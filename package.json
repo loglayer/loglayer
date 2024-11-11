@@ -1,118 +1,45 @@
 {
-  "name": "loglayer",
-  "version": "4.8.0",
-  "description": "Standardizes logging across multiple logging libraries, providing a consistent way to specify context, metadata, and errors.",
-  "files": [
-    "dist"
-  ],
-  "types": "dist/index.d.ts",
-  "main": "dist/index.js",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js"
-    }
-  },
+  "name": "loglayer-monorepo",
+  "description": "",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
     "add-changeset": "changeset add",
-    "add-readme": "git add README.md",
-    "build": "tsup src/index.ts",
+    "build": "turbo run build",
     "changeset": "changeset",
-    "clean": "rm -rf node_modules dist",
-    "compile": "tsc",
-    "debug": "ts-node-dev --inspect -- src/index.ts",
-    "debug:break": "ts-node-dev --inspect-brk -- src/index.ts",
-    "format": "biome format src --write",
-    "lint": "biome lint src",
-    "lint:check": "biome check --apply-unsafe src",
-    "lint-staged": "lint-staged",
-    "livetest:datadog-browser-logs": "ts-node-dev livetests/datadog-browser-logs.ts",
-    "livetest:bunyan": "ts-node-dev livetests/bunyan.ts",
-    "livetest:console": "ts-node-dev livetests/console.ts",
-    "livetest:express": "ts-node-dev livetests/express.ts",
-    "livetest:pino": "ts-node-dev livetests/pino.ts",
-    "livetest:roarr": "ROARR_LOG=true ts-node-dev livetests/roarr.ts",
-    "livetest:winston": "ts-node-dev livetests/winston.ts",
-    "livetest:log4js-node": "ts-node-dev livetests/log4js-node.ts",
-    "livetest:signale": "ts-node-dev livetests/signale.ts",
-    "livetest:consola": "ts-node-dev livetests/consola.ts",
-    "prepare": "husky install",
+    "clean:repo": "git add --all && git reset --hard",
+    "clean:workspaces": "turbo clean",
+    "clean:node_modules": "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' +\n",
+    "commitlint": "commitlint",
+    "lint": "turbo run lint --continue --",
+    "lint:packages": "pnpm run lint:packages:semver && pnpm run lint:packages:mismatches",
+    "lint:packages:semver": "syncpack lint-semver-ranges",
+    "lint:packages:mismatches": "syncpack list-mismatches",
+    "publish-packages": "turbo run build && changeset version && changeset publish",
+    "typecheck": "turbo run verify-types --continue --",
+    "syncpack:update": "syncpack update && syncpack fix-mismatches && pnpm i",
+    "syncpack:format": "syncpack format",
+    "syncpack:lint": "syncpack lint",
     "release": "changeset publish",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "toc": "toc-md README.md README.md",
-    "ts-node-dev": "ts-node-dev",
-    "typecheck": "tsc --noEmit",
-    "version-packages": "changeset version"
+    "version-packages": "changeset version",
+    "test": "turbo test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/theogravity/loglayer.git"
-  },
-  "author": "Theo Gravity <theo@suteki.nu>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/theogravity/loglayer/issues"
-  },
-  "homepage": "https://github.com/theogravity/loglayer",
-  "keywords": [
-    "logging",
-    "log",
-    "roarr",
-    "log4js",
-    "log4js-node",
-    "winston",
-    "bunyan",
-    "structured",
-    "standard",
-    "wrapper",
-    "serialize",
-    "error",
-    "abstraction",
-    "pino",
-    "electron",
-    "signale",
-    "consola",
-    "datadog"
-  ],
   "devDependencies": {
-    "@biomejs/biome": "^1.6.4",
-    "@changesets/changelog-github": "^0.5.0",
-    "@changesets/cli": "^2.27.1",
-    "@commitlint/cli": "^19.3.0",
-    "@commitlint/config-conventional": "^19.2.2",
-    "@datadog/browser-logs": "5.27.0",
-    "@types/bunyan": "^1.8.8",
-    "@types/node": "^20.12.8",
-    "@types/roarr": "^2.14.3",
-    "@types/signale": "^1.4.7",
-    "bunyan": "^1.8.15",
-    "consola": "^3.2.3",
-    "express": "^4.19.2",
-    "global-jsdom": "^25.0.0",
-    "husky": "^8.0.0",
-    "lint-staged": "^15.2.2",
-    "log4js": "^6.9.1",
-    "pino": "^8.0.0",
-    "roarr": "^7.11.0",
-    "serialize-error": "8.1.0",
-    "signale": "^1.4.0",
-    "toc-md-alt": "^0.4.6",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.5",
-    "vitest": "^1.6.0",
-    "winston": "^3.7.2"
+    "@biomejs/biome": "1.9.4",
+    "@changesets/changelog-github": "0.5.0",
+    "@changesets/cli": "2.27.11",
+    "@commitlint/cli": "19.6.1",
+    "@commitlint/config-conventional": "19.6.0",
+    "@internal/tsconfig": "workspace:*",
+    "@types/node": "22.10.3",
+    "lefthook": "1.10.1",
+    "syncpack": "13.0.0",
+    "turbo": "2.3.3",
+    "typescript": "5.7.2"
   },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx,html,css,json}": [
-      "npm run format",
-      "npm run lint:check"
-    ]
-  },
+  "engineStrict": true,
   "engines": {
-    "node": ">=18"
-  }
+    "node": ">=20.16.0"
+  },
+  "packageManager": "pnpm@9.12.2"
 }

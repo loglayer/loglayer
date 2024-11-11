@@ -1,37 +1,47 @@
-name: Release
+name: Snapshot Release
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+env:
+  PNPM_CACHE_FOLDER: .pnpm-store
 
 jobs:
-  release:
-    name: Releasing
+  snapshot:
+    name: Snapshot Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Use pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.4.0
+
+      - name: setup pnpm config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+
       - name: Install Dependencies
-        run: npm install --frozen-lockfile --prefer-offline
+        run: pnpm install --frozen-lockfile
 
       - name: Build workspace packages
-        run: npm run build
+        run: pnpm build
+
+      - name: Run package checking
+        run: pnpm run lint:packages
 
       - name: Run type checking
-        run: npm run typecheck
+        run: pnpm run typecheck
 
       - name: Run linting
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Create Release Pull Request / Publish Packages
         uses: changesets/action@v1
         with:
-          publish: npm run release
-          version: npm run version-packages
+          publish: pnpm run release
+          version: pnpm run version-packages
           commit: 'chore: release package(s)'
           title: 'chore: release package(s)'
         env:

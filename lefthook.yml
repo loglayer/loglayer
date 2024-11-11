@@ -1,0 +1,17 @@
+pre-commit:
+  commands:
+    "lint and format files":
+      run: pnpm run lint
+      stage_fixed: true
+    "check package.json files":
+      run: pnpm run syncpack:format && pnpm run lint:packages
+      stage_fixed: true
+    "verify typescript types":
+      run: pnpm run typecheck
+    test:
+      run: pnpm run test
+
+commit-msg:
+  commands:
+    "lint commit message":
+      run: pnpm run commitlint --edit {1}

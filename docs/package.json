@@ -1,0 +1,19 @@
+{
+  "name": "loglayer-docs",
+  "description": "Documentation for LogLayer.",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "1.5.0"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">=20.16.0"
+  },
+  "packageManager": "pnpm@9.12.2"
+}
