@@ -11,27 +11,27 @@ hero:
       link: /getting-started
 
 features:
-  - title: Structured Logging
-    details: LogLayer provides a structured logging experience for your logs, making it easier to parse and search through logs.
-  - title: Fluid API
-    details: LogLayer provides a fluid API for logging, making it easy to log messages, metadata, and errors with different levels and contexts.
-  - title: Swap logging libraries
-    details: Start off with a console logger, then later swap to another logging library like pino or bunyan without changing your code.
-  - title: Plugins
-    details: LogLayer provides a plugin system for modifying log messages and data before being shipped to your logging library.
-  - title: Ship to Multiple Destinations
-    details: Send logs to multiple logging libraries at once. Want to use pino and ship logs to datadog at the same time? You can with LogLayer.
-  - title: Built for Testing
-    details: LogLayer provides a mock logger for use with your unit tests, allowing you to test your code without having to write a custom mock.
-  - title: Zero Dependencies
-    details: LogLayer has zero 3rd party dependencies, so you can use it in any project without worrying about compatibility or supply chain issues.
-  - title: MIT Licensed
-    details: LogLayer is MIT licensed, so you can use it in any project, commercial or open source, without worrying about licensing issues.
+  - title: Type-Safe & Structured
+    details: First-class TypeScript support with structured logging that makes log aggregation and analysis a breeze.
+  - title: Chainable API
+    details: Write expressive, self-documenting logs with a chainable API that makes complex logging patterns simple and maintainable.
+  - title: Swap Logging Libraries Freely
+    details: Use console logging in development, then switch to pino, winston, or bunyan in production without changing your application code.
+  - title: Extensible Plugin System
+    details: Transform, enrich, and filter logs with a powerful plugin system that lets you customize every aspect of your logging pipeline.
+  - title: Multi-Transport Support
+    details: Fan out logs to multiple destinations simultaneously - perfect for scenarios requiring both local logging and cloud aggregation.
+  - title: Mock Logs
+    details: Mock logging provided for use with testing libraries like mocha / jest / vitest. No more log prints during tests!
+  - title: Zero External Dependencies
+    details: LogLayer does not depend on any external libraries, ensuring a minimal footprint and maximum compatibility with your existing projects.
+  - title: Developer-First License
+    details: MIT licensed for maximum flexibility in both commercial and open-source projects.
 ---
 
 ## Before LogLayer
 
-Defining a log entry can vary significantly between different libraries:
+Different logging libraries force you to remember their unique APIs:
 
 ```javascript
 // Using `winston`:
@@ -41,7 +41,7 @@ winston.info('my message', { some: 'data' })
 bunyan.info({ some: 'data' }, 'my message')
 ```
 
-Handling errors can also be inconsistent:
+Error handling is equally inconsistent:
 
 ```javascript
 // Using `roarr` with a direct error object:
@@ -53,7 +53,7 @@ roarr.error({ err: serialize(new Error('test')) })
 
 ## With LogLayer
 
-Focus on creating logs with clear, consistent syntax without worrying about library-specific syntax:
+Write clean, consistent, and type-safe logs that work everywhere:
 
 ```javascript
 logLayer

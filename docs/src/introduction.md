@@ -24,13 +24,13 @@ Here's a simple example using `loglayer` with `pino`:
 
 ```typescript
 import pino from 'pino'
-import { LogLayer, LoggerType } from 'loglayer'
+import { LogLayer } from 'loglayer'
+import { PinoTransport } from "@loglayer/transport-pino"
 
 const log = new LogLayer({
-  transport: {
-    instance: pino(),
-    type: LoggerType.PINO
-  }
+  transport: new PinoTransport({
+    logger: pino()
+  })
 })
 
 // Create logs with a fluent API
