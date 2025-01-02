@@ -1,5 +1,14 @@
 # loglayer
 
+## 5.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`c136c0f`](https://github.com/loglayer/loglayer/commit/c136c0fbc044d80a03d1851e68e9c6a23dc8a8d8)]:
+  - @loglayer/plugin@1.0.2
+  - @loglayer/shared@1.0.2
+  - @loglayer/transport@1.0.2
+
 ## 5.0.1
 
 ### Patch Changes
