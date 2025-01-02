@@ -5,6 +5,9 @@ export default {
   srcDir: "src",
 
   themeConfig: {
+    search: {
+      provider: 'local'
+    },
     outline: {
       level: [2, 3]
     },

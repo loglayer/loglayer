@@ -2,17 +2,16 @@
 
 Context allows you to add persistent data that will be included with every log message. This is particularly useful for adding request IDs, user information, or any other data that should be present across multiple log entries.
 
+::: info
+The output examples use `msg` as the message field. The name of this field may vary depending on the logging library you are using.
+In the `console` logger, this field does not exist, and the message is printed directly.
+:::
+
 ## Adding Context
 
 Use the `withContext` method to add context data:
 
 ```typescript
-const log = new LogLayer({
-  transport: new ConsoleTransport({
-    logger: console
-  })
-})
-
 log.withContext({
   requestId: '123',
   userId: 'user_456'
@@ -26,8 +25,6 @@ log.warn('User quota exceeded')
 By default, context data is flattened into the root of the log object:
 ```json
 {
-  "level": 30,
-  "time": 1638146872750,
   "msg": "Processing request",
   "requestId": "123",
   "userId": "user_456"
@@ -41,13 +38,6 @@ By default, context data is flattened into the root of the log object:
 You can configure LogLayer to place context data in a dedicated field:
 
 ```typescript
-const log = new LogLayer({
-  contextFieldName: 'context',
-  transport: new ConsoleTransport({
-    logger: console
-  })
-})
-
 log.withContext({
   requestId: '123',
   userId: 'user_456'
@@ -57,8 +47,6 @@ log.withContext({
 This produces:
 ```json
 {
-  "level": 30,
-  "time": 1638146872750,
   "msg": "Processing request",
   "context": {
     "requestId": "123",
@@ -75,9 +63,6 @@ If you set the same field name for both context and metadata, they will be merge
 const log = new LogLayer({
   contextFieldName: 'data',
   metadataFieldName: 'data',
-  transport: new ConsoleTransport({
-    logger: console
-  })
 })
 
 log.withContext({ requestId: '123' })
@@ -88,8 +73,6 @@ log.withContext({ requestId: '123' })
 This produces:
 ```json
 {
-  "level": 30,
-  "time": 1638146872750,
   "msg": "Request completed",
   "data": {
     "requestId": "123",
@@ -111,26 +94,6 @@ const context = log.getContext()
 // Returns: { requestId: '123' }
 ```
 
-### Child Loggers
-
-You can create a child logger that inherits the parent's context:
-
-```typescript
-const parentLog = new LogLayer({
-  transport: new ConsoleTransport({
-    logger: console
-  })
-}).withContext({ app: 'myapp' })
-
-const childLog = parentLog.child()
-  .withContext({ module: 'users' })
-
-childLog.info('User created')
-// Will include both { app: 'myapp', module: 'users' }
-```
-
-Note that the context is shallow copied when creating a child logger.
-
 ### Muting Context
 
 You can temporarily disable context logging:
@@ -139,9 +102,6 @@ You can temporarily disable context logging:
 // Via configuration
 const log = new LogLayer({
   muteContext: true,
-  transport: new ConsoleTransport({
-    logger: console
-  })
 })
 
 // Or via methods

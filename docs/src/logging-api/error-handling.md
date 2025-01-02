@@ -45,9 +45,6 @@ By default, errors are logged under the `err` field. You can customize this:
 ```typescript
 const log = new LogLayer({
   errorFieldName: 'error', // Default is 'err'
-  transport: new ConsoleTransport({
-    logger: console
-  })
 })
 
 log.errorOnly(new Error('test'))
@@ -65,9 +62,6 @@ const log = new LogLayer({
     stack: err.stack,
     code: err.code
   }),
-  transport: new ConsoleTransport({
-    logger: console
-  })
 })
 ```
 
@@ -91,9 +85,6 @@ You can configure LogLayer to automatically copy the error's message as the log 
 ```typescript
 const log = new LogLayer({
   copyMsgOnOnlyError: true,
-  transport: new ConsoleTransport({
-    logger: console
-  })
 })
 
 // Will include error.message as the log message
@@ -117,9 +108,6 @@ You can configure errors to be included in the metadata field instead of at the 
 const log = new LogLayer({
   errorFieldInMetadata: true,
   metadataFieldName: 'metadata',
-  transport: new ConsoleTransport({
-    logger: console
-  })
 })
 
 log.errorOnly(new Error('test'))

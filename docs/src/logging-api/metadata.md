@@ -2,6 +2,11 @@
 
 Metadata allows you to add structured data to your log messages. LogLayer provides several ways to include metadata in your logs.
 
+::: info
+The output examples use `msg` as the message field. The name of this field may vary depending on the logging library you are using.
+In the `console` logger, this field does not exist, and the message is printed directly.
+:::
+
 ## Adding Metadata to Messages
 
 The most common way to add metadata is using the `withMetadata` method:
@@ -17,8 +22,6 @@ log.withMetadata({
 By default, this produces a flattened log entry:
 ```json
 {
-  "level": 30,
-  "time": 1638138422796,
   "msg": "User logged in",
   "userId": "123",
   "action": "login",
@@ -67,8 +70,6 @@ log.withMetadata({
 This produces:
 ```json
 {
-  "level": 30,
-  "time": 1638138422796,
   "msg": "User logged in",
   "metadata": {
     "userId": "123",
@@ -92,8 +93,6 @@ log.withContext({ requestId: 'abc' })
 If using field names:
 ```json
 {
-  "level": 30,
-  "time": 1638138422796,
   "msg": "Processing request",
   "context": {
     "requestId": "abc"

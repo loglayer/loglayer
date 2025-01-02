@@ -46,11 +46,7 @@ const childLog = parentLog.child()
 Context data is shallow copied from the parent:
 
 ```typescript
-const parentLog = new LogLayer({
-  transport: new ConsoleTransport({
-    logger: console
-  })
-}).withContext({
+const parentLog = new LogLayer({}).withContext({
   app: 'myapp',
   version: '1.0.0'
 })
