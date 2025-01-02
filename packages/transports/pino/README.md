@@ -1,7 +1,7 @@
 # Pino Transport for LogLayer
 
-[![NPM version](https://img.shields.io/npm/v/%40loglayer%2Fpino-transport.svg?style=flat-square)](https://www.npmjs.com/package/@loglayer/pino-transport)
-![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Fpino-transport)
+![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-pino)
+![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-pino)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
 [Pino](https://github.com/pinojs/pino) is a very low overhead Node.js logger, focused on performance.

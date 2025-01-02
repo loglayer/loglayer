@@ -6,6 +6,7 @@
   "scripts": {
     "add-changeset": "changeset add",
     "build": "turbo run build",
+    "docs": "cd docs && pnpm run docs:dev",
     "changeset": "changeset",
     "clean:repo": "git add --all && git reset --hard",
     "clean:workspaces": "turbo clean",

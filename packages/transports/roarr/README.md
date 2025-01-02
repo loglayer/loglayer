@@ -1,7 +1,7 @@
 # Roarr Transport for LogLayer
 
-[![NPM version](https://img.shields.io/npm/v/@loglayer/transport-roarr.svg?style=flat-square)](https://www.npmjs.com/package/@loglayer/transport-roarr)
-![NPM Downloads](https://img.shields.io/npm/dm/@loglayer/transport-roarr)
+![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-roarr)
+![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-roarr)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
 [Roarr](https://github.com/gajus/roarr) is a JSON logger for Node.js and browser environments.

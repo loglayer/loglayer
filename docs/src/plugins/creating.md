@@ -1,6 +1,30 @@
 # Creating Plugins
 
-A plugin is a plain object that implements the `LogLayerPlugin` interface from `loglayer`:
+## Installation
+
+::: info
+Installation is only necessary if you need the Typescript types for the plugin interface.
+:::
+
+::: code-group
+
+```sh [npm]
+npm install @loglayer/plugin
+```
+
+```sh [pnpm]
+pnpm add @loglayer/plugin
+```
+
+```sh [yarn]
+yarn add @loglayer/plugin
+```
+
+:::
+
+## Overview
+
+A plugin is a plain object that implements the `LogLayerPlugin` interface from `@loglayer/plugin`:
 
 ```typescript
 interface LogLayerPlugin {
