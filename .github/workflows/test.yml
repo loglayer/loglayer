@@ -6,6 +6,8 @@ on:
       - opened
       - reopened
       - synchronize
+    paths-ignore:
+      - 'docs/**'
 
 jobs:
   test:

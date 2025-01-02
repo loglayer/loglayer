@@ -74,3 +74,131 @@ Here's a complete mapping of configuration options from 4.x to 5.x:
 | `muteMetadata` | `muteMetadata` | Unchanged |
 | `plugins` | `plugins` | Unchanged |
 | N/A | `errorFieldInMetadata` | New in 5.x - controls error object placement |
+
+### 3. getLoggerInstance Changes
+
+The `getLoggerInstance()` method has been updated to support multiple transports. Each transport must now have a unique ID that is used to retrieve its logger instance:
+
+```typescript
+// 4.x
+const log = new LogLayer({
+  logger: {
+    instance: console,
+    type: LoggerType.CONSOLE
+  }
+});
+const logger = log.getLoggerInstance(); // Returns the logger instance directly
+
+// 5.x
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    id: 'console', // ID is required and must be unique
+    logger: console
+  })
+});
+const logger = log.getLoggerInstance('console'); // Must specify the transport ID
+
+// 5.x with multiple transports
+const log = new LogLayer({
+  transport: [
+    new ConsoleTransport({
+      id: 'console',
+      logger: console
+    }),
+    new WinstonTransport({
+      id: 'winston',
+      logger: winstonLogger
+    })
+  ]
+});
+const consoleLogger = log.getLoggerInstance('console');
+const winstonLogger = log.getLoggerInstance('winston');
+```
+
+If the transport ID doesn't exist, `undefined` is returned.
+
+### 4. TypeScript Changes
+
+#### Generic Type Parameters
+
+The most significant change is the removal of generic type parameters from both the `ILogLayer` interface and `LogLayer` class:
+
+```typescript
+// 4.x
+class LogLayer<ExternalLogger extends LoggerLibrary = LoggerLibrary, ErrorType = ErrorDataType> 
+  implements ILogLayer<ExternalLogger, ErrorType> {
+  // ...
+}
+
+interface ILogLayer<ExternalLogger extends LoggerLibrary = LoggerLibrary, ErrorType = ErrorDataType> {
+  getLoggerInstance(): ExternalLogger;
+  withError(error: ErrorType): ILogBuilder<ErrorType>;
+  // ...
+}
+
+// 5.x
+class LogLayer implements ILogLayer {
+  getLoggerInstance<Library>(id: string): Library | undefined;
+  withError(error: any): ILogBuilder;
+  // ...
+}
+
+interface ILogLayer {
+  getLoggerInstance<Library>(id: string): Library | undefined;
+  withError(error: any): ILogBuilder;
+  // ...
+}
+```
+
+This change moves type safety from the class/interface level to the method level, particularly for `getLoggerInstance`. The `ErrorType` generic has been removed entirely in favor of `any` as errors are now handled by transports.
+
+#### Package Organization
+
+Types have been moved to more specific packages:
+- `LoggerLibrary` interface → `@loglayer/transport`
+- Plugin types → `@loglayer/plugin`
+
+Example of importing from new packages:
+```typescript
+// 4.x
+import { LogLayerPlugin, PluginBeforeDataOutFn } from 'loglayer';
+
+// 5.x
+import { LogLayerPlugin, PluginBeforeDataOutFn } from '@loglayer/plugin';
+```
+
+#### Error Handling
+
+Error-related types have been simplified:
+
+```typescript
+// 4.x - Generic error types
+interface ILogBuilder<ErrorType = ErrorDataType> {
+  withError(error: ErrorType): ILogBuilder<ErrorType>;
+}
+type ErrorSerializerType<ErrorType> = (err: ErrorType) => Record<string, any>;
+
+// 5.x - Simplified to use 'any'
+interface ILogBuilder {
+  withError(error: any): ILogBuilder;
+}
+type ErrorSerializerType = (err: any) => Record<string, any>;
+```
+
+#### Method Return Types
+
+Method return types no longer include generics:
+
+```typescript
+// 4.x
+interface ILogLayer<ExternalLogger, ErrorType> {
+  muteContext(): ILogLayer<ExternalLogger, ErrorType>;
+  withContext(context: Record<string, any>): ILogLayer<ExternalLogger, ErrorType>;
+}
+
+// 5.x
+interface ILogLayer {
+  muteContext(): ILogLayer;
+  withContext(context: Record<string, any>): ILogLayer;
+}
+```
