@@ -3,6 +3,14 @@ name: Snapshot Release
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+  checks: read
+  deployments: read
+  statuses: read
+
 env:
   PNPM_CACHE_FOLDER: .pnpm-store
 

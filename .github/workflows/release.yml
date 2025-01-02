@@ -1,14 +1,26 @@
-name: Snapshot Release
+name: Release
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - master
 
 env:
   PNPM_CACHE_FOLDER: .pnpm-store
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+  checks: read
+  deployments: read
+  statuses: read
+
 jobs:
-  snapshot:
-    name: Snapshot Release
+  release:
+    name: Releasing
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
