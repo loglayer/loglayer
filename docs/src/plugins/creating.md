@@ -111,6 +111,7 @@ shouldSendToLogger?(params: PluginShouldSendToLoggerParams): boolean
 **Parameters:**
 ```typescript
 interface PluginShouldSendToLoggerParams {
+  transportId?: string;        // ID of the transport that will send the log
   messages: any[];              // Message data that is copied from the original
   logLevel: LogLevel;          // Log level of the message
   data?: Record<string, any>;  // The object containing metadata / context / error data
@@ -130,6 +131,22 @@ const productionFilterPlugin = {
     if (logLevel === 'error') {
       return !isRateLimited('error-logs')
     }
+    return true
+  }
+}
+```
+
+**Example:**
+```typescript
+
+const productionFilterPlugin = {
+  id: 'production-filter',
+  shouldSendToLogger: ({ transportId, logLevel, data }) => {
+    // don't send logs if the transportId is 'console'
+    if (transportId === 'console') {
+      return false
+    }
+    
     return true
   }
 }

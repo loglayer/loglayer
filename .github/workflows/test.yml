@@ -6,8 +6,8 @@ on:
       - opened
       - reopened
       - synchronize
-    paths-ignore:
-      - 'docs/**'
+    paths:
+      - 'packages/**'
 
 jobs:
   test:
@@ -30,19 +30,11 @@ jobs:
           cache: 'pnpm'
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
+        run: pnpm install --frozen-lockfile
 
       - name: Build workspace packages
         run: pnpm build
 
-      - name: Branch Information
-        run: |
-          echo "Git Branch: $(git branch)"
-          echo "Git Log: $(git log --oneline)"
-          echo "HEAD SHA: $(git rev-parse HEAD)"
-          echo "HEAD^1 SHA: $(git rev-parse HEAD^1)"
-          echo "Git Diff: $(git diff HEAD^1)"
-
-      - name: Run Package(s) Tests
+      - name: Run Package Tests
         run: |
           pnpm run test

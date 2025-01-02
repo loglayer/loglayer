@@ -9,15 +9,12 @@
       "persistent": true
     },
     "build:dev": {
-      "cache": false
+      "cache": false,
+        "dependsOn": ["^build:dev"]
     },
     "build": {
-      "dependsOn": ["lint", "^build"],
-      "cache": true,
-      "inputs": [
-        "$TURBO_DEFAULT$"
-      ],
-      "outputs": ["dist/**"]
+      "cache": false,
+      "dependsOn": ["^build"]
     },
     "verify-types": {},
     "lint": {},
