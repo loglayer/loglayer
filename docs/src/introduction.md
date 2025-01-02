@@ -70,7 +70,7 @@ When working with logging libraries, you often face several challenges:
 
 LogLayer is designed to sit on top of your logging library(s) of choice, such as `pino`, `winston`, `bunyan`, and more.
 
-Learn more about logging [transports](/transports).
+Learn more about logging [transports](/transports/).
 
 ## Consistent API
 
@@ -116,7 +116,7 @@ const log = new LogLayer({
 })
 ```
 
-See more about using and creating [plugins](/plugins).
+See more about using and creating [plugins](/plugins/).
 
 ## Multiple Logger Support
 
