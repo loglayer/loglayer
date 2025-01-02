@@ -44,6 +44,7 @@ turbo docs:dev
 
 ```
 loglayer/
+├── docs/                         # Documentation (vitepress)
 ├── packages/
 │   ├── core/                     # Core packages
 │   │   ├── loglayer/             # Main LogLayer implementation
