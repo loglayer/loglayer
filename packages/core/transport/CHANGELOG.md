@@ -1,5 +1,14 @@
 # @loglayer/transport
 
+## 1.0.3
+
+### Patch Changes
+
+- [`43ffd72`](https://github.com/loglayer/loglayer/commit/43ffd725d94e2ecdf58b4f002f06392611489582) Thanks [@theogravity](https://github.com/theogravity)! - docs: fix up documentation
+
+- Updated dependencies [[`43ffd72`](https://github.com/loglayer/loglayer/commit/43ffd725d94e2ecdf58b4f002f06392611489582)]:
+  - @loglayer/shared@1.0.3
+
 ## 1.0.2
 
 ### Patch Changes
