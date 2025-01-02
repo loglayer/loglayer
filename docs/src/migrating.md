@@ -1,8 +1,10 @@
 # Migrating from 4.x to 5.x
 
-## Breaking Changes
+## Node.js version
 
-### 1. Transport System
+The minimum Node.js version required is now 18.
+
+## Transport System
 
 The most significant change in 5.x is the introduction of a new transport system. Instead of specifying a logger type and instance directly, you now need to use transport-specific packages:
 
@@ -27,7 +29,7 @@ const log = new LogLayer({
 
 You can find the full list of transports in the [Transport](https://loglayer.dev/docs/transports) documentation.
 
-### 2. Configuration Changes
+## Configuration Changes
 
 Several configuration options have been renamed or restructured:
 
@@ -75,7 +77,7 @@ Here's a complete mapping of configuration options from 4.x to 5.x:
 | `plugins` | `plugins` | Unchanged |
 | N/A | `errorFieldInMetadata` | New in 5.x - controls error object placement |
 
-### 3. getLoggerInstance Changes
+## getLoggerInstance Changes
 
 The `getLoggerInstance()` method has been updated to support multiple transports. Each transport must now have a unique ID that is used to retrieve its logger instance:
 
@@ -117,9 +119,9 @@ const winstonLogger = log.getLoggerInstance('winston');
 
 If the transport ID doesn't exist, `undefined` is returned.
 
-### 4. TypeScript Changes
+## TypeScript Changes
 
-#### Generic Type Parameters
+### Generic Type Parameters
 
 The most significant change is the removal of generic type parameters from both the `ILogLayer` interface and `LogLayer` class:
 
@@ -152,7 +154,7 @@ interface ILogLayer {
 
 This change moves type safety from the class/interface level to the method level, particularly for `getLoggerInstance`. The `ErrorType` generic has been removed entirely in favor of `any` as errors are now handled by transports.
 
-#### Package Organization
+### Package Organization
 
 Types have been moved to more specific packages:
 - `LoggerLibrary` interface → `@loglayer/transport`
@@ -167,7 +169,7 @@ import { LogLayerPlugin, PluginBeforeDataOutFn } from 'loglayer';
 import { LogLayerPlugin, PluginBeforeDataOutFn } from '@loglayer/plugin';
 ```
 
-#### Error Handling
+### Error Handling
 
 Error-related types have been simplified:
 
@@ -185,7 +187,7 @@ interface ILogBuilder {
 type ErrorSerializerType = (err: any) => Record<string, any>;
 ```
 
-#### Method Return Types
+### Method Return Types
 
 Method return types no longer include generics:
 
