@@ -10,6 +10,51 @@ provide a consistent logging experience across all your projects.
 - For full documentation, read the [docs](https://loglayer.dev).
 - [Older 4.x documentation](https://github.com/loglayer/loglayer/tree/4.x)
 
+```javascript
+// Example using the Pino logging library with LogLayer
+import { LogLayer } from 'loglayer';
+import { pino } from 'pino';
+import { PinoTransport } from '@loglayer/transport-pino';
+import { redactionPlugin } from '@loglayer/plugin-redaction';
+
+const log = new LogLayer({
+  // Multiple loggers can also be used at the same time. 
+  // Need to also ship to a cloud provider like DataDog at the same time? You can!
+  transport: new PinoTransport({
+    logger: pino()
+  }),
+  // Plugins can be created to modify log data before it's shipped to your logging library.
+  plugins: [
+    redactionPlugin({
+      paths: ['password'],
+      censor: '[REDACTED]',
+    }),
+  ],
+})
+
+log.withPrefix("[my-app]")
+  .withMetadata({ some: 'data', password: 'my-pass' })
+  .withError(new Error('test'))
+  .info('my message')
+```
+
+```json5
+{
+   "level":30,
+   "time":1735857465669,
+   "pid":30863,
+   "msg":"[my-app] my message",
+   // The placement of these fields are also configurable!
+   "password":"[REDACTED]",
+   "some":"data",
+   "err":{
+      "type":"Error",
+      "message":"test",
+      "stack":"Error: test\n ..."
+   }
+}
+```
+
 ## Development Setup
 
 This is a monorepo using [`pnpm`](https://pnpm.io/installation) for package management and [`turbo`](https://turbo.build/repo/docs/getting-started/installation) for build orchestration. 

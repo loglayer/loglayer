@@ -1,7 +1,7 @@
 # Bunyan Transport for LogLayer
 
-![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-bunyan)
-![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-bunyan)
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-bunyan)](https://www.npmjs.com/package/@loglayer/transport-bunyan)
+[![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-bunyan)](https://www.npmjs.com/package/@loglayer/transport-bunyan)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
 [Bunyan](https://github.com/trentm/node-bunyan) is a JSON logging library for Node.js services.

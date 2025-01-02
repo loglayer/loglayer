@@ -13,7 +13,8 @@ export default {
     },
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Get Started', link: '/getting-started' }
+      { text: 'Get Started', link: '/getting-started' },
+      { text: 'Transports', link: '/transports/' }
     ],
     sidebar: [
       {

@@ -2,6 +2,54 @@
 
 `loglayer` is a TypeScript library that standardizes logging across your application, regardless of which logging library you use under the hood.
 
+It offers a chainable, fluent API for specifying metadata and errors, along with a plugin system that allows
+you to modify log data before it's shipped to your logging library.
+
+```javascript
+// Example using the Pino logging library with LogLayer
+import { LogLayer } from 'loglayer';
+import { pino } from 'pino';
+import { PinoTransport } from '@loglayer/transport-pino';
+import { redactionPlugin } from '@loglayer/plugin-redaction';
+
+const log = new LogLayer({
+  // Multiple loggers can also be used at the same time. 
+  // Need to also ship to a cloud provider like DataDog at the same time? You can!
+  transport: new PinoTransport({
+    logger: pino()
+  }),
+  // Plugins can be created to modify log data before it's shipped to your logging library.
+  plugins: [
+    redactionPlugin({
+      paths: ['password'],
+      censor: '[REDACTED]',
+    }),
+  ],
+})
+
+log.withPrefix("[my-app]")
+  .withMetadata({ some: 'data', password: 'my-pass' })
+  .withError(new Error('test'))
+  .info('my message')
+```
+
+```json5
+{
+  "level":30,
+  "time":1735857465669,
+  "pid":30863,
+  "msg":"[my-app] my message",
+  // The placement of these fields are also configurable!
+  "password":"[REDACTED]",
+  "some":"data",
+  "err":{
+    "type":"Error",
+    "message":"test",
+    "stack":"Error: test\n ..."
+  }
+}
+```
+
 ## Why LogLayer?
 
 When working with logging libraries, you often face several challenges:
@@ -18,32 +66,13 @@ When working with logging libraries, you often face several challenges:
 - Easy switching between logging libraries without changing your application code
 - Built-in mocks for testing
 
-## Example
+## Bring Your Own Logger
 
-Here's a simple example using `loglayer` with `pino`:
+LogLayer is designed to sit on top of your logging library(s) of choice, such as `pino`, `winston`, `bunyan`, and more.
 
-```typescript
-import pino from 'pino'
-import { LogLayer } from 'loglayer'
-import { PinoTransport } from "@loglayer/transport-pino"
+Learn more about logging [transports](/transports).
 
-const log = new LogLayer({
-  transport: new PinoTransport({
-    logger: pino()
-  })
-})
-
-// Create logs with a fluent API
-log
-  .withContext({ requestId: '123' })
-  .withMetadata({ user: 'admin' })
-  .withError(new Error('Permission denied'))
-  .error('Failed to access resource')
-```
-
-## Key Features
-
-### Consistent API
+## Consistent API
 
 No need to remember different parameter orders or method names between logging libraries:
 
@@ -56,7 +85,9 @@ winston.info('my message', { some: 'data' })     // winston
 bunyan.info({ some: 'data' }, 'my message')      // bunyan
 ```
 
-### Standardized Error Handling
+Start with [basic logging](/logging-api/basic-logging).
+
+## Standardized Error Handling
 
 `loglayer` provides consistent error handling across all logging libraries:
 
@@ -65,18 +96,9 @@ bunyan.info({ some: 'data' }, 'my message')      // bunyan
 log.withError(new Error('test')).error('Operation failed')
 ```
 
-### Easy Testing
+See more about [error handling](/logging-api/error-handling).
 
-Built-in mocks make testing a breeze:
-
-```typescript
-import { MockLogLayer } from 'loglayer'
-
-// Use MockLogLayer in your tests - no real logging will occur
-const log = new MockLogLayer()
-```
-
-### Powerful Plugin System
+## Powerful Plugin System
 
 Extend functionality with plugins:
 
@@ -94,7 +116,9 @@ const log = new LogLayer({
 })
 ```
 
-### Multiple Logger Support
+See more about using and creating [plugins](/plugins).
+
+## Multiple Logger Support
 
 Send your logs to multiple destinations simultaneously:
 
@@ -127,3 +151,18 @@ const log = new LogLayer({
 // Logs will be sent to both Pino and Datadog
 log.info('User logged in successfully')
 ```
+
+See more about [multi-transport support](/transports/multiple-transports).
+
+## Easy Testing
+
+Built-in mocks make testing a breeze:
+
+```typescript
+import { MockLogLayer } from 'loglayer'
+
+// Use MockLogLayer in your tests - no real logging will occur
+const log = new MockLogLayer()
+```
+
+See more about [testing](/logging-api/unit-testing).

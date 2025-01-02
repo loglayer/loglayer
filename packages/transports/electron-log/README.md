@@ -1,7 +1,7 @@
 # Electron-log Transport for LogLayer
 
-![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-electron-log)
-![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-electron-log)
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-electron-log)](https://www.npmjs.com/package/@loglayer/transport-electron-log)
+[![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-electron-log)](https://www.npmjs.com/package/@loglayer/transport-electron-log)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
 [Electron-log](https://github.com/megahertz/electron-log) is a logging library designed specifically for Electron applications.
