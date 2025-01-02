@@ -1,7 +1,7 @@
 export default {
   lang: 'en-US',
   title: 'LogLayer',
-  description: 'A wrapper around Javascript-based logging libraries to provide a consistent and easy to use API.',
+  description: 'A layer on top of Javascript logging libraries to provide a consistent logging experience across all your projects.',
   srcDir: "src",
 
   themeConfig: {
