@@ -45,7 +45,7 @@
     "loglayer": "workspace:*",
     "@types/bunyan": "1.8.11",
     "hash-runner": "2.0.1",
-    "@types/node": "22.10.3",
+    "@types/node": "22.10.4",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.3.5",
     "typescript": "5.7.2",

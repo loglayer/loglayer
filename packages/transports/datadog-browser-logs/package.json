@@ -41,7 +41,7 @@
     "loglayer": "workspace:*",
     "hash-runner": "2.0.1",
     "global-jsdom": "25.0.0",
-    "@types/node": "22.10.3",
+    "@types/node": "22.10.4",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.3.5",
     "typescript": "5.7.2",

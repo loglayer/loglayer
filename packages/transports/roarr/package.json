@@ -40,7 +40,7 @@
   "devDependencies": {
     "loglayer": "workspace:*",
     "hash-runner": "2.0.1",
-    "@types/node": "22.10.3",
+    "@types/node": "22.10.4",
     "@internal/tsconfig": "workspace:*",
     "serialize-error": "11.0.3",
     "tsup": "8.3.5",
