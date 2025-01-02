@@ -1,5 +1,16 @@
 # loglayer
 
+## 5.0.1
+
+### Patch Changes
+
+- [`87394f9`](https://github.com/loglayer/loglayer/commit/87394f9480d31222460e88a9163689dbe06cda4e) Thanks [@theogravity](https://github.com/theogravity)! - Add `transportId` parameter to plugin `shouldSendToLogger` call
+
+- Updated dependencies [[`87394f9`](https://github.com/loglayer/loglayer/commit/87394f9480d31222460e88a9163689dbe06cda4e), [`da9bc6f`](https://github.com/loglayer/loglayer/commit/da9bc6f59385834643d677bd998213cd84046f6f)]:
+  - @loglayer/plugin@1.0.1
+  - @loglayer/transport@1.0.1
+  - @loglayer/shared@1.0.1
+
 ## 5.0.0
 
 ### Major Changes

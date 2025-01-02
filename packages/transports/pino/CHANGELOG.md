@@ -1,5 +1,14 @@
 # loglayer-transport
 
+## 1.0.2
+
+### Patch Changes
+
+- [`da9bc6f`](https://github.com/loglayer/loglayer/commit/da9bc6f59385834643d677bd998213cd84046f6f) Thanks [@theogravity](https://github.com/theogravity)! - Add LICENSE file (MIT) to packages
+
+- Updated dependencies [[`da9bc6f`](https://github.com/loglayer/loglayer/commit/da9bc6f59385834643d677bd998213cd84046f6f)]:
+  - @loglayer/transport@1.0.1
+
 ## 1.0.1
 
 ### Patch Changes
