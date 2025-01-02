@@ -30,3 +30,4 @@ tsup.config.json
 .turbo/
 .hashes.json
 .hash-runnerrc.json
+.pnpm-store/

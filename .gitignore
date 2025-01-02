@@ -133,3 +133,5 @@ dist
 .hashes.json
 
 .test-report.xml
+
+.pnpm-store/
