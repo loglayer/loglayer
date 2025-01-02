@@ -50,7 +50,7 @@ jobs:
         run: pnpm run docs:build
         working-directory: docs
         env:
-          BASE_URL: 'https://loglayer.github.io'
+          BASE_URL: 'https://loglayer.dev'
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

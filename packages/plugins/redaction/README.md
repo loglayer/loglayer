@@ -87,4 +87,4 @@ interface RedactionPluginOptions {
 
 ## Documentation
 
-For more details, visit [https://loglayer.github.io/plugins/redaction](https://loglayer.github.io/plugins/redaction)
+For more details, visit [https://loglayer.dev/plugins/redaction](https://loglayer.dev/plugins/redaction)

@@ -37,5 +37,5 @@ const log = new LogLayer({
 
 ## Documentation
 
-For more details, visit [https://loglayer.github.io/transports/bunyan](https://loglayer.github.io/transports/bunyan)
+For more details, visit [https://loglayer.dev/transports/bunyan](https://loglayer.dev/transports/bunyan)
 

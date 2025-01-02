@@ -2,7 +2,7 @@
 
 This is the monorepo for the LogLayer project, a flexible and extensible logging library for JavaScript and TypeScript.
 
-- For full documentation, read the [docs](https://loglayer.github.io).
+- For full documentation, read the [docs](https://loglayer.dev).
 - [Older 4.x documentation](https://github.com/loglayer/loglayer/tree/4.x)
 
 ## Development Setup
@@ -57,4 +57,4 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ## Documentation
 
-For detailed documentation, visit [https://loglayer.github.io](https://loglayer.github.io)
+For detailed documentation, visit [https://loglayer.dev](https://loglayer.dev)

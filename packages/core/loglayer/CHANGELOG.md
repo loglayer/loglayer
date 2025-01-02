@@ -4,14 +4,14 @@
 
 ### Major Changes
 
-New documentation site is available at [loglayer.github.io](https://loglayer.github.io/).
+New documentation site is available at [loglayer.dev](https://loglayer.dev/).
 
-Migration from 4.x to 5.x is available at [here](https://loglayer.github.io/migrating).
+Migration from 4.x to 5.x is available at [here](https://loglayer.dev/migrating).
 
 - Introduced new transport system
   - Replaced direct logger instance and type configuration with transport-specific packages
   - Added new transport classes for each supported logger type
-  - See [Transport documentation](https://loglayer.github.io/docs/transports) for details
+  - See [Transport documentation](https://loglayer.dev/docs/transports) for details
 - Configuration changes
   - Moved error configuration options to root level (`errorSerializer`, `errorFieldName`, `copyMsgOnOnlyError`)
   - Moved context and metadata field names to root level (`contextFieldName`, `metadataFieldName`)

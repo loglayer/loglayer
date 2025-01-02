@@ -35,4 +35,4 @@ const log = new LogLayer({
 
 ## Documentation
 
-For more details, visit [https://loglayer.github.io/transports/consola](https://loglayer.github.io/transports/consola)
+For more details, visit [https://loglayer.dev/transports/consola](https://loglayer.dev/transports/consola)

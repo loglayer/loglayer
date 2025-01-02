@@ -30,5 +30,5 @@ const log = new LogLayer({
 
 ## Documentation
 
-For more details, visit [https://loglayer.github.io/transports/winston](https://loglayer.github.io/transports/winston)
+For more details, visit [https://loglayer.dev/transports/winston](https://loglayer.dev/transports/winston)
 

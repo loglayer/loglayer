@@ -36,5 +36,5 @@ const log = new LogLayer({
 
 ## Documentation
 
-For more details, visit [https://loglayer.github.io/transports/signale](https://loglayer.github.io/transports/signale)
+For more details, visit [https://loglayer.dev/transports/signale](https://loglayer.dev/transports/signale)
 

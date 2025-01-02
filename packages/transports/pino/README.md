@@ -32,4 +32,4 @@ const log = new LogLayer<P.Logger>({
 
 ## Documentation
 
-For more details, visit [https://loglayer.github.io/transports/pino](https://loglayer.github.io/transports/pino)
+For more details, visit [https://loglayer.dev/transports/pino](https://loglayer.dev/transports/pino)

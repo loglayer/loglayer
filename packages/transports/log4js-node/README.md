@@ -39,4 +39,4 @@ const log = new LogLayer({
 
 ## Documentation
 
-For more details, visit [https://loglayer.github.io/transports/log4js](https://loglayer.github.io/transports/log4js)
+For more details, visit [https://loglayer.dev/transports/log4js](https://loglayer.dev/transports/log4js)

@@ -31,4 +31,4 @@ const logger = new LogLayer({
 
 ## Documentation
 
-For more details, visit [https://loglayer.github.io/transports/electron-log](https://loglayer.github.io/transports/electron-log)
+For more details, visit [https://loglayer.dev/transports/electron-log](https://loglayer.dev/transports/electron-log)

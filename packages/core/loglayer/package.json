@@ -69,6 +69,6 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://loglayer.github.io",
+  "homepage": "https://loglayer.dev",
   "packageManager": "pnpm@9.12.2"
 }

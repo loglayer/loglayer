@@ -40,4 +40,4 @@ const log = new LogLayer({
 
 ## Documentation
 
-For more details, visit [https://loglayer.github.io/transports/datadog](https://loglayer.github.io/transports/datadog)
+For more details, visit [https://loglayer.dev/transports/datadog](https://loglayer.dev/transports/datadog)

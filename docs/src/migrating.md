@@ -25,7 +25,7 @@ const log = new LogLayer({
 })
 ```
 
-You can find the full list of transports in the [Transport](https://loglayer.github.io/docs/transports) documentation.
+You can find the full list of transports in the [Transport](https://loglayer.dev/docs/transports) documentation.
 
 ### 2. Configuration Changes
 

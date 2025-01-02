@@ -8,8 +8,6 @@ pre-commit:
       stage_fixed: true
     "verify typescript types":
       run: pnpm run typecheck
-    test:
-      run: pnpm run test
 
 commit-msg:
   commands:

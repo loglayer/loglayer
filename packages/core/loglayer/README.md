@@ -7,7 +7,7 @@
 `loglayer` standardizes log entry definitions, contextual data, metadata, and error reporting, 
 streamlining your logging process using your logging library of choice like `pino` / `winston` / `bunyan` / etc.
 
-For usage and supported logging libraries, see the loglayer [docs](https://loglayer.github.io).
+For usage and supported logging libraries, see the loglayer [docs](https://loglayer.dev).
 
 For 4.x documentation, see the [4.x branch](https://github.com/loglayer/loglayer/tree/4.x).
 
