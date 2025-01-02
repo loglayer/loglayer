@@ -23,7 +23,7 @@ const p = pino({
   level: 'trace'  // Enable all log levels
 })
 
-const log = new LogLayer<P.Logger>({
+const log = new LogLayer({
   transport: new PinoTransport({
     logger: p
   })

@@ -4,7 +4,8 @@
 ![NPM Downloads](https://img.shields.io/npm/dm/loglayer)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-This is the monorepo for the LogLayer project, a flexible and extensible logging library for JavaScript and TypeScript.
+`loglayer` is a layer on top of logging libraries like `pino` / `winston` / `bunyan` to
+provide a consistent logging experience across all your projects.
 
 - For full documentation, read the [docs](https://loglayer.dev).
 - [Older 4.x documentation](https://github.com/loglayer/loglayer/tree/4.x)

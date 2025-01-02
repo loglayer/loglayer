@@ -4,8 +4,8 @@
 ![NPM Downloads](https://img.shields.io/npm/dm/loglayer)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-`loglayer` standardizes log entry definitions, contextual data, metadata, and error reporting, 
-streamlining your logging process using your logging library of choice like `pino` / `winston` / `bunyan` / etc.
+`loglayer` is a layer on top of logging libraries like `pino` / `winston` / `bunyan` to
+provide a consistent logging experience across all your projects.
 
 For usage and supported logging libraries, see the loglayer [docs](https://loglayer.dev).
 

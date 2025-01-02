@@ -127,32 +127,38 @@ The most significant change is the removal of generic type parameters from both 
 
 ```typescript
 // 4.x
-class LogLayer<ExternalLogger extends LoggerLibrary = LoggerLibrary, ErrorType = ErrorDataType> 
-  implements ILogLayer<ExternalLogger, ErrorType> {
-  // ...
-}
+import pino, { P } from 'pino'
+import { LogLayer, LoggerType } from 'loglayer'
 
-interface ILogLayer<ExternalLogger extends LoggerLibrary = LoggerLibrary, ErrorType = ErrorDataType> {
-  getLoggerInstance(): ExternalLogger;
-  withError(error: ErrorType): ILogBuilder<ErrorType>;
-  // ...
-}
+const p = pino({
+  level: 'trace'
+})
 
-// 5.x
-class LogLayer implements ILogLayer {
-  getLoggerInstance<Library>(id: string): Library | undefined;
-  withError(error: any): ILogBuilder;
-  // ...
-}
-
-interface ILogLayer {
-  getLoggerInstance<Library>(id: string): Library | undefined;
-  withError(error: any): ILogBuilder;
-  // ...
-}
+const log = new LogLayer<P.Logger>({
+  logger: {
+    instance: p,
+    type: LoggerType.PINO,
+  },
+})
 ```
 
-This change moves type safety from the class/interface level to the method level, particularly for `getLoggerInstance`. The `ErrorType` generic has been removed entirely in favor of `any` as errors are now handled by transports.
+```typescript
+// 5.x
+import pino, { P } from 'pino'
+import { LogLayer } from 'loglayer'
+import { PinoTransport } from "@loglayer/transport-pino"
+
+const p = pino({
+  level: 'trace'
+})
+
+// No more generic type parameters
+const log = new LogLayer({
+  transport: new PinoTransport({
+    logger: p
+  })
+})
+```
 
 ### Package Organization
 
@@ -167,40 +173,4 @@ import { LogLayerPlugin, PluginBeforeDataOutFn } from 'loglayer';
 
 // 5.x
 import { LogLayerPlugin, PluginBeforeDataOutFn } from '@loglayer/plugin';
-```
-
-### Error Handling
-
-Error-related types have been simplified:
-
-```typescript
-// 4.x - Generic error types
-interface ILogBuilder<ErrorType = ErrorDataType> {
-  withError(error: ErrorType): ILogBuilder<ErrorType>;
-}
-type ErrorSerializerType<ErrorType> = (err: ErrorType) => Record<string, any>;
-
-// 5.x - Simplified to use 'any'
-interface ILogBuilder {
-  withError(error: any): ILogBuilder;
-}
-type ErrorSerializerType = (err: any) => Record<string, any>;
-```
-
-### Method Return Types
-
-Method return types no longer include generics:
-
-```typescript
-// 4.x
-interface ILogLayer<ExternalLogger, ErrorType> {
-  muteContext(): ILogLayer<ExternalLogger, ErrorType>;
-  withContext(context: Record<string, any>): ILogLayer<ExternalLogger, ErrorType>;
-}
-
-// 5.x
-interface ILogLayer {
-  muteContext(): ILogLayer;
-  withContext(context: Record<string, any>): ILogLayer;
-}
 ```
