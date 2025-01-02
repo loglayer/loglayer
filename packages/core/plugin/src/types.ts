@@ -16,6 +16,10 @@ export type PluginBeforeDataOutFn = (params: PluginBeforeDataOutParams) => Recor
 
 export interface PluginShouldSendToLoggerParams {
   /**
+   * Unique identifier for the transport. Can be used to not send to a specific transport.
+   */
+  transportId?: string;
+  /**
    * Message data that is copied from the original.
    */
   messages: any[];

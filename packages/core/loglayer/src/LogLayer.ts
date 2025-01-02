@@ -451,20 +451,21 @@ export class LogLayer implements ILogLayer {
       });
     }
 
-    if (this.pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)) {
-      const shouldSend = this.pluginManager.runShouldSendToLogger({
-        messages: [...params],
-        data: hasObjData ? d : undefined,
-        logLevel,
-      });
-
-      if (!shouldSend) {
-        return;
-      }
-    }
-
     if (Array.isArray(this._config.transport)) {
       for (const transport of this._config.transport) {
+        if (this.pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)) {
+          const shouldSend = this.pluginManager.runShouldSendToLogger({
+            messages: [...params],
+            data: hasObjData ? d : undefined,
+            logLevel,
+            transportId: transport.id,
+          });
+
+          if (!shouldSend) {
+            continue;
+          }
+        }
+
         transport._sendToLogger({
           logLevel,
           messages: [...params],
@@ -473,6 +474,19 @@ export class LogLayer implements ILogLayer {
         });
       }
     } else {
+      if (this.pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)) {
+        const shouldSend = this.pluginManager.runShouldSendToLogger({
+          messages: [...params],
+          data: hasObjData ? d : undefined,
+          logLevel,
+          transportId: this._config.transport.id,
+        });
+
+        if (!shouldSend) {
+          return;
+        }
+      }
+
       this._config.transport._sendToLogger({
         logLevel,
         messages: [...params],

@@ -6,8 +6,8 @@ on:
       - opened
       - reopened
       - synchronize
-    paths-ignore:
-      - 'docs/**'
+    paths:
+      - 'packages/**'
 
 jobs:
   lint:
@@ -28,7 +28,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
+        run: pnpm install --frozen-lockfile
 
       - name: Build workspace packages
         run: pnpm build

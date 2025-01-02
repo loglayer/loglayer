@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-    paths-ignore:
-      - 'docs/**'
+    paths:
+      - 'packages/**'
 
 env:
   PNPM_CACHE_FOLDER: .pnpm-store
