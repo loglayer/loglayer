@@ -1,0 +1,5 @@
+packages:
+  - "packages/core/*"
+  - "packages/transports/*"
+  - "packages/plugins/*"
+  - "docs"

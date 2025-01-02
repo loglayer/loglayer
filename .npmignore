@@ -27,3 +27,6 @@ biome.json
 build/
 commitlint.config.js
 tsup.config.json
+.turbo/
+.hashes.json
+.hash-runnerrc.json

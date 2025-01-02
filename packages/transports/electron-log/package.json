@@ -1,0 +1,60 @@
+{
+  "name": "@loglayer/transport-electron-log",
+  "description": "electron-log transport for loglayer.",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "repository": "loglayer/loglayer.git",
+  "author": "Theo Gravity <theo@suteki.nu>",
+  "keywords": [
+    "logging",
+    "log",
+    "loglayer",
+    "electron-log",
+    "transport"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts",
+    "build:dev": "hash-runner",
+    "clean": "rm -rf .turbo node_modules dist",
+    "lint": "biome check --write --unsafe src && biome format src --write && biome lint src --fix",
+    "verify-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@loglayer/transport": "workspace:*"
+  },
+  "devDependencies": {
+    "loglayer": "workspace:*",
+    "hash-runner": "2.0.1",
+    "@types/node": "22.10.3",
+    "@internal/tsconfig": "workspace:*",
+    "tsup": "8.3.5",
+    "typescript": "5.7.2",
+    "vitest": "2.1.8"
+  },
+  "peerDependencies": {
+    "electron-log": "*"
+  },
+  "bugs": "https://github.com/loglayer/loglayer/issues",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://loglayer.github.io",
+  "packageManager": "pnpm@9.12.2"
+}

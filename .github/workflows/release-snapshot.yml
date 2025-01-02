@@ -3,31 +3,50 @@ name: Snapshot Release
 on:
   workflow_dispatch:
 
+env:
+  PNPM_CACHE_FOLDER: .pnpm-store
+
 jobs:
   snapshot:
     name: Snapshot Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Use pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.11.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: setup pnpm config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
       - name: Install Dependencies
-        run: npm install --frozen-lockfile --prefer-offline
+        run: pnpm install --frozen-lockfile
 
       - name: Build workspace packages
-        run: npm run build
+        run: pnpm build
+
+      - name: Run package checking
+        run: pnpm run lint:packages
 
       - name: Run type checking
-        run: npm run typecheck
+        run: pnpm run typecheck
 
       - name: Run linting
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Create Snapshot Release
         run: |
-          npm run version-packages --snapshot "${{ github.ref_name }}"
+          pnpm run version-packages --snapshot "${{ github.ref_name }}"
           echo '---'
           echo 'Detected Changes:'
           git diff
           echo '---'
-          npm run release --tag "${{ github.ref_name }}" --no-git-tag
+          pnpm run release --tag "${{ github.ref_name }}" --no-git-tag

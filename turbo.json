@@ -1,0 +1,33 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "biome.json",
+    "packages/tsconfig/**"
+  ],
+  "tasks": {
+    "docs:dev": {
+      "persistent": true
+    },
+    "build:dev": {
+      "cache": false
+    },
+    "build": {
+      "dependsOn": ["lint", "^build"],
+      "cache": true,
+      "inputs": [
+        "$TURBO_DEFAULT$"
+      ],
+      "outputs": ["dist/**"]
+    },
+    "verify-types": {},
+    "lint": {},
+    "test": {
+      "dependsOn": ["build:dev"]
+    },
+    "dev": {
+      "dependsOn": ["build:dev"],
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
