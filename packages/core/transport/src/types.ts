@@ -51,7 +51,7 @@ export interface LogLayerTransportConfig<LogLibrary> {
   consoleDebug?: boolean;
 }
 
-export interface LogLayerTransport<LogLibrary extends LoggerLibrary = LoggerLibrary> {
+export interface LogLayerTransport<LogLibrary = any> {
   /**
    * A user-defined identifier for the transport
    **/

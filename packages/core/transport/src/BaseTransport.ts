@@ -1,7 +1,7 @@
 import { LogLevel } from "@loglayer/shared";
-import type { LogLayerTransport, LogLayerTransportConfig, LogLayerTransportParams, LoggerLibrary } from "./types.js";
+import type { LogLayerTransport, LogLayerTransportConfig, LogLayerTransportParams } from "./types.js";
 
-export abstract class BaseTransport<LogLibrary extends LoggerLibrary> implements LogLayerTransport<LogLibrary> {
+export abstract class BaseTransport<LogLibrary> implements LogLayerTransport<LogLibrary> {
   /**
    * An identifier for the transport. If not defined, a random one will be generated.
    */

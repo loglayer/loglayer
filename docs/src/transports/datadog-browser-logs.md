@@ -12,9 +12,8 @@ description: Learn how to use the DataDog Browser Logs library with LogLayer
 ## Important Notes
 
 - Only works in browser environments (not in Node.js)
-- Requires a Datadog account and client token
-- Automatically forwards errors to Datadog
-- Supports global context and custom attributes
+  * For server-side logging, use the [`@loglayer/transport-datadog`](/transports/datadog.html) package
+- You will not get any console output since this sends directly to DataDog. Use the `onDebug` option to log out messages.
 
 ## Installation
 

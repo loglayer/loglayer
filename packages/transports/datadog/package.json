@@ -1,7 +1,7 @@
 {
-  "name": "@loglayer/transport-datadog-browser-logs",
-  "description": "Datadog Browser Logs transport for loglayer.",
-  "version": "1.0.3",
+  "name": "@loglayer/transport-datadog",
+  "description": "DataDog transport for loglayer.",
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -35,20 +35,18 @@
     "verify-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@loglayer/transport": "workspace:*"
+    "@loglayer/transport": "workspace:*",
+    "@datadog/datadog-api-client": "1.31.0",
+    "datadog-transport-common": "3.0.2"
   },
   "devDependencies": {
     "loglayer": "workspace:*",
     "hash-runner": "2.0.1",
-    "global-jsdom": "25.0.0",
     "@types/node": "22.10.4",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.3.5",
     "typescript": "5.7.2",
     "vitest": "2.1.8"
-  },
-  "peerDependencies": {
-    "@datadog/browser-logs": "*"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {
