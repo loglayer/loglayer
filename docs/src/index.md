@@ -6,7 +6,7 @@ layout: home
 
 hero:
   name: "LogLayer"
-  text: "Supercharges logging"
+  text: "Supercharges Logging"
   tagline: "A layer on top of Javascript logging libraries to provide a consistent logging experience."
   image:
     src: /images/loglayer.jpg
