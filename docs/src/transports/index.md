@@ -14,5 +14,6 @@ Transports are the way LogLayer sends logs to a logging library.
 - [Pino](./pino) - Very low overhead Node.js logger
 - [Roarr](./roarr) - JSON logger for Node.js and browser
 - [Signale](./signale) - Highly configurable CLI logger
+- [tslog](./tslog) - Powerful, fast and expressive logging for TypeScript and JavaScript
 - [Tracer](./tracer) - Tracer logging library for Node.js
 - [Winston](./winston) - Multi-transport async logging library
