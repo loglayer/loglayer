@@ -32,15 +32,15 @@ describe("structured transport with datadog-browser-logs", () => {
   it("should log a message", () => {
     log.info("this is a test message");
     // @ts-ignore
-    const consolaMessages = ddLogger.info.mock.calls.map((c) => c[0]);
-    expect(consolaMessages).toContain("this is a test message");
+    const datadogMessages = ddLogger.info.mock.calls.map((c) => c[0]);
+    expect(datadogMessages).toContain("this is a test message");
   });
 
   it("should log a message with a prefix", () => {
     log.withPrefix("[testing]").info("this is a test message");
     // @ts-ignore
-    const consolaMessages = ddLogger.info.mock.calls.map((c) => c[0]);
-    expect(consolaMessages).toContain("[testing] this is a test message");
+    const datadogMessages = ddLogger.info.mock.calls.map((c) => c[0]);
+    expect(datadogMessages).toContain("[testing] this is a test message");
   });
 
   it("should include context", () => {

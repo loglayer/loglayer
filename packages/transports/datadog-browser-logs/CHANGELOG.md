@@ -1,4 +1,4 @@
-# loglayer-transport
+# Datadog Browser Logs Transport Changelog
 
 ## 1.0.3
 

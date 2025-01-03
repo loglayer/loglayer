@@ -9,6 +9,8 @@
 ## Important Notes
 
 - Only works in browser environments (not in Node.js)
+    * For server-side logging, use the `@loglayer/transport-datadog` package
+- You will not get any console output since this sends directly to DataDog. 
 
 ## Installation
 
@@ -40,4 +42,4 @@ const log = new LogLayer({
 
 ## Documentation
 
-For more details, visit [https://loglayer.dev/transports/datadog](https://loglayer.dev/transports/datadog)
+For more details, visit [https://loglayer.dev/transports/datadog-browser-logs](https://loglayer.dev/transports/datadog)
