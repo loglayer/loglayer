@@ -1,6 +1,6 @@
 import { defineConfig, HeadConfig } from 'vitepress'
 
-const defaultTitle = "LogLayer - Supercharge your Javascript logging"
+const defaultTitle = "LogLayer"
 const defaultDescription = "A layer on top of Javascript logging libraries to provide a consistent logging experience."
 
 export default defineConfig({
