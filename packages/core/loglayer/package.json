@@ -1,7 +1,7 @@
 {
   "name": "loglayer",
   "description": "Standardizes logging across multiple logging libraries, providing a consistent way to specify context, metadata, and errors.",
-  "version": "5.0.3",
+  "version": "5.0.4",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
