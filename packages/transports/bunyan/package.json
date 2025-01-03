@@ -30,6 +30,7 @@
     "build": "tsup src/index.ts",
     "test": "vitest --run",
     "build:dev": "hash-runner",
+    "livetest": "tsx src/__tests__/livetest.ts",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "biome check --write --unsafe src && biome format src --write && biome lint src --fix",
     "verify-types": "tsc --noEmit"
@@ -44,6 +45,7 @@
     "@types/node": "22.10.4",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.3.5",
+    "tsx": "4.19.2",
     "typescript": "5.7.2",
     "vitest": "2.1.8"
   },

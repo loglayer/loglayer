@@ -82,6 +82,7 @@ export default defineConfig({
           { text: 'Configuration', link: '/transports/configuration' },
           { text: 'Multiple Transports', link: '/transports/multiple-transports' },
           { text: 'Creating Transports', link: '/transports/creating-transports' },
+          { text: 'Testing Transports', link: '/transports/testing-transports' },
           { text: 'Supported Loggers', items:
             [
               { text: 'Console', link: '/transports/console' },

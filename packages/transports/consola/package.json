@@ -32,7 +32,8 @@
     "build:dev": "hash-runner",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "biome check --write --unsafe src && biome format src --write && biome lint src --fix",
-    "verify-types": "tsc --noEmit"
+    "verify-types": "tsc --noEmit",
+    "livetest": "tsx src/__tests__/livetest.ts"
   },
   "dependencies": {
     "@loglayer/transport": "workspace:*"
@@ -44,7 +45,8 @@
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.3.5",
     "typescript": "5.7.2",
-    "vitest": "2.1.8"
+    "vitest": "2.1.8",
+    "tsx": "4.19.2"
   },
   "peerDependencies": {
     "consola": "*"
