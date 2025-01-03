@@ -1,3 +1,8 @@
+---
+title: Logging Metadata in LogLayer
+description: Learn how to log structured metadata with your log messages in LogLayer
+---
+
 # Logging with Metadata
 
 Metadata allows you to add structured data to your log messages. LogLayer provides several ways to include metadata in your logs.

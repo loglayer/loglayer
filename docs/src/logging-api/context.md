@@ -1,3 +1,8 @@
+---
+title: Context Logging in LogLayer
+description: Learn how to create logs with context data in LogLayer
+---
+
 # Logging with Context
 
 Context allows you to add persistent data that will be included with every log message. This is particularly useful for adding request IDs, user information, or any other data that should be present across multiple log entries.

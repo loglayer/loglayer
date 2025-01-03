@@ -1,9 +1,22 @@
-export default {
-  lang: 'en-US',
-  title: 'LogLayer',
-  description: 'A layer on top of Javascript logging libraries to provide a consistent logging experience across all your projects.',
-  srcDir: "src",
+import { defineConfig, HeadConfig } from 'vitepress'
 
+const defaultTitle = "LogLayer"
+const defaultDescription = "A layer on top of Javascript logging libraries to provide a consistent logging experience across all your projects."
+
+export default defineConfig({
+  lang: 'en-US',
+  title: defaultTitle,
+  description: defaultDescription,
+  srcDir: "src",
+  async transformHead ({ pageData }) {
+    const head: HeadConfig[] = []
+
+    head.push(['meta', { property: 'og:title', content: String(pageData?.frontmatter?.title ?? defaultTitle).replace(/"/g, '&quot;') }])
+    head.push(['meta', { property: 'og:description', content: String(pageData?.frontmatter?.description ?? defaultDescription).replace(/"/g, '&quot;') }])
+    head.push(['meta', { property: 'og:image', content: "/assets/loglayer.jpg" }])
+
+    return head
+  },
   themeConfig: {
     search: {
       provider: 'local'
@@ -85,4 +98,4 @@ export default {
       { icon: 'github', link: 'https://github.com/loglayer/loglayer' }
     ],
   }
-} 
+})

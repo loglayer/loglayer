@@ -1,3 +1,8 @@
+---
+title: LogLayer Tips for Typescript
+description: Notes on using LogLayer with Typescript
+---
+
 # Typescript Tips
 
 ## Use `ILogLayer` if you need to type your logger

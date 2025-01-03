@@ -1,3 +1,8 @@
+---
+title: Configuration Options for LogLayer Transports
+description: Learn how to configure LogLayer transports
+---
+
 # Transport Configuration
 
 All LogLayer transports share a common set of configuration options that control their behavior. These options are passed to the transport constructor when creating a new transport instance.

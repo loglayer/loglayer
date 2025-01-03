@@ -1,3 +1,8 @@
+---
+title: Logging Basics With LogLayer
+description: Learn how to log messages at different severity levels with LogLayer
+---
+
 # Basic Logging
 
 LogLayer provides a simple and consistent API for logging messages at different severity levels. This guide covers the basics of logging messages.

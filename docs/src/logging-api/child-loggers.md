@@ -1,3 +1,8 @@
+---
+title: Child Logging in LogLayer
+description: Learn how to create child loggers in LogLayer
+---
+
 # Child Loggers
 
 Child loggers allow you to create new logger instances that inherit configuration, context, and plugins from their parent logger. This is particularly useful for creating loggers with additional context for specific components or modules while maintaining the base configuration.

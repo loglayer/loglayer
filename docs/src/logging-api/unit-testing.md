@@ -1,3 +1,8 @@
+---
+title: Using MockLogLayer for Unit Testing in LogLayer
+description: Learn how to silence logging during unit tests using MockLogLayer
+---
+
 # Mocking LogLayer for Unit Testing
 
 LogLayer provides a `MockLogLayer` class that implements the `ILogLayer` interface implemented by `LogLayer` but all methods are no-ops (they do nothing). This is useful for testing services that use logging.

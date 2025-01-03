@@ -1,4 +1,7 @@
 ---
+title: LogLayer - A layer on top of Javascript logging libraries
+description: Supercharges logging by providing a consistent logging experience on top of Javascript logging libraries.
+
 layout: home
 
 hero:

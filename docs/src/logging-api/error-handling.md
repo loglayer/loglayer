@@ -1,3 +1,8 @@
+---
+title: Error Handling in LogLayer
+description: Learn how to pass errors to LogLayer for logging
+---
+
 # Error Handling
 
 LogLayer provides robust error handling capabilities with flexible configuration options for how errors are logged and serialized.

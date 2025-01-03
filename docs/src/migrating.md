@@ -1,3 +1,8 @@
+---
+title: Migrating from LogLayer 4.x to 5.x
+description: Learn how to migrate from LogLayer 4.x to 5.x
+---
+
 # Migrating from 4.x to 5.x
 
 ## Node.js version

@@ -1,3 +1,8 @@
+---
+title: Using LogLayer with Express
+description: Learn how to implement LogLayer with Express
+---
+
 # LogLayer with Express
 
 LogLayer can be easily integrated with Express as middleware to provide request-scoped logging via `req.log`. This guide will show you how to set it up.
