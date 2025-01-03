@@ -1,7 +1,7 @@
 # LogLayer Monorepo
 
 [![NPM version](https://img.shields.io/npm/v/loglayer.svg?style=flat-square)](https://www.npmjs.com/package/loglayer)
-![NPM Downloads](https://img.shields.io/npm/dm/loglayer)
+[![NPM Downloads](https://img.shields.io/npm/dm/loglayer)](https://www.npmjs.com/package/loglayer)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
 `loglayer` is a layer on top of logging libraries like `pino` / `winston` / `bunyan` to

@@ -93,6 +93,7 @@ export default defineConfig({
               { text: 'Pino', link: '/transports/pino' },
               { text: 'Roarr', link: '/transports/roarr' },
               { text: 'Signale', link: '/transports/signale' },
+              { text: 'Tracer', link: '/transports/tracer' },
               { text: 'Winston', link: '/transports/winston' },
             ]
           }
