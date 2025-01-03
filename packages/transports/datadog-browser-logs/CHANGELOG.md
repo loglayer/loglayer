@@ -1,5 +1,12 @@
 # Datadog Browser Logs Transport Changelog
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies [[`372a062`](https://github.com/loglayer/loglayer/commit/372a062138ffd4768a798180f02f3e9705842f0a)]:
+  - @loglayer/transport@1.1.1
+
 ## 1.0.4
 
 ### Patch Changes

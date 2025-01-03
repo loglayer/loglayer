@@ -1,5 +1,11 @@
 # @loglayer/transport
 
+## 1.1.1
+
+### Patch Changes
+
+- [#59](https://github.com/loglayer/loglayer/pull/59) [`372a062`](https://github.com/loglayer/loglayer/commit/372a062138ffd4768a798180f02f3e9705842f0a) Thanks [@theogravity](https://github.com/theogravity)! - Add the `testTransportOutput` testing utility to the `@loglayer/transport` package
+
 ## 1.1.0
 
 ### Minor Changes
