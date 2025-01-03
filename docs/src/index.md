@@ -8,6 +8,9 @@ hero:
   name: "LogLayer"
   text: "Supercharges logging"
   tagline: "A layer on top of Javascript logging libraries to provide a consistent logging experience."
+  image:
+    src: /images/loglayer.jpg
+    alt: LogLayer
   actions:
     - theme: brand
       text: What is LogLayer?

@@ -8,8 +8,17 @@ export default defineConfig({
   title: defaultTitle,
   description: defaultDescription,
   srcDir: "src",
+  appearance: 'dark',
   async transformHead ({ pageData }) {
-    const head: HeadConfig[] = []
+    const head: HeadConfig[] = [
+      ['link', { rel: 'icon', href: '/images/icons/favicon.ico' }],
+      ['link', { rel: 'manifest', href: '/images/icons/site.webmanifest' }],
+      ['meta', { name: 'keywords', content: 'loglayer, logging, logger, log, javascript, typescript, nodejs, browser' }],
+      ['meta', { property: 'og:type', content: 'website' }],
+      ['meta', { property: 'og:image', content: '/images/loglayer.jpg' }],
+      ['meta', { property: 'og:url', content: 'https://loglayer.dev' }],
+      ['meta', { property: 'og:site_name', content: 'LogLayer' }],
+    ]
 
     head.push(['meta', { property: 'og:title', content: String(pageData?.frontmatter?.title ?? defaultTitle).replace(/"/g, '&quot;') }])
     head.push(['meta', { property: 'og:description', content: String(pageData?.frontmatter?.description ?? defaultDescription).replace(/"/g, '&quot;') }])
@@ -17,6 +26,7 @@ export default defineConfig({
     return head
   },
   themeConfig: {
+    logo: "/images/loglayer.jpg",
     search: {
       provider: 'local'
     },

@@ -6,7 +6,7 @@
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "docs:preview": "vitepress build && vitepress preview"
   },
   "devDependencies": {
     "vitepress": "1.5.0"
