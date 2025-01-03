@@ -35,9 +35,37 @@ import { BaseTransport, LogLayerTransportParams } from "@loglayer/transport";
 export class CustomTransport extends BaseTransport<YourLoggerType> {
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams): any[] {
     // Your implementation here
+    // Use this.logger to access the logger instance that the user has passed through
+    this.logger.info(data, ...messages);
+
     return messages;
   }
 }
+```
+
+### How this works
+
+If one did the following:
+
+```typescript
+logger.withMetadata({foo: 'bar'}).info('hello world', 'foo');
+```
+
+The parameters passed to `shipToLogger` would be:
+
+```typescript
+{
+  logLevel: LogLevel.info,
+  messages: ['hello world', 'foo'],
+  data: {foo: 'bar'},
+  hasData: true
+}
+```
+
+This would be translated to the following if using the `console` transport:
+
+```typescript
+console.info({foo: 'bar'}, 'hello world', 'foo');
 ```
 
 ### Transport Parameters
@@ -67,7 +95,7 @@ interface LogLayerTransportParams {
 }
 ```
 
-### Shipping to the Logger
+## Shipping to the Logger
 
 The transport must do the following:
 
@@ -122,27 +150,8 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
 }
 ```
 
-### How this works
+### Example using a non-logging library
 
-If one did the following:
+It is possible to use a transport to send logs to a service that is not a logging library. For example, you could use a transport to send logs to a third-party service like Datadog.
 
-```typescript
-logger.withMetadata({foo: 'bar'}).info('hello world', 'foo');
-```
-
-The parameters passed to `shipToLogger` would be:
-
-```typescript
-{
-  logLevel: LogLevel.info,
-  messages: ['hello world', 'foo'],
-  data: {foo: 'bar'},
-  hasData: true
-}
-```
-
-This would be translated to the following:
-
-```typescript
-console.info({foo: 'bar'}, 'hello world', 'foo');
-```
+See the [Datadog Transport](https://github.com/loglayer/loglayer/blob/master/packages/transports/datadog/src/DataDogTransport.ts) implementation for an example.
