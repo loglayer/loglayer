@@ -120,27 +120,21 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
     // now ship the message to the logger
     switch (logLevel) {
       case LogLevel.info:
-        // @ts-ignore
         this.logger.info(...messages);
         break;
       case LogLevel.warn:
-        // @ts-ignore
         this.logger.warn(...messages);
         break;
       case LogLevel.error:
-        // @ts-ignore
         this.logger.error(...messages);
         break;
       case LogLevel.trace:
-        // @ts-ignore
         this.logger.trace(...messages);
         break;
       case LogLevel.debug:
-        // @ts-ignore
         this.logger.debug(...messages);
         break;
       case LogLevel.fatal:
-        // @ts-ignore
         this.logger.error(...messages);
         break;
     }

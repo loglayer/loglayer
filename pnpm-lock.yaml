@@ -486,6 +486,37 @@ importers:
         specifier: 2.1.8
         version: 2.1.8(@types/node@22.10.4)(jsdom@25.0.1)
 
+  packages/transports/tracer:
+    dependencies:
+      '@loglayer/transport':
+        specifier: workspace:*
+        version: link:../../core/transport
+      tracer:
+        specifier: '*'
+        version: 1.3.0
+    devDependencies:
+      '@internal/tsconfig':
+        specifier: workspace:*
+        version: link:../../core/tsconfig
+      '@types/node':
+        specifier: 22.10.4
+        version: 22.10.4
+      hash-runner:
+        specifier: 2.0.1
+        version: 2.0.1
+      loglayer:
+        specifier: workspace:*
+        version: link:../../core/loglayer
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(jiti@2.4.2)(postcss@8.4.49)(typescript@5.7.2)(yaml@2.5.1)
+      typescript:
+        specifier: 5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: 2.1.8
+        version: 2.1.8(@types/node@22.10.4)(jsdom@25.0.1)
+
   packages/transports/winston:
     dependencies:
       '@loglayer/transport':
@@ -1750,6 +1781,10 @@ packages:
   color@3.2.1:
     resolution: {integrity: sha512-aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA==}
 
+  colors@1.4.0:
+    resolution: {integrity: sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==}
+    engines: {node: '>=0.1.90'}
+
   colorspace@1.1.4:
     resolution: {integrity: sha512-BgvKJiuVu1igBUF2kEjRCZXol6wiiGbY5ipL/oVPwm0BL9sIpMIzM8IK7vwuxIIzOXMV3Ey5w+vxhm0rR/TN8w==}
 
@@ -1843,6 +1878,9 @@ packages:
   date-format@4.0.14:
     resolution: {integrity: sha512-39BOQLs9ZjKh0/patS9nrT8wc3ioX3/eA/zgbKNopnF2wCqJEoxywwwElATYvRsXdnOxA/OQeQoFZ3rFjVajhg==}
     engines: {node: '>=4.0'}
+
+  dateformat@4.5.1:
+    resolution: {integrity: sha512-OD0TZ+B7yP7ZgpJf5K2DIbj3FZvFvxgFUuaqA/V5zTjAtAAXZ1E8bktHxmAGs4x5b7PflqA9LeQ84Og7wYtF7Q==}
 
   debug@4.3.7:
     resolution: {integrity: sha512-Er2nc/H7RrMXZBFCEim6TCmMk02Z8vLC2Rbi1KEBggpo0fS6l0S1nnapwmIi3yW/+GOJap1Krg4w0Hg80oCqgQ==}
@@ -2522,6 +2560,11 @@ packages:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
     hasBin: true
 
+  mkdirp@1.0.4:
+    resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   moment@2.30.1:
     resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
 
@@ -3115,6 +3158,10 @@ packages:
     resolution: {integrity: sha512-n1cw8k1k0x4pgA2+9XrOkFydTerNcJ1zWCO5Nn9scWHTD+5tp8dghT2x1uduQePZTZgd3Tupf+x9BxJjeJi77Q==}
     engines: {node: '>=14.0.0'}
 
+  tinytim@0.1.1:
+    resolution: {integrity: sha512-NIpsp9lBIxPNzB++HnMmUd4byzJSVbbO4F+As1Gb1IG/YQT5QvmBDjpx8SpDS8fhGC+t+Qw8ldQgbcAIaU+2cA==}
+    engines: {node: '>= 0.2.0'}
+
   tldts-core@6.1.60:
     resolution: {integrity: sha512-XHjoxak8SFQnHnmYHb3PcnW5TZ+9ErLZemZei3azuIRhQLw4IExsVbL3VZJdHcLeNaXq6NqawgpDPpjBOg4B5g==}
 
@@ -3143,6 +3190,10 @@ packages:
   tr46@5.0.0:
     resolution: {integrity: sha512-tk2G5R2KRwBd+ZN0zaEXpmzdKyOYksXwywulIX95MBODjSzMIuQnQ3m8JxgbhnL1LeVo7lqQKsYa1O3Htl7K5g==}
     engines: {node: '>=18'}
+
+  tracer@1.3.0:
+    resolution: {integrity: sha512-8G2okIuUNThM1W8HU9YUCsQgxROw9VpewE2f8Tsw3B90b0acvBiATqnUIvv07qG/aBTs7ALDr7tLVUVD86kPPA==}
+    engines: {node: '>= 16.20.1'}
 
   tree-kill@1.2.2:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
@@ -4674,6 +4725,8 @@ snapshots:
       color-convert: 1.9.3
       color-string: 1.9.1
 
+  colors@1.4.0: {}
+
   colorspace@1.1.4:
     dependencies:
       color: 3.2.1
@@ -4769,6 +4822,8 @@ snapshots:
   dataloader@1.4.0: {}
 
   date-format@4.0.14: {}
+
+  dateformat@4.5.1: {}
 
   debug@4.3.7:
     dependencies:
@@ -5463,6 +5518,8 @@ snapshots:
       minimist: 1.2.8
     optional: true
 
+  mkdirp@1.0.4: {}
+
   moment@2.30.1:
     optional: true
 
@@ -6047,6 +6104,8 @@ snapshots:
 
   tinyspy@3.0.2: {}
 
+  tinytim@0.1.1: {}
+
   tldts-core@6.1.60: {}
 
   tldts@6.1.60:
@@ -6074,6 +6133,13 @@ snapshots:
   tr46@5.0.0:
     dependencies:
       punycode: 2.3.1
+
+  tracer@1.3.0:
+    dependencies:
+      colors: 1.4.0
+      dateformat: 4.5.1
+      mkdirp: 1.0.4
+      tinytim: 0.1.1
 
   tree-kill@1.2.2: {}
 
