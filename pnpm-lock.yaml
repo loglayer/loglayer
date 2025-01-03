@@ -538,6 +538,40 @@ importers:
         specifier: 2.1.8
         version: 2.1.8(@types/node@22.10.4)(jsdom@25.0.1)
 
+  packages/transports/tslog:
+    dependencies:
+      '@loglayer/transport':
+        specifier: workspace:*
+        version: link:../../core/transport
+      tslog:
+        specifier: '*'
+        version: 4.9.3
+    devDependencies:
+      '@internal/tsconfig':
+        specifier: workspace:*
+        version: link:../../core/tsconfig
+      '@types/node':
+        specifier: 22.10.4
+        version: 22.10.4
+      hash-runner:
+        specifier: 2.0.1
+        version: 2.0.1
+      loglayer:
+        specifier: workspace:*
+        version: link:../../core/loglayer
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)(yaml@2.5.1)
+      tsx:
+        specifier: 4.19.2
+        version: 4.19.2
+      typescript:
+        specifier: 5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: 2.1.8
+        version: 2.1.8(@types/node@22.10.4)(jsdom@25.0.1)
+
   packages/transports/winston:
     dependencies:
       '@loglayer/transport':
@@ -3390,6 +3424,10 @@ packages:
 
   ts-toolbelt@9.6.0:
     resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
+
+  tslog@4.9.3:
+    resolution: {integrity: sha512-oDWuGVONxhVEBtschLf2cs/Jy8i7h1T+CpdkTNWQgdAF7DhRo2G8vMCgILKe7ojdEkLhICWgI1LYSSKaJsRgcw==}
+    engines: {node: '>=16'}
 
   tsup@8.3.5:
     resolution: {integrity: sha512-Tunf6r6m6tnZsG9GYWndg0z8dEV7fD733VBFzFJ5Vcm1FtlXB8xBD/rtrBi2a3YKEV7hHtxiZtW5EAVADoe1pA==}
@@ -6440,6 +6478,8 @@ snapshots:
   ts-interface-checker@0.1.13: {}
 
   ts-toolbelt@9.6.0: {}
+
+  tslog@4.9.3: {}
 
   tsup@8.3.5(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)(yaml@2.5.1):
     dependencies:

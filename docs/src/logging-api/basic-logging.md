@@ -18,9 +18,12 @@ LogLayer supports six standard log levels, each with its own method:
 - `trace()` - For detailed debugging information
 - `fatal()` - For critical errors that require immediate attention
 
-Note: Some logging libraries may not support all levels. In such cases:
+::: info
+Some logging libraries may not support all levels. In such cases:
+
 - `trace` is mapped to `debug`
 - `fatal` is mapped to `error`
+:::
 
 ## Basic Message Logging
 
