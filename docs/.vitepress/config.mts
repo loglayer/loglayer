@@ -11,6 +11,18 @@ export default defineConfig({
   appearance: 'dark',
   async transformHead ({ pageData }) {
     const head: HeadConfig[] = [
+      [
+        'script',
+        { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-WS76Z01D7D' }
+      ],
+      [
+        'script',
+        {},
+        `window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WS76Z01D7D');`
+      ],
       ['link', { rel: 'icon', href: '/images/icons/favicon.ico' }],
       ['link', { rel: 'manifest', href: '/images/icons/site.webmanifest' }],
       ['meta', { name: 'keywords', content: 'loglayer, logging, logger, log, javascript, typescript, nodejs, browser' }],
