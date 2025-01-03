@@ -8,7 +8,7 @@ export default defineConfig({
   title: defaultTitle,
   description: defaultDescription,
   srcDir: "src",
-  appearance: 'dark',
+  appearance: 'force-dark',
   async transformHead ({ pageData }) {
     const head: HeadConfig[] = [
       [
