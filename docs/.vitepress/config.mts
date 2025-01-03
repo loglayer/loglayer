@@ -1,7 +1,7 @@
 import { defineConfig, HeadConfig } from 'vitepress'
 
-const defaultTitle = "LogLayer"
-const defaultDescription = "A layer on top of Javascript logging libraries to provide a consistent logging experience across all your projects."
+const defaultTitle = "LogLayer - Supercharge your Javascript logging"
+const defaultDescription = "A layer on top of Javascript logging libraries to provide a consistent logging experience."
 
 export default defineConfig({
   lang: 'en-US',
@@ -13,7 +13,6 @@ export default defineConfig({
 
     head.push(['meta', { property: 'og:title', content: String(pageData?.frontmatter?.title ?? defaultTitle).replace(/"/g, '&quot;') }])
     head.push(['meta', { property: 'og:description', content: String(pageData?.frontmatter?.description ?? defaultDescription).replace(/"/g, '&quot;') }])
-    head.push(['meta', { property: 'og:image', content: "/assets/loglayer.jpg" }])
 
     return head
   },
