@@ -9,6 +9,9 @@ export default defineConfig({
   description: defaultDescription,
   srcDir: "src",
   appearance: 'force-dark',
+  sitemap: {
+    hostname: 'https://loglayer.dev'
+  },
   async transformHead ({ pageData }) {
     const head: HeadConfig[] = [
       [
