@@ -1,6 +1,13 @@
+---
+title: Signale Transport for LogLayer
+description: Learn how to use the Signale logging library with LogLayer
+---
+
 # Signale Transport
 
 [Signale](https://github.com/klaussinani/signale) is a highly configurable logging utility designed for CLI applications.
+
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/signale)
 
 ## Important Notes
 

@@ -1,6 +1,13 @@
+---
+title: Electron-log Transport for LogLayer
+description: Learn how to use the electron-log logging library with LogLayer
+---
+
 # Electron-log Transport
 
 [Electron-log](https://github.com/megahertz/electron-log) is a logging library designed specifically for Electron applications.
+
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/electron-log)
 
 ## Installation
 

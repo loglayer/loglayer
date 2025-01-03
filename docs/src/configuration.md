@@ -1,3 +1,8 @@
+---
+title: Configuring LogLayer
+description: Learn how to configure LogLayer to customize its behavior
+---
+
 # Configuration
 
 LogLayer can be configured with various options to customize its behavior. Here's a comprehensive guide to all available configuration options.

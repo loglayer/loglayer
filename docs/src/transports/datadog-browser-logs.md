@@ -1,6 +1,13 @@
-# Datadog Browser Logs Transport
+---
+title: DataDog Browser Logs Transport for LogLayer
+description: Learn how to use the DataDog Browser Logs library with LogLayer
+---
+
+# DataDog Browser Logs Transport
 
 [@datadog/browser-logs](https://docs.datadoghq.com/logs/log_collection/javascript/) is Datadog's official browser-side logging library.
+
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/datadog-browser-logs)
 
 ## Important Notes
 

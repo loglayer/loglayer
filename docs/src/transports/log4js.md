@@ -1,6 +1,13 @@
+---
+title: Log4js Transport for LogLayer
+description: Learn how to use the Log4js logging library with LogLayer
+---
+
 # Log4js Transport
 
 [Log4js-node](https://log4js-node.github.io/log4js-node/) is a conversion of the Log4j framework to Node.js.
+
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/log4js-node)
 
 ## Important Notes
 

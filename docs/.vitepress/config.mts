@@ -50,7 +50,7 @@ export default {
               { text: 'Console', link: '/transports/console' },
               { text: 'Bunyan', link: '/transports/bunyan' },
               { text: 'Consola', link: '/transports/consola' },
-              { text: 'Datadog Browser Logs', link: '/transports/datadog' },
+              { text: 'Datadog Browser Logs', link: '/transports/datadog-browser-logs' },
               { text: 'Electron Log', link: '/transports/electron-log' },
               { text: 'Log4js', link: '/transports/log4js' },
               { text: 'Pino', link: '/transports/pino' },

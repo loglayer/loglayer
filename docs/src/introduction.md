@@ -1,3 +1,8 @@
+---
+title: About LogLayer
+description: Learn more about LogLayer and how it supercharges your logging experience
+---
+
 # Introduction
 
 `loglayer` is a TypeScript library that standardizes logging across your application, regardless of which logging library you use under the hood.

@@ -1,3 +1,8 @@
+---
+title: Get started with LogLayer
+description: Learn how to install and use LogLayer in your project
+---
+
 # Getting Started
 
 ## Installation

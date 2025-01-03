@@ -1,6 +1,13 @@
+---
+title: Bunyan Transport for LogLayer
+description: Learn how to use the Bunyan logging library with LogLayer
+---
+
 # Bunyan Transport
 
 [Bunyan](https://github.com/trentm/node-bunyan) is a JSON logging library for Node.js services.
+
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/bunyan)
 
 ## Installation
 

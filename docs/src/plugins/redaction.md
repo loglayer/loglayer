@@ -1,7 +1,9 @@
 ---
-title: Redaction Plugin
+title: Redaction Plugin for LogLayer
 description: Learn how to use the redaction plugin to protect sensitive data in your logs
 ---
+
+[Plugin Source](https://github.com/loglayer/loglayer/tree/master/packages/plugins/redaction)
 
 # Redaction Plugin
 

@@ -1,3 +1,8 @@
+---
+title: Creating LogLayer Plugins
+description: Learn how to create custom plugins for LogLayer
+---
+
 # Creating Plugins
 
 ## Installation

@@ -1,6 +1,13 @@
+---
+title: Roarr Transport for LogLayer
+description: Learn how to use the roarr logging library with LogLayer
+---
+
 # Roarr Transport
 
 [Roarr](https://github.com/gajus/roarr) is a JSON logger for Node.js and browser environments.
+
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/roarr)
 
 ## Installation
 

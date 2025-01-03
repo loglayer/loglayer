@@ -1,6 +1,13 @@
+---
+title: Winston Transport for LogLayer
+description: Learn how to use the Winston logging library with LogLayer
+---
+
 # Winston Transport
 
 [Winston](https://github.com/winstonjs/winston) is a multi-transport async logging library for Node.js.
+
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/winston)
 
 ## Installation
 

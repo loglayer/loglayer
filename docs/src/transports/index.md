@@ -13,4 +13,4 @@ Transports are the way LogLayer sends logs to a logging library.
 - [Log4js](./log4js) - Port of Log4j framework to Node.js
 - [Signale](./signale) - Highly configurable CLI logger
 - [Consola](./consola) - Elegant console logger for Node.js and browser
-- [Datadog Browser Logs](./datadog) - Browser-side logging for Datadog
+- [Datadog Browser Logs](./datadog-browser-logs) - Browser-side logging for Datadog

@@ -1,6 +1,13 @@
+---
+title: Consola Transport for LogLayer
+description: Learn how to use the Consola logging library with LogLayer
+---
+
 # Consola Transport
 
 [Consola](https://github.com/unjs/consola) is an elegant and configurable console logger for Node.js and browser.
+
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/consola)
 
 ## Important Notes
 

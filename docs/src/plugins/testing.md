@@ -1,5 +1,9 @@
-# Testing Plugins
+---
+title: Testing LogLayer Plugins
+description: Learn how to write tests for your LogLayer plugins
+---
 
+# Testing Plugins
 
 LogLayer provides a `TestTransport` and `TestLoggingLibrary` that make it easy to test your plugins. Here's an example of how to test a plugin that adds a timestamp to metadata:
 

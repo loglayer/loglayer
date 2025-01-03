@@ -1,6 +1,13 @@
+---
+title: Console Transport for LogLayer
+description: Learn how to use console logging with LogLayer
+---
+
 # Console Transport
 
 The simplest integration is with the built-in `console` object, which is available in both Node.js and browser environments.
+
+[Transport Source](https://github.com/loglayer/loglayer/blob/master/packages/core/loglayer/src/transports/ConsoleTransport.ts)
 
 ## Installation
 

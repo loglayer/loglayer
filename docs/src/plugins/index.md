@@ -7,19 +7,6 @@ description: Learn how to create and use plugins with LogLayer
 
 LogLayer's plugin system allows you to extend and modify logging behavior at various points in the log lifecycle. Plugins can modify data and messages before they're sent to the logging library, control whether logs should be sent, and intercept metadata calls.
 
-## Using Plugins
-
-To use a plugin, define the `plugins` array when creating the `LogLayer` instance:
-
-```typescript
-const log = new LogLayer({
-  transport: new ConsoleTransport({
-    logger: console
-  }),
-  plugins: [timestampPlugin(), sensitiveDataPlugin()]
-})
-```
-
 ## Plugin Management
 
 ### Adding Plugins
@@ -31,14 +18,30 @@ const log = new LogLayer({
   transport: new ConsoleTransport({
     logger: console
   }),
-  plugins: [timestampPlugin, sensitiveDataPlugin]
+  plugins: [
+    timestampPlugin(),
+    {
+      id: 'sensitive-data-filter',
+      onBeforeDataOut(params) {
+        // a simple plugin that does something
+        return params.data
+      }
+    }
+  ]
 })
 ```
 
 Or add them later:
 
 ```typescript
-log.addPlugins([productionFilterPlugin])
+log.addPlugins([timestampPlugin()])
+log.addPlugins([{
+    id: 'sensitive-data-filter',
+    onBeforeDataOut(params) {
+        // a simple plugin that does something
+        return params.data
+    }
+}])
 ```
 
 ### Enabling/Disabling Plugins
