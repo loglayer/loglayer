@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-datadog-browser-logs",
   "description": "Datadog Browser Logs transport for loglayer.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
