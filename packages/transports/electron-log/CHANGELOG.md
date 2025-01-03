@@ -1,4 +1,4 @@
-# loglayer-transport
+# Electron Log Transport Changelog
 
 ## 1.0.4
 

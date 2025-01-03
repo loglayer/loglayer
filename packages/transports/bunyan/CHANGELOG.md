@@ -1,4 +1,4 @@
-# loglayer-transport
+# Bunyan Transport Changelog
 
 ## 1.0.4
 

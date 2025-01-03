@@ -1,4 +1,4 @@
-# loglayer-transport
+# Winston Transport Changelog
 
 ## 1.0.4
 

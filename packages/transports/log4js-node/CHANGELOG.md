@@ -1,4 +1,4 @@
-# loglayer-transport
+# Log4js Node Transport Changelog
 
 ## 1.0.4
 

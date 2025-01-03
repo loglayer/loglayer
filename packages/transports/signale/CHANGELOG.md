@@ -1,4 +1,4 @@
-# loglayer-transport
+# Signale Transport Changelog
 
 ## 1.0.4
 
