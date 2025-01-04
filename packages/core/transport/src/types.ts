@@ -31,15 +31,11 @@ export interface LoggerLibrary {
   fatal?: (...data: any[]) => void;
 }
 
-export interface LogLayerTransportConfig<LogLibrary> {
+export interface LoggerlessTransportConfig {
   /**
    * A user-defined identifier for the transport
    */
   id?: string;
-  /**
-   * The logging library instance to use for logging
-   */
-  logger: LogLibrary;
   /**
    * If false, the transport will not send logs to the logger.
    * Default is true.
@@ -49,6 +45,13 @@ export interface LogLayerTransportConfig<LogLibrary> {
    * If true, the transport will log to the console for debugging purposes
    */
   consoleDebug?: boolean;
+}
+
+export interface LogLayerTransportConfig<LogLibrary> extends LoggerlessTransportConfig {
+  /**
+   * The logging library instance to use for logging
+   */
+  logger: LogLibrary;
 }
 
 export interface LogLayerTransport<LogLibrary = any> {

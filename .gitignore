@@ -135,3 +135,5 @@ dist
 .test-report.xml
 
 .pnpm-store/
+.env
+.env.local

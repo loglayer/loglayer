@@ -29,10 +29,10 @@ export function testTransportOutput(label: string, logLayerInstance: any) {
       test: "metadata",
       test2: "metadata2",
     })
-    .trace("trace message");
+    .trace("trace message with metadata");
 
   console.log("\n===== withError() ====");
-  logLayerInstance.withError(new Error("error object")).trace("trace message");
+  logLayerInstance.withError(new Error("error object")).trace("trace message with error");
 
   console.log("\n===== withError() + withMetadata() ====");
   logLayerInstance
@@ -41,7 +41,7 @@ export function testTransportOutput(label: string, logLayerInstance: any) {
       test2: "metadata2",
     })
     .withError(new Error("error object"))
-    .error("error message");
+    .error("error message with metadata and error instance");
 
   console.log("\n===== onlyError() ====");
   logLayerInstance.errorOnly(new Error("error message"));
@@ -49,6 +49,7 @@ export function testTransportOutput(label: string, logLayerInstance: any) {
   console.log("\n===== onlyMetadata() ====");
   logLayerInstance.metadataOnly({
     only: "metadata",
+    arrayData: [1, 2, 3],
   });
 
   console.log("\n===== withContext() ====");
