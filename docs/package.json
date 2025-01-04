@@ -1,5 +1,5 @@
 {
-  "name": "loglayer-docs",
+  "name": "@loglayer/docs",
   "description": "Documentation for LogLayer.",
   "version": "1.0.0",
   "private": true,
