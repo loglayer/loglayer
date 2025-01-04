@@ -4,7 +4,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Fplugin-redaction)](https://www.npmjs.com/package/@loglayer/plugin-redaction)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-The redaction plugin provides data redaction support for LogLayer using [fast-redact](https://www.npmjs.com/package/fast-redact). 
+The redaction plugin for [loglayer](https://loglayer.dev) provides data redaction support for LogLayer using [fast-redact](https://www.npmjs.com/package/fast-redact). 
 It allows you to automatically redact sensitive information from your logs.
 
 It currently only performs redaction on metadata.

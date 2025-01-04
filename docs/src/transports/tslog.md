@@ -3,7 +3,7 @@ title: TsLog Transport for LogLayer
 description: Learn how to use the TsLog logging library with LogLayer
 ---
 
-# TsLog Transport
+# tslog Transport
 
 [tslog](https://tslog.js.org/) is a powerful TypeScript logging library that provides beautiful logging with full TypeScript support.
 

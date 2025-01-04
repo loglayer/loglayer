@@ -4,6 +4,8 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-datadog-browser-logs)](https://www.npmjs.com/package/@loglayer/transport-datadog-browser-logs)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
+The Datadog Browser Logs transport for [LogLayer](https://loglayer.dev).
+
 [@datadog/browser-logs](https://docs.datadoghq.com/logs/log_collection/javascript/) is Datadog's official browser-side logging library.
 
 ## Important Notes
