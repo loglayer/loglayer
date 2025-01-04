@@ -1,6 +1,6 @@
 {
   "name": "loglayer",
-  "description": "Standardizes logging across multiple logging libraries, providing a consistent way to specify context, metadata, and errors.",
+  "description": "A unified logger that routes logs to various logging libraries and cloud providers while providing a fluent API for specifying log messages, metadata and errors",
   "version": "5.0.5",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -25,6 +25,8 @@
     "roarr",
     "log4js",
     "log4js-node",
+    "multi-transport",
+    "tslog",
     "winston",
     "bunyan",
     "structured",

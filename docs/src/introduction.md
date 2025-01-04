@@ -1,14 +1,13 @@
 ---
 title: About LogLayer
-description: Learn more about LogLayer and how it supercharges your logging experience
+description: Learn more about LogLayer and how it unifies your logging experience
 ---
 
 # Introduction
 
-`loglayer` is a TypeScript library that standardizes logging across your application, regardless of which logging library you use under the hood.
+`loglayer` is a unified logger that routes logs to various logging libraries and cloud providers while providing a fluent API for specifying log messages, metadata and errors.
 
-It offers a chainable, fluent API for specifying metadata and errors, along with a plugin system that allows
-you to modify log data before it's shipped to your logging library.
+It also offers a plugin system that allows you to modify log data before it's shipped to your logging library.
 
 ```javascript
 // Example using the Pino logging library with LogLayer
