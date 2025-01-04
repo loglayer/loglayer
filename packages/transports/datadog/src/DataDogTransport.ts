@@ -1,8 +1,9 @@
-import { BaseTransport, type LogLayerTransportParams } from "@loglayer/transport";
-import type { LogLayerTransportConfig } from "@loglayer/transport";
+import type { LogLayerTransportParams } from "@loglayer/transport";
+import type { LoggerlessTransportConfig } from "@loglayer/transport";
+import { LoggerlessTransport } from "@loglayer/transport";
 import { type DDTransportOptions, DataDogTransport as DatadogTransportCommon } from "datadog-transport-common";
 
-export interface DatadogTransportConfig extends Omit<LogLayerTransportConfig<DatadogTransportCommon>, "logger"> {
+export interface DatadogTransportConfig extends LoggerlessTransportConfig {
   /**
    * The options to pass to the datadog-transport-common instance.
    */
@@ -25,15 +26,17 @@ export interface DatadogTransportConfig extends Omit<LogLayerTransportConfig<Dat
   timestampFunction?: () => any;
 }
 
-class DataDogTransport extends BaseTransport<DatadogTransportCommon> {
-  messageField: string;
-  levelField: string;
-  timestampField: string;
-  timestampFunction?: () => any;
+export class DataDogTransport extends LoggerlessTransport {
+  private messageField: string;
+  private levelField: string;
+  private timestampField: string;
+  private timestampFunction?: () => any;
+  private transport: DatadogTransportCommon;
 
-  constructor(config: DatadogTransportConfig & Pick<LogLayerTransportConfig<DatadogTransportCommon>, "logger">) {
+  constructor(config: DatadogTransportConfig) {
     super(config);
 
+    this.transport = new DatadogTransportCommon(config.options);
     this.messageField = config.messageField ?? "message";
     this.levelField = config.levelField ?? "level";
     this.timestampField = config.timestampField ?? "time";
@@ -47,7 +50,7 @@ class DataDogTransport extends BaseTransport<DatadogTransportCommon> {
       Object.assign(logEntry, data);
     }
 
-    if (this.timestampField && this.timestampFunction) {
+    if (this.timestampFunction) {
       logEntry[this.timestampField] = this.timestampFunction();
     } else {
       logEntry[this.timestampField] = new Date().toISOString();
@@ -56,15 +59,8 @@ class DataDogTransport extends BaseTransport<DatadogTransportCommon> {
     logEntry[this.levelField] = logLevel;
     logEntry[this.messageField] = messages.join(" ");
 
-    this.logger.processLog(logEntry);
+    this.transport.processLog(logEntry);
 
     return messages;
   }
-}
-
-export function createDataDogTransport(config: DatadogTransportConfig) {
-  return new DataDogTransport({
-    ...config,
-    logger: new DatadogTransportCommon(config.options),
-  });
 }
