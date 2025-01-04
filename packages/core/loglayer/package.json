@@ -1,7 +1,7 @@
 {
   "name": "loglayer",
   "description": "A unified logger that routes logs to various logging libraries and cloud providers while providing a fluent API for specifying log messages, metadata and errors",
-  "version": "5.0.5",
+  "version": "5.0.6",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
