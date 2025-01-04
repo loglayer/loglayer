@@ -1,5 +1,12 @@
 # @loglayer/plugin
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [[`cef5ab1`](https://github.com/loglayer/loglayer/commit/cef5ab1d5013c0759c5d344ef7ad0084f9698b2f)]:
+  - @loglayer/shared@1.0.4
+
 ## 1.0.3
 
 ### Patch Changes
