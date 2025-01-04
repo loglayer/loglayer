@@ -1,5 +1,14 @@
 # Signale Transport Changelog
 
+## 1.0.7
+
+### Patch Changes
+
+- [`cef5ab1`](https://github.com/loglayer/loglayer/commit/cef5ab1d5013c0759c5d344ef7ad0084f9698b2f) Thanks [@theogravity](https://github.com/theogravity)! - Readme updates
+
+- Updated dependencies []:
+  - @loglayer/transport@1.1.3
+
 ## 1.0.6
 
 ### Patch Changes
