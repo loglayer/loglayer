@@ -13,8 +13,6 @@ Ships logs server-side to Datadog using the [datadog-transport-common](https://w
 
 - Only works server-side (not in browsers)
     * For browser-side logging, use the [`@loglayer/transport-datadog-browser-logs`](/transports/datadog-browser-logs) package
-- `datadog-transport-common` isn't a logging library, but we use it to ship logs to Datadog, so the initialization is a bit different than other transports
-- import `createDataDogTransport` from `@loglayer/transport-datadog` to create a new DataDog transport
 - You will not get any console output since this sends directly to DataDog. Use the `onDebug` option to log out messages.
 
 ## Installation
@@ -41,11 +39,10 @@ yarn add loglayer @loglayer/transport-datadog
 
 ```typescript
 import { LogLayer } from 'loglayer'
-import { createDataDogTransport } from "@loglayer/transport-datadog"
+import { DataDogTransport } from "@loglayer/transport-datadog"
 
 const log = new LogLayer({
-  transport: createDataDogTransport({
-    id: "datadog",
+  transport: new DataDogTransport({
     options: {
       ddClientConf: {
         authMethods: {
@@ -70,11 +67,7 @@ const log = new LogLayer({
 ## Transport Configuration
 
 ```typescript
-interface DataDogTransportOptions {
-  /**
-   * The ID of the transport.
-   */
-  id?: string
+interface DatadogTransportConfig {
   /**
    * Whether the transport is enabled. Default is true.
    */
@@ -173,4 +166,35 @@ export interface DDTransportOptions {
    */
   sendImmediate?: boolean
 }
+```
+
+## Migration Guide
+
+### Migrating from v1 to v2
+
+We no longer provide a `createDataDogTransport` function. Instead, you should directly instantiate the `DataDogTransport` class:
+
+```typescript
+// v1
+import { createDataDogTransport } from "@loglayer/transport-datadog"
+
+const log = new LogLayer({
+  transport: createDataDogTransport({
+    id: "datadog",  // id was required in v1
+    options: {
+      // ... options
+    }
+  })
+})
+
+// v2
+import { DataDogTransport } from "@loglayer/transport-datadog"
+
+const log = new LogLayer({
+  transport: new DataDogTransport({
+    options: {
+      // ... options
+    }
+  })
+})
 ```

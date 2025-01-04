@@ -1,34 +1,35 @@
-import type { DataDogTransport } from "datadog-transport-common";
+import type { DataDogTransport as DatadogTransportCommon } from "datadog-transport-common";
 import { LogLayer } from "loglayer";
 import { beforeEach, describe, expect, it, vitest } from "vitest";
-import { createDataDogTransport } from "../DataDogTransport.js";
+import { DataDogTransport } from "../DataDogTransport.js";
 
 let log: LogLayer;
-let ddTransport: DataDogTransport;
+let ddTransport: DatadogTransportCommon;
 const mockISOString = "2024-01-01T00:00:00.000Z";
 
 describe("structured transport with datadog", () => {
   beforeEach(() => {
     // Mock Date.prototype.toISOString
     vitest.spyOn(Date.prototype, "toISOString").mockReturnValue(mockISOString);
-
-    log = new LogLayer({
-      transport: createDataDogTransport({
-        id: "datadog",
-        options: {
-          ddClientConf: {
-            authMethods: {
-              apiKeyAuth: "TEST-KEY",
-            },
-          },
-          ddServerConf: {
-            site: "datadoghq.eu",
+    const transport = new DataDogTransport({
+      id: "datadog",
+      options: {
+        ddClientConf: {
+          authMethods: {
+            apiKeyAuth: "TEST-KEY",
           },
         },
-      }),
+        ddServerConf: {
+          site: "datadoghq.eu",
+        },
+      },
     });
 
-    ddTransport = log.getLoggerInstance("datadog");
+    log = new LogLayer({
+      transport,
+    });
+
+    ddTransport = transport["transport"];
     ddTransport.processLog = vitest.fn();
   });
 
@@ -106,25 +107,25 @@ describe("structured transport with datadog", () => {
   });
 
   it("should use custom field names", () => {
-    log = new LogLayer({
-      transport: createDataDogTransport({
-        id: "datadog",
-        options: {
-          ddClientConf: {
-            authMethods: {
-              apiKeyAuth: "TEST-KEY",
-            },
-          },
-          ddServerConf: {
-            site: "datadoghq.eu",
+    const transport = new DataDogTransport({
+      id: "datadog",
+      options: {
+        ddClientConf: {
+          authMethods: {
+            apiKeyAuth: "TEST-KEY",
           },
         },
-        messageField: "msg",
-        levelField: "severity",
-      }),
+        ddServerConf: {
+          site: "datadoghq.eu",
+        },
+      },
+      messageField: "msg",
+      levelField: "severity",
     });
 
-    ddTransport = log.getLoggerInstance("datadog");
+    log = new LogLayer({ transport });
+
+    ddTransport = transport["transport"];
     ddTransport.processLog = vitest.fn();
 
     log.info("this is a test message");
@@ -133,31 +134,31 @@ describe("structured transport with datadog", () => {
     expect(ddTransport.processLog).toBeCalledWith({
       msg: "this is a test message",
       severity: "info",
-      time: expect.any(String),
+      time: mockISOString,
     });
   });
 
   it("should use custom timestamp field and function", () => {
     const mockTimestamp = 1234567890;
-    log = new LogLayer({
-      transport: createDataDogTransport({
-        id: "datadog",
-        options: {
-          ddClientConf: {
-            authMethods: {
-              apiKeyAuth: "TEST-KEY",
-            },
-          },
-          ddServerConf: {
-            site: "datadoghq.eu",
+    const transport = new DataDogTransport({
+      id: "datadog",
+      options: {
+        ddClientConf: {
+          authMethods: {
+            apiKeyAuth: "TEST-KEY",
           },
         },
-        timestampField: "timestamp",
-        timestampFunction: () => mockTimestamp,
-      }),
+        ddServerConf: {
+          site: "datadoghq.eu",
+        },
+      },
+      timestampField: "timestamp",
+      timestampFunction: () => mockTimestamp,
     });
 
-    ddTransport = log.getLoggerInstance("datadog");
+    log = new LogLayer({ transport });
+
+    ddTransport = (transport as any)["transport"];
     ddTransport.processLog = vitest.fn();
 
     log.info("this is a test message");
