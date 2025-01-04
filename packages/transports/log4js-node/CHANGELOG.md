@@ -1,5 +1,12 @@
 # Log4js Node Transport Changelog
 
+## 1.0.6
+
+### Patch Changes
+
+- Updated dependencies [[`4a25d33`](https://github.com/loglayer/loglayer/commit/4a25d33ced2b5b1596a05b24adfcce26ab991a1f)]:
+  - @loglayer/transport@1.1.2
+
 ## 1.0.5
 
 ### Patch Changes

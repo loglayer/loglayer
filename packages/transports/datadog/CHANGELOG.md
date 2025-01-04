@@ -1,5 +1,43 @@
 # Datadog Transport Changelog
 
+## 2.0.0
+
+### Major Changes
+
+- [#65](https://github.com/loglayer/loglayer/pull/65) [`a8f243d`](https://github.com/loglayer/loglayer/commit/a8f243d5c60c1deb2d5ce3ae134b797523008316) Thanks [@theogravity](https://github.com/theogravity)! - ## Breaking Changes
+
+  We no longer provide a `createDataDogTransport` function. Instead, you should directly instantiate the `DataDogTransport` class:
+
+  ```typescript
+  // v1
+  import { createDataDogTransport } from "@loglayer/transport-datadog";
+
+  const log = new LogLayer({
+    transport: createDataDogTransport({
+      id: "datadog", // id was required in v1
+      options: {
+        // ... options
+      },
+    }),
+  });
+
+  // v2
+  import { DataDogTransport } from "@loglayer/transport-datadog";
+
+  const log = new LogLayer({
+    transport: new DataDogTransport({
+      options: {
+        // ... options
+      },
+    }),
+  });
+  ```
+
+### Patch Changes
+
+- Updated dependencies [[`4a25d33`](https://github.com/loglayer/loglayer/commit/4a25d33ced2b5b1596a05b24adfcce26ab991a1f)]:
+  - @loglayer/transport@1.1.2
+
 ## 1.0.2
 
 ### Patch Changes
