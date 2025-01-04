@@ -1,20 +1,14 @@
 import { LogLevel } from "@loglayer/shared";
-import type { LogLayerTransport, LogLayerTransportConfig, LogLayerTransportParams } from "./types.js";
+import type { LogLayerTransport, LogLayerTransportParams, LoggerlessTransportConfig } from "./types.js";
 
 /**
- * For implementing libraries that are logging libraries that generally have an interface of:
- * info(), warn(), error(), debug(), trace(), etc.
+ * For implementing libraries that aren't logging libraries
  */
-export abstract class BaseTransport<LogLibrary> implements LogLayerTransport<LogLibrary> {
+export abstract class LoggerlessTransport implements LogLayerTransport {
   /**
    * An identifier for the transport. If not defined, a random one will be generated.
    */
   id?: string;
-
-  /**
-   * Instance of the logger library
-   */
-  protected logger: LogLibrary;
 
   /**
    * If false, the transport will not send logs to the logger.
@@ -26,9 +20,9 @@ export abstract class BaseTransport<LogLibrary> implements LogLayerTransport<Log
    */
   protected consoleDebug?: boolean;
 
-  constructor(config: LogLayerTransportConfig<LogLibrary>) {
-    this.id = config.id ?? new Date().getTime().toString() + Math.random().toString();
-    this.logger = config.logger;
+  constructor(config: LoggerlessTransportConfig) {
+    // loglayer still needs an id, so we generate one even if it won't really be used
+    this.id = new Date().getTime().toString() + Math.random().toString();
     this.enabled = config.enabled ?? true;
     this.consoleDebug = config.consoleDebug ?? false;
   }
@@ -72,8 +66,8 @@ export abstract class BaseTransport<LogLibrary> implements LogLayerTransport<Log
   /**
    * Returns the logger instance attached to the transport
    */
-  getLoggerInstance(): LogLibrary {
-    return this.logger;
+  getLoggerInstance() {
+    throw new Error("This transport does not have a logger instance");
   }
 
   /**

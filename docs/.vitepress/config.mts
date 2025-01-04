@@ -92,8 +92,6 @@ export default defineConfig({
               { text: 'Console', link: '/transports/console' },
               { text: 'Bunyan', link: '/transports/bunyan' },
               { text: 'Consola', link: '/transports/consola' },
-              { text: 'DataDog (server-side)', link: '/transports/datadog' },
-              { text: 'DataDog Browser Logs', link: '/transports/datadog-browser-logs' },
               { text: 'Electron Log', link: '/transports/electron-log' },
               { text: 'Log4js', link: '/transports/log4js' },
               { text: 'Pino', link: '/transports/pino' },
@@ -103,7 +101,12 @@ export default defineConfig({
               { text: 'Tracer', link: '/transports/tracer' },
               { text: 'Winston', link: '/transports/winston' },
             ]
-          }
+          },
+          { text: "Cloud Providers", items: [
+            { text: 'DataDog (server-side)', link: '/transports/datadog' },
+            { text: 'DataDog Browser Logs', link: '/transports/datadog-browser-logs' },
+            { text: 'New Relic', link: '/transports/new-relic' },
+          ]}
         ]
       },
       {
