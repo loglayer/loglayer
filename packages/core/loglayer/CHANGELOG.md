@@ -1,5 +1,11 @@
 # loglayer
 
+## 5.0.6
+
+### Patch Changes
+
+- [`476702c`](https://github.com/loglayer/loglayer/commit/476702c367c047ac8ab321dd145ec2091cf0f164) Thanks [@theogravity](https://github.com/theogravity)! - Update about copy
+
 ## 5.0.5
 
 ### Patch Changes
