@@ -42,6 +42,10 @@ export default defineConfig({
   },
   themeConfig: {
     logo: "/images/loglayer.jpg",
+    editLink: {
+      pattern: "https://github.com/loglayer/loglayer/edit/master/docs/src/:path",
+      text: 'Edit this page on GitHub'
+    },
     search: {
       provider: 'local'
     },
