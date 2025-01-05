@@ -2,6 +2,8 @@
 
 The New Relic transport allows you to send logs directly to New Relic's [Log API](https://docs.newrelic.com/docs/logs/log-api/introduction-log-api/). It provides robust features including compression, retry logic, rate limiting support, and validation of New Relic's API constraints.
 
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/new-relic)
+
 ## Installation
 
 ::: code-group
