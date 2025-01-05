@@ -3,3 +3,16 @@
   border: solid 3px #7a8daa59;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
+
+#js-lib-label {
+  font-weight: bold;
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#js-lib-label.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

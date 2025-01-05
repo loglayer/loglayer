@@ -7,7 +7,7 @@ layout: home
 hero:
   name: "LogLayer"
   text: "Unifies Logging"
-  tagline: "A layer on top of Javascript logging libraries to provide a consistent logging experience."
+  tagline: "A layer on top of <span id=\"js-lib-label\" class=\"visible\">Javascript logging libraries</span> to provide a consistent logging experience."
   image:
     src: /images/loglayer.jpg
     alt: LogLayer
@@ -23,14 +23,14 @@ hero:
       link: https://github.com/loglayer/loglayer
 
 features:
-  - title: Standarize Log Writing
+  - title: Structured Logging
     details: Write logs with a fluid API that makes adding tags, metadata and errors simple.
   - title: Bring Your Own Logger
     details: Use console logging when starting out, then switch to pino, winston, etc later without changing your application code.
   - title: Extensible Plugin System
     details: Transform, enrich, and filter logs with plugins that lets you customize every aspect of your logging pipeline.
   - title: Multi-logger Support
-    details: Fan out logs to multiple logging libraries and cloud providers at the same time.
+    details: Fan out logs to multiple logging libraries and cloud providers such as DataDog and New Relic at the same time.
 
 ---
 
