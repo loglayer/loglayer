@@ -5,6 +5,8 @@ description: Learn how to use the pino logging library with LogLayer
 
 # Pino Transport
 
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-pino)](https://www.npmjs.com/package/@loglayer/transport-pino)
+
 [Pino](https://github.com/pinojs/pino) is a very low overhead Node.js logger, focused on performance.
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/pino)

@@ -5,6 +5,8 @@ description: Learn how to use the Tracer logging library with LogLayer
 
 # Tracer Transport
 
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-tracer)](https://www.npmjs.com/package/@loglayer/transport-tracer)
+
 [Tracer](https://www.npmjs.com/package/tracer) is a powerful and customizable logging library for Node.js.
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/tracer)

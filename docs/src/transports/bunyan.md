@@ -5,6 +5,8 @@ description: Learn how to use the Bunyan logging library with LogLayer
 
 # Bunyan Transport
 
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-bunyan)](https://www.npmjs.com/package/@loglayer/transport-bunyan)
+
 [Bunyan](https://github.com/trentm/node-bunyan) is a JSON logging library for Node.js services.
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/bunyan)

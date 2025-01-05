@@ -5,6 +5,8 @@ description: Learn how to use the TsLog logging library with LogLayer
 
 # tslog Transport
 
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-tslog)](https://www.npmjs.com/package/@loglayer/transport-tslog)
+
 [tslog](https://tslog.js.org/) is a powerful TypeScript logging library that provides beautiful logging with full TypeScript support.
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/tslog)

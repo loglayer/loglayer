@@ -5,6 +5,8 @@ description: Learn how to use the Signale logging library with LogLayer
 
 # Signale Transport
 
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-signale)](https://www.npmjs.com/package/@loglayer/transport-signale)
+
 [Signale](https://github.com/klaussinani/signale) is a highly configurable logging utility designed for CLI applications.
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/signale)

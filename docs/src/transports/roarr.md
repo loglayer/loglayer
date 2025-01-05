@@ -5,6 +5,8 @@ description: Learn how to use the roarr logging library with LogLayer
 
 # Roarr Transport
 
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-roarr)](https://www.npmjs.com/package/@loglayer/transport-roarr)
+
 [Roarr](https://github.com/gajus/roarr) is a JSON logger for Node.js and browser environments.
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/roarr)

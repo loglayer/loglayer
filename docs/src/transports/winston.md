@@ -5,6 +5,8 @@ description: Learn how to use the Winston logging library with LogLayer
 
 # Winston Transport
 
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-winston)](https://www.npmjs.com/package/@loglayer/transport-winston)
+
 [Winston](https://github.com/winstonjs/winston) is a multi-transport async logging library for Node.js.
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/winston)

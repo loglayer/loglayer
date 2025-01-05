@@ -5,6 +5,8 @@ description: Learn how to use the DataDog Browser Logs library with LogLayer
 
 # DataDog Browser Logs Transport
 
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-datadog-browser-logs)](https://www.npmjs.com/package/@loglayer/transport-datadog-browser-logs)
+
 [@datadog/browser-logs](https://docs.datadoghq.com/logs/log_collection/javascript/) is Datadog's official browser-side logging library.
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/datadog-browser-logs)

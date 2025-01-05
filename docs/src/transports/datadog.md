@@ -5,6 +5,8 @@ description: Learn how to ship logs to DataDog using LogLayer
 
 # DataDog Transport
 
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-datadog)](https://www.npmjs.com/package/@loglayer/transport-datadog)
+
 Ships logs server-side to Datadog using the [datadog-transport-common](https://www.npmjs.com/package/datadog-transport-common) library.
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/datadog)
