@@ -9,50 +9,7 @@ description: Learn more about LogLayer and how it unifies your logging experienc
 
 It also offers a plugin system that allows you to modify log data before it's shipped to your logging library.
 
-```javascript
-// Example using the Pino logging library with LogLayer
-import { LogLayer } from 'loglayer';
-import { pino } from 'pino';
-import { PinoTransport } from '@loglayer/transport-pino';
-import { redactionPlugin } from '@loglayer/plugin-redaction';
-
-const log = new LogLayer({
-  // Multiple loggers can also be used at the same time. 
-  // Need to also ship to a cloud provider like DataDog at the same time? You can!
-  transport: new PinoTransport({
-    logger: pino()
-  }),
-  // Plugins can be created to modify log data before it's shipped to your logging library.
-  plugins: [
-    redactionPlugin({
-      paths: ['password'],
-      censor: '[REDACTED]',
-    }),
-  ],
-})
-
-log.withPrefix("[my-app]")
-  .withMetadata({ some: 'data', password: 'my-pass' })
-  .withError(new Error('test'))
-  .info('my message')
-```
-
-```json5
-{
-  "level":30,
-  "time":1735857465669,
-  "pid":30863,
-  "msg":"[my-app] my message",
-  // The placement of these fields are also configurable!
-  "password":"[REDACTED]",
-  "some":"data",
-  "err":{
-    "type":"Error",
-    "message":"test",
-    "stack":"Error: test\n ..."
-  }
-}
-```
+<!--@include: ./_partials/fte-pino-example.md-->
 
 ## Why LogLayer?
 

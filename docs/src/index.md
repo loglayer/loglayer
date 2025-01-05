@@ -26,7 +26,7 @@ features:
   - title: Structured Logging
     details: Write logs with a fluid API that makes adding tags, metadata and errors simple.
   - title: Bring Your Own Logger
-    details: Use console logging when starting out, then switch to pino, winston, etc later without changing your application code.
+    details: Use console logging when starting out, then switch to another logging provider later without changing your application code.
   - title: Extensible Plugin System
     details: Transform, enrich, and filter logs with plugins that lets you customize every aspect of your logging pipeline.
   - title: Multi-logger Support
@@ -36,48 +36,6 @@ features:
 
 ---
 
-```javascript
-// Example using the Pino logging library with LogLayer
-// You can also start out with a console logger and swap to another later!
-import { LogLayer } from 'loglayer';
-import { pino } from 'pino';
-import { PinoTransport } from '@loglayer/transport-pino';
-import { redactionPlugin } from '@loglayer/plugin-redaction';
+<!--@include: ./_partials/fte-pino-example.md-->
 
-const log = new LogLayer({
-  // Multiple loggers can also be used at the same time. 
-  // Need to also ship to a cloud provider like DataDog at the same time? You can!
-  transport: new PinoTransport({
-    logger: pino()
-  }),
-  // Plugins can be created to modify log data before it's shipped to your logging library.
-  plugins: [
-    redactionPlugin({
-      paths: ['password'],
-      censor: '[REDACTED]',
-    }),
-  ],
-})
-
-log.withPrefix("[my-app]")
-  .withMetadata({ some: 'data', password: 'my-pass' })
-  .withError(new Error('test'))
-  .info('my message')
-```
-
-```json5
-{
-  "level":30,
-  "time":1735857465669,
-  "pid":30863,
-  "msg":"[my-app] my message",
-  // The placement of these fields are also configurable!
-  "password":"[REDACTED]",
-  "some":"data",
-  "err":{
-    "type":"Error",
-    "message":"test",
-    "stack":"Error: test\n ..."
-  }
-}
-```
+<!--@include: ./transports/_partials/transport-list.md-->

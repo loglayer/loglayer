@@ -18,7 +18,6 @@ import { redactionPlugin } from '@loglayer/plugin-redaction';
 
 const log = new LogLayer({
   // Multiple loggers can also be used at the same time. 
-  // Need to also ship to a cloud provider like DataDog at the same time? You can!
   transport: new PinoTransport({
     logger: pino()
   }),
@@ -41,7 +40,6 @@ log.withPrefix("[my-app]")
 {
    "level":30,
    "time":1735857465669,
-   "pid":30863,
    "msg":"[my-app] my message",
    // The placement of these fields are also configurable!
    "password":"[REDACTED]",

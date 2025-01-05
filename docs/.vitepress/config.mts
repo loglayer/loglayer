@@ -53,9 +53,7 @@ export default defineConfig({
       level: [2, 3]
     },
     nav: [
-      { text: 'Home', link: '/' },
       { text: 'Get Started', link: '/getting-started' },
-      { text: 'Transports', link: '/transports/' }
     ],
     sidebar: [
       {
