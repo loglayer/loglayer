@@ -177,24 +177,9 @@ new NewRelicTransport({
   onDebug: (entry) => {
     // Log the entry being sent
     console.log('Sending log entry:', JSON.stringify(entry, null, 2));
-    
-    // Or collect metrics
-    collectMetrics(entry);
-    
-    // Or verify log structure
-    validateCustomRules(entry);
   }
 })
 ```
-
-The debug callback is useful for:
-- Development and testing
-- Monitoring log structure and content
-- Verifying validation and transformations
-- Custom metrics collection
-- Debugging integration issues
-
-The callback receives the validated entry object after all transformations (like attribute truncation) have been applied, but before compression and sending.
 
 ## Best Practices
 
