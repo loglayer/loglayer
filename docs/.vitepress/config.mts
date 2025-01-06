@@ -118,6 +118,7 @@ export default defineConfig({
           { text: 'Available Plugins', items:
             [
               { text: 'Redaction', link: '/plugins/redaction' },
+              { text: 'Sprintf', link: '/plugins/sprintf' },
             ]
           }
         ]
