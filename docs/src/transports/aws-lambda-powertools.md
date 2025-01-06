@@ -56,7 +56,7 @@ const log = new LogLayer({
 });
 
 // Use LogLayer as normal
-log.info('Hello from Lambda!', { customField: 'value' });
+log.withMetadata({ customField: 'value' }).info('Hello from Lambda!');
 ```
 
 ## Log Level Mapping
