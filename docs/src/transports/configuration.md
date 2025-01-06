@@ -17,12 +17,6 @@ interface TransportConfig {
   id?: string;
 
   /**
-   * The logging library instance to use for logging.
-   * This is required and specific to each transport type.
-   */
-  logger: LoggerLibrary;
-
-  /**
    * If false, the transport will not send any logs to the logger.
    * Useful for temporarily disabling a transport.
    * @default true
