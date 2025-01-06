@@ -6,7 +6,7 @@
 
 The Winston transport for [LogLayer](https://loglayer.dev).
 
-[Winston](https://github.com/winstonjs/winston) is a multi-transport async logging library for Node.js.
+[Winston](https://github.com/winstonjs/winston) A logger for just about everything.
 
 ## Installation
 

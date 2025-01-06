@@ -10,7 +10,7 @@
 - [Signale](/transports/signale) - Highly configurable CLI logger
 - [tslog](/transports/tslog) - Powerful, fast and expressive logging for TypeScript and JavaScript
 - [Tracer](/transports/tracer) - Tracer logging library for Node.js
-- [Winston](/transports/winston) - Multi-transport async logging library
+- [Winston](/transports/winston) - A logger for just about everything.
 
 ### Cloud Providers
 
