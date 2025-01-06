@@ -1,16 +1,34 @@
-import type { LogLayerTransportParams } from "@loglayer/transport";
+import type { LogLayerTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
 import { BaseTransport, LogLevel } from "@loglayer/transport";
 
 type ConsoleType = typeof console;
+
+interface ConsoleTransportConfig extends LogLayerTransportConfig<ConsoleType> {
+  /**
+   * If true, object data will be appended as the last parameter.
+   * If false, object data will be prepended as the first parameter (default).
+   */
+  appendObjectData?: boolean;
+}
 
 /**
  * Transport for use with a console logger.
  */
 export class ConsoleTransport extends BaseTransport<ConsoleType> {
+  private appendObjectData: boolean;
+
+  constructor(params: ConsoleTransportConfig) {
+    super(params);
+    this.appendObjectData = params.appendObjectData || false;
+  }
+
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams) {
     if (data && hasData) {
-      // put object data as the first parameter
-      messages.unshift(data);
+      if (this.appendObjectData) {
+        messages.push(data);
+      } else {
+        messages.unshift(data);
+      }
     }
 
     switch (logLevel) {
