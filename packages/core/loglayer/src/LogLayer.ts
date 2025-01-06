@@ -453,6 +453,10 @@ export class LogLayer implements ILogLayer {
 
     if (Array.isArray(this._config.transport)) {
       for (const transport of this._config.transport) {
+        if (!transport.enabled) {
+          continue;
+        }
+
         if (this.pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)) {
           const shouldSend = this.pluginManager.runShouldSendToLogger({
             messages: [...params],
@@ -474,6 +478,10 @@ export class LogLayer implements ILogLayer {
         });
       }
     } else {
+      if (!this._config.transport.enabled) {
+        return;
+      }
+
       if (this.pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)) {
         const shouldSend = this.pluginManager.runShouldSendToLogger({
           messages: [...params],

@@ -36,6 +36,10 @@ export class DataDogTransport extends LoggerlessTransport {
   constructor(config: DatadogTransportConfig) {
     super(config);
 
+    if (!this.enabled) {
+      return;
+    }
+
     this.transport = new DatadogTransportCommon(config.options);
     this.messageField = config.messageField ?? "message";
     this.levelField = config.levelField ?? "level";
@@ -45,6 +49,12 @@ export class DataDogTransport extends LoggerlessTransport {
 
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams) {
     const logEntry: Record<string, any> = {};
+
+    if (!this.transport) {
+      throw new Error(
+        "DataDogTransport was previously disabled; enabling the flag manually on the transport instance is not supported.",
+      );
+    }
 
     if (data && hasData) {
       Object.assign(logEntry, data);

@@ -13,7 +13,7 @@ export abstract class LoggerlessTransport implements LogLayerTransport {
   /**
    * If false, the transport will not send logs to the logger.
    */
-  protected enabled: boolean;
+  enabled: boolean;
 
   /**
    * If true, the transport will log to the console for debugging purposes

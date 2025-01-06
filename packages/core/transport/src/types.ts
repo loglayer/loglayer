@@ -59,7 +59,11 @@ export interface LogLayerTransport<LogLibrary = any> {
    * A user-defined identifier for the transport
    **/
   id?: string;
-
+  /**
+   * If false, the transport will not send logs to the logger.
+   * Default is true.
+   */
+  enabled?: boolean;
   /**
    * Sends the log data to the logger for transport
    */
