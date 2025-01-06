@@ -192,6 +192,40 @@ importers:
         specifier: 2.1.8
         version: 2.1.8(@types/node@22.10.4)(jsdom@25.0.1)
 
+  packages/transports/aws-lambda-powertools:
+    dependencies:
+      '@aws-lambda-powertools/logger':
+        specifier: '*'
+        version: 1.18.1
+      '@loglayer/transport':
+        specifier: workspace:*
+        version: link:../../core/transport
+    devDependencies:
+      '@internal/tsconfig':
+        specifier: workspace:*
+        version: link:../../core/tsconfig
+      '@types/node':
+        specifier: 22.10.4
+        version: 22.10.4
+      hash-runner:
+        specifier: 2.0.1
+        version: 2.0.1
+      loglayer:
+        specifier: workspace:*
+        version: link:../../core/loglayer
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)(yaml@2.5.1)
+      tsx:
+        specifier: 4.19.2
+        version: 4.19.2
+      typescript:
+        specifier: 5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: 2.1.8
+        version: 2.1.8(@types/node@22.10.4)(jsdom@25.0.1)
+
   packages/transports/bunyan:
     dependencies:
       '@loglayer/transport':
@@ -719,6 +753,19 @@ packages:
   '@algolia/requester-node-http@5.18.0':
     resolution: {integrity: sha512-tZCqDrqJ2YE2I5ukCQrYN8oiF6u3JIdCxrtKq+eniuLkjkO78TKRnXrVcKZTmfFJyyDK8q47SfDcHzAA3nHi6w==}
     engines: {node: '>= 14.0.0'}
+
+  '@aws-lambda-powertools/commons@1.18.1':
+    resolution: {integrity: sha512-gFRgQ2GJDghKvf+fXvT0kQVftgOT05W+hCa7RkfZj6HSjVAO+9DZZeJL3JK1HcsLAjWRj7W9ra0/MqB3Abf+PQ==}
+    deprecated: 'Version 1.x has reached End-of-Life, please upgrade to 2.x, more info here: https://s12d.com/upgrade-v2'
+
+  '@aws-lambda-powertools/logger@1.18.1':
+    resolution: {integrity: sha512-GsSMqaFXCSz+llSOn2CVNMoN+j/jNsS6JP2Opy9myU0tvg7PeuU3+rN24vKyibUwpxM466IzWFBSJkYdm0bqVw==}
+    deprecated: 'Version 1.x has reached End-of-Life, please upgrade to 2.x, more info here: https://s12d.com/upgrade-v2'
+    peerDependencies:
+      '@middy/core': '>=3.x'
+    peerDependenciesMeta:
+      '@middy/core':
+        optional: true
 
   '@babel/code-frame@7.26.2':
     resolution: {integrity: sha512-RJlIHRueQgwWitWgF8OdFYGZX328Ax5BCemNGlqHfplnRT9ESi8JkFlvaVYbS+UubVY6dpv87Fs2u5M29iNFVQ==}
@@ -3878,6 +3925,13 @@ snapshots:
   '@algolia/requester-node-http@5.18.0':
     dependencies:
       '@algolia/client-common': 5.18.0
+
+  '@aws-lambda-powertools/commons@1.18.1': {}
+
+  '@aws-lambda-powertools/logger@1.18.1':
+    dependencies:
+      '@aws-lambda-powertools/commons': 1.18.1
+      lodash.merge: 4.6.2
 
   '@babel/code-frame@7.26.2':
     dependencies:
