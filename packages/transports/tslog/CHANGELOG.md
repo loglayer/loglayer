@@ -1,5 +1,12 @@
 # tslog Transport Changelog
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [[`d01dcb9`](https://github.com/loglayer/loglayer/commit/d01dcb91517ed1cb2b425799ab3432d36721bf46)]:
+  - @loglayer/transport@1.1.4
+
 ## 1.0.3
 
 ### Patch Changes

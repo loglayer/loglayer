@@ -1,5 +1,12 @@
 # loglayer
 
+## 5.0.12
+
+### Patch Changes
+
+- Updated dependencies [[`d01dcb9`](https://github.com/loglayer/loglayer/commit/d01dcb91517ed1cb2b425799ab3432d36721bf46)]:
+  - @loglayer/transport@1.1.4
+
 ## 5.0.11
 
 ### Patch Changes

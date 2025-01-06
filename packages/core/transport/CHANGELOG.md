@@ -1,5 +1,11 @@
 # @loglayer/transport
 
+## 1.1.4
+
+### Patch Changes
+
+- [`d01dcb9`](https://github.com/loglayer/loglayer/commit/d01dcb91517ed1cb2b425799ab3432d36721bf46) Thanks [@theogravity](https://github.com/theogravity)! - Adds the enabled? flag to the LogLayerTransport interface in @loglayer/transport
+
 ## 1.1.3
 
 ### Patch Changes
