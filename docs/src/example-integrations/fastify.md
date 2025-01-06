@@ -74,3 +74,4 @@ fastify.listen({ port: 3000 }, function (err, address) {
   // Server is now listening on ${address}
 })
 ```
+
