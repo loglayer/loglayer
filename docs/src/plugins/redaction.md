@@ -3,9 +3,11 @@ title: Redaction Plugin for LogLayer
 description: Learn how to use the redaction plugin to protect sensitive data in your logs
 ---
 
-[Plugin Source](https://github.com/loglayer/loglayer/tree/master/packages/plugins/redaction)
-
 # Redaction Plugin
+
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fplugin-redaction)](https://www.npmjs.com/package/@loglayer/plugin-redaction)
+
+[Plugin Source](https://github.com/loglayer/loglayer/tree/master/packages/plugins/redaction)
 
 The redaction plugin for LogLayer provides a simple way to redact sensitive information from your logs using [fast-redact](https://www.npmjs.com/package/fast-redact).
 

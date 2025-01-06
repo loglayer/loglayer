@@ -124,6 +124,7 @@ export default defineConfig({
         text: 'Example Integrations',
         items: [
           { text: 'Express', link: '/example-integrations/express' },
+          { text: 'Fastify', link: '/example-integrations/fastify' },
         ]
       }
     ],
