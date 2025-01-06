@@ -1,5 +1,11 @@
 # @loglayer/plugin-sprintf
 
+## 1.0.1
+
+### Patch Changes
+
+- [#84](https://github.com/loglayer/loglayer/pull/84) [`1ad51a6`](https://github.com/loglayer/loglayer/commit/1ad51a649f3a8d6923b22c09857a2abdd17824c5) Thanks [@theogravity](https://github.com/theogravity)! - Add missing LICENSE file to @loglayer/plugin-sprintf
+
 ## 1.0.0
 
 ### Major Changes
