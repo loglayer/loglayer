@@ -1,0 +1,62 @@
+{
+  "name": "@loglayer/plugin-sprintf",
+  "description": "sprintf plugin for loglayer.",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "repository": "loglayer/loglayer.git",
+  "author": "Theo Gravity <theo@suteki.nu>",
+  "keywords": [
+    "logging",
+    "log",
+    "loglayer",
+    "sprintf",
+    "format",
+    "plugin"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts",
+    "test": "vitest --run",
+    "build:dev": "hash-runner",
+    "clean": "rm -rf .turbo node_modules dist",
+    "lint": "biome check --write --unsafe src && biome format src --write && biome lint src --fix",
+    "verify-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@loglayer/plugin": "workspace:*",
+    "@loglayer/shared": "workspace:*",
+    "sprintf-js": "1.1.3"
+  },
+  "devDependencies": {
+    "@types/sprintf-js": "1.1.4",
+    "loglayer": "workspace:*",
+    "hash-runner": "2.0.1",
+    "@types/node": "22.10.4",
+    "@internal/tsconfig": "workspace:*",
+    "tsup": "8.3.5",
+    "typescript": "5.7.2",
+    "vitest": "2.1.8"
+  },
+  "bugs": "https://github.com/loglayer/loglayer/issues",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://loglayer.dev",
+  "packageManager": "pnpm@9.12.2"
+}
