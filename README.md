@@ -1,4 +1,4 @@
-# LogLayer Monorepo
+# LogLayer
 
 [![NPM version](https://img.shields.io/npm/v/loglayer.svg?style=flat-square)](https://www.npmjs.com/package/loglayer)
 [![NPM Downloads](https://img.shields.io/npm/dm/loglayer)](https://www.npmjs.com/package/loglayer)
