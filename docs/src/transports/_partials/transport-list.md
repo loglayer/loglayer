@@ -1,6 +1,6 @@
 ### Logging Libraries
 
-- [AWS Lambda Powertools Logger](/transports/aws-lambda-powertools) - AWS Lambda Powertools Logger
+- [AWS Lambda Powertools Logger](/transports/aws-lambda-powertools) - Logging for AWS Lambdas
 - [Bunyan](/transports/bunyan) - JSON logging library for Node.js
 - [Console](/transports/console) - Simple console-based logging for development
 - [Consola](/transports/consola) - Elegant console logger for Node.js and browser
