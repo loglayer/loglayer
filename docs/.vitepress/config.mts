@@ -88,6 +88,7 @@ export default defineConfig({
           { text: 'Supported Loggers', items:
             [
               { text: 'Console', link: '/transports/console' },
+              { text: 'AWS Lambda Powertools', link: '/transports/aws-lambda-powertools' },
               { text: 'Bunyan', link: '/transports/bunyan' },
               { text: 'Consola', link: '/transports/consola' },
               { text: 'Electron Log', link: '/transports/electron-log' },
