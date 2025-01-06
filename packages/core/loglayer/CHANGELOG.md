@@ -1,5 +1,11 @@
 # loglayer
 
+## 5.0.9
+
+### Patch Changes
+
+- [#67](https://github.com/loglayer/loglayer/pull/67) [`174f545`](https://github.com/loglayer/loglayer/commit/174f545be1eca2d11ea69b2305fb6d49856874b1) Thanks [@theogravity](https://github.com/theogravity)! - Add exports from @loglayer/plugin
+
 ## 5.0.8
 
 ### Patch Changes
