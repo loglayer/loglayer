@@ -5,6 +5,10 @@ description: Printf-style string formatting support for LogLayer
 
 # Sprintf Plugin
 
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fplugin-sprintf)](https://www.npmjs.com/package/@loglayer/plugin-sprintf)
+
+[Plugin Source](https://github.com/loglayer/loglayer/tree/master/packages/plugins/sprintf)
+
 The sprintf plugin provides printf-style string formatting support using [sprintf-js](https://www.npmjs.com/package/sprintf-js). It allows you to format your log messages using familiar printf-style placeholders if a transport does not support this behavior.
 
 ::: warning
