@@ -53,6 +53,7 @@ export default defineConfig({
       level: [2, 3]
     },
     nav: [
+      { text: '<img alt="NPM Version" src="https://img.shields.io/npm/v/loglayer" />', link: 'https://www.npmjs.com/package/loglayer' },
       { text: 'Get Started', link: '/getting-started' },
     ],
     sidebar: [
@@ -130,7 +131,7 @@ export default defineConfig({
       }
     ],
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/loglayer/loglayer' }
+      { icon: 'github', link: 'https://github.com/loglayer/loglayer' },
     ],
   }
 })

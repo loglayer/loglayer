@@ -5,27 +5,38 @@ description: Learn more about LogLayer and how it unifies your logging experienc
 
 # Introduction
 
-`loglayer` is a unified logger that routes logs to various logging libraries and cloud providers while providing a fluent API for specifying log messages, metadata and errors.
-
-It also offers a plugin system that allows you to modify log data before it's shipped to your logging library.
-
-<!--@include: ./_partials/fte-pino-example.md-->
+`loglayer` is a unified logger that routes logs to various logging libraries and cloud providers while providing a 
+fluent API for specifying log messages, metadata and errors, enhancing and standardizing the developer experience 
+around writing logs.
 
 ## Why LogLayer?
 
-When working with logging libraries, you often face several challenges:
+Challenges with logging—choosing, using, and maintaining the right logger for various projects—are a common experience. 
+While most loggers offer the usual methods like `info`, `warn`, and `error`, they vary significantly in handling 
+structured metadata or `Error` objects. This can lead to ad-hoc solutions, like serializing errors or writing custom 
+pipelines, just to get logs formatted correctly.
 
-- Different logging libraries have inconsistent APIs for creating log entries
-- Error handling varies between libraries
-- Switching logging libraries requires rewriting logging code throughout your application
-- Testing code with logging is cumbersome without proper mocks
+LogLayer was built to address these pain points by introducing a fluid, expressive API. With methods like 
+`withMetadata` and `withError`, **LogLayer separates object injection from the log message itself, making logging code 
+both cleaner and more maintainable.**
 
-`loglayer` solves these problems by providing:
+Logs are processed through a LogLayer Transport, which acts as an adapter for the preferred logging library. 
+This design offers several key advantages:
 
-- A consistent, fluent API for creating log entries
-- Standardized error handling and serialization
-- Easy switching between logging libraries without changing your application code
-- Built-in mocks for testing
+- **Multi-Transport Support**: Send logs to multiple destinations (e.g., [DataDog](/transports/datadog) and 
+[New Relic](/transports/new-relic)) simultaneously. This feature can be used to ship logs directly to DataDog without 
+relying on their APM package or sidecars.
+
+- **Easy Logger Swapping**: If Pino has been used with Next.js, issues might arise where it doesn’t work out of the box 
+after a production build without webpack hacks. With LogLayer, a better-suited library can be swapped in without 
+touching the logging code.
+
+## Battle Tested
+
+LogLayer has been in production use for at least three years at [Airtop.ai](https://airtop.ai) (formerly Switchboard) in
+multiple backend and frontend systems.
+
+*LogLayer is not affiliated with Airtop.*
 
 ## Bring Your Own Logger
 
