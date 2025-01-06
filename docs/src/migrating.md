@@ -164,18 +164,3 @@ const log = new LogLayer({
   })
 })
 ```
-
-### Package Organization
-
-Types have been moved to more specific packages:
-- `LoggerLibrary` interface → `@loglayer/transport`
-- Plugin types → `@loglayer/plugin`
-
-Example of importing from new packages:
-```typescript
-// 4.x
-import { LogLayerPlugin, PluginBeforeDataOutFn } from 'loglayer';
-
-// 5.x
-import { LogLayerPlugin, PluginBeforeDataOutFn } from '@loglayer/plugin';
-```
