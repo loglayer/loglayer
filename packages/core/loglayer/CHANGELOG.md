@@ -1,5 +1,13 @@
 # loglayer
 
+## 5.0.11
+
+### Patch Changes
+
+- [#79](https://github.com/loglayer/loglayer/pull/79) [`f88d492`](https://github.com/loglayer/loglayer/commit/f88d49216706663c868f695e21bafab8bb8c745b) Thanks [@theogravity](https://github.com/theogravity)! - - Fixes an issue where a transport will still be called even if the enabled flag for it is false
+  - Adds the `enabled?` flag to the `LogLayerTransport` interface in `@loglayer/transport`
+  - Updates `@loglayer/transport-datadog` to not initialize the client lib if the transport is disabled
+
 ## 5.0.10
 
 ### Patch Changes
