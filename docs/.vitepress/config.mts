@@ -111,8 +111,8 @@ export default defineConfig({
         text: 'Plugins',
         items: [
           { text: 'Overview', link: '/plugins' },
-          { text: 'Creating Plugins', link: '/plugins/creating' },
-          { text: 'Testing Plugins', link: '/plugins/testing' },
+          { text: 'Creating Plugins', link: '/plugins/creating-plugins' },
+          { text: 'Testing Plugins', link: '/plugins/testing-plugins' },
           { text: 'Available Plugins', items:
             [
               { text: 'Redaction', link: '/plugins/redaction' },
