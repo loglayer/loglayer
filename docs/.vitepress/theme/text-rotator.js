@@ -8,7 +8,7 @@ export function setupTextRotator() {
   if (isInitialized) return;
   isInitialized = true;
 
-  const loggers = ["Javascript logging libraries", "pino", "winston", "electron-log", "DataDog", "New Relic"];
+  const loggers = ["pino", "winston", "electron-log", "DataDog", "New Relic", "Javascript logging libraries"];
   let currentIndex = 0;
 
   function updateText() {
@@ -34,9 +34,6 @@ export function setupTextRotator() {
   if (rotationInterval) {
     clearInterval(rotationInterval);
   }
-
-  // Initial update
-  updateText();
 
   // Start rotation
   rotationInterval = setInterval(updateText, 3000);
