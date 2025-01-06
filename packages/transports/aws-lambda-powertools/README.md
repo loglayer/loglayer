@@ -1,4 +1,4 @@
-# @loglayer/transport-aws-lambda-powertools
+# AWS Lambda Powertools Logger Transport for LogLayer
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-aws-lambda-powertools)](https://www.npmjs.com/package/@loglayer/transport-aws-lambda-powertools)
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-aws-lambda-powertools)](https://www.npmjs.com/package/@loglayer/transport-aws-lambda-powertools)
