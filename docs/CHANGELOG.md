@@ -1,5 +1,11 @@
 # LogLayer Docs Site Changelog
 
+## 1.1.3
+
+### Patch Changes
+
+- [#74](https://github.com/loglayer/loglayer/pull/74) [`d92fce0`](https://github.com/loglayer/loglayer/commit/d92fce0bc04c385849614ab0e34fa8ed389b0ff3) Thanks [@theogravity](https://github.com/theogravity)! - Add an option `appendObjectData` in `ConsoleTransport` to allow for the object data to be at the end of the log entry instead of the beginning.
+
 ## 1.1.2
 
 ### Patch Changes
