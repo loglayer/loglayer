@@ -1,5 +1,11 @@
 # LogLayer Docs Site Changelog
 
+## 1.1.2
+
+### Patch Changes
+
+- [#70](https://github.com/loglayer/loglayer/pull/70) [`c422f9b`](https://github.com/loglayer/loglayer/commit/c422f9bb3eca7c0fe330c6d9af1288b47c80f30b) Thanks [@theogravity](https://github.com/theogravity)! - Add support for AWS Lambda Powertools Logger
+
 ## 1.1.1
 
 ### Patch Changes
