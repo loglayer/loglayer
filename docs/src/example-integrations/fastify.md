@@ -22,6 +22,7 @@ pnpm add loglayer @loglayer/transport-pino pino fastify serialize-error
 ```sh [yarn]
 yarn add loglayer @loglayer/transport-pino pino fastify serialize-error
 ```
+:::
 
 ## Example
 
@@ -74,4 +75,3 @@ fastify.listen({ port: 3000 }, function (err, address) {
   // Server is now listening on ${address}
 })
 ```
-
