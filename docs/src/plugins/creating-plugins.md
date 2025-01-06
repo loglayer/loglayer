@@ -5,31 +5,9 @@ description: Learn how to create custom plugins for LogLayer
 
 # Creating Plugins
 
-## Installation
-
-::: info
-Installation is only necessary if you need the Typescript types for the plugin interface.
-:::
-
-::: code-group
-
-```sh [npm]
-npm install @loglayer/plugin
-```
-
-```sh [pnpm]
-pnpm add @loglayer/plugin
-```
-
-```sh [yarn]
-yarn add @loglayer/plugin
-```
-
-:::
-
 ## Overview
 
-A plugin is a plain object that implements the `LogLayerPlugin` interface from `@loglayer/plugin`:
+A plugin is a plain object that implements the `LogLayerPlugin` interface from `@loglayer/plugin` or `loglayer`:
 
 ```typescript
 interface LogLayerPlugin {
@@ -67,6 +45,94 @@ interface LogLayerPlugin {
 }
 ```
 
+## In-Project
+
+If you want to quickly write a plugin for your own project, you can use the `loglayer` package to get the Typescript types for 
+the plugin interface.
+
+### Example
+
+```typescript
+import { LogLayer, ConsoleTransport } from 'loglayer'
+import type { LogLayerPlugin, PluginBeforeMessageOutParams } from 'loglayer'
+
+// Create a timestamp plugin
+const timestampPlugin: LogLayerPlugin = {
+  onBeforeMessageOut: ({ messages }: PluginBeforeMessageOutParams): string[] => {
+    // Add timestamp prefix to each message
+    return messages.map(msg => `[${new Date().toISOString()}] ${msg}`)
+  }
+}
+
+// Create LogLayer instance with console transport and timestamp plugin
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console
+  }),
+  plugins: [timestampPlugin]
+})
+
+// Usage example
+log.info('Hello world!') // Output: [2024-01-17T12:34:56.789Z] Hello world!
+```
+
+## As an NPM Package
+
+If you're creating an npm package, you should use the `@loglayer/plugin` package to get the Typescript types for the plugin interface
+instead of making `loglayer` a dependency.
+
+::: info
+We recommend it as a `dependency` and not a `devDependency` as `@loglayer/plugin` may not be types-only in the future.
+:::
+
+### Installation
+
+::: code-group
+
+```sh [npm]
+npm install @loglayer/plugin
+```
+
+```sh [pnpm]
+pnpm add @loglayer/plugin
+```
+
+```sh [yarn]
+yarn add @loglayer/plugin
+```
+
+:::
+
+### Example
+
+```typescript
+import type { LogLayerPlugin, PluginBeforeMessageOutParams, LogLayerPluginParams } from '@loglayer/plugin'
+
+// LogLayerPluginParams provides the common options for the plugin
+export interface TimestampPluginOptions extends LogLayerPluginParams {
+  /**
+   * Format of the timestamp. If not provided, uses ISO string
+   */
+  format?: 'iso' | 'locale'
+}
+
+export const createTimestampPlugin = (options: TimestampPluginOptions = {}): LogLayerPlugin => {
+  return {
+    // Copy over the common options
+    id: options.id,
+    disabled: options.disabled,
+    // Implement the onBeforeMessageOut lifecycle method
+    onBeforeMessageOut: ({ messages }: PluginBeforeMessageOutParams): string[] => {
+      const timestamp = options.format === 'locale' 
+        ? new Date().toLocaleString()
+        : new Date().toISOString()
+      
+      return messages.map(msg => `[${timestamp}] ${msg}`)
+    }
+  }
+}
+```
+
 ## Plugin Lifecycle Methods
 
 ### onBeforeDataOut
@@ -89,7 +155,6 @@ interface PluginBeforeDataOutParams {
 **Example:**
 ```typescript
 const dataEnrichmentPlugin = {
-  id: 'data-enrichment',
   onBeforeDataOut: ({ data, logLevel }) => {
     return {
       ...(data || {}),
@@ -121,7 +186,6 @@ interface PluginBeforeMessageOutParams {
 **Example:**
 ```typescript
 const messageFormatterPlugin = {
-  id: 'message-formatter',
   onBeforeMessageOut: ({ messages, logLevel }) => {
     return messages.map(msg => `[${logLevel.toUpperCase()}][${new Date().toISOString()}] ${msg}`)
   }
@@ -150,7 +214,6 @@ interface PluginShouldSendToLoggerParams {
 **Example:**
 ```typescript
 const productionFilterPlugin = {
-  id: 'production-filter',
   shouldSendToLogger: ({ logLevel, data }) => {
     // Filter out debug logs in production
     if (process.env.NODE_ENV === 'production') {
@@ -169,7 +232,6 @@ const productionFilterPlugin = {
 ```typescript
 
 const productionFilterPlugin = {
-  id: 'production-filter',
   shouldSendToLogger: ({ transportId, logLevel, data }) => {
     // don't send logs if the transportId is 'console'
     if (transportId === 'console') {
