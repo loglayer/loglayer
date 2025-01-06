@@ -1,5 +1,11 @@
 # AWS Lambda Powertools Logger Transport Changelog
 
+## 1.0.1
+
+### Patch Changes
+
+- [`71cd077`](https://github.com/loglayer/loglayer/commit/71cd07788b8cdfd4a465a1fa813c73b6d719bcab) Thanks [@theogravity](https://github.com/theogravity)! - Update readme
+
 ## 1.0.0
 
 ### Major Changes
