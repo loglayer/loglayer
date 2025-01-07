@@ -1,5 +1,11 @@
 # loglevel Transport Changelog
 
+## 1.0.1
+
+### Patch Changes
+
+- [`25c0be0`](https://github.com/loglayer/loglayer/commit/25c0be05d5fdc4e3729697616a2af44280870619) Thanks [@theogravity](https://github.com/theogravity)! - Add missing badges
+
 ## 1.0.0
 
 ### Major Changes
