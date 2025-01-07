@@ -94,6 +94,7 @@ export default defineConfig({
               { text: 'Consola', link: '/transports/consola' },
               { text: 'Electron Log', link: '/transports/electron-log' },
               { text: 'Log4js', link: '/transports/log4js' },
+              { text: 'loglevel', link: '/transports/loglevel' },
               { text: 'Pino', link: '/transports/pino' },
               { text: 'Roarr', link: '/transports/roarr' },
               { text: 'Signale', link: '/transports/signale' },

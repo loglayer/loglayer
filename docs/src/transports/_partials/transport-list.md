@@ -6,6 +6,7 @@
 - [Consola](/transports/consola) - Elegant console logger for Node.js and browser
 - [Electron-log](/transports/electron-log) - Logging library for Electron applications
 - [Log4js](/transports/log4js) - Port of Log4j framework to Node.js
+- [loglevel](/transports/loglevel) - Minimal lightweight logging for JavaScript
 - [Pino](/transports/pino) - Very low overhead Node.js logger
 - [Roarr](/transports/roarr) - JSON logger for Node.js and browser
 - [Signale](/transports/signale) - Highly configurable CLI logger
