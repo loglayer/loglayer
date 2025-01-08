@@ -1,5 +1,11 @@
 # Datadog Transport Changelog
 
+## 2.0.4
+
+### Patch Changes
+
+- [#92](https://github.com/loglayer/loglayer/pull/92) [`81c59d7`](https://github.com/loglayer/loglayer/commit/81c59d7bae68dd3f690d0d8d277bcba7c0414dc1) Thanks [@theogravity](https://github.com/theogravity)! - Add serialize-error to readme doc for @loglayer/transport-datadog
+
 ## 2.0.3
 
 ### Patch Changes

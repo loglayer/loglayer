@@ -1,5 +1,11 @@
 # AWS Lambda Powertools Logger Transport Changelog
 
+## 2.0.0
+
+### Major Changes
+
+- [#91](https://github.com/loglayer/loglayer/pull/91) [`b33e3b3`](https://github.com/loglayer/loglayer/commit/b33e3b3d3cd7e0469ed1763ae2ce6fdc6ecb43f2) Thanks [@theogravity](https://github.com/theogravity)! - BREAKING: If using multiple message parameters, they will be `.join(" ")` instead of `.join("")`
+
 ## 1.0.3
 
 ### Patch Changes

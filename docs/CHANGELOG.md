@@ -1,5 +1,15 @@
 # LogLayer Docs Site Changelog
 
+## 1.2.0
+
+### Minor Changes
+
+- [#89](https://github.com/loglayer/loglayer/pull/89) [`fe67df6`](https://github.com/loglayer/loglayer/commit/fe67df6167f7cb945cee13d855220cc405b7ef75) Thanks [@theogravity](https://github.com/theogravity)! - Add support for Google Cloud Logging
+
+### Patch Changes
+
+- [#92](https://github.com/loglayer/loglayer/pull/92) [`81c59d7`](https://github.com/loglayer/loglayer/commit/81c59d7bae68dd3f690d0d8d277bcba7c0414dc1) Thanks [@theogravity](https://github.com/theogravity)! - Add serialize-error to readme doc for @loglayer/transport-datadog
+
 ## 1.1.5
 
 ### Patch Changes
