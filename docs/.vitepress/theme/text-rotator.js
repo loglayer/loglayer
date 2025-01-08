@@ -8,7 +8,15 @@ export function setupTextRotator() {
   if (isInitialized) return;
   isInitialized = true;
 
-  const loggers = ["pino", "winston", "electron-log", "DataDog", "New Relic", "Javascript logging libraries"];
+  const loggers = [
+    "pino",
+    "winston",
+    "electron-log",
+    "DataDog",
+    "New Relic",
+    "Google Cloud Logging",
+    "Javascript logging libraries",
+  ];
   let currentIndex = 0;
 
   function updateText() {

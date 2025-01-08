@@ -18,4 +18,5 @@
 
 - [Datadog](/transports/datadog) - Server-side logging for Datadog
 - [Datadog Browser Logs](/transports/datadog-browser-logs) - Browser-side logging for Datadog
+- [Google Cloud Logging](/transports/google-cloud-logging) - Server-side logging for Google Cloud Platform
 - [New Relic](/transports/new-relic) - Server-side logging for New Relic
