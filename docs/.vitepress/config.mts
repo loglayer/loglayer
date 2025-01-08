@@ -106,6 +106,7 @@ export default defineConfig({
           { text: "Cloud Providers", items: [
             { text: 'DataDog (server-side)', link: '/transports/datadog' },
             { text: 'DataDog Browser Logs', link: '/transports/datadog-browser-logs' },
+            { text: 'Google Cloud Logging', link: '/transports/google-cloud-logging' },
             { text: 'New Relic', link: '/transports/new-relic' },
           ]}
         ]
