@@ -24,15 +24,15 @@ Install the required packages (`datadog-transport-common` is installed as part o
 ::: code-group
 
 ```sh [npm]
-npm i loglayer @loglayer/transport-datadog
+npm i loglayer @loglayer/transport-datadog serialize-error
 ```
 
 ```sh [pnpm]
-pnpm add loglayer @loglayer/transport-datadog
+pnpm add loglayer @loglayer/transport-datadog serialize-error
 ```
 
 ```sh [yarn]
-yarn add loglayer @loglayer/transport-datadog
+yarn add loglayer @loglayer/transport-datadog serialize-error
 ```
 
 :::
@@ -42,8 +42,10 @@ yarn add loglayer @loglayer/transport-datadog
 ```typescript
 import { LogLayer } from 'loglayer'
 import { DataDogTransport } from "@loglayer/transport-datadog"
+import { serializeError } from "serialize-error";
 
 const log = new LogLayer({
+  errorSerializer: serializeError,
   transport: new DataDogTransport({
     options: {
       ddClientConf: {

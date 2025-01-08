@@ -14,13 +14,21 @@ Ships logs to DataDog using the [datadog-transport-common](https://www.npmjs.com
   * For browser-side logging, use the [`@loglayer/transport-datadog-browser-logs`](https://github.com/loglayer/loglayer/tree/master/packages/transports/datadog-browser-logs) package
 - You will not get any console output since this sends directly to DataDog. Use the `onDebug` option to log out messages.
 
+## Installation
+
+```bash
+npm install loglayer @loglayer/transport-datadog serialize-error
+```
+
 ## Usage
 
 ```typescript
 import { LogLayer } from 'loglayer'
 import { DataDogTransport } from "@loglayer/transport-datadog"
+import { serializeError } from "serialize-error";
 
 const log = new LogLayer({
+  errorSerializer: serializeError,
   transport: new DataDogTransport({
     options: {
       ddClientConf: {
