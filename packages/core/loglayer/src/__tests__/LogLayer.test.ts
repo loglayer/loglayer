@@ -1042,5 +1042,110 @@ describe("mute / unmute", () => {
         });
       });
     });
+
+    describe("onContextCalled", () => {
+      it("should modify the context", () => {
+        const log = getLogger();
+        log.addPlugins([
+          {
+            onContextCalled: (context) => {
+              return {
+                ...context,
+                modified: true,
+              };
+            },
+          },
+        ]);
+
+        const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+        log
+          .withContext({
+            someData: false,
+          })
+          .info("Test message");
+
+        expect(genericLogger.popLine()).toStrictEqual(
+          expect.objectContaining({
+            level: LogLevel.info,
+            data: [
+              {
+                someData: false,
+                modified: true,
+              },
+              "Test message",
+            ],
+          }),
+        );
+      });
+
+      it("should drop the context", () => {
+        const log = getLogger();
+        log.addPlugins([
+          {
+            onContextCalled: () => null,
+          },
+        ]);
+
+        const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+        log
+          .withContext({
+            someData: false,
+          })
+          .info("Test message");
+
+        expect(genericLogger.popLine()).toStrictEqual(
+          expect.objectContaining({
+            level: LogLevel.info,
+            data: ["Test message"],
+          }),
+        );
+      });
+
+      it("should chain multiple context plugins", () => {
+        const log = getLogger();
+        log.addPlugins([
+          {
+            onContextCalled: (context) => {
+              return {
+                ...context,
+                first: true,
+              };
+            },
+          },
+          {
+            onContextCalled: (context) => {
+              return {
+                ...context,
+                second: true,
+              };
+            },
+          },
+        ]);
+
+        const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+        log
+          .withContext({
+            original: true,
+          })
+          .info("Test message");
+
+        expect(genericLogger.popLine()).toStrictEqual(
+          expect.objectContaining({
+            level: LogLevel.info,
+            data: [
+              {
+                original: true,
+                first: true,
+                second: true,
+              },
+              "Test message",
+            ],
+          }),
+        );
+      });
+    });
   });
 });

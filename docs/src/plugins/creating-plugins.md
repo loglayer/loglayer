@@ -42,6 +42,10 @@ interface LogLayerPlugin {
    * Called when withMetadata() or metadataOnly() is called.
    */
   onMetadataCalled?(metadata: Record<string, any>): Record<string, any> | null | undefined;
+  /**
+   * Called when withContext() is called. 
+   */
+  onContextCalled?(context: Record<string, any>): Record<string, any> | null | undefined;
 }
 ```
 
@@ -247,6 +251,8 @@ const productionFilterPlugin = {
 
 Intercepts and modifies metadata when `withMetadata()` or `metadataOnly()` is called. This is useful for transforming or enriching metadata before it's attached to logs.
 
+Returning `null` or `undefined` will prevent the metadata from being added to the log.
+
 **Method Signature:**
 ```typescript
 onMetadataCalled?(metadata: Record<string, any>): Record<string, any> | null | undefined
@@ -258,12 +264,39 @@ onMetadataCalled?(metadata: Record<string, any>): Record<string, any> | null | u
 **Example:**
 ```typescript
 const metadataEnrichmentPlugin = {
-  id: 'metadata-enrichment',
   onMetadataCalled: (metadata) => {
     return {
       ...metadata,
       enrichedAt: new Date().toISOString(),
       userId: getCurrentUser()?.id
+    }
+  }
+}
+```
+
+### onContextCalled
+
+Intercepts and modifies context when `withContext()` is called. This is useful for transforming or enriching context data before it's used in logs.
+
+Returning `null` or `undefined` will prevent the context from being added to the log.
+
+**Method Signature:**
+```typescript
+onContextCalled?(context: Record<string, any>): Record<string, any> | null | undefined
+```
+
+**Parameters:**
+- `context`: Record<string, any> - The context object being added
+
+**Example:**
+```typescript
+const contextEnrichmentPlugin = {
+  onContextCalled: (context) => {
+    return {
+      ...context,
+      environment: process.env.NODE_ENV,
+      processId: process.pid,
+      timestamp: new Date().toISOString()
     }
   }
 }

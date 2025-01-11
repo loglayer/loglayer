@@ -70,9 +70,23 @@ export class LogLayer implements ILogLayer {
    * every log entry.
    */
   withContext(context: Record<string, any>): LogLayer {
+    let updatedContext = context;
+
+    if (this.pluginManager.hasPlugins(PluginCallbackType.onContextCalled)) {
+      updatedContext = this.pluginManager.runOnContextCalled(context);
+
+      if (!updatedContext) {
+        if (this._config.consoleDebug) {
+          console.debug("[LogLayer] Context was dropped due to plugin returning falsy value.");
+        }
+
+        return this;
+      }
+    }
+
     this.context = {
       ...this.context,
-      ...context,
+      ...updatedContext,
     };
 
     this.hasContext = true;

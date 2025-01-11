@@ -202,4 +202,56 @@ describe("PluginManager", () => {
       expect(plugin2.onMetadataCalled).not.toHaveBeenCalled();
     });
   });
+
+  describe("runOnContextCalled", () => {
+    it("should return a modified context object", () => {
+      pluginManager.addPlugins([
+        {
+          id: "context-1",
+          onContextCalled: (params) => {
+            return {
+              ...params,
+              added: "test",
+            };
+          },
+        },
+        {
+          id: "context-2",
+          onContextCalled: (params) => {
+            return {
+              ...params,
+              modified: "yes",
+            };
+          },
+        },
+      ]);
+
+      expect(pluginManager.countPlugins(PluginCallbackType.onContextCalled)).toBe(2);
+
+      const context = pluginManager.runOnContextCalled({ initial: "data" });
+
+      expect(context).toEqual({ added: "test", modified: "yes", initial: "data" });
+    });
+
+    it("should return a null result", () => {
+      const plugin = {
+        id: "context-1",
+        onContextCalled: vitest.fn().mockReturnValue(null),
+      };
+
+      const plugin2 = {
+        id: "context-2",
+        onContextCalled: vitest.fn().mockReturnValue({ modified: "yes" }),
+      };
+
+      // First plugin returns a null result, so the second plugin should not run
+      pluginManager.addPlugins([plugin, plugin2]);
+
+      const context = pluginManager.runOnContextCalled({ initial: "data" });
+
+      expect(context).toEqual(null);
+      expect(plugin.onContextCalled).toHaveBeenCalledOnce();
+      expect(plugin2.onContextCalled).not.toHaveBeenCalled();
+    });
+  });
 });
