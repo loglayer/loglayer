@@ -1,5 +1,11 @@
 # roarr Transport Changelog
 
+## 2.0.0
+
+### Major Changes
+
+- [#103](https://github.com/loglayer/loglayer/pull/103) [`2044f0a`](https://github.com/loglayer/loglayer/commit/2044f0ac49ce48ab0e77e820f458e6dad5905445) Thanks [@theogravity](https://github.com/theogravity)! - Allow the roarr transport to accept multi-param messages
+
 ## 1.0.9
 
 ### Patch Changes
