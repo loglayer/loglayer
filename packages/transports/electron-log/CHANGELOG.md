@@ -1,5 +1,12 @@
 # Electron Log Transport Changelog
 
+## 1.0.9
+
+### Patch Changes
+
+- Updated dependencies [[`06c8c20`](https://github.com/loglayer/loglayer/commit/06c8c207a569d6e7e6b66cc96abed8a7365bcfac)]:
+  - @loglayer/transport@1.1.5
+
 ## 1.0.8
 
 ### Patch Changes
