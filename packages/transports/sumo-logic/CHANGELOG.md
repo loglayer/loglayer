@@ -1,0 +1,2 @@
+# Sumo Logic Transport Changelog
+
