@@ -39,6 +39,9 @@ export function testTransportOutput(label: string, logLayerInstance: any) {
     .withMetadata({
       test: "metadata",
       test2: "metadata2",
+      nested: {
+        data: "nested data",
+      },
     })
     .withError(new Error("error object"))
     .error("error message with metadata and error instance");
