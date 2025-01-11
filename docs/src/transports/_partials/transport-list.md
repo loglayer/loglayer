@@ -18,9 +18,10 @@
 
 ### Cloud Providers
 
-| Name | Package | Description |
-|------|---------|-------------|
-| [Datadog](/transports/datadog) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-datadog)](https://www.npmjs.com/package/@loglayer/transport-datadog) | Server-side logging for Datadog |
-| [Datadog Browser Logs](/transports/datadog-browser-logs) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-datadog-browser-logs)](https://www.npmjs.com/package/@loglayer/transport-datadog-browser-logs) | Browser-side logging for Datadog |
+| Name                                                     | Package | Description                                   |
+|----------------------------------------------------------|---------|-----------------------------------------------|
+| [Datadog](/transports/datadog)                           | [![npm](https://img.shields.io/npm/v/@loglayer/transport-datadog)](https://www.npmjs.com/package/@loglayer/transport-datadog) | Server-side logging for Datadog               |
+| [Datadog Browser Logs](/transports/datadog-browser-logs) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-datadog-browser-logs)](https://www.npmjs.com/package/@loglayer/transport-datadog-browser-logs) | Browser-side logging for Datadog              |
+| [Dynatrace](/transports/dynatrace)                       | [![npm](https://img.shields.io/npm/v/@loglayer/transport-dynatrace)](https://www.npmjs.com/package/@loglayer/transport-dynatrace) | Server-side logging for Dynatrace             |
 | [Google Cloud Logging](/transports/google-cloud-logging) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-google-cloud-logging)](https://www.npmjs.com/package/@loglayer/transport-google-cloud-logging) | Server-side logging for Google Cloud Platform |
-| [New Relic](/transports/new-relic) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-new-relic)](https://www.npmjs.com/package/@loglayer/transport-new-relic) | Server-side logging for New Relic |
+| [New Relic](/transports/new-relic)                       | [![npm](https://img.shields.io/npm/v/@loglayer/transport-new-relic)](https://www.npmjs.com/package/@loglayer/transport-new-relic) | Server-side logging for New Relic             |

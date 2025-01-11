@@ -402,6 +402,40 @@ importers:
         specifier: 2.1.8
         version: 2.1.8(@types/node@22.10.4)(jsdom@25.0.1)
 
+  packages/transports/dynatrace:
+    dependencies:
+      '@loglayer/transport':
+        specifier: workspace:*
+        version: link:../../core/transport
+    devDependencies:
+      '@internal/tsconfig':
+        specifier: workspace:*
+        version: link:../../core/tsconfig
+      '@types/node':
+        specifier: 22.10.4
+        version: 22.10.4
+      hash-runner:
+        specifier: 2.0.1
+        version: 2.0.1
+      loglayer:
+        specifier: workspace:*
+        version: link:../../core/loglayer
+      serialize-error:
+        specifier: 11.0.3
+        version: 11.0.3
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)(yaml@2.5.1)
+      tsx:
+        specifier: 4.19.2
+        version: 4.19.2
+      typescript:
+        specifier: 5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: 2.1.8
+        version: 2.1.8(@types/node@22.10.4)(jsdom@25.0.1)
+
   packages/transports/electron-log:
     dependencies:
       '@loglayer/transport':
