@@ -42,9 +42,21 @@ For libraries that follow a common logging interface with methods like `info()`,
 The `BaseTransport` class provides a `logger` property where users pass in their logging library instance:
 
 ```typescript
-import { BaseTransport, LogLayerTransportParams } from "@loglayer/transport";
+import {
+  BaseTransport,
+  type LogLayerTransportConfig,
+  type LogLayerTransportParams,
+} from "@loglayer/transport";
+
+export interface CustomLoggerTransportConfig extends LogLayerTransportConfig<ConsoleType> {
+  // Add configuration options here if necessary
+}
 
 export class CustomLoggerTransport extends BaseTransport<YourLoggerType> {
+  constructor(config: CustomLoggerTransportConfig) {
+    super(config);
+  }
+
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams) {
     if (data && hasData) {
       // Most logging libraries expect data as first or last parameter
@@ -93,12 +105,20 @@ For services or libraries that don't follow the common logging interface (e.g., 
 Unlike `BaseTransport`, `LoggerlessTransport` doesn't provide a `logger` property since these services typically don't require a logger instance. Instead, you'll usually initialize your service in the constructor:
 
 ```typescript
-import { LoggerlessTransport, LogLayerTransportParams } from "@loglayer/transport";
+import { 
+  LoggerlessTransport, 
+  type LogLayerTransportParams,
+  type LoggerlessTransportConfig
+} from "@loglayer/transport";
+
+export interface CustomServiceTransportConfig extends LoggerlessTransportConfig {
+  // Add configuration options here if necessary
+}
 
 export class CustomServiceTransport extends LoggerlessTransport {
   private service: YourServiceType;
 
-  constructor(config: YourConfigType) {
+  constructor(config: CustomServiceTransportConfig) {
     super(config);
     this.service = new YourServiceType(config);
   }
@@ -221,3 +241,9 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
 ### Loggerless Example: DataDog Transport
 
 For an example of a loggerless transport that sends logs to a third-party service, see the [Datadog Transport](https://github.com/loglayer/loglayer/blob/master/packages/transports/datadog/src/DataDogTransport.ts) implementation.
+
+## Boilerplate / Template Code
+
+A sample project that you can use as a template is provided here:
+
+[GitHub Boilerplate Template](https://github.com/loglayer/loglayer-transport-boilerplate)
