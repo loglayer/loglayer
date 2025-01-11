@@ -1,0 +1,5 @@
+{
+  "include": ["src/**", "package.json"],
+  "execOnChange": "pnpm run build",
+  "hashFile": ".hashes.json"
+}

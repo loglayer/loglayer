@@ -16,6 +16,7 @@ export function setupTextRotator() {
     "New Relic",
     "Google Cloud Logging",
     "Dynatrace",
+    "Sumo Logic",
     "Javascript logging libraries",
   ];
   let currentIndex = 0;

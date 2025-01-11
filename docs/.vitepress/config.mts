@@ -109,6 +109,7 @@ export default defineConfig({
             { text: 'Dynatrace', link: '/transports/dynatrace' },
             { text: 'Google Cloud Logging', link: '/transports/google-cloud-logging' },
             { text: 'New Relic', link: '/transports/new-relic' },
+            { text: "Sumo Logic", link: '/transports/sumo-logic'}
           ]}
         ]
       },
