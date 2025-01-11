@@ -5,6 +5,10 @@ description: Send logs to Dynatrace using their Log Monitoring API v2
 
 # Dynatrace Transport
 
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-dynatrace)](https://www.npmjs.com/package/@loglayer/transport-dynatrace)
+
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/dynatrace)
+
 The Dynatrace transport sends logs to Dynatrace using their [Log Monitoring API v2](https://docs.dynatrace.com/docs/discover-dynatrace/references/dynatrace-api/environment-api/log-monitoring-v2/post-ingest-logs).
 
 ::: warning
@@ -15,9 +19,19 @@ Although the limitations are pretty generous, it is advised to define the `onErr
 
 ## Installation
 
-```bash
+::: code-group
+```bash [npm]
 npm install loglayer @loglayer/transport-dynatrace serialize-error
 ```
+
+```bash [yarn]
+yarn add loglayer @loglayer/transport-dynatrace serialize-error
+```
+
+```bash [pnpm]
+pnpm add loglayer @loglayer/transport-dynatrace serialize-error
+```
+:::
 
 ## Usage
 
