@@ -1,5 +1,11 @@
 # LogLayer Docs Site Changelog
 
+## 1.5.0
+
+### Minor Changes
+
+- [#101](https://github.com/loglayer/loglayer/pull/101) [`d5496ea`](https://github.com/loglayer/loglayer/commit/d5496ea6196dcf7bf161cdddd7a4f032b14a549c) Thanks [@theogravity](https://github.com/theogravity)! - Add Sumo Logic transport
+
 ## 1.4.0
 
 ### Minor Changes
