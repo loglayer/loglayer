@@ -1,5 +1,12 @@
 # @loglayer/plugin-sprintf
 
+## 1.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`c38d650`](https://github.com/loglayer/loglayer/commit/c38d65064017013aaf13aa4291eddff6936204f8)]:
+  - @loglayer/plugin@1.1.0
+
 ## 1.0.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @loglayer/plugin
 
+## 1.1.0
+
+### Minor Changes
+
+- [#97](https://github.com/loglayer/loglayer/pull/97) [`c38d650`](https://github.com/loglayer/loglayer/commit/c38d65064017013aaf13aa4291eddff6936204f8) Thanks [@theogravity](https://github.com/theogravity)! - Add plugin lifecycle method `onContextCalled` to intercept `withContext` calls
+
 ## 1.0.4
 
 ### Patch Changes
