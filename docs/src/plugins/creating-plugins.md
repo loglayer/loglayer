@@ -268,3 +268,9 @@ const metadataEnrichmentPlugin = {
   }
 }
 ```
+
+## Boilerplate / Template Code
+
+A sample project that you can use as a template is provided here:
+
+[GitHub Boilerplate Template](https://github.com/loglayer/loglayer-plugin-boilerplate)
