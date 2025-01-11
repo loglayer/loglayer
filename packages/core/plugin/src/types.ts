@@ -51,6 +51,8 @@ export type PluginBeforeMessageOutFn = (params: PluginBeforeMessageOutParams) =>
 
 export type PluginOnMetadataCalledFn = (metadata: Record<string, any>) => Record<string, any> | null | undefined;
 
+export type PluginOnContextCalledFn = (context: Record<string, any>) => Record<string, any> | null | undefined;
+
 export interface LogLayerPluginParams {
   /**
    * Unique identifier for the plugin. Used for selectively disabling / enabling
@@ -99,6 +101,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    * @returns boolean If true, sends data to the transport, if false does not.
    */
   shouldSendToLogger?(params: PluginShouldSendToLoggerParams): boolean;
+
   /**
    * Called when withMetadata() or metadataOnly() is called. This allows you to modify the metadata before it is sent to the destination logging library.
    *
@@ -111,6 +114,19 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    * @returns [Object] The metadata object to be sent to the destination logging library.
    */
   onMetadataCalled?: (metadata: Record<string, any>) => Record<string, any> | null | undefined;
+
+  /**
+   * Called when withContext() is called. This allows you to modify the context before it is used.
+   *
+   * The context is a *shallow* clone of the context input.
+   *
+   * If null is returned, then no context will be used.
+   *
+   * In multiple plugins, the modified context will be passed through each plugin in the order they are added.
+   *
+   * @returns [Object] The context object to be used.
+   */
+  onContextCalled?: (context: Record<string, any>) => Record<string, any> | null | undefined;
 }
 
 /**
@@ -121,4 +137,5 @@ export enum PluginCallbackType {
   shouldSendToLogger = "shouldSendToLogger",
   onMetadataCalled = "onMetadataCalled",
   onBeforeMessageOut = "onBeforeMessageOut",
+  onContextCalled = "onContextCalled",
 }

@@ -1,11 +1,11 @@
-import {
-  type LogLayerPlugin,
-  type PluginBeforeDataOutParams,
-  type PluginBeforeMessageOutParams,
-  PluginCallbackType,
-  type PluginShouldSendToLoggerParams,
+import type {
+  LogLayerPlugin,
+  PluginBeforeDataOutParams,
+  PluginBeforeMessageOutParams,
+  PluginShouldSendToLoggerParams,
 } from "@loglayer/plugin";
 
+import { PluginCallbackType } from "@loglayer/plugin";
 import type { MessageDataType } from "@loglayer/shared";
 
 const CALLBACK_LIST = [
@@ -13,6 +13,7 @@ const CALLBACK_LIST = [
   PluginCallbackType.onMetadataCalled,
   PluginCallbackType.shouldSendToLogger,
   PluginCallbackType.onBeforeMessageOut,
+  PluginCallbackType.onContextCalled,
 ];
 
 interface LogLayerPluginWithTimestamp extends LogLayerPlugin {
@@ -26,6 +27,7 @@ export class PluginManager {
   private shouldSendToLogger: Array<string> = [];
   private onMetadataCalled: Array<string> = [];
   private onBeforeMessageOut: Array<string> = [];
+  private onContextCalled: Array<string> = [];
 
   constructor(plugins: Array<LogLayerPlugin>) {
     this.idToPlugin = {};
@@ -53,6 +55,7 @@ export class PluginManager {
     this.shouldSendToLogger = [];
     this.onMetadataCalled = [];
     this.onBeforeMessageOut = [];
+    this.onContextCalled = [];
 
     const pluginList = Object.values(this.idToPlugin).sort((a, b) => a.registeredAt - b.registeredAt);
 
@@ -195,5 +198,29 @@ export class PluginManager {
     }
 
     return messages;
+  }
+
+  /**
+   * Runs plugins that define onContextCalled.
+   */
+  runOnContextCalled(context: Record<string, any>): Record<string, any> | null {
+    // Create a shallow copy of context to avoid direct modification
+    let data: Record<string, any> = {
+      ...context,
+    };
+
+    for (const pluginId of this.onContextCalled) {
+      const plugin = this.idToPlugin[pluginId];
+
+      const result = plugin.onContextCalled?.(data);
+
+      if (result) {
+        data = result;
+      } else {
+        return null;
+      }
+    }
+
+    return data;
   }
 }
