@@ -1,4 +1,4 @@
 User-agent: *
-Allow: https://loglayer.dev
+Allow: /
 
 Sitemap: https://loglayer.dev/sitemap.xml
