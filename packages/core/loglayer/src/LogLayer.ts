@@ -456,6 +456,10 @@ export class LogLayer implements ILogLayer {
         data: hasObjData ? d : undefined,
         logLevel,
       });
+
+      if (d && !hasObjData) {
+        hasObjData = true;
+      }
     }
 
     if (this.pluginManager.hasPlugins(PluginCallbackType.onBeforeMessageOut)) {

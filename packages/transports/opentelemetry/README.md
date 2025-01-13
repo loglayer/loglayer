@@ -8,6 +8,11 @@ The OpenTelemetry transport for LogLayer sends logs using the [OpenTelemetry Log
 
 Compatible with OpenTelemetry JS API and SDK `1.0+`.
 
+### Note
+
+In most cases, you should use the [OpenTelemetry Plugin](https://loglayer.dev/plugins/opentelemetry) instead as it stamps logs with trace context.
+Use this transport if you are using OpenTelemetry log processors, where the log processors do the actual shipping of logs.
+
 ### Acknowledgements
 
 A lot of the code is based on the [@opentelemetry/winston-transport](https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/packages/winston-transport) code,

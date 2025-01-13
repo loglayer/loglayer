@@ -27,7 +27,7 @@
 | [New Relic](/transports/new-relic)                       | [![npm](https://img.shields.io/npm/v/@loglayer/transport-new-relic)](https://www.npmjs.com/package/@loglayer/transport-new-relic) | Server-side logging for New Relic             |
 | [Sumo Logic](/transports/sumo-logic)                     | [![npm](https://img.shields.io/npm/v/@loglayer/transport-sumo-logic)](https://www.npmjs.com/package/@loglayer/transport-sumo-logic) | Send logs to Sumo Logic via HTTP Source |
 
-### Other Integrations
+### Other Transports
 
 | Name | Package | Description                                  |
 |------|---------|----------------------------------------------|

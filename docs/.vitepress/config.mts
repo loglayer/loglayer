@@ -111,7 +111,7 @@ export default defineConfig({
             { text: 'New Relic', link: '/transports/new-relic' },
             { text: "Sumo Logic", link: '/transports/sumo-logic'}
           ]},
-          { text: "Other Integrations", items: [
+          { text: "Other Transports", items: [
             { text: 'OpenTelemetry', link: '/transports/opentelemetry' }
           ]}
         ]
@@ -124,6 +124,7 @@ export default defineConfig({
           { text: 'Testing Plugins', link: '/plugins/testing-plugins' },
           { text: 'Available Plugins', items:
             [
+              { text: 'OpenTelemetry', link: '/plugins/opentelemetry' },
               { text: 'Redaction', link: '/plugins/redaction' },
               { text: 'Sprintf', link: '/plugins/sprintf' },
             ]

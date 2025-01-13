@@ -5,7 +5,7 @@ description: Learn more about LogLayer and how it unifies your logging experienc
 
 # Introduction
 
-`loglayer` is a unified logger that routes logs to various logging libraries and cloud providers while providing a 
+`loglayer` is a unified logger that routes logs to various logging libraries, cloud providers, and OpenTelemetry while providing a 
 fluent API for specifying log messages, metadata and errors, enhancing and standardizing the developer experience 
 around writing logs.
 

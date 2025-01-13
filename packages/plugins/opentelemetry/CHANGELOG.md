@@ -1,0 +1,2 @@
+# OpenTelemetry Plugin Changelog
+
