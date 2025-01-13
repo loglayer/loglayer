@@ -1,6 +1,6 @@
 import type { Log } from "@google-cloud/logging";
 import type { LogEntry } from "@google-cloud/logging/build/src/entry.js";
-import { BaseTransport, LogLevel } from "@loglayer/transport";
+import { BaseTransport, LogLevel, LogLevelPriority } from "@loglayer/transport";
 import type { LogLayerTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
 
 export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConfig<Log> {
@@ -10,14 +10,21 @@ export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConf
    * @see https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry
    */
   rootLevelData?: Omit<LogEntry, "severity" | "timestamp" | "jsonPayload">;
+
+  /**
+   * Minimum log level to process. Defaults to "trace"
+   */
+  level?: LogLevel | "trace" | "debug" | "info" | "warn" | "error" | "fatal";
 }
 
 export class GoogleCloudLoggingTransport extends BaseTransport<Log> {
   private rootLevelData: Omit<LogEntry, "severity" | "timestamp" | "jsonPayload">;
+  private level: LogLevel | "trace" | "debug" | "info" | "warn" | "error" | "fatal";
 
   constructor(config: GoogleCloudLoggingTransportConfig) {
     super(config);
     this.rootLevelData = config.rootLevelData || {};
+    this.level = config.level ?? LogLevel.trace; // Default to trace to allow all logs
   }
 
   private mapLogLevel(level: LogLevel): string {
@@ -40,6 +47,11 @@ export class GoogleCloudLoggingTransport extends BaseTransport<Log> {
   }
 
   shipToLogger({ data, hasData, logLevel, messages }: LogLayerTransportParams): any[] {
+    // Skip if log level is lower priority than configured minimum
+    if (LogLevelPriority[logLevel] < LogLevelPriority[this.level]) {
+      return [];
+    }
+
     const entry = this.logger.entry(
       {
         ...this.rootLevelData,

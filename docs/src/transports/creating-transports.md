@@ -104,6 +104,11 @@ For services or libraries that don't follow the common logging interface (e.g., 
 
 Unlike `BaseTransport`, `LoggerlessTransport` doesn't provide a `logger` property since these services typically don't require a logger instance. Instead, you'll usually initialize your service in the constructor:
 
+::: info
+All loggerless transports have an optional `level` input as part of configuration. This is used by the `LoggerlessTransport`
+class to filter out logs that are below the specified level. You do not need to do any work around filtering based on level.
+:::
+
 ```typescript
 import { 
   LoggerlessTransport, 

@@ -55,20 +55,27 @@ datadogLogs.init({
 // Basic setup
 const log = new LogLayer({
   transport: new DatadogBrowserLogsTransport({
-    id: "datadog",
     logger: datadogLogs
   })
 })
 
 // Or with a custom logger instance
 const logger = datadogLogs.createLogger('my-logger')
+
 const log = new LogLayer({
   transport: new DatadogBrowserLogsTransport({
-    id: "datadog",
     logger
   })
 })
 ```
+
+## Configuration Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `logger` | `DatadogLogs` | - | **Required.** The DataDog browser logs instance |
+| `enabled` | `boolean` | `true` | Whether the transport is enabled |
+| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
 
 ## Log Level Mapping
 

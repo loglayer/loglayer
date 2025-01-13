@@ -1,4 +1,13 @@
-import type { LogLevel } from "@loglayer/shared";
+import { LogLevel } from "@loglayer/shared";
+
+export const LogLevelPriority: Record<LogLevel, number> = {
+  [LogLevel.trace]: 0,
+  [LogLevel.debug]: 1,
+  [LogLevel.info]: 2,
+  [LogLevel.warn]: 3,
+  [LogLevel.error]: 4,
+  [LogLevel.fatal]: 5,
+};
 
 export interface LogLayerTransportParams {
   /**
@@ -45,9 +54,13 @@ export interface LoggerlessTransportConfig {
    * If true, the transport will log to the console for debugging purposes
    */
   consoleDebug?: boolean;
+  /**
+   * Minimum log level to process. Defaults to "trace".
+   */
+  level?: "trace" | "debug" | "info" | "warn" | "error" | "fatal";
 }
 
-export interface LogLayerTransportConfig<LogLibrary> extends LoggerlessTransportConfig {
+export interface LogLayerTransportConfig<LogLibrary> extends Omit<LoggerlessTransportConfig, "level"> {
   /**
    * The logging library instance to use for logging
    */

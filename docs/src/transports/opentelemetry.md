@@ -68,7 +68,7 @@ const logger = new LogLayer({
 
 ### `level`
 
-Sets the minimum log level to process. Logs below this level will be filtered out.
+Minimum log level to process. Logs below this level will be filtered out.
 - Type: `'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'`
 - Default: `'trace'` (allows all logs)
 

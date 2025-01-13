@@ -160,4 +160,67 @@ describe("GoogleCloudLoggingTransport", () => {
       );
     });
   });
+
+  describe("level filtering", () => {
+    it("should only log messages at or above the specified level", () => {
+      const loggerWithLevel = new LogLayer({
+        transport: new GoogleCloudLoggingTransport({
+          logger: mockLog,
+          level: "warn",
+        }),
+      });
+
+      // These should be logged
+      loggerWithLevel.fatal("fatal message");
+      loggerWithLevel.error("error message");
+      loggerWithLevel.warn("warning message");
+
+      // These should not be logged
+      loggerWithLevel.info("info message");
+      loggerWithLevel.debug("debug message");
+      loggerWithLevel.trace("trace message");
+
+      // Should be called 3 times for fatal, error, and warn
+      expect(mockWrite).toHaveBeenCalledTimes(3);
+
+      // Verify the calls were for the right levels
+      expect(mockWrite).toHaveBeenCalledWith(
+        expect.objectContaining({
+          metadata: expect.objectContaining({ severity: "CRITICAL" }),
+          data: { message: "fatal message" },
+        }),
+      );
+      expect(mockWrite).toHaveBeenCalledWith(
+        expect.objectContaining({
+          metadata: expect.objectContaining({ severity: "ERROR" }),
+          data: { message: "error message" },
+        }),
+      );
+      expect(mockWrite).toHaveBeenCalledWith(
+        expect.objectContaining({
+          metadata: expect.objectContaining({ severity: "WARNING" }),
+          data: { message: "warning message" },
+        }),
+      );
+    });
+
+    it("should log all messages when level is trace", () => {
+      const loggerWithLevel = new LogLayer({
+        transport: new GoogleCloudLoggingTransport({
+          logger: mockLog,
+          level: "trace",
+        }),
+      });
+
+      loggerWithLevel.fatal("fatal message");
+      loggerWithLevel.error("error message");
+      loggerWithLevel.warn("warning message");
+      loggerWithLevel.info("info message");
+      loggerWithLevel.debug("debug message");
+      loggerWithLevel.trace("trace message");
+
+      // Should be called for all 6 log levels
+      expect(mockWrite).toHaveBeenCalledTimes(6);
+    });
+  });
 });

@@ -1,5 +1,10 @@
 import { LogLevel } from "@loglayer/shared";
-import type { LogLayerTransport, LogLayerTransportParams, LoggerlessTransportConfig } from "./types.js";
+import {
+  type LogLayerTransport,
+  type LogLayerTransportParams,
+  LogLevelPriority,
+  type LoggerlessTransportConfig,
+} from "./types.js";
 
 /**
  * For implementing libraries that aren't logging libraries
@@ -16,6 +21,11 @@ export abstract class LoggerlessTransport implements LogLayerTransport {
   enabled: boolean;
 
   /**
+   * Minimum log level to process. Defaults to "trace".
+   */
+  level?: LogLevel | "trace" | "debug" | "info" | "warn" | "error" | "fatal";
+
+  /**
    * If true, the transport will log to the console for debugging purposes
    */
   protected consoleDebug?: boolean;
@@ -25,6 +35,7 @@ export abstract class LoggerlessTransport implements LogLayerTransport {
     this.id = new Date().getTime().toString() + Math.random().toString();
     this.enabled = config.enabled ?? true;
     this.consoleDebug = config.consoleDebug ?? false;
+    this.level = config.level ?? "trace";
   }
 
   /**
@@ -32,6 +43,11 @@ export abstract class LoggerlessTransport implements LogLayerTransport {
    */
   _sendToLogger(params: LogLayerTransportParams): void {
     if (!this.enabled) {
+      return;
+    }
+
+    // Skip if log level is lower priority than configured minimum
+    if (LogLevelPriority[params.logLevel] < LogLevelPriority[this.level]) {
       return;
     }
 
