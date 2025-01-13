@@ -1,4 +1,4 @@
-# @loglayer/plugin-redaction
+# `@loglayer/plugin-redaction` Changelog
 
 ## 1.0.5
 

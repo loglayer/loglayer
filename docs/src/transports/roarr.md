@@ -62,3 +62,7 @@ const log = new LogLayer({
   errorSerializer: serializeError  // Roarr requires error serialization
 })
 ```
+
+## Changelog
+
+View the changelog [here](./changelogs/roarr-changelog.md).

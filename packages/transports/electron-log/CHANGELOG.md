@@ -1,4 +1,4 @@
-# Electron Log Transport Changelog
+# `@loglayer/transport-electron-log` Changelog
 
 ## 1.0.10
 

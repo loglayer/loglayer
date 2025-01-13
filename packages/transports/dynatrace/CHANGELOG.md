@@ -1,4 +1,4 @@
-# Dynatrace Transport Changelog
+# `@loglayer/transport-dynatrace` Changelog
 
 ## 1.0.1
 

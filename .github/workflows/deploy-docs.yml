@@ -3,14 +3,8 @@
 name: Deploy LogLayer docs to Pages
 
 on:
-  # Runs on pushes targeting the `main` branch. Change this to `master` if you're
-  # using the `master` branch as the default branch.
-  push:
-    branches: [master]
-    paths:
-      - 'docs/**'
-
-  # Allows you to run this workflow manually from the Actions tab
+  # Only allow manual triggers and workflow calls
+  workflow_call:
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages

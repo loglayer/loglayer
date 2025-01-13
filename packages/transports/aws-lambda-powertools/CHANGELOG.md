@@ -1,4 +1,4 @@
-# AWS Lambda Powertools Logger Transport Changelog
+# `@loglayer/transport-aws-lambda-powertools` Changelog
 
 ## 2.0.2
 

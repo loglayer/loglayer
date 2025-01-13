@@ -1,4 +1,4 @@
-# tracer Transport Changelog
+# `@loglayer/transport-tracer` Changelog
 
 ## 1.0.6
 

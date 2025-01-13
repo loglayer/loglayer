@@ -1,4 +1,4 @@
-# @loglayer/plugin-sprintf
+# `@loglayer/plugin-sprintf` Changelog
 
 ## 1.0.2
 

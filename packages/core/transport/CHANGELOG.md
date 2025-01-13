@@ -1,4 +1,4 @@
-# @loglayer/transport
+# `@loglayer/transport` Changelog
 
 ## 1.2.0
 

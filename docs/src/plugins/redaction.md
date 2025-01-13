@@ -261,3 +261,7 @@ log.metadataOnly({
 //   "creditCard": "************1111"
 // }
 ```
+
+## Changelog
+
+View the changelog [here](./changelogs/redaction-changelog.md).

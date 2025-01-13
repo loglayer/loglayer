@@ -1,4 +1,4 @@
-# Winston Transport Changelog
+# `@loglayer/transport-winston` Changelog
 
 ## 1.0.10
 

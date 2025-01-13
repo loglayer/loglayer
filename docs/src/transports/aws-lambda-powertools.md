@@ -69,3 +69,7 @@ log.withMetadata({ customField: 'value' }).info('Hello from Lambda!');
 | warn     | WARN       |
 | error    | ERROR      |
 | fatal    | ERROR      |
+
+## Changelog
+
+View the changelog [here](./changelogs/aws-lambda-powertools-changelog.md).

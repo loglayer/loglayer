@@ -65,3 +65,7 @@ const log = new LogLayer({
 | error    | error   |
 | fatal    | fatal   |
 
+## Changelog
+
+View the changelog [here](./changelogs/bunyan-changelog.md).
+

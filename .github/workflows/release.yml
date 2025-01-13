@@ -63,3 +63,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  deploy-docs:
+    needs: release
+    name: Deploy Docs
+    uses: ./.github/workflows/deploy-docs.yml
+    permissions:
+      pages: write
+      id-token: write
+      contents: read

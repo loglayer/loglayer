@@ -102,3 +102,7 @@ interface DatadogTransportConfig {
   options: DDTransportOptions
 }
 ```
+
+## Changelog
+
+View the changelog [here](./changelogs/datadog-changelog.md).

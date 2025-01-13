@@ -57,3 +57,7 @@ const log = new LogLayer({
 | warn     | warn   |
 | error    | error  |
 | fatal    | fatal  |
+
+## Changelog
+
+View the changelog [here](./changelogs/tslog-changelog.md).

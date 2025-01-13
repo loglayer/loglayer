@@ -137,3 +137,7 @@ dist
 .pnpm-store/
 .env
 .env.local
+
+docs/src/core-changelogs/*.md
+docs/src/transports/changelogs/*.md
+docs/src/plugins/changelogs/*.md

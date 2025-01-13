@@ -161,3 +161,7 @@ The transport enforces Sumo Logic's 1MB payload size limit. If a payload exceeds
 3. The error will include the actual size that exceeded the limit
 
 This applies to both raw and compressed payloads. 
+
+## Changelog
+
+View the changelog [here](./changelogs/sumo-logic-changelog.md).

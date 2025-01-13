@@ -4,12 +4,14 @@
   "version": "1.8.0",
   "private": true,
   "scripts": {
-    "docs:dev": "vitepress dev",
-    "docs:build": "vitepress build",
-    "docs:preview": "vitepress build && vitepress preview"
+    "copy-changelogs": "node scripts/copy-changelogs.js",
+    "docs:dev": "pnpm copy-changelogs && vitepress dev",
+    "docs:build": "pnpm copy-changelogs && vitepress build",
+    "docs:preview": "pnpm copy-changelogs && vitepress build && vitepress preview"
   },
   "devDependencies": {
-    "vitepress": "1.5.0"
+    "vitepress": "1.5.0",
+    "glob": "11.0.1"
   },
   "engineStrict": true,
   "engines": {

@@ -63,3 +63,7 @@ const log = new LogLayer({
 | warn     | warn    |
 | error    | error   |
 | fatal    | error   |
+
+## Changelog
+
+View the changelog [here](./changelogs/signale-changelog.md).

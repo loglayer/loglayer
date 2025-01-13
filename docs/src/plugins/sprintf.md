@@ -55,3 +55,7 @@ log.info("Hello %s!", "world")
 log.info("Number: %d", 42)
 // Output: Number: 42
 ```
+
+## Changelog
+
+View the changelog [here](./changelogs/sprintf-changelog.md).

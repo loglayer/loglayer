@@ -198,6 +198,10 @@ new NewRelicTransport({
 
 5. **Validation**: Be aware of the attribute limits when adding metadata to avoid validation errors.
 
+## Changelog
+
+View the changelog [here](./changelogs/new-relic-changelog.md).
+
 ## TypeScript Support
 
 The transport is written in TypeScript and provides full type definitions:
@@ -210,3 +214,7 @@ const config: NewRelicTransportConfig = {
   // TypeScript will enforce correct options
 }
 ``` 
+
+## Changelog
+
+View the changelog [here](./changelogs/new-relic-changelog.md).

@@ -1,4 +1,4 @@
-# @loglayer/plugin
+# `@loglayer/plugin` Changelog
 
 ## 1.1.0
 

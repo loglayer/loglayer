@@ -1,4 +1,4 @@
-# Bunyan Transport Changelog
+# `@loglayer/transport-bunyan` Changelog
 
 ## 1.0.10
 

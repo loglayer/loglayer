@@ -1,4 +1,4 @@
-# @loglayer/transport-new-relic
+# `@loglayer/transport-new-relic` Changelog
 
 ## 1.0.5
 
