@@ -1,5 +1,11 @@
 # LogLayer Docs Site Changelog
 
+## 1.8.2
+
+### Patch Changes
+
+- [#114](https://github.com/loglayer/loglayer/pull/114) [`d0e67f1`](https://github.com/loglayer/loglayer/commit/d0e67f12ff0cc18cb17fcabc463c9c3a72f276e9) Thanks [@theogravity](https://github.com/theogravity)! - Add missing documentation around optional config options for `@loglayer/plugin-opentelemetry`
+
 ## 1.8.1
 
 ### Patch Changes
