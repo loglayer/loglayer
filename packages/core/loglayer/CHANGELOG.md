@@ -1,4 +1,9 @@
-# loglayer
+# `loglayer` Changelog
+
+Changelogs for other core libraries:
+
+- [`@loglayer/plugin` Changelog](https://loglayer.dev/core-changelogs/plugin-changelog.html)
+- [`@loglayer/transport` Changelog](https://loglayer.dev/core-changelogs/transport-changelog.html)
 
 ## 5.1.3
 

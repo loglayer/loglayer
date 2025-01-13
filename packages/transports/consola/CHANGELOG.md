@@ -1,4 +1,4 @@
-# Consola Transport Changelog
+# `@loglayer/transport-consola` Changelog
 
 ## 1.0.10
 

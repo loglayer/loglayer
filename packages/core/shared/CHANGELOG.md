@@ -1,4 +1,4 @@
-# @loglayer/shared
+# `@loglayer/shared` Changelog
 
 ## 1.0.4
 

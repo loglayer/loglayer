@@ -79,3 +79,7 @@ loglayer.withMetadata({ user: 'john' }).info('User logged in');
 | error    | error    |
 | fatal    | error    |
 
+## Changelog
+
+View the changelog [here](./changelogs/loglevel-changelog.md).
+

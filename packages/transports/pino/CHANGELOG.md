@@ -1,4 +1,4 @@
-# Pino Transport Changelog
+# `@loglayer/transport-pino` Changelog
 
 ## 1.0.11
 

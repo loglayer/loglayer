@@ -1,4 +1,4 @@
-# OpenTelemetry Plugin Changelog
+# `@loglayer/plugin-opentelemetry` Changelog
 
 ## 1.0.0
 

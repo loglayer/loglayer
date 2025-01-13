@@ -1,4 +1,4 @@
-# Sumo Logic Transport Changelog
+# `@loglayer/transport-sumo-logic` Changelog
 
 ## 1.0.1
 

@@ -1,4 +1,4 @@
-# tslog Transport Changelog
+# `@loglayer/transport-tslog` Changelog
 
 ## 1.0.6
 

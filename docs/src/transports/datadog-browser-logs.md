@@ -77,6 +77,10 @@ const log = new LogLayer({
 | `enabled` | `boolean` | `true` | Whether the transport is enabled |
 | `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
 
+## Changelog
+
+View the changelog [here](./changelogs/datadog-browser-logs-changelog.md).
+
 ## Log Level Mapping
 
 | LogLayer | Datadog |
@@ -87,3 +91,7 @@ const log = new LogLayer({
 | warn     | warn    |
 | error    | error   |
 | fatal    | error   |
+
+## Changelog
+
+View the changelog [here](./changelogs/datadog-browser-logs-changelog.md).

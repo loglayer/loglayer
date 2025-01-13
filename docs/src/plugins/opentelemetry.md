@@ -212,3 +212,7 @@ Output might look like this:
   trace_flags: '01'
 } Printing hello world
 ``` 
+
+## Changelog
+
+View the changelog [here](./changelogs/opentelemetry-changelog.md).

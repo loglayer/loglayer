@@ -1,4 +1,4 @@
-# Google Cloud Logging Transport Changelog
+# `@loglayer/transport-google-cloud-logging` Changelog
 
 ## 1.1.0
 

@@ -1,4 +1,4 @@
-# Datadog Browser Logs Transport Changelog
+# `@loglayer/transport-datadog-browser-logs` Changelog
 
 ## 1.0.10
 

@@ -57,3 +57,7 @@ const log = new LogLayer({
 | warn     | warn    |
 | error    | error   |
 | fatal    | error   |
+
+## Changelog
+
+View the changelog [here](./changelogs/winston-changelog.md).

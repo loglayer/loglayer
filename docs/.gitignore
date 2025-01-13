@@ -136,3 +136,7 @@ dist
 .hashes.json
 
 .test-report.xml
+src/core-changelogs/*.md
+src/transports/changelogs/*.md
+src/plugins/changelogs/*.md
+

@@ -85,3 +85,7 @@ The transport sends logs to Dynatrace in the following format:
   // Any additional metadata fields
 }
 ```
+
+## Changelog
+
+View the changelog [here](./changelogs/dynatrace-changelog.md).

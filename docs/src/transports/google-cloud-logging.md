@@ -120,3 +120,7 @@ LogLayer log levels are mapped to Google Cloud Logging severity levels as follow
 | `info` | `INFO` |
 | `debug` | `DEBUG` |
 | `trace` | `DEBUG` |
+
+## Changelog
+
+View the changelog [here](./changelogs/google-cloud-logging-changelog.md).

@@ -1,4 +1,4 @@
-# Signale Transport Changelog
+# `@loglayer/transport-signale` Changelog
 
 ## 1.0.10
 

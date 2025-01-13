@@ -1,4 +1,4 @@
-# loglevel Transport Changelog
+# `@loglayer/transport-loglevel` Changelog
 
 ## 1.0.3
 

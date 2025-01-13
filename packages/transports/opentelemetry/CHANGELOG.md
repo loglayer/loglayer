@@ -1,4 +1,4 @@
-# OpenTelemetry Transport Changelog
+# `@loglayer/transport-opentelemetry` Changelog
 
 ## 1.1.1
 

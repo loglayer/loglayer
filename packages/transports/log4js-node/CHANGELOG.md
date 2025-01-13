@@ -1,4 +1,4 @@
-# Log4js Node Transport Changelog
+# `@loglayer/transport-log4js` Changelog
 
 ## 1.0.10
 

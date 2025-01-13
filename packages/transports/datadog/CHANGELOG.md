@@ -1,4 +1,4 @@
-# Datadog Transport Changelog
+# `@loglayer/transport-datadog` Changelog
 
 ## 2.0.6
 

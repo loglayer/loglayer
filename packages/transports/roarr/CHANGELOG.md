@@ -1,4 +1,4 @@
-# roarr Transport Changelog
+# `@loglayer/transport-roarr` Changelog
 
 ## 2.0.1
 
