@@ -110,6 +110,9 @@ export default defineConfig({
             { text: 'Google Cloud Logging', link: '/transports/google-cloud-logging' },
             { text: 'New Relic', link: '/transports/new-relic' },
             { text: "Sumo Logic", link: '/transports/sumo-logic'}
+          ]},
+          { text: "Other Integrations", items: [
+            { text: 'OpenTelemetry', link: '/transports/opentelemetry' }
           ]}
         ]
       },
