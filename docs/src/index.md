@@ -32,7 +32,7 @@ features:
   - title: Multi-logger Support
     details: Fan out logs to multiple logging libraries and cloud providers such as DataDog and New Relic at the same time.
   - title: OpenTelemetry Support
-    details: Send logs to the OpenTelemetry Logging SDK for distributed tracing and observability.
+    details: A transport and plugin is available for connecting logs to OpenTelemetry.
 ---
 
 ---
