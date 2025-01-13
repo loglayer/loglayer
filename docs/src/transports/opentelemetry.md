@@ -9,7 +9,7 @@ description: Send logs to OpenTelemetry using LogLayer
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/opentelemetry)
 
-The OpenTelemetry transport for LogLayer sends logs using the [OpenTelemetry Logs SDK](https://www.npmjs.com/package/@opentelemetry/sdk-logs). This allows you to integrate logs with OpenTelemetry's observability ecosystem.
+The OpenTelemetry transport sends logs using the [OpenTelemetry Logs SDK](https://www.npmjs.com/package/@opentelemetry/sdk-logs). This allows you to integrate logs with OpenTelemetry's observability ecosystem.
 
 Compatible with OpenTelemetry JS API and SDK `1.0+`.
 

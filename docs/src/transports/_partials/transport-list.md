@@ -29,6 +29,6 @@
 
 ### Other Integrations
 
-| Name | Package | Description |
-|------|---------|-------------|
-| [OpenTelemetry](/transports/opentelemetry) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-opentelemetry)](https://www.npmjs.com/package/@loglayer/transport-opentelemetry) | Send logs to OpenTelemetry Logging SDK |
+| Name | Package | Description                                  |
+|------|---------|----------------------------------------------|
+| [OpenTelemetry](/transports/opentelemetry) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-opentelemetry)](https://www.npmjs.com/package/@loglayer/transport-opentelemetry) | Send logs using the OpenTelemetry Logs SDK |
