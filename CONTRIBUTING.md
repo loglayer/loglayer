@@ -7,6 +7,7 @@
   * New features should be added to the `minor` category.
   * Breaking changes should be added to the `major` category.
 - Make sure to add tests for any code written. They are written using [vitest](https://vitest.dev/). The tests should pass before submitting a PR.
+- Make sure to add appropriate documentation for new features and changes.
 - Make sure to run the linter before submitting a PR. The linter is run using the `lint` command. It uses
   [biome.js](https://biomejs.dev/) for linting.
 - The PR must pass the CI checks before it can be merged. This means it should pass linting and tests.
