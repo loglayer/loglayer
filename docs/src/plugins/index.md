@@ -7,10 +7,7 @@ description: Learn how to create and use plugins with LogLayer
 
 LogLayer's plugin system allows you to extend and modify logging behavior at various points in the log lifecycle. Plugins can modify data and messages before they're sent to the logging library, control whether logs should be sent, and intercept metadata calls.
 
-## Available Plugins
-
-- [Sprintf Plugin](./sprintf) - Printf-style string formatting support
-- [Redaction Plugin](./redaction) - Redact sensitive information from logs
+<!--@include: ./_partials/plugin-list.md-->
 
 ## Plugin Management
 

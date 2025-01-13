@@ -155,6 +155,70 @@ importers:
 
   packages/core/tsconfig: {}
 
+  packages/plugins/opentelemetry:
+    dependencies:
+      '@loglayer/plugin':
+        specifier: workspace:*
+        version: link:../../core/plugin
+      '@loglayer/shared':
+        specifier: workspace:*
+        version: link:../../core/shared
+      '@opentelemetry/api':
+        specifier: 1.9.0
+        version: 1.9.0
+    devDependencies:
+      '@internal/tsconfig':
+        specifier: workspace:*
+        version: link:../../core/tsconfig
+      '@opentelemetry/instrumentation-express':
+        specifier: 0.47.0
+        version: 0.47.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/instrumentation-http':
+        specifier: 0.57.0
+        version: 0.57.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources':
+        specifier: 1.30.0
+        version: 1.30.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-logs':
+        specifier: 0.57.0
+        version: 0.57.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-node':
+        specifier: 0.57.0
+        version: 0.57.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-node':
+        specifier: 1.30.0
+        version: 1.30.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions':
+        specifier: 1.28.0
+        version: 1.28.0
+      '@types/node':
+        specifier: 22.10.4
+        version: 22.10.4
+      express:
+        specifier: 4.21.2
+        version: 4.21.2
+      hash-runner:
+        specifier: 2.0.1
+        version: 2.0.1
+      loglayer:
+        specifier: workspace:*
+        version: link:../../core/loglayer
+      serialize-error:
+        specifier: 11.0.3
+        version: 11.0.3
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)(yaml@2.5.1)
+      tsx:
+        specifier: 4.19.2
+        version: 4.19.2
+      typescript:
+        specifier: 5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: 2.1.8
+        version: 2.1.8(@types/node@22.10.4)(jsdom@25.0.1)
+
   packages/plugins/redaction:
     dependencies:
       '@loglayer/plugin':

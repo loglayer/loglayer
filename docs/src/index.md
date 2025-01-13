@@ -40,3 +40,5 @@ features:
 <!--@include: ./_partials/fte-pino-example.md-->
 
 <!--@include: ./transports/_partials/transport-list.md-->
+
+<!--@include: ./plugins/_partials/plugin-list.md-->
