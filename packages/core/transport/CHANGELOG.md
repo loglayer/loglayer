@@ -1,5 +1,11 @@
 # @loglayer/transport
 
+## 1.2.0
+
+### Minor Changes
+
+- [#108](https://github.com/loglayer/loglayer/pull/108) [`f3b89d3`](https://github.com/loglayer/loglayer/commit/f3b89d3c77da9fe4a4f981aca334145b735d9466) Thanks [@theogravity](https://github.com/theogravity)! - Add `level` field for cloud provider transports to filter out logs
+
 ## 1.1.5
 
 ### Patch Changes

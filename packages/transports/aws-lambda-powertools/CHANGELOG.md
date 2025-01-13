@@ -1,5 +1,12 @@
 # AWS Lambda Powertools Logger Transport Changelog
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`f3b89d3`](https://github.com/loglayer/loglayer/commit/f3b89d3c77da9fe4a4f981aca334145b735d9466)]:
+  - @loglayer/transport@1.2.0
+
 ## 2.0.1
 
 ### Patch Changes
