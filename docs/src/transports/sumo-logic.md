@@ -64,6 +64,7 @@ logger.info("Hello from LogLayer!");
 | `headers` | `Record<string, string>` | `{}` | Custom headers to be added to the request |
 | `messageField` | `string` | `"message"` | Field name to use for the log message |
 | `onError` | `(error: Error \| string) => void` | - | Callback for error handling |
+| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
 
 ### Retry Configuration
 

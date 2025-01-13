@@ -13,6 +13,15 @@ Implements the [Google Cloud Logging library](https://www.npmjs.com/package/@goo
 
 This transport sends logs to [Google Cloud Logging](https://cloud.google.com/logging) (formerly known as Stackdriver Logging).
 
+## Configuration Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `logger` | `Log` | - | **Required.** The Google Cloud Logging instance |
+| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | The minimum log level to process. Logs below this level will be filtered out |
+| `rootLevelData` | `Record<string, any>` | - | Data to be included in the metadata portion of the log entry |
+| `onError` | `(error: Error) => void` | - | Error handling callback |
+
 ## Installation
 
 ::: code-group

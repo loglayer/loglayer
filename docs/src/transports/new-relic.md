@@ -56,7 +56,6 @@ log.withMetadata({ userId: "123" }).error("User not found");
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `enabled` | `boolean` | `true` | Whether the transport is enabled |
 | `apiKey` | `string` | - | **Required.** Your New Relic API key |
 | `endpoint` | `string` | `"https://log-api.newrelic.com/log/v1"` | The New Relic Log API endpoint |
 | `useCompression` | `boolean` | `true` | Whether to use gzip compression |
@@ -65,6 +64,8 @@ log.withMetadata({ userId: "123" }).error("User not found");
 | `respectRateLimit` | `boolean` | `true` | Whether to respect rate limiting |
 | `onError` | `(err: Error) => void` | - | Error handling callback |
 | `onDebug` | `(entry: Record<string, any>) => void` | - | Debug callback for inspecting log entries |
+| `enabled` | `boolean` | `true` | Whether the transport is enabled |
+| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
 
 ## Features
 

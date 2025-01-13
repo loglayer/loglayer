@@ -71,6 +71,7 @@ The transport accepts the following configuration options:
 - `onError`: A callback function that will be called when there's an error sending logs to Dynatrace
 - `enabled`: If set to `false`, the transport will not send any logs (defaults to `true`)
 - `consoleDebug`: If set to `true`, logs will also be output to the console (defaults to `false`)
+- `level`: Minimum log level to process. Logs below this level will be filtered out (defaults to `"trace"`)
 
 ## Log Format
 
