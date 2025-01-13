@@ -1,5 +1,12 @@
 # OpenTelemetry Transport Changelog
 
+## 1.1.1
+
+### Patch Changes
+
+- [#110](https://github.com/loglayer/loglayer/pull/110) [`13154ed`](https://github.com/loglayer/loglayer/commit/13154eded5c0bb96de9ed73e04f2adb6438715e5) Thanks [@theogravity](https://github.com/theogravity)! - - `loglayer`: Fix an issue where if you use a plugin that creates metadata, and no metadata was present prior, it does not save
+  - `@loglayer/transport-opentelemetry`: Add a note about the difference between the plugin and the transport
+
 ## 1.1.0
 
 ### Minor Changes
