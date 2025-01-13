@@ -59,6 +59,72 @@ const logger = new LogLayer({
 });
 ```
 
+## Configuration
+
+The plugin accepts the following configuration options:
+
+```typescript
+interface OpenTelemetryPluginParams {
+  /**
+   * If specified, all trace fields will be nested under this key
+   */
+  traceFieldName?: string;
+  
+  /**
+   * Field name for the trace ID. Defaults to 'trace_id'
+   */
+  traceIdFieldName?: string;
+  
+  /**
+   * Field name for the span ID. Defaults to 'span_id'
+   */
+  spanIdFieldName?: string;
+  
+  /**
+   * Field name for the trace flags. Defaults to 'trace_flags'
+   */
+  traceFlagsFieldName?: string;
+  
+  /**
+   * Whether the plugin is disabled
+   */
+  disabled?: boolean;
+}
+```
+
+### Example with Custom Configuration
+
+```typescript
+const logger = new LogLayer({
+  transport: [
+    new ConsoleTransport({
+      logger: console
+    }),
+  ],
+  plugins: [
+    openTelemetryPlugin({
+      // Nest all trace fields under 'trace'
+      traceFieldName: 'trace',
+      // Custom field names
+      traceIdFieldName: 'traceId',
+      spanIdFieldName: 'spanId',
+      traceFlagsFieldName: 'flags'
+    })
+  ]
+});
+```
+
+This would output logs with the following structure:
+```json
+{
+  "trace": {
+    "traceId": "8de71fcab951aad172f1148c74d0877e",
+    "spanId": "349623465c6dfc1b",
+    "flags": "01"
+  }
+}
+```
+
 ## Example with Express
 
 This example has been tested to work with the plugin.
