@@ -148,7 +148,7 @@ Then the query context would be:
 
 // Filter by message content
 // see: https://github.com/jsonquerylang/jsonquery/blob/main/reference/functions.md#regex
-["regex(.message, 'test', 'i')""]
+["regex(.message, 'test', 'i')"]
 
 // Filter by data properties
 [".data.user.age == 25"]
