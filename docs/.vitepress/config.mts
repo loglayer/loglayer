@@ -125,6 +125,7 @@ export default defineConfig({
           { text: 'Testing Plugins', link: '/plugins/testing-plugins' },
           { text: 'Available Plugins', items:
             [
+              { text: 'Filter', link: '/plugins/filter' },
               { text: 'OpenTelemetry', link: '/plugins/opentelemetry' },
               { text: 'Redaction', link: '/plugins/redaction' },
               { text: 'Sprintf', link: '/plugins/sprintf' },
