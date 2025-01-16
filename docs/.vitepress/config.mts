@@ -54,7 +54,7 @@ export default defineConfig({
     },
     nav: [
       { text: '<img alt="NPM Version" src="https://img.shields.io/npm/v/loglayer" />', link: 'https://www.npmjs.com/package/loglayer' },
-      { text: 'Changelog', link: '/core-changelogs/loglayer-changelog'},
+      { text: `What's new`, link: '/whats-new'},
       { text: 'Get Started', link: '/getting-started' },
     ],
     sidebar: [
