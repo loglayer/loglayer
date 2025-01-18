@@ -4,6 +4,7 @@ import { PluginManager } from "./PluginManager.js";
 import type { ErrorOnlyOpts, ILogLayer, LogLayerConfig } from "./types/index.js";
 
 import { type LogLayerPlugin, PluginCallbackType } from "@loglayer/plugin";
+import type { LogLayerTransport } from "@loglayer/transport";
 
 interface FormatLogParams {
   logLevel: LogLevel;
@@ -22,6 +23,8 @@ export class LogLayer implements ILogLayer {
   private hasContext: boolean;
   private pluginManager: PluginManager;
   private idToTransport: Record<string, any>;
+  private hasMultipleTransports: boolean;
+  private singleTransport: LogLayerTransport | null;
 
   _config: LogLayerConfig;
 
@@ -42,6 +45,14 @@ export class LogLayer implements ILogLayer {
     if (!this._config.copyMsgOnOnlyError) {
       this._config.copyMsgOnOnlyError = false;
     }
+
+    // Cache the transport array check and single transport reference
+    this.hasMultipleTransports = Array.isArray(this._config.transport) && this._config.transport.length > 1;
+    this.singleTransport = this.hasMultipleTransports
+      ? null
+      : Array.isArray(this._config.transport)
+        ? this._config.transport[0]
+        : this._config.transport;
 
     if (Array.isArray(config.transport)) {
       this.idToTransport = config.transport.reduce((acc, transport) => {
@@ -469,34 +480,40 @@ export class LogLayer implements ILogLayer {
       });
     }
 
-    if (Array.isArray(this._config.transport)) {
-      for (const transport of this._config.transport) {
-        if (!transport.enabled) {
-          continue;
-        }
+    if (this.hasMultipleTransports) {
+      const transportPromises = (this._config.transport as LogLayerTransport[])
+        .filter((transport) => transport.enabled)
+        .map(async (transport) => {
+          if (this.pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)) {
+            const shouldSend = this.pluginManager.runShouldSendToLogger({
+              messages: [...params],
+              data: hasObjData ? d : undefined,
+              logLevel,
+              transportId: transport.id,
+            });
 
-        if (this.pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)) {
-          const shouldSend = this.pluginManager.runShouldSendToLogger({
+            if (!shouldSend) {
+              return;
+            }
+          }
+
+          return transport._sendToLogger({
+            logLevel,
             messages: [...params],
             data: hasObjData ? d : undefined,
-            logLevel,
-            transportId: transport.id,
+            hasData: hasObjData,
           });
-
-          if (!shouldSend) {
-            continue;
-          }
-        }
-
-        transport._sendToLogger({
-          logLevel,
-          messages: [...params],
-          data: hasObjData ? d : undefined,
-          hasData: hasObjData,
         });
-      }
+
+      // Execute all transports in parallel
+      Promise.all(transportPromises).catch((err) => {
+        if (this._config.consoleDebug) {
+          console.error("[LogLayer] Error executing transports:", err);
+        }
+      });
     } else {
-      if (!this._config.transport.enabled) {
+      // Use cached single transport
+      if (!this.singleTransport?.enabled) {
         return;
       }
 
@@ -505,7 +522,7 @@ export class LogLayer implements ILogLayer {
           messages: [...params],
           data: hasObjData ? d : undefined,
           logLevel,
-          transportId: this._config.transport.id,
+          transportId: this.singleTransport.id,
         });
 
         if (!shouldSend) {
@@ -513,7 +530,8 @@ export class LogLayer implements ILogLayer {
         }
       }
 
-      this._config.transport._sendToLogger({
+      // Execute single transport synchronously
+      this.singleTransport._sendToLogger({
         logLevel,
         messages: [...params],
         data: hasObjData ? d : undefined,
