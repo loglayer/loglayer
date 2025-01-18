@@ -819,4 +819,138 @@ describe("LogFileRotationTransport", () => {
 
     mockExit.mockRestore();
   });
+
+  test("should include static data from function in log entries", async () => {
+    const staticData = {
+      hostname: "test-host",
+      pid: 12345,
+      environment: "test",
+    };
+
+    const transport = new LogFileRotationTransport({
+      filename: join(TEST_DIR, "static-data-fn-test.log"),
+      staticData: () => staticData,
+    });
+
+    transport.shipToLogger({
+      logLevel: LogLevel.info,
+      messages: ["Test message"],
+      data: { customField: "value" },
+      hasData: true,
+    });
+
+    transport[Symbol.dispose]();
+    await waitForFileOperation();
+
+    const content = await readFile(join(TEST_DIR, "static-data-fn-test.log"), "utf8");
+    const logEntry = JSON.parse(content);
+
+    expect(logEntry).toMatchObject({
+      level: "info",
+      message: "Test message",
+      ...staticData,
+      customField: "value",
+    });
+  });
+
+  test("should include static data from object in log entries", async () => {
+    const staticData = {
+      hostname: "test-host",
+      pid: 12345,
+      environment: "test",
+    };
+
+    const transport = new LogFileRotationTransport({
+      filename: join(TEST_DIR, "static-data-obj-test.log"),
+      staticData, // Use object directly
+    });
+
+    transport.shipToLogger({
+      logLevel: LogLevel.info,
+      messages: ["Test message"],
+      data: { customField: "value" },
+      hasData: true,
+    });
+
+    transport[Symbol.dispose]();
+    await waitForFileOperation();
+
+    const content = await readFile(join(TEST_DIR, "static-data-obj-test.log"), "utf8");
+    const logEntry = JSON.parse(content);
+
+    expect(logEntry).toMatchObject({
+      level: "info",
+      message: "Test message",
+      ...staticData,
+      customField: "value",
+    });
+  });
+
+  test("should allow dynamic data to override static data", async () => {
+    const staticData = {
+      environment: "production",
+      version: "1.0.0",
+    };
+
+    const transport = new LogFileRotationTransport({
+      filename: join(TEST_DIR, "static-data-override-test.log"),
+      staticData, // Use object directly
+    });
+
+    transport.shipToLogger({
+      logLevel: LogLevel.info,
+      messages: ["Test message"],
+      data: { environment: "test" }, // This should override the static environment
+      hasData: true,
+    });
+
+    transport[Symbol.dispose]();
+    await waitForFileOperation();
+
+    const content = await readFile(join(TEST_DIR, "static-data-override-test.log"), "utf8");
+    const logEntry = JSON.parse(content);
+
+    expect(logEntry.environment).toBe("test"); // Dynamic value should win
+    expect(logEntry.version).toBe("1.0.0"); // Static value should remain
+  });
+
+  test("should handle dynamic values in static data function", async () => {
+    let counter = 0;
+    const transport = new LogFileRotationTransport({
+      filename: join(TEST_DIR, "static-data-dynamic-test.log"),
+      staticData: () => ({
+        counter: counter++, // This value should increment with each call
+        constant: "fixed", // This value should remain the same
+      }),
+    });
+
+    // Write two log entries
+    transport.shipToLogger({
+      logLevel: LogLevel.info,
+      messages: ["First message"],
+      data: {},
+      hasData: false,
+    });
+
+    transport.shipToLogger({
+      logLevel: LogLevel.info,
+      messages: ["Second message"],
+      data: {},
+      hasData: false,
+    });
+
+    transport[Symbol.dispose]();
+    await waitForFileOperation();
+
+    const content = await readFile(join(TEST_DIR, "static-data-dynamic-test.log"), "utf8");
+    const logs = content
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line));
+
+    expect(logs[0].counter).toBe(0); // First log entry should have counter = 0
+    expect(logs[1].counter).toBe(1); // Second log entry should have counter = 1
+    expect(logs[0].constant).toBe("fixed"); // Constant value should remain the same
+    expect(logs[1].constant).toBe("fixed"); // Constant value should remain the same
+  });
 });

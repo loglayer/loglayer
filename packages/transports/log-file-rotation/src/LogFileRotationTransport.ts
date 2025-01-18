@@ -136,6 +136,30 @@ export interface LogFileRotationTransportConfig extends LoggerlessTransportConfi
    */
   filename: string;
   /**
+   * Static data to be included in every log entry.
+   * Can be either:
+   * - A function that returns an object containing static data
+   * - A direct object containing static data
+   *
+   * The data will be merged with the log entry before any other data.
+   * If using a function, it will be called for each log entry.
+   * @example
+   * ```typescript
+   * // Using a function
+   * staticData: () => ({
+   *   hostname: hostname(),
+   *   pid: process.pid
+   * })
+   *
+   * // Using an object
+   * staticData: {
+   *   hostname: hostname(),
+   *   pid: process.pid
+   * }
+   * ```
+   */
+  staticData?: (() => Record<string, any>) | Record<string, any>;
+  /**
    * The frequency of rotation. Can be:
    * - 'daily' for daily rotation
    * - 'date' for rotation on date format change
@@ -302,6 +326,8 @@ export class LogFileRotationTransport extends LoggerlessTransport implements Dis
   private isCompressing: boolean;
   /** The base filename pattern for log files */
   private filename: string;
+  /** Static data to be included in every log entry */
+  private staticData?: (() => Record<string, any>) | Record<string, any>;
   /** Whether batch processing is enabled */
   private batchEnabled: boolean;
   /** Maximum number of log entries to queue before writing */
@@ -438,6 +464,7 @@ export class LogFileRotationTransport extends LoggerlessTransport implements Dis
     this.auditHashType = params.auditHashType;
     this.fileOptions = params.fileOptions;
     this.fileMode = params.fileMode;
+    this.staticData = params.staticData;
 
     // Set up exit handler for flushing
     if (this.batchEnabled) {
@@ -655,6 +682,7 @@ export class LogFileRotationTransport extends LoggerlessTransport implements Dis
       [this.fieldNames.level]: this.levelMap[logLevel as keyof LogFileRotationLevelMap] ?? logLevel,
       [this.fieldNames.message]: messages.join(" ") || "",
       [this.fieldNames.timestamp]: this.timestampFn(),
+      ...(this.staticData ? (typeof this.staticData === "function" ? this.staticData() : this.staticData) : {}),
       ...(hasData ? data : {}),
     };
 
