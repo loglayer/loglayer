@@ -1,5 +1,11 @@
 # `@loglayer/transport-log-file-rotation` Changelog
 
+## 1.0.1
+
+### Patch Changes
+
+- [`fe71ac8`](https://github.com/loglayer/loglayer/commit/fe71ac8cbe6d7ed7cf2dacfffb040ab2d05bba70) - Update readme and package.json
+
 ## 1.0.0
 
 ### Major Changes
