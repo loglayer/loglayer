@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 5.2.0
+
+### Minor Changes
+
+- [#122](https://github.com/loglayer/loglayer/pull/122) [`e944b8d`](https://github.com/loglayer/loglayer/commit/e944b8de2f7b58391e7043a531b2eb4bdf1bf84e) Thanks [@theogravity](https://github.com/theogravity)! - Performance improvements around using multiple transports
+
 ## 5.1.4
 
 ### Patch Changes
