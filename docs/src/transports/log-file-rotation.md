@@ -89,26 +89,26 @@ Child loggers do not have this problem as they inherit the transport instance fr
 
 | Option | Type | Description                                                                                                                                        | Default |
 |--------|------|----------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `frequency` | `string` | The frequency of rotation. Can be 'daily', 'date', '[1-30]m' for minutes, or '[1-12]h' for hours                                                   | None |
-| `dateFormat` | `string` | The date format to use in the filename. Uses single characters: 'Y' (full year), 'M' (month), 'D' (day), 'H' (hour), 'm' (minutes), 's' (seconds)  | `"YMD"` |
-| `size` | `string` | The size at which to rotate. Must include a unit suffix: "k"/"K" for kilobytes, "m"/"M" for megabytes, "g"/"G" for gigabytes (e.g., "10M", "100K") | None |
-| `maxLogs` | `string \| number` | Maximum number of logs to keep. Can be a number of files or days (e.g., "10d" for 10 days)                                                         | None |
 | `auditFile` | `string` | Location to store the log audit file                                                                                                               | None |
-| `extension` | `string` | File extension to be appended to the filename                                                                                                      | None |
-| `createSymlink` | `boolean` | Create a tailable symlink to the current active log file                                                                                           | `false` |
-| `symlinkName` | `string` | Name to use when creating the symbolic link                                                                                                        | `"current.log"` |
-| `utc` | `boolean` | Use UTC time for date in filename                                                                                                                  | `false` |
 | `auditHashType` | `"md5" \| "sha256"` | Hashing algorithm for audit file. Use 'sha256' for FIPS compliance                                                                                 | `"md5"` |
+| `batch` | `object` | Batch processing configuration. See [Batch Configuration](#batch-configuration) for details                                                           | None |
+| `callbacks` | `object` | Event callbacks for various file stream events. See [Callbacks](#callbacks) for details                                                              | None |
+| `compressOnRotate` | `boolean` | Whether to compress rotated log files using gzip                                                                                                   | `false` |
+| `createSymlink` | `boolean` | Create a tailable symlink to the current active log file                                                                                           | `false` |
+| `dateFormat` | `string` | The date format to use in the filename. Uses single characters: 'Y' (full year), 'M' (month), 'D' (day), 'H' (hour), 'm' (minutes), 's' (seconds)  | `"YMD"` |
+| `delimiter` | `string` | Delimiter between log entries                                                                                                                      | `"\n"` |
+| `extension` | `string` | File extension to be appended to the filename                                                                                                      | None |
+| `fieldNames` | `object` | Custom field names for the log entry JSON. See [Field Names](#field-names) for details                                                              | See below |
 | `fileMode` | `number` | File mode (permissions) to be used when creating log files | `0o640` |
 | `fileOptions` | `object` | Options passed to fs.createWriteStream                                                                                                             | `{ flags: 'a' }` |
-| `verbose` | `boolean` | Whether to enable verbose mode in the underlying file-stream-rotator                                                                               | `false` |
-| `callbacks` | `object` | Event callbacks for various file stream events                                                                                                     | None |
-| `fieldNames` | `object` | Custom field names for the log entry JSON                                                                                                          | See below |
-| `delimiter` | `string` | Delimiter between log entries                                                                                                                      | `"\n"` |
+| `frequency` | `string` | The frequency of rotation. Can be 'daily', 'date', '[1-30]m' for minutes, or '[1-12]h' for hours                                                   | None |
+| `levelMap` | `object` | Custom mapping for log levels. See [Level Mapping](#level-mapping) for details                                                                      | None |
+| `maxLogs` | `string \| number` | Maximum number of logs to keep. Can be a number of files or days (e.g., "10d" for 10 days)                                                         | None |
+| `size` | `string` | The size at which to rotate. Must include a unit suffix: "k"/"K" for kilobytes, "m"/"M" for megabytes, "g"/"G" for gigabytes (e.g., "10M", "100K") | None |
+| `symlinkName` | `string` | Name to use when creating the symbolic link                                                                                                        | `"current.log"` |
 | `timestampFn` | `() => string \| number` | Custom function to generate timestamps                                                                                                             | `() => new Date().toISOString()` |
-| `levelMap` | `object` | Custom mapping for log levels. Each level can be mapped to a string or number                                                                      | None |
-| `compressOnRotate` | `boolean` | Whether to compress rotated log files using gzip                                                                                                   | `false` |
-| `batch` | `object` | Batch processing configuration. See [Batch Configuration](#batch-configuration)                                                                    | None |
+| `utc` | `boolean` | Use UTC time for date in filename                                                                                                                  | `false` |
+| `verbose` | `boolean` | Whether to enable verbose mode in the underlying file-stream-rotator. See [Verbose Mode](#verbose-mode) for details                                   | `false` |
 
 ### Field Names
 
@@ -126,13 +126,13 @@ The `callbacks` object supports the following event handlers:
 
 | Callback | Parameters | Description |
 |----------|------------|-------------|
-| `onRotate` | `(oldFile: string, newFile: string) => void` | Called when a log file is rotated |
-| `onNew` | `(newFile: string) => void` | Called when a new log file is created |
-| `onOpen` | `() => void` | Called when a log file is opened |
 | `onClose` | `() => void` | Called when a log file is closed |
 | `onError` | `(error: Error) => void` | Called when an error occurs |
 | `onFinish` | `() => void` | Called when the stream is finished |
 | `onLogRemoved` | `(info: { date: number; name: string; hash: string }) => void` | Called when a log file is removed due to retention policy |
+| `onNew` | `(newFile: string) => void` | Called when a new log file is created |
+| `onOpen` | `() => void` | Called when a log file is opened |
+| `onRotate` | `(oldFile: string, newFile: string) => void` | Called when a log file is rotated |
 
 ### Level Mapping
 
@@ -140,12 +140,12 @@ The `levelMap` object allows you to map each log level to either a string or num
 
 | Level | Type | Example (Numeric) | Example (String) |
 |-------|------|------------------|------------------|
-| `fatal` | `string \| number` | 60 | `"FATAL"` |
-| `error` | `string \| number` | 50 | `"ERROR"` |
-| `warn` | `string \| number` | 40 | `"WARNING"` |
-| `info` | `string \| number` | 30 | `"INFO"` |
 | `debug` | `string \| number` | 20 | `"DEBUG"` |
+| `error` | `string \| number` | 50 | `"ERROR"` |
+| `fatal` | `string \| number` | 60 | `"FATAL"` |
+| `info` | `string \| number` | 30 | `"INFO"` |
 | `trace` | `string \| number` | 10 | `"TRACE"` |
+| `warn` | `string \| number` | 40 | `"WARNING"` |
 
 ### Batch Configuration
 
