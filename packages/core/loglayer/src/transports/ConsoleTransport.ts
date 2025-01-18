@@ -41,7 +41,7 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
 
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams) {
     // Skip if log level is lower priority than configured minimum
-    if (LogLevelPriority[this.logLevel] > LogLevelPriority[logLevel]) {
+    if (LogLevelPriority[logLevel] < LogLevelPriority[this.logLevel]) {
       return;
     }
 

@@ -26,6 +26,7 @@
     "transport"
   ],
   "scripts": {
+    "test": "vitest --run",
     "build": "tsup src/index.ts",
     "build:dev": "hash-runner",
     "clean": "rm -rf .turbo node_modules dist",
