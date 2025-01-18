@@ -1,5 +1,11 @@
 # LogLayer Docs Site Changelog
 
+## 1.10.0
+
+### Minor Changes
+
+- [#122](https://github.com/loglayer/loglayer/pull/122) [`e944b8d`](https://github.com/loglayer/loglayer/commit/e944b8de2f7b58391e7043a531b2eb4bdf1bf84e) Thanks [@theogravity](https://github.com/theogravity)! - Add documentation for the Log File Rotation transport
+
 ## 1.9.0
 
 ### Minor Changes
