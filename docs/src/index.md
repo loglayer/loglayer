@@ -33,6 +33,8 @@ features:
     details: Fan out logs to multiple logging libraries and cloud providers such as DataDog and New Relic at the same time.
   - title: OpenTelemetry Support
     details: A transport and plugin is available for connecting logs to OpenTelemetry.
+  - title: Log File Rotation Support
+    details: Rotate log files based on time or size with optional batching and compression with the Log File Rotation transport.
 ---
 
 ---

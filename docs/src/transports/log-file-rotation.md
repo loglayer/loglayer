@@ -105,6 +105,7 @@ Child loggers do not have this problem as they inherit the transport instance fr
 | `levelMap` | `object` | Custom mapping for log levels. See [Level Mapping](#level-mapping) for details                                                                      | None |
 | `maxLogs` | `string \| number` | Maximum number of logs to keep. Can be a number of files or days (e.g., "10d" for 10 days)                                                         | None |
 | `size` | `string` | The size at which to rotate. Must include a unit suffix: "k"/"K" for kilobytes, "m"/"M" for megabytes, "g"/"G" for gigabytes (e.g., "10M", "100K") | None |
+| `staticData` | `(() => Record<string, any>) \| Record<string, any>` | Static data to be included in every log entry. Can be either a function that returns an object, or a direct object. If it's a function, it's called for each log entry. | None |
 | `symlinkName` | `string` | Name to use when creating the symbolic link                                                                                                        | `"current.log"` |
 | `timestampFn` | `() => string \| number` | Custom function to generate timestamps                                                                                                             | `() => new Date().toISOString()` |
 | `utc` | `boolean` | Use UTC time for date in filename                                                                                                                  | `false` |
@@ -231,9 +232,84 @@ Each log entry is written as a JSON object with the following format:
 }
 ```
 
-## Examples
+## Adding Static Data to Every Log Entry
 
-Here are several examples demonstrating different rotation scenarios:
+```typescript
+import { hostname } from "node:os";
+
+// Using a function
+new LogFileRotationTransport({
+  filename: "./logs/app-%DATE%.log",
+  frequency: "daily",
+  dateFormat: "YMD",
+  staticData: () => ({
+    hostname: hostname(),  // Add the server's hostname
+    pid: process.pid,      // Add the process ID
+    environment: process.env.NODE_ENV || "development"
+  })
+});
+
+// Using a direct object
+new LogFileRotationTransport({
+  filename: "./logs/app-%DATE%.log",
+  frequency: "daily",
+  dateFormat: "YMD",
+  staticData: {
+    hostname: hostname(),
+    pid: process.pid,
+    environment: process.env.NODE_ENV || "development"
+  }
+});
+```
+
+This will add the hostname, process ID, and environment to every log entry:
+```json
+{
+  "level": "info",
+  "message": "Application started",
+  "timestamp": "2024-01-17T12:34:56.789Z",
+  "hostname": "my-server",
+  "pid": 12345,
+  "environment": "production"
+}
+```
+
+::: tip Static Data Performance
+When using static values that don't change during the lifetime of your application (like hostname and process ID), it's better to use a direct object instead of a function:
+
+```typescript
+// Better performance: object is created once
+new LogFileRotationTransport({
+  filename: "./logs/app-%DATE%.log",
+  staticData: {
+    hostname: hostname(),
+    pid: process.pid,
+    environment: process.env.NODE_ENV || "development"
+  }
+});
+
+// Use a function only if you need dynamic values
+new LogFileRotationTransport({
+  filename: "./logs/app-%DATE%.log",
+  staticData: () => ({
+    timestamp: Date.now(),  // Dynamic value that changes
+    hostname: hostname(),   // Static value
+    pid: process.pid       // Static value
+  })
+});
+```
+:::
+
+## Rotation Examples
+
+::: tip Date Format Requirements
+The transport requires specific date formats based on the rotation frequency:
+- For daily rotation: use `dateFormat: "YMD"`
+- For hourly rotation: use `dateFormat: "YMDHm"`
+- For minute rotation: use `dateFormat: "YMDHm"`
+
+These formats ensure proper rotation timing and file naming.
+:::
 
 ### Daily Rotation
 ```typescript
@@ -270,23 +346,3 @@ new LogFileRotationTransport({
   maxLogs: 5,
 });
 ```
-
-### Combined Size and Date Rotation
-```typescript
-new LogFileRotationTransport({
-  filename: "./logs/combined/app-%DATE%.log",
-  frequency: "daily",
-  dateFormat: "YMD",  // Required for daily rotation
-  size: "50k",
-  maxLogs: "5",
-});
-```
-
-::: tip Date Format Requirements
-The transport requires specific date formats based on the rotation frequency:
-- For daily rotation: use `dateFormat: "YMD"`
-- For hourly rotation: use `dateFormat: "YMDHm"`
-- For minute rotation: use `dateFormat: "YMDHm"`
-
-These formats ensure proper rotation timing and file naming.
-:::
