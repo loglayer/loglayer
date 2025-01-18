@@ -22,9 +22,6 @@
   "keywords": [
     "logging",
     "log",
-    "roarr",
-    "log4js",
-    "log4js-node",
     "multi-transport",
     "opentelemetry",
     "otel",
@@ -39,7 +36,9 @@
     "pino",
     "electron",
     "loglevel",
-    "datadog"
+    "datadog",
+    "rotation",
+    "rotate"
   ],
   "scripts": {
     "build": "tsup src/index.ts",
