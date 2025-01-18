@@ -1,5 +1,14 @@
 # `loglayer` Changelog
 
+## 5.3.0
+
+### Minor Changes
+
+- [#127](https://github.com/loglayer/loglayer/pull/127) [`bf2022b`](https://github.com/loglayer/loglayer/commit/bf2022be6f905c8516748dd9dc8021924dda2c4b) Thanks [@theogravity](https://github.com/theogravity)! - Add new options to the `ConsoleTransport`:
+
+  - `messageField`: Allows you to specify the field in the log message object where the message should be stored. This is useful when you want to log structured data and need to specify the field name for the message.
+  - `level`: Sets the minimum log level to process. Messages with a lower priority level will be ignored.
+
 ## 5.2.0
 
 ### Minor Changes

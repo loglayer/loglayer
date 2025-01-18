@@ -1,7 +1,7 @@
 {
   "name": "loglayer",
   "description": "A unified logger that routes logs to various logging libraries, cloud providers, and OpenTelemetry while providing a fluent API for specifying log messages, metadata and errors",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
