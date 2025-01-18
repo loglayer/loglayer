@@ -1,5 +1,11 @@
 # `@loglayer/transport-log-file-rotation` Changelog
 
+## 1.1.0
+
+### Minor Changes
+
+- [#125](https://github.com/loglayer/loglayer/pull/125) [`c7c796e`](https://github.com/loglayer/loglayer/commit/c7c796e96dbe4ab58ac8f5c2e299c8cb92591ccb) Thanks [@theogravity](https://github.com/theogravity)! - Add support for adding static data
+
 ## 1.0.1
 
 ### Patch Changes
