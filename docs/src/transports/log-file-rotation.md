@@ -346,3 +346,7 @@ new LogFileRotationTransport({
   maxLogs: 5,
 });
 ```
+
+## Changelog
+
+View the changelog [here](./changelogs/log-file-rotation-changelog.md).

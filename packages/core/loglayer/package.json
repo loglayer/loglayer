@@ -29,7 +29,7 @@
     "bunyan",
     "structured",
     "standard",
-    "wrapper",
+    "file",
     "serialize",
     "error",
     "abstraction",
@@ -55,7 +55,6 @@
     "@loglayer/transport": "workspace:*"
   },
   "devDependencies": {
-    "@datadog/browser-logs": "*",
     "hash-runner": "2.0.1",
     "serialize-error": "11.0.3",
     "@internal/tsconfig": "workspace:*",

@@ -63,9 +63,6 @@ importers:
         specifier: workspace:*
         version: link:../transport
     devDependencies:
-      '@datadog/browser-logs':
-        specifier: '*'
-        version: 5.29.0
       '@internal/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
