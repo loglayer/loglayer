@@ -1,4 +1,4 @@
-# `@loglayer/transport-loglevel` Changelog
+# `@loglayer/transport-log-file-rotation` Changelog
 
 ## 1.0.0
 
