@@ -5,6 +5,7 @@
 ## Jan 17, 2025
 
 - Added the [Log File Rotation Transport](https://loglayer.dev/transports/log-file-rotation) to write logs to files and rotate them
+- Performance improvements around using multiple transports with `loglayer`
 
 ## Jan 15, 2025
 
