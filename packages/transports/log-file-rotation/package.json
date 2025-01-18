@@ -25,6 +25,7 @@
     "loglayer",
     "file",
     "rotation",
+    "rotate",
     "transport"
   ],
   "scripts": {

@@ -1,8 +1,10 @@
 # @loglayer/transport-log-file-rotation
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-log-file-rotation)](https://www.npmjs.com/package/@loglayer/transport-log-file-rotation)
+[![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-log-file-rotation)](https://www.npmjs.com/package/@loglayer/transport-log-file-rotation)
+[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-A transport for [LogLayer](https://github.com/loglayer/loglayer) that writes logs to files with automatic rotation based on size or time. Built on top of [file-stream-rotator](https://github.com/rogerc/file-stream-rotator/).
+A transport for [LogLayer](https://loglayer.dev) that writes logs to files with automatic rotation based on size or time. Built on top of [file-stream-rotator](https://github.com/rogerc/file-stream-rotator/).
 
 ## Features
 
@@ -71,4 +73,4 @@ Child loggers do not have this problem as they inherit the transport instance fr
 
 ## Documentation
 
-For detailed documentation, including all configuration options and advanced features, visit the [LogLayer documentation](https://loglayer.dev/transports/log-file-rotation.html). 
+For detailed documentation, including all configuration options and advanced features, visit the [documentation](https://loglayer.dev/transports/log-file-rotation.html). 
