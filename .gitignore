@@ -141,3 +141,7 @@ dist
 docs/src/core-changelogs/*.md
 docs/src/transports/changelogs/*.md
 docs/src/plugins/changelogs/*.md
+.DS_Store
+audit.json
+test-logs/
+live-logs/

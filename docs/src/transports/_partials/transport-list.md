@@ -31,4 +31,5 @@
 
 | Name | Package | Changelog | Description |
 |------|---------|-----------|-------------|
+| [Log File Rotation](/transports/log-file-rotation) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-log-file-rotation)](https://www.npmjs.com/package/@loglayer/transport-log-file-rotation) | [Changelog](/transports/changelogs/log-file-rotation-changelog.md) | Write logs to local files with rotation support |
 | [OpenTelemetry](/transports/opentelemetry) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-opentelemetry)](https://www.npmjs.com/package/@loglayer/transport-opentelemetry) | [Changelog](/transports/changelogs/opentelemetry-changelog.md) | Send logs using the OpenTelemetry Logs SDK |
