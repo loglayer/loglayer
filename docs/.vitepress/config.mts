@@ -2,6 +2,7 @@ import { defineConfig, HeadConfig } from 'vitepress'
 
 const defaultTitle = "LogLayer"
 const defaultDescription = "A unified logger that routes logs to various logging libraries and cloud providers while providing a fluent API for specifying log messages, metadata and errors"
+const baseUrl = 'https://loglayer.dev'
 
 export default defineConfig({
   lang: 'en-US',
@@ -28,20 +29,27 @@ export default defineConfig({
       ],
       ['link', { rel: 'icon', href: '/images/icons/favicon.ico' }],
       ['link', { rel: 'manifest', href: '/images/icons/site.webmanifest' }],
-      ['meta', { name: 'keywords', content: 'loglayer, logging, logger, log, javascript, typescript, nodejs, browser' }],
+      ['meta', { name: 'keywords', content: 'loglayer, logging, logger, log, javascript, typescript, nodejs, browser, file, otel, opentelemetry, rotation, library, structured, framework' }],
       ['meta', { property: 'og:type', content: 'website' }],
       ['meta', { property: 'og:image', content: '/images/loglayer.jpg' }],
-      ['meta', { property: 'og:url', content: 'https://loglayer.dev' }],
       ['meta', { property: 'og:site_name', content: 'LogLayer' }],
+      ['meta', { property: 'og:image:alt', content: 'LogLayer Logo' }],
+      ['meta', { property: 'og:locale', content: 'en_US' }],
+      ['meta', { name: 'twitter:card', content: 'summary' }],
+      ['meta', { name: 'twitter:image:alt', content: 'LogLayer Logo' }],
     ]
 
     head.push(['meta', { property: 'og:title', content: String(pageData?.frontmatter?.title ?? defaultTitle).replace(/"/g, '&quot;') }])
     head.push(['meta', { property: 'og:description', content: String(pageData?.frontmatter?.description ?? defaultDescription).replace(/"/g, '&quot;') }])
+    head.push(['meta', { property: 'og:url', content: `${baseUrl}${pageData.relativePath ? '/' + pageData.relativePath.replace(/\.md$/, '') : ''}` }])
 
     return head
   },
   themeConfig: {
-    logo: "/images/loglayer.jpg",
+    logo: {
+      src: '/images/loglayer.jpg',
+      alt: 'LogLayer Logo'
+    },
     editLink: {
       pattern: "https://github.com/loglayer/loglayer/edit/master/docs/src/:path",
       text: 'Edit this page on GitHub'
