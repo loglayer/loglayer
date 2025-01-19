@@ -1,6 +1,6 @@
 ---
 title: Electron-log Transport for LogLayer
-description: Learn how to use the electron-log logging library with LogLayer
+description: Send logs to electron-log with the LogLayer logging library
 ---
 
 # Electron-log Transport

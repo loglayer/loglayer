@@ -1,6 +1,6 @@
 ---
 title: Console Transport for LogLayer
-description: Learn how to use console logging with LogLayer
+description: Send logs to the console with the LogLayer logging library
 ---
 
 # Console Transport

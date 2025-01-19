@@ -1,6 +1,6 @@
 ---
 title: Dynatrace Transport for LogLayer
-description: Send logs to Dynatrace using their Log Monitoring API v2
+description: Send logs to Dynatrace with the LogLayer logging library
 ---
 
 # Dynatrace Transport

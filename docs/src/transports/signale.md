@@ -1,6 +1,6 @@
 ---
 title: Signale Transport for LogLayer
-description: Learn how to use the Signale logging library with LogLayer
+description: Send logs to Signale with the LogLayer logging library
 ---
 
 # Signale Transport

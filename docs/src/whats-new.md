@@ -1,3 +1,8 @@
+---
+title: What's new in LogLayer
+description: Learn about the latest features and improvements in LogLayer
+---
+
 # What's new in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)

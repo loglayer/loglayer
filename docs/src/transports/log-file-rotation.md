@@ -1,3 +1,8 @@
+---
+title: Log File Rotation Transport for LogLayer
+description: Write logs to files with automatic rotation based on size or time with the LogLayer logging library
+---
+
 # Log File Rotation Transport
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-log-file-rotation)](https://www.npmjs.com/package/@loglayer/transport-log-file-rotation)

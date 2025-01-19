@@ -1,3 +1,8 @@
+---
+title: Using Multiple Transports
+description: Learn how to use multiple transports with LogLayer
+---
+
 # Multiple Transports
 
 You can use multiple logging libraries simultaneously:

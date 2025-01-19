@@ -1,6 +1,6 @@
 ---
 title: Roarr Transport for LogLayer
-description: Learn how to use the roarr logging library with LogLayer
+description: Send logs to Roarr with the LogLayer logging library
 ---
 
 # Roarr Transport

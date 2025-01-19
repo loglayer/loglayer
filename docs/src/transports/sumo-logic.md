@@ -1,3 +1,8 @@
+---
+title: Sumo Logic Transport for LogLayer
+description: Send logs to Sumo Logic with the LogLayer logging library
+---
+
 # Sumo Logic Transport
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-sumo-logic)](https://www.npmjs.com/package/@loglayer/transport-sumo-logic)

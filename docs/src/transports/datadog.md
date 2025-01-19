@@ -1,6 +1,6 @@
 ---
-title: DataDog Logs Transport for LogLayer
-description: Learn how to ship logs to DataDog using LogLayer
+title: DataDog Transport for LogLayer
+description: Send logs to DataDog with the LogLayer logging library
 ---
 
 # DataDog Transport

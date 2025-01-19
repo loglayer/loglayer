@@ -1,6 +1,6 @@
 ---
 title: Log4js Transport for LogLayer
-description: Learn how to use the Log4js logging library with LogLayer
+description: Send logs to Log4js with the LogLayer logging library
 ---
 
 # Log4js Transport

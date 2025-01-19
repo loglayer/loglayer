@@ -1,6 +1,6 @@
 ---
 title: AWS Lambda Powertools Transport for LogLayer
-description: Learn how to use AWS Lambda Powertools logging library with LogLayer
+description: Logging for AWS Lambdas with the LogLayer logging library
 ---
 
 # AWS Lambda Powertools Transport

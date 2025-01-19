@@ -1,6 +1,6 @@
 ---
 title: DataDog Browser Logs Transport for LogLayer
-description: Learn how to use the DataDog Browser Logs library with LogLayer
+description: Send logs using the DataDog Browser Logs library with LogLayer
 ---
 
 # DataDog Browser Logs Transport

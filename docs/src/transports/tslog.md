@@ -1,6 +1,6 @@
 ---
 title: TsLog Transport for LogLayer
-description: Learn how to use the TsLog logging library with LogLayer
+description: Send logs to TsLog with the LogLayer logging library
 ---
 
 # tslog Transport

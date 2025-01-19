@@ -1,6 +1,6 @@
 ---
 title: Pino Transport for LogLayer
-description: Learn how to use the pino logging library with LogLayer
+description: Send logs to Pino with the LogLayer logging library
 ---
 
 # Pino Transport

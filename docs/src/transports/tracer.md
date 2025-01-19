@@ -1,6 +1,6 @@
 ---
 title: Tracer Transport for LogLayer
-description: Learn how to use the Tracer logging library with LogLayer
+description: Send logs to Tracer with the LogLayer logging library
 ---
 
 # Tracer Transport

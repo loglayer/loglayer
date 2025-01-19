@@ -1,6 +1,6 @@
 ---
 title: Bunyan Transport for LogLayer
-description: Learn how to use the Bunyan logging library with LogLayer
+description: Send logs to Bunyan with the LogLayer logging library
 ---
 
 # Bunyan Transport

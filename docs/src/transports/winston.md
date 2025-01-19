@@ -1,6 +1,6 @@
 ---
 title: Winston Transport for LogLayer
-description: Learn how to use the Winston logging library with LogLayer
+description: Send logs to Winston with the LogLayer logging library
 ---
 
 # Winston Transport

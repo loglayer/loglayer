@@ -1,6 +1,6 @@
 ---
 title: loglevel Transport for LogLayer
-description: Learn how to use loglevel with LogLayer
+description: Send logs to loglevel with the LogLayer logging library
 ---
 
 # loglevel Transport

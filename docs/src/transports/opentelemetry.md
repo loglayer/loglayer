@@ -1,6 +1,6 @@
 ---
 title: OpenTelemetry Transport
-description: Send logs to OpenTelemetry using LogLayer
+description: Send logs to OpenTelemetry with the LogLayer logging library
 ---
 
 # OpenTelemetry Transport

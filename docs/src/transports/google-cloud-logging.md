@@ -1,6 +1,6 @@
 ---
-title: Google Cloud Logging
-description: Transport for Google Cloud Logging
+title: Google Cloud Logging Transport for LogLayer
+description: Send logs to Google Cloud Logging with the LogLayer logging library
 ---
 
 # Google Cloud Logging Transport
