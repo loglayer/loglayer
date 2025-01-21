@@ -6,7 +6,7 @@ import type {
 } from "@loglayer/plugin";
 
 import { PluginCallbackType } from "@loglayer/plugin";
-import type { MessageDataType } from "@loglayer/shared";
+import type { ILogLayer, MessageDataType } from "@loglayer/shared";
 
 const CALLBACK_LIST = [
   PluginCallbackType.onBeforeDataOut,
@@ -118,17 +118,20 @@ export class PluginManager {
   /**
    * Runs plugins that defines onBeforeDataOut.
    */
-  runOnBeforeDataOut(params: PluginBeforeDataOutParams): Record<string, any> | undefined {
+  runOnBeforeDataOut(params: PluginBeforeDataOutParams, loglayer: ILogLayer): Record<string, any> | undefined {
     const initialData = { ...params }; // Make a shallow copy of params to avoid direct modification
 
     for (const pluginId of this.onBeforeDataOut) {
       const plugin = this.idToPlugin[pluginId];
 
       if (plugin.onBeforeDataOut) {
-        const result = plugin.onBeforeDataOut({
-          data: initialData.data,
-          logLevel: initialData.logLevel,
-        });
+        const result = plugin.onBeforeDataOut(
+          {
+            data: initialData.data,
+            logLevel: initialData.logLevel,
+          },
+          loglayer,
+        );
 
         if (result) {
           if (!initialData.data) {
@@ -147,20 +150,20 @@ export class PluginManager {
   /**
    * Runs plugins that define shouldSendToLogger. Any plugin that returns false will prevent the message from being sent to the transport.
    */
-  runShouldSendToLogger(params: PluginShouldSendToLoggerParams) {
+  runShouldSendToLogger(params: PluginShouldSendToLoggerParams, loglayer: ILogLayer) {
     return !this.shouldSendToLogger.some((pluginId) => {
       const plugin = this.idToPlugin[pluginId];
 
       // Return the negation of 'shouldSendToLogger' because 'some' will stop on true,
       // and we stop on an explicit false return value from 'shouldSendToLogger'.
-      return !plugin.shouldSendToLogger?.(params);
+      return !plugin.shouldSendToLogger?.(params, loglayer);
     });
   }
 
   /**
    * Runs plugins that define onMetadataCalled.
    */
-  runOnMetadataCalled(metadata: Record<string, any>): Record<string, any> | null {
+  runOnMetadataCalled(metadata: Record<string, any>, loglayer: ILogLayer): Record<string, any> | null {
     // Create a shallow copy of metadata to avoid direct modification
     let data: Record<string, any> = {
       ...metadata,
@@ -169,7 +172,7 @@ export class PluginManager {
     for (const pluginId of this.onMetadataCalled) {
       const plugin = this.idToPlugin[pluginId];
 
-      const result = plugin.onMetadataCalled?.(data);
+      const result = plugin.onMetadataCalled?.(data, loglayer);
 
       if (result) {
         data = result;
@@ -181,16 +184,19 @@ export class PluginManager {
     return data;
   }
 
-  runOnBeforeMessageOut(params: PluginBeforeMessageOutParams): MessageDataType[] {
+  runOnBeforeMessageOut(params: PluginBeforeMessageOutParams, loglayer: ILogLayer): MessageDataType[] {
     let messages = [...params.messages];
 
     for (const pluginId of this.onBeforeMessageOut) {
       const plugin = this.idToPlugin[pluginId];
 
-      const result = plugin.onBeforeMessageOut?.({
-        messages: messages,
-        logLevel: params.logLevel,
-      });
+      const result = plugin.onBeforeMessageOut?.(
+        {
+          messages: messages,
+          logLevel: params.logLevel,
+        },
+        loglayer,
+      );
 
       if (result) {
         messages = result;
@@ -203,7 +209,7 @@ export class PluginManager {
   /**
    * Runs plugins that define onContextCalled.
    */
-  runOnContextCalled(context: Record<string, any>): Record<string, any> | null {
+  runOnContextCalled(context: Record<string, any>, loglayer: ILogLayer): Record<string, any> | null {
     // Create a shallow copy of context to avoid direct modification
     let data: Record<string, any> = {
       ...context,
@@ -212,7 +218,7 @@ export class PluginManager {
     for (const pluginId of this.onContextCalled) {
       const plugin = this.idToPlugin[pluginId];
 
-      const result = plugin.onContextCalled?.(data);
+      const result = plugin.onContextCalled?.(data, loglayer);
 
       if (result) {
         data = result;

@@ -1,4 +1,6 @@
-import type { LogLevel } from "@loglayer/shared";
+import type { ILogLayer, LogLevel } from "@loglayer/shared";
+
+export type { LogLevel, ILogLayer } from "@loglayer/shared";
 
 export interface PluginBeforeDataOutParams {
   /**
@@ -34,7 +36,7 @@ export interface PluginShouldSendToLoggerParams {
   data?: Record<string, any>;
 }
 
-export type PluginShouldSendToLoggerFn = (params: PluginShouldSendToLoggerParams) => boolean;
+export type PluginShouldSendToLoggerFn = (params: PluginShouldSendToLoggerParams, loglayer: ILogLayer) => boolean;
 
 export interface PluginBeforeMessageOutParams {
   /**
@@ -47,11 +49,17 @@ export interface PluginBeforeMessageOutParams {
   messages: any[];
 }
 
-export type PluginBeforeMessageOutFn = (params: PluginBeforeMessageOutParams) => any[];
+export type PluginBeforeMessageOutFn = (params: PluginBeforeMessageOutParams, loglayer: ILogLayer) => any[];
 
-export type PluginOnMetadataCalledFn = (metadata: Record<string, any>) => Record<string, any> | null | undefined;
+export type PluginOnMetadataCalledFn = (
+  metadata: Record<string, any>,
+  loglayer: ILogLayer,
+) => Record<string, any> | null | undefined;
 
-export type PluginOnContextCalledFn = (context: Record<string, any>) => Record<string, any> | null | undefined;
+export type PluginOnContextCalledFn = (
+  context: Record<string, any>,
+  loglayer: ILogLayer,
+) => Record<string, any> | null | undefined;
 
 export interface LogLayerPluginParams {
   /**
@@ -79,7 +87,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    * @returns [Object] The object to be sent to the destination logging
    * library or null / undefined to not pass an object through.
    */
-  onBeforeDataOut?(params: PluginBeforeDataOutParams): Record<string, any> | null | undefined;
+  onBeforeDataOut?(params: PluginBeforeDataOutParams, loglayer: ILogLayer): Record<string, any> | null | undefined;
 
   /**
    * Called after `onBeforeDataOut` and before `shouldSendToLogger`.
@@ -87,7 +95,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @returns [Array] The message data to be sent to the destination logging library.
    */
-  onBeforeMessageOut?(params: PluginBeforeMessageOutParams): any[];
+  onBeforeMessageOut?(params: PluginBeforeMessageOutParams, loglayer: ILogLayer): any[];
 
   /**
    * Called before the data is sent to the transport. Return false to omit sending
@@ -100,7 +108,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @returns boolean If true, sends data to the transport, if false does not.
    */
-  shouldSendToLogger?(params: PluginShouldSendToLoggerParams): boolean;
+  shouldSendToLogger?(params: PluginShouldSendToLoggerParams, loglayer: ILogLayer): boolean;
 
   /**
    * Called when withMetadata() or metadataOnly() is called. This allows you to modify the metadata before it is sent to the destination logging library.
@@ -113,7 +121,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @returns [Object] The metadata object to be sent to the destination logging library.
    */
-  onMetadataCalled?: (metadata: Record<string, any>) => Record<string, any> | null | undefined;
+  onMetadataCalled?: (metadata: Record<string, any>, loglayer: ILogLayer) => Record<string, any> | null | undefined;
 
   /**
    * Called when withContext() is called. This allows you to modify the context before it is used.
@@ -126,7 +134,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @returns [Object] The context object to be used.
    */
-  onContextCalled?: (context: Record<string, any>) => Record<string, any> | null | undefined;
+  onContextCalled?: (context: Record<string, any>, loglayer: ILogLayer) => Record<string, any> | null | undefined;
 }
 
 /**

@@ -1,9 +1,9 @@
 import { PluginCallbackType } from "@loglayer/plugin";
 import { LogLevel } from "@loglayer/shared";
 import type { MessageDataType } from "@loglayer/shared";
+import type { ILogBuilder } from "@loglayer/shared";
 import type { LogLayer } from "./LogLayer.js";
 import type { PluginManager } from "./PluginManager.js";
-import type { ILogBuilder } from "./types/index.js";
 
 /**
  * A class that contains methods to specify log metadata and an error and assembles
@@ -38,7 +38,7 @@ export class LogBuilder implements ILogBuilder {
     let data: Record<string, any> | null = metadata;
 
     if (pluginManager.hasPlugins(PluginCallbackType.onMetadataCalled)) {
-      data = pluginManager.runOnMetadataCalled(metadata);
+      data = pluginManager.runOnMetadataCalled(metadata, this.structuredLogger);
 
       if (!data) {
         if (consoleDebug) {

@@ -7,14 +7,22 @@ import {
 } from "@loglayer/plugin";
 import { beforeEach, describe, expect, it, vi, vitest } from "vitest";
 
-import { LogLevel } from "@loglayer/shared";
+import { type ILogLayer, LogLevel } from "@loglayer/shared";
 import { PluginManager } from "../PluginManager.js";
 
 describe("PluginManager", () => {
   let pluginManager: PluginManager;
   let plugins: LogLayerPlugin[];
+  let mockLogLayer: ILogLayer;
 
   beforeEach(() => {
+    mockLogLayer = {
+      // Add minimal mock implementation
+      metadata: vi.fn(),
+      context: vi.fn(),
+      log: vi.fn(),
+    } as unknown as ILogLayer;
+
     plugins = [
       {
         id: "plugin1",
@@ -83,7 +91,7 @@ describe("PluginManager", () => {
       data: { initial: "data" },
     };
 
-    const result = pluginManager.runOnBeforeDataOut(initialParams);
+    const result = pluginManager.runOnBeforeDataOut(initialParams, mockLogLayer);
 
     expect(result).toEqual({ initial: "data", added: "test", modified: "yes" });
     expect(plugins[0].onBeforeDataOut).toHaveBeenCalledOnce();
@@ -105,7 +113,7 @@ describe("PluginManager", () => {
       messages: ["Test message"],
     };
 
-    const result = pluginManager.runOnBeforeMessageOut(initialParams);
+    const result = pluginManager.runOnBeforeMessageOut(initialParams, mockLogLayer);
 
     expect(result).toEqual(["Test message", "Modified message"]);
   });
@@ -117,7 +125,7 @@ describe("PluginManager", () => {
       data: { key: "value" },
     };
 
-    const shouldSend1 = pluginManager.runShouldSendToLogger(params);
+    const shouldSend1 = pluginManager.runShouldSendToLogger(params, mockLogLayer);
     expect(shouldSend1).toBe(false);
     expect(plugins[0].shouldSendToLogger).toHaveBeenCalledTimes(1);
     expect(plugins[1].shouldSendToLogger).toHaveBeenCalledTimes(1);
@@ -126,7 +134,7 @@ describe("PluginManager", () => {
     plugins[1].shouldSendToLogger = vi.fn(() => true);
     plugins[2].shouldSendToLogger = vi.fn(() => true);
 
-    const shouldSend2 = pluginManager.runShouldSendToLogger(params);
+    const shouldSend2 = pluginManager.runShouldSendToLogger(params, mockLogLayer);
     expect(shouldSend2).toBe(true);
     expect(plugins[0].shouldSendToLogger).toHaveBeenCalledTimes(1);
     expect(plugins[1].shouldSendToLogger).toHaveBeenCalledTimes(1);
@@ -176,7 +184,7 @@ describe("PluginManager", () => {
 
       expect(pluginManager.countPlugins(PluginCallbackType.onMetadataCalled)).toBe(2);
 
-      const metadata = pluginManager.runOnMetadataCalled({ initial: "data" });
+      const metadata = pluginManager.runOnMetadataCalled({ initial: "data" }, mockLogLayer);
 
       expect(metadata).toEqual({ added: "test", modified: "yes", initial: "data" });
     });
@@ -195,7 +203,7 @@ describe("PluginManager", () => {
       // First plugin returns a null result, so the second plugin should not run
       pluginManager.addPlugins([plugin, plugin2]);
 
-      const metadata = pluginManager.runOnMetadataCalled({ initial: "data" });
+      const metadata = pluginManager.runOnMetadataCalled({ initial: "data" }, mockLogLayer);
 
       expect(metadata).toEqual(null);
       expect(plugin.onMetadataCalled).toHaveBeenCalledOnce();
@@ -228,7 +236,7 @@ describe("PluginManager", () => {
 
       expect(pluginManager.countPlugins(PluginCallbackType.onContextCalled)).toBe(2);
 
-      const context = pluginManager.runOnContextCalled({ initial: "data" });
+      const context = pluginManager.runOnContextCalled({ initial: "data" }, mockLogLayer);
 
       expect(context).toEqual({ added: "test", modified: "yes", initial: "data" });
     });
@@ -247,7 +255,7 @@ describe("PluginManager", () => {
       // First plugin returns a null result, so the second plugin should not run
       pluginManager.addPlugins([plugin, plugin2]);
 
-      const context = pluginManager.runOnContextCalled({ initial: "data" });
+      const context = pluginManager.runOnContextCalled({ initial: "data" }, mockLogLayer);
 
       expect(context).toEqual(null);
       expect(plugin.onContextCalled).toHaveBeenCalledOnce();

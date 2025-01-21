@@ -42,11 +42,11 @@
     "loglayer": "workspace:*",
     "@types/signale": "1.4.7",
     "hash-runner": "2.0.1",
-    "@types/node": "22.10.4",
+    "@types/node": "22.10.7",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.3.5",
-    "typescript": "5.7.2",
-    "vitest": "2.1.8",
+    "typescript": "5.7.3",
+    "vitest": "3.0.2",
     "tsx": "4.19.2"
   },
   "peerDependencies": {

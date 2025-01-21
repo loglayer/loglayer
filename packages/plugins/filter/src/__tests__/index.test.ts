@@ -1,7 +1,10 @@
 import type { PluginShouldSendToLoggerParams } from "@loglayer/plugin";
 import type { LogLevel } from "@loglayer/shared";
+import { MockLogLayer } from "loglayer";
 import { describe, expect, it, vi } from "vitest";
 import { filterPlugin } from "../index.js";
+
+const loglayer = new MockLogLayer();
 
 describe("filter plugin", () => {
   it("should allow all messages when no queries are provided", () => {
@@ -12,7 +15,7 @@ describe("filter plugin", () => {
       data: { foo: "bar" },
     };
 
-    expect(plugin.shouldSendToLogger(params)).toBe(true);
+    expect(plugin.shouldSendToLogger(params, loglayer)).toBe(true);
   });
 
   it("should filter messages based on a single query", () => {
@@ -23,20 +26,26 @@ describe("filter plugin", () => {
 
     // Should allow error messages
     expect(
-      plugin.shouldSendToLogger({
-        messages: ["error message"],
-        logLevel: "error" as LogLevel,
-        data: {},
-      }),
+      plugin.shouldSendToLogger(
+        {
+          messages: ["error message"],
+          logLevel: "error" as LogLevel,
+          data: {},
+        },
+        loglayer,
+      ),
     ).toBe(true);
 
     // Should filter out info messages
     expect(
-      plugin.shouldSendToLogger({
-        messages: ["info message"],
-        logLevel: "info" as LogLevel,
-        data: {},
-      }),
+      plugin.shouldSendToLogger(
+        {
+          messages: ["info message"],
+          logLevel: "info" as LogLevel,
+          data: {},
+        },
+        loglayer,
+      ),
     ).toBe(false);
   });
 
@@ -48,29 +57,38 @@ describe("filter plugin", () => {
 
     // Should allow error messages
     expect(
-      plugin.shouldSendToLogger({
-        messages: ["error message"],
-        logLevel: "error" as LogLevel,
-        data: { important: false },
-      }),
+      plugin.shouldSendToLogger(
+        {
+          messages: ["error message"],
+          logLevel: "error" as LogLevel,
+          data: { important: false },
+        },
+        loglayer,
+      ),
     ).toBe(true);
 
     // Should allow important messages
     expect(
-      plugin.shouldSendToLogger({
-        messages: ["important info"],
-        logLevel: "info" as LogLevel,
-        data: { important: true },
-      }),
+      plugin.shouldSendToLogger(
+        {
+          messages: ["important info"],
+          logLevel: "info" as LogLevel,
+          data: { important: true },
+        },
+        loglayer,
+      ),
     ).toBe(true);
 
     // Should filter out non-error, non-important messages
     expect(
-      plugin.shouldSendToLogger({
-        messages: ["regular info"],
-        logLevel: "info" as LogLevel,
-        data: { important: false },
-      }),
+      plugin.shouldSendToLogger(
+        {
+          messages: ["regular info"],
+          logLevel: "info" as LogLevel,
+          data: { important: false },
+        },
+        loglayer,
+      ),
     ).toBe(false);
   });
 
@@ -81,11 +99,14 @@ describe("filter plugin", () => {
     });
 
     expect(
-      plugin.shouldSendToLogger({
-        messages: ["test"],
-        logLevel: "info" as LogLevel,
-        data: undefined,
-      }),
+      plugin.shouldSendToLogger(
+        {
+          messages: ["test"],
+          logLevel: "info" as LogLevel,
+          data: undefined,
+        },
+        loglayer,
+      ),
     ).toBe(false);
   });
 
@@ -96,11 +117,14 @@ describe("filter plugin", () => {
     });
 
     expect(
-      plugin.shouldSendToLogger({
-        messages: undefined,
-        logLevel: "info" as LogLevel,
-        data: {},
-      }),
+      plugin.shouldSendToLogger(
+        {
+          messages: undefined,
+          logLevel: "info" as LogLevel,
+          data: {},
+        },
+        loglayer,
+      ),
     ).toBe(false);
   });
 
@@ -111,19 +135,25 @@ describe("filter plugin", () => {
     });
 
     expect(
-      plugin.shouldSendToLogger({
-        messages: ["test"],
-        logLevel: "info" as LogLevel,
-        data: { user: { age: 25 } },
-      }),
+      plugin.shouldSendToLogger(
+        {
+          messages: ["test"],
+          logLevel: "info" as LogLevel,
+          data: { user: { age: 25 } },
+        },
+        loglayer,
+      ),
     ).toBe(true);
 
     expect(
-      plugin.shouldSendToLogger({
-        messages: ["test"],
-        logLevel: "info" as LogLevel,
-        data: { user: { age: 15 } },
-      }),
+      plugin.shouldSendToLogger(
+        {
+          messages: ["test"],
+          logLevel: "info" as LogLevel,
+          data: { user: { age: 15 } },
+        },
+        loglayer,
+      ),
     ).toBe(false);
   });
 
@@ -135,11 +165,14 @@ describe("filter plugin", () => {
 
     // Should default to false when query is invalid
     expect(
-      plugin.shouldSendToLogger({
-        messages: ["test"],
-        logLevel: "info" as LogLevel,
-        data: {},
-      }),
+      plugin.shouldSendToLogger(
+        {
+          messages: ["test"],
+          logLevel: "info" as LogLevel,
+          data: {},
+        },
+        loglayer,
+      ),
     ).toBe(false);
   });
 
@@ -161,11 +194,14 @@ describe("filter plugin", () => {
       debug: true,
     });
 
-    plugin.shouldSendToLogger({
-      messages: ["test"],
-      logLevel: "info" as LogLevel,
-      data: {},
-    });
+    plugin.shouldSendToLogger(
+      {
+        messages: ["test"],
+        logLevel: "info" as LogLevel,
+        data: {},
+      },
+      loglayer,
+    );
 
     expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("[filter-plugin] query:"));
     expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("[filter-plugin] input:"));
@@ -182,29 +218,38 @@ describe("filter plugin", () => {
 
       // Should match when message contains the pattern
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["this is an error message"],
-          logLevel: "info" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["this is an error message"],
+            logLevel: "info" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(true);
 
       // Should match when message contains any pattern
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["this is a warning message"],
-          logLevel: "info" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["this is a warning message"],
+            logLevel: "info" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(true);
 
       // Should not match when message doesn't contain any pattern
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["this is a regular message"],
-          logLevel: "info" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["this is a regular message"],
+            logLevel: "info" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(false);
     });
 
@@ -216,29 +261,38 @@ describe("filter plugin", () => {
 
       // Should match case-insensitive RegExp
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["this is an ERROR message"],
-          logLevel: "info" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["this is an ERROR message"],
+            logLevel: "info" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(true);
 
       // Should match RegExp with special pattern
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["this is warning123"],
-          logLevel: "info" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["this is warning123"],
+            logLevel: "info" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(true);
 
       // Should not match when RegExp doesn't match
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["this is just a warning"],
-          logLevel: "info" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["this is just a warning"],
+            logLevel: "info" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(false);
     });
 
@@ -250,29 +304,38 @@ describe("filter plugin", () => {
 
       // Should match string pattern
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["this is an error"],
-          logLevel: "info" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["this is an error"],
+            logLevel: "info" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(true);
 
       // Should match RegExp pattern
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["this is warning123"],
-          logLevel: "info" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["this is warning123"],
+            logLevel: "info" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(true);
 
       // Should not match when neither pattern matches
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["this is a regular message"],
-          logLevel: "info" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["this is a regular message"],
+            logLevel: "info" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(false);
     });
 
@@ -285,29 +348,38 @@ describe("filter plugin", () => {
 
       // Should match message pattern regardless of query
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["this is an error"],
-          logLevel: "info" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["this is an error"],
+            logLevel: "info" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(true);
 
       // Should use query when message pattern doesn't match
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["regular message"],
-          logLevel: "warn" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["regular message"],
+            logLevel: "warn" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(true);
 
       // Should not match when neither pattern nor query matches
       expect(
-        plugin.shouldSendToLogger({
-          messages: ["regular message"],
-          logLevel: "info" as LogLevel,
-          data: {},
-        }),
+        plugin.shouldSendToLogger(
+          {
+            messages: ["regular message"],
+            logLevel: "info" as LogLevel,
+            data: {},
+          },
+          loglayer,
+        ),
       ).toBe(false);
     });
   });
