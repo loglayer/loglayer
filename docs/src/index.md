@@ -1,6 +1,6 @@
 ---
-title: LogLayer - Unify your Javascript logging
-description: A modern logging library for Typescript / Javascript with a fluent API for specifying log messages, metadata and errors
+title: "LogLayer: The modern logging library for Typescript / Javascript"
+description: A structured logging library with a fluent API for specifying log messages, metadata and errors
 
 layout: home
 
