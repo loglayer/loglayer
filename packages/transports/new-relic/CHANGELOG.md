@@ -1,5 +1,12 @@
 # `@loglayer/transport-new-relic` Changelog
 
+## 1.0.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@1.2.2
+
 ## 1.0.6
 
 ### Patch Changes

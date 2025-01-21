@@ -1,5 +1,16 @@
 # `@loglayer/plugin` Changelog
 
+## 1.2.0
+
+### Minor Changes
+
+- [#129](https://github.com/loglayer/loglayer/pull/129) [`d8054c8`](https://github.com/loglayer/loglayer/commit/d8054c887f371621e23a53ff2ea90d99afcc0ec3) Thanks [@theogravity](https://github.com/theogravity)! - LogLayer now passes the `loglayer` instance as the last parameter to all plugin callbacks
+
+### Patch Changes
+
+- Updated dependencies [[`d8054c8`](https://github.com/loglayer/loglayer/commit/d8054c887f371621e23a53ff2ea90d99afcc0ec3)]:
+  - @loglayer/shared@1.1.0
+
 ## 1.1.1
 
 ### Patch Changes

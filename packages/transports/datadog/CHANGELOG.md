@@ -1,5 +1,12 @@
 # `@loglayer/transport-datadog` Changelog
 
+## 2.0.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@1.2.2
+
 ## 2.0.7
 
 ### Patch Changes
