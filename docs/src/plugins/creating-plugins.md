@@ -26,26 +26,26 @@ interface LogLayerPlugin {
    * Called after the assembly of the data object that contains
    * metadata / context / error data before being sent to the logging library.
    */
-  onBeforeDataOut?(params: PluginBeforeDataOutParams): Record<string, any> | null | undefined;
+  onBeforeDataOut?(params: PluginBeforeDataOutParams, loglayer: ILogLayer): Record<string, any> | null | undefined;
   
   /**
    * Called to modify message data before it is sent to the logging library.
    */
-  onBeforeMessageOut?(params: PluginBeforeMessageOutParams): MessageDataType[];
+  onBeforeMessageOut?(params: PluginBeforeMessageOutParams, loglayer: ILogLayer): MessageDataType[];
   
   /**
    * Controls whether the log entry should be sent to the logging library.
    */
-  shouldSendToLogger?(params: PluginShouldSendToLoggerParams): boolean;
+  shouldSendToLogger?(params: PluginShouldSendToLoggerParams, loglayer: ILogLayer): boolean;
   
   /**
    * Called when withMetadata() or metadataOnly() is called.
    */
-  onMetadataCalled?(metadata: Record<string, any>): Record<string, any> | null | undefined;
+  onMetadataCalled?(metadata: Record<string, any>, loglayer: ILogLayer): Record<string, any> | null | undefined;
   /**
    * Called when withContext() is called. 
    */
-  onContextCalled?(context: Record<string, any>): Record<string, any> | null | undefined;
+  onContextCalled?(context: Record<string, any>, loglayer: ILogLayer): Record<string, any> | null | undefined;
 }
 ```
 
@@ -62,7 +62,7 @@ import type { LogLayerPlugin, PluginBeforeMessageOutParams } from 'loglayer'
 
 // Create a timestamp plugin
 const timestampPlugin: LogLayerPlugin = {
-  onBeforeMessageOut: ({ messages }: PluginBeforeMessageOutParams): string[] => {
+  onBeforeMessageOut: ({ messages }: PluginBeforeMessageOutParams, loglayer: ILogLayer): string[] => {
     // Add timestamp prefix to each message
     return messages.map(msg => `[${new Date().toISOString()}] ${msg}`)
   }
@@ -110,7 +110,7 @@ yarn add @loglayer/plugin
 ### Example
 
 ```typescript
-import type { LogLayerPlugin, PluginBeforeMessageOutParams, LogLayerPluginParams } from '@loglayer/plugin'
+import type { LogLayerPlugin, PluginBeforeMessageOutParams, LogLayerPluginParams, ILogLayer } from '@loglayer/plugin'
 
 // LogLayerPluginParams provides the common options for the plugin
 export interface TimestampPluginOptions extends LogLayerPluginParams {
@@ -120,13 +120,13 @@ export interface TimestampPluginOptions extends LogLayerPluginParams {
   format?: 'iso' | 'locale'
 }
 
-export const createTimestampPlugin = (options: TimestampPluginOptions = {}): LogLayerPlugin => {
+export const createTimestampPlugin = (options: TimestampPluginOptions = {}, loglayer: ILogLayer): LogLayerPlugin => {
   return {
     // Copy over the common options
     id: options.id,
     disabled: options.disabled,
     // Implement the onBeforeMessageOut lifecycle method
-    onBeforeMessageOut: ({ messages }: PluginBeforeMessageOutParams): string[] => {
+    onBeforeMessageOut: ({ messages }: PluginBeforeMessageOutParams, loglayer: ILogLayer): string[] => {
       const timestamp = options.format === 'locale' 
         ? new Date().toLocaleString()
         : new Date().toISOString()
@@ -145,7 +145,7 @@ Allows you to modify or transform the data object containing metadata, context, 
 
 **Method Signature:**
 ```typescript
-onBeforeDataOut?(params: PluginBeforeDataOutParams): Record<string, any> | null | undefined
+onBeforeDataOut?(params: PluginBeforeDataOutParams, loglayer: ILogLayer): Record<string, any> | null | undefined
 ```
 
 **Parameters:**
@@ -159,7 +159,7 @@ interface PluginBeforeDataOutParams {
 **Example:**
 ```typescript
 const dataEnrichmentPlugin = {
-  onBeforeDataOut: ({ data, logLevel }) => {
+  onBeforeDataOut: ({ data, logLevel }: PluginBeforeDataOutParams, loglayer: ILogLayer) => {
     return {
       ...(data || {}),
       environment: process.env.NODE_ENV,
@@ -176,7 +176,7 @@ Allows you to modify or transform the message content before it's sent to the lo
 
 **Method Signature:**
 ```typescript
-onBeforeMessageOut?(params: PluginBeforeMessageOutParams): MessageDataType[]
+onBeforeMessageOut?(params: PluginBeforeMessageOutParams, loglayer: ILogLayer): MessageDataType[]
 ```
 
 **Parameters:**
@@ -190,7 +190,7 @@ interface PluginBeforeMessageOutParams {
 **Example:**
 ```typescript
 const messageFormatterPlugin = {
-  onBeforeMessageOut: ({ messages, logLevel }) => {
+  onBeforeMessageOut: ({ messages, logLevel }: PluginBeforeMessageOutParams, loglayer: ILogLayer) => {
     return messages.map(msg => `[${logLevel.toUpperCase()}][${new Date().toISOString()}] ${msg}`)
   }
 }
@@ -202,7 +202,7 @@ Controls whether a log entry should be sent to the logging library. This is usef
 
 **Method Signature:**
 ```typescript
-shouldSendToLogger?(params: PluginShouldSendToLoggerParams): boolean
+shouldSendToLogger?(params: PluginShouldSendToLoggerParams, loglayer: ILogLayer): boolean
 ```
 
 **Parameters:**
@@ -218,7 +218,7 @@ interface PluginShouldSendToLoggerParams {
 **Example:**
 ```typescript
 const productionFilterPlugin = {
-  shouldSendToLogger: ({ logLevel, data }) => {
+  shouldSendToLogger: ({ logLevel, data }: PluginShouldSendToLoggerParams, loglayer: ILogLayer) => {
     // Filter out debug logs in production
     if (process.env.NODE_ENV === 'production') {
       return logLevel !== 'debug'
@@ -234,9 +234,8 @@ const productionFilterPlugin = {
 
 **Example:**
 ```typescript
-
 const productionFilterPlugin = {
-  shouldSendToLogger: ({ transportId, logLevel, data }) => {
+  shouldSendToLogger: ({ transportId, logLevel, data }: PluginShouldSendToLoggerParams, loglayer: ILogLayer) => {
     // don't send logs if the transportId is 'console'
     if (transportId === 'console') {
       return false
@@ -255,7 +254,7 @@ Returning `null` or `undefined` will prevent the metadata from being added to th
 
 **Method Signature:**
 ```typescript
-onMetadataCalled?(metadata: Record<string, any>): Record<string, any> | null | undefined
+onMetadataCalled?(metadata: Record<string, any>, loglayer: ILogLayer): Record<string, any> | null | undefined
 ```
 
 **Parameters:**
@@ -264,7 +263,7 @@ onMetadataCalled?(metadata: Record<string, any>): Record<string, any> | null | u
 **Example:**
 ```typescript
 const metadataEnrichmentPlugin = {
-  onMetadataCalled: (metadata) => {
+  onMetadataCalled: (metadata: Record<string, any>, loglayer: ILogLayer) => {
     return {
       ...metadata,
       enrichedAt: new Date().toISOString(),
@@ -282,7 +281,7 @@ Returning `null` or `undefined` will prevent the context from being added to the
 
 **Method Signature:**
 ```typescript
-onContextCalled?(context: Record<string, any>): Record<string, any> | null | undefined
+onContextCalled?(context: Record<string, any>, loglayer: ILogLayer): Record<string, any> | null | undefined
 ```
 
 **Parameters:**
@@ -291,7 +290,7 @@ onContextCalled?(context: Record<string, any>): Record<string, any> | null | und
 **Example:**
 ```typescript
 const contextEnrichmentPlugin = {
-  onContextCalled: (context) => {
+  onContextCalled: (context: Record<string, any>, loglayer: ILogLayer) => {
     return {
       ...context,
       environment: process.env.NODE_ENV,

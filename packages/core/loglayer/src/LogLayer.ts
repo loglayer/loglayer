@@ -1,7 +1,7 @@
-import { LogLevel, type MessageDataType } from "@loglayer/shared";
+import { type ErrorOnlyOpts, type ILogLayer, LogLevel, type MessageDataType } from "@loglayer/shared";
 import { LogBuilder } from "./LogBuilder.js";
 import { PluginManager } from "./PluginManager.js";
-import type { ErrorOnlyOpts, ILogLayer, LogLayerConfig } from "./types/index.js";
+import type { LogLayerConfig } from "./types/index.js";
 
 import { type LogLayerPlugin, PluginCallbackType } from "@loglayer/plugin";
 import type { LogLayerTransport } from "@loglayer/transport";
@@ -84,7 +84,7 @@ export class LogLayer implements ILogLayer {
     let updatedContext = context;
 
     if (this.pluginManager.hasPlugins(PluginCallbackType.onContextCalled)) {
-      updatedContext = this.pluginManager.runOnContextCalled(context);
+      updatedContext = this.pluginManager.runOnContextCalled(context, this);
 
       if (!updatedContext) {
         if (this._config.consoleDebug) {
@@ -207,7 +207,7 @@ export class LogLayer implements ILogLayer {
     let data: Record<string, any> | null = metadata;
 
     if (this.pluginManager.hasPlugins(PluginCallbackType.onMetadataCalled)) {
-      data = this.pluginManager.runOnMetadataCalled(metadata);
+      data = this.pluginManager.runOnMetadataCalled(metadata, this);
 
       if (!data) {
         if (consoleDebug) {
@@ -463,10 +463,13 @@ export class LogLayer implements ILogLayer {
     }
 
     if (this.pluginManager.hasPlugins(PluginCallbackType.onBeforeDataOut)) {
-      d = this.pluginManager.runOnBeforeDataOut({
-        data: hasObjData ? d : undefined,
-        logLevel,
-      });
+      d = this.pluginManager.runOnBeforeDataOut(
+        {
+          data: hasObjData ? d : undefined,
+          logLevel,
+        },
+        this,
+      );
 
       if (d && !hasObjData) {
         hasObjData = true;
@@ -474,10 +477,13 @@ export class LogLayer implements ILogLayer {
     }
 
     if (this.pluginManager.hasPlugins(PluginCallbackType.onBeforeMessageOut)) {
-      params = this.pluginManager.runOnBeforeMessageOut({
-        messages: [...params],
-        logLevel,
-      });
+      params = this.pluginManager.runOnBeforeMessageOut(
+        {
+          messages: [...params],
+          logLevel,
+        },
+        this,
+      );
     }
 
     if (this.hasMultipleTransports) {
@@ -485,12 +491,15 @@ export class LogLayer implements ILogLayer {
         .filter((transport) => transport.enabled)
         .map(async (transport) => {
           if (this.pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)) {
-            const shouldSend = this.pluginManager.runShouldSendToLogger({
-              messages: [...params],
-              data: hasObjData ? d : undefined,
-              logLevel,
-              transportId: transport.id,
-            });
+            const shouldSend = this.pluginManager.runShouldSendToLogger(
+              {
+                messages: [...params],
+                data: hasObjData ? d : undefined,
+                logLevel,
+                transportId: transport.id,
+              },
+              this,
+            );
 
             if (!shouldSend) {
               return;
@@ -518,12 +527,15 @@ export class LogLayer implements ILogLayer {
       }
 
       if (this.pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)) {
-        const shouldSend = this.pluginManager.runShouldSendToLogger({
-          messages: [...params],
-          data: hasObjData ? d : undefined,
-          logLevel,
-          transportId: this.singleTransport.id,
-        });
+        const shouldSend = this.pluginManager.runShouldSendToLogger(
+          {
+            messages: [...params],
+            data: hasObjData ? d : undefined,
+            logLevel,
+            transportId: this.singleTransport.id,
+          },
+          this,
+        );
 
         if (!shouldSend) {
           return;
