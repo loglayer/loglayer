@@ -45,6 +45,9 @@ log.withPrefix("[my-app]")
   .withError(new Error('test'))
   // data that is included for this log entry only
   .withMetadata({ some: 'data', password: 'my-pass' })
+  // Non-object data only (numbers and strings only)
+  // this can be omitted to just log an object / error
+  // by using .errorOnly() / .metadataOnly() instead of withError() / withMetadata()
   .info('my message')
 ```
 
