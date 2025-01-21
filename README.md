@@ -33,10 +33,12 @@ const log = new LogLayer({
   contextFieldName: 'context',
   // Put metadata in a specific field (default is flattened)
   metadataFieldName: 'metadata',
+})
+
 // persisted data that is always included in logs
-}).withContext({
-  path: "/",
-  reqId: "1234"
+log.withContext({
+   path: "/",
+   reqId: "1234"
 })
 
 log.withPrefix("[my-app]")

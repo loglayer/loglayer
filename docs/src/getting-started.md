@@ -50,4 +50,9 @@ log.info('Processing request') // Will include requestId
 log.withError(new Error('Something went wrong')).error('Failed to process request')
 ```
 
-See the [Transports](/transports/) section for more information on how to use other logging libraries with LogLayer.
+## Next steps
+
+- Optionally [configure](/configuration) LogLayer to further customize logging behavior.
+- Start exploring the [Logging API](/logging-api/basic-logging) section for more advanced logging features.
+- See the [Transports](/transports/) section for more ways to ship logs to different destinations.
+
