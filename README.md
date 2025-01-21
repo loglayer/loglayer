@@ -11,6 +11,7 @@
 
 ```javascript
 // Example using the Pino logging library with LogLayer
+// You can also start out with a console logger and swap to another later!
 import { LogLayer } from 'loglayer';
 import { pino } from 'pino';
 import { PinoTransport } from '@loglayer/transport-pino';
@@ -21,33 +22,47 @@ const log = new LogLayer({
   transport: new PinoTransport({
     logger: pino()
   }),
-  // Plugins can be created to modify log data before it's shipped to your logging library.
+  // Plugins modify log data before it's shipped to your logging library.
   plugins: [
     redactionPlugin({
       paths: ['password'],
       censor: '[REDACTED]',
     }),
   ],
+  // Put context data in a specific field (default is flattened)
+  contextFieldName: 'context',
+  // Put metadata in a specific field (default is flattened)
+  metadataFieldName: 'metadata',
+// persisted data that is always included in logs
+}).withContext({
+  path: "/",
+  reqId: "1234"
 })
 
 log.withPrefix("[my-app]")
-  .withMetadata({ some: 'data', password: 'my-pass' })
   .withError(new Error('test'))
+  // data that is included for this log entry only
+  .withMetadata({ some: 'data', password: 'my-pass' })
   .info('my message')
 ```
 
 ```json5
 {
-   "level":30,
-   "time":1735857465669,
-   "msg":"[my-app] my message",
-   // The placement of these fields are also configurable!
-   "password":"[REDACTED]",
-   "some":"data",
+   "level": 30,
+   "time": 1735857465669,
+   "msg": "[my-app] my message",
+   "context": {
+      "path": "/",
+      "reqId": "1234",
+   },
+   "metadata": {
+      "password": "[REDACTED]",
+      "some": "data",
+   },
    "err":{
-      "type":"Error",
-      "message":"test",
-      "stack":"Error: test\n ..."
+      "type": "Error",
+      "message": "test",
+      "stack": "Error: test\n ..."
    }
 }
 ```
