@@ -1,5 +1,12 @@
 # `@loglayer/plugin-redaction` Changelog
 
+## 1.0.7
+
+### Patch Changes
+
+- Updated dependencies [[`d8054c8`](https://github.com/loglayer/loglayer/commit/d8054c887f371621e23a53ff2ea90d99afcc0ec3)]:
+  - @loglayer/plugin@1.2.0
+
 ## 1.0.6
 
 ### Patch Changes

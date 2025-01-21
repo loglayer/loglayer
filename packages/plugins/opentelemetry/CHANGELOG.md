@@ -1,5 +1,13 @@
 # `@loglayer/plugin-opentelemetry` Changelog
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [[`d8054c8`](https://github.com/loglayer/loglayer/commit/d8054c887f371621e23a53ff2ea90d99afcc0ec3)]:
+  - @loglayer/plugin@1.2.0
+  - @loglayer/shared@1.1.0
+
 ## 1.0.2
 
 ### Patch Changes
