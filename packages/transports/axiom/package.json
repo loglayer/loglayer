@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-axiom",
   "description": "Axiom.co transport for the loglayer logging library.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

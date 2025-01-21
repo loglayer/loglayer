@@ -1,5 +1,11 @@
 # LogLayer Docs Site Changelog
 
+## 1.13.0
+
+### Minor Changes
+
+- [`48a8f6f`](https://github.com/loglayer/loglayer/commit/48a8f6f008786ee1f25246a84d07af9555fd689d) Thanks [@theogravity](https://github.com/theogravity)! - Add the Axiom transport
+
 ## 1.12.0
 
 ### Minor Changes
