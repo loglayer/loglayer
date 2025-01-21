@@ -9,7 +9,7 @@ A transport for sending logs to [Axiom.co](https://axiom.co) with the [LogLayer]
 ## Installation
 
 ```bash
-npm install @loglayer/transport-axiom @axiomhq/js serialize-error
+npm install @loglayer/transport-axiom @axiomhq/js serialize-error loglayer
 ```
 
 ## Usage

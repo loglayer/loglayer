@@ -17,15 +17,15 @@ It uses the [Axiom JavaScript SDK](https://github.com/axiomhq/axiom-js).
 ::: code-group
 
 ```sh [npm]
-npm install @loglayer/transport-axiom @axiomhq/js serialize-error
+npm install @loglayer/transport-axiom @axiomhq/js serialize-error loglayer
 ```
 
 ```sh [pnpm]
-pnpm add @loglayer/transport-axiom @axiomhq/js serialize-error
+pnpm add @loglayer/transport-axiom @axiomhq/js serialize-error loglayer
 ```
 
 ```sh [yarn]
-yarn add @loglayer/transport-axiom @axiomhq/js serialize-error
+yarn add @loglayer/transport-axiom @axiomhq/js serialize-error loglayer
 ```
 
 :::
