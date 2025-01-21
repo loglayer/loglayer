@@ -7,6 +7,11 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Jan 20, 2025
+
+- Plugin callbacks now pass the `loglayer` instance as the last parameter.
+- Add the [Axiom.co Transport](https://loglayer.dev/transports/axiom).
+
 ## Jan 18, 2025
 
 Add new options to the `ConsoleTransport`:

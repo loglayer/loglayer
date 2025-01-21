@@ -112,7 +112,8 @@ export default defineConfig({
               { text: 'Winston', link: '/transports/winston' },
             ]
           },
-          { text: "Cloud Providers", items: [
+          { text: 'Cloud Providers', items: [
+            { text: 'Axiom', link: '/transports/axiom' },
             { text: 'DataDog (server-side)', link: '/transports/datadog' },
             { text: 'DataDog Browser Logs', link: '/transports/datadog-browser-logs' },
             { text: 'Dynatrace', link: '/transports/dynatrace' },
@@ -120,7 +121,7 @@ export default defineConfig({
             { text: 'New Relic', link: '/transports/new-relic' },
             { text: "Sumo Logic", link: '/transports/sumo-logic'}
           ]},
-          { text: "Other Transports", items: [
+          { text: 'Other Transports', items: [
             { text: 'Log File Rotation', link: '/transports/log-file-rotation' },
             { text: 'OpenTelemetry', link: '/transports/opentelemetry' }
           ]}

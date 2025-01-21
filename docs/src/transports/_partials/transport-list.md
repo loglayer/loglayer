@@ -20,6 +20,7 @@
 
 | Name | Package | Changelog | Description |
 |------|---------|-----------|-------------|
+| [Axiom](/transports/axiom) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-axiom)](https://www.npmjs.com/package/@loglayer/transport-axiom) | [Changelog](/transports/changelogs/axiom-changelog.md) | Send logs to Axiom cloud logging platform |
 | [Datadog](/transports/datadog) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-datadog)](https://www.npmjs.com/package/@loglayer/transport-datadog) | [Changelog](/transports/changelogs/datadog-changelog.md) | Server-side logging for Datadog |
 | [Datadog Browser Logs](/transports/datadog-browser-logs) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-datadog-browser-logs)](https://www.npmjs.com/package/@loglayer/transport-datadog-browser-logs) | [Changelog](/transports/changelogs/datadog-browser-logs-changelog.md) | Browser-side logging for Datadog |
 | [Dynatrace](/transports/dynatrace) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-dynatrace)](https://www.npmjs.com/package/@loglayer/transport-dynatrace) | [Changelog](/transports/changelogs/dynatrace-changelog.md) | Server-side logging for Dynatrace |
