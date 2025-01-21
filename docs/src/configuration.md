@@ -116,6 +116,10 @@ Configure how errors are handled and serialized:
 
 ### Data Structure Configuration
 
+::: tip
+See [error handling configuration](#error-handling-configuration) for configuring the error field name and placement.
+:::
+
 Control how context and metadata are structured in log output:
 
 ```typescript
@@ -125,7 +129,7 @@ Control how context and metadata are structured in log output:
   
   // Put metadata in a specific field (default: flattened)
   metadataFieldName: 'metadata',
-  
+
   // Disable context/metadata in log output
   muteContext: false,
   muteMetadata: false
