@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 5.4.1
+
+### Patch Changes
+
+- [#135](https://github.com/loglayer/loglayer/pull/135) [`b23976d`](https://github.com/loglayer/loglayer/commit/b23976d6d14bdadb37c4dd83dcb0b2ad464c25d7) Thanks [@theogravity](https://github.com/theogravity)! - Updates the main example code on the README.md file.
+
 ## 5.4.0
 
 ### Minor Changes
