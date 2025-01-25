@@ -4,7 +4,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-google-cloud-logging)](https://www.npmjs.com/package/@loglayer/transport-google-cloud-logging)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-Implements the [Google Cloud Logging library](https://www.npmjs.com/package/@google-cloud/logging) for use with [LogLayer](https://loglayer.dev).
+Implements the [Google Cloud Logging library](https://www.npmjs.com/package/@google-cloud/logging) for use with the [LogLayer](https://loglayer.dev) logging library.
 
 This transport sends logs to [Google Cloud Logging](https://cloud.google.com/logging) (formerly known as Stackdriver Logging).
 

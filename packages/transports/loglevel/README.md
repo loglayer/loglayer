@@ -4,7 +4,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-loglevel)](https://www.npmjs.com/package/@loglayer/transport-loglevel)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-A transport for using [loglevel](https://github.com/pimterry/loglevel) with [LogLayer](https://loglayer.dev).
+A transport for using [loglevel](https://github.com/pimterry/loglevel) with the [LogLayer](https://loglayer.dev) logging library.
 
 ## Installation
 

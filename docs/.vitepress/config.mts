@@ -83,6 +83,7 @@ export default defineConfig({
           { text: 'Metadata', link: '/logging-api/metadata' },
           { text: 'Error Handling', link: '/logging-api/error-handling' },
           { text: 'Child Loggers', link: '/logging-api/child-loggers' },
+          { text: 'Transport Management', link: '/logging-api/transport-management' },
           { text: 'Typescript Tips', link: '/logging-api/typescript' },
           { text: 'Unit Testing', link: '/logging-api/unit-testing' },
         ]

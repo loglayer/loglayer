@@ -1,6 +1,6 @@
 {
   "name": "@loglayer/transport-datadog",
-  "description": "DataDog transport for loglayer.",
+  "description": "DataDog transport for the LogLayer logging library.",
   "version": "2.0.8",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -42,11 +42,11 @@
   "devDependencies": {
     "loglayer": "workspace:*",
     "hash-runner": "2.0.1",
-    "@types/node": "22.10.7",
+    "@types/node": "22.10.10",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.3.5",
     "typescript": "5.7.3",
-    "vitest": "3.0.2"
+    "vitest": "3.0.4"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

@@ -4,7 +4,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-signale)](https://www.npmjs.com/package/@loglayer/transport-signale)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-The Signale transport for [LogLayer](https://loglayer.dev).
+The Signale transport for the [LogLayer](https://loglayer.dev) logging library.
 
 [Signale](https://github.com/klaussinani/signale) is a highly configurable logging utility designed for CLI applications.
 

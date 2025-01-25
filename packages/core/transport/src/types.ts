@@ -1,4 +1,5 @@
 import { LogLevel } from "@loglayer/shared";
+export type { LogLayerTransport, LogLayerTransportParams } from "@loglayer/shared";
 
 export const LogLevelPriority: Record<LogLevel, number> = {
   [LogLevel.trace]: 0,
@@ -8,25 +9,6 @@ export const LogLevelPriority: Record<LogLevel, number> = {
   [LogLevel.error]: 4,
   [LogLevel.fatal]: 5,
 };
-
-export interface LogLayerTransportParams {
-  /**
-   * The log level of the message
-   */
-  logLevel: LogLevel;
-  /**
-   * The parameters that were passed to the log message method (eg: info / warn / debug / error)
-   */
-  messages: any[];
-  /**
-   * Object data such as metadata, context, and / or error data
-   */
-  data?: Record<string, any>;
-  /**
-   * If true, the data object is included in the message parameters
-   */
-  hasData?: boolean;
-}
 
 /**
  * Logging methods that are common to logging libraries
@@ -65,31 +47,4 @@ export interface LogLayerTransportConfig<LogLibrary> extends Omit<LoggerlessTran
    * The logging library instance to use for logging
    */
   logger: LogLibrary;
-}
-
-export interface LogLayerTransport<LogLibrary = any> {
-  /**
-   * A user-defined identifier for the transport
-   **/
-  id?: string;
-  /**
-   * If false, the transport will not send logs to the logger.
-   * Default is true.
-   */
-  enabled?: boolean;
-  /**
-   * Sends the log data to the logger for transport
-   */
-  shipToLogger(params: LogLayerTransportParams): any[];
-
-  /**
-   * Internal use only. Do not implement.
-   * @param params
-   */
-  _sendToLogger(params: LogLayerTransportParams): void;
-
-  /**
-   * Returns the logger instance attached to the transport
-   */
-  getLoggerInstance(): LogLibrary;
 }

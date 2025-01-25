@@ -4,7 +4,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-log-file-rotation)](https://www.npmjs.com/package/@loglayer/transport-log-file-rotation)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-A transport for [LogLayer](https://loglayer.dev) that writes logs to files with automatic rotation based on size or time. Built on top of [file-stream-rotator](https://github.com/rogerc/file-stream-rotator/).
+A transport for the [LogLayer](https://loglayer.dev) logging library that writes logs to files with automatic rotation based on size or time. Built on top of [file-stream-rotator](https://github.com/rogerc/file-stream-rotator/).
 
 ## Features
 

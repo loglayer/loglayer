@@ -259,6 +259,7 @@ onMetadataCalled?(metadata: Record<string, any>, loglayer: ILogLayer): Record<st
 
 **Parameters:**
 - `metadata`: Record<string, any> - The metadata object being added
+- `loglayer`: ILogLayer - The LogLayer instance
 
 **Example:**
 ```typescript
@@ -286,6 +287,7 @@ onContextCalled?(context: Record<string, any>, loglayer: ILogLayer): Record<stri
 
 **Parameters:**
 - `context`: Record<string, any> - The context object being added
+- `loglayer`: ILogLayer - The LogLayer instance
 
 **Example:**
 ```typescript

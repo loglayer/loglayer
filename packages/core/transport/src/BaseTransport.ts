@@ -4,6 +4,8 @@ import type { LogLayerTransport, LogLayerTransportConfig, LogLayerTransportParam
 /**
  * For implementing libraries that are logging libraries that generally have an interface of:
  * info(), warn(), error(), debug(), trace(), etc.
+ *
+ * {@link https://loglayer.dev/transports/creating-transports.html | Creating Transports}
  */
 export abstract class BaseTransport<LogLibrary> implements LogLayerTransport<LogLibrary> {
   /**

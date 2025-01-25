@@ -52,7 +52,7 @@
     "@opentelemetry/instrumentation-express": "0.47.0",
     "@opentelemetry/instrumentation-http": "0.57.1",
     "@types/express": "5.0.0",
-    "@types/node": "22.10.7",
+    "@types/node": "22.10.10",
     "express": "4.21.2",
     "hash-runner": "2.0.1",
     "loglayer": "workspace:*",
@@ -60,7 +60,7 @@
     "tsup": "8.3.5",
     "tsx": "4.19.2",
     "typescript": "5.7.3",
-    "vitest": "3.0.2"
+    "vitest": "3.0.4"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

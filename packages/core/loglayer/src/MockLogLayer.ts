@@ -1,8 +1,14 @@
 /* eslint @typescript-eslint/no-empty-function: 0 */
 /* istanbul ignore file */
 
-import type { ErrorOnlyOpts, ILogBuilder, ILogLayer, LogLevel, MessageDataType } from "@loglayer/shared";
-import type { LogLayerTransport } from "@loglayer/transport";
+import type {
+  ErrorOnlyOpts,
+  ILogBuilder,
+  ILogLayer,
+  LogLayerTransport,
+  LogLevel,
+  MessageDataType,
+} from "@loglayer/shared";
 import { MockLogBuilder } from "./MockLogBuilder.js";
 
 import type { LogLayerPlugin } from "@loglayer/plugin";
@@ -76,6 +82,10 @@ export class MockLogLayer implements ILogLayer {
   }
 
   unMuteMetadata() {
+    return this;
+  }
+
+  withFreshTransports(transports: LogLayerTransport | Array<LogLayerTransport>) {
     return this;
   }
 }
