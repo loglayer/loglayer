@@ -1,5 +1,12 @@
 # `@loglayer/transport-google-cloud-logging` Changelog
 
+## 1.1.3
+
+### Patch Changes
+
+- Updated dependencies [[`54b8223`](https://github.com/loglayer/loglayer/commit/54b822362f631891cff92d8279883eee994e66cb)]:
+  - @loglayer/transport@1.2.3
+
 ## 1.1.2
 
 ### Patch Changes

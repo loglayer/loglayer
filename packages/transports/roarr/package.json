@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-roarr",
   "description": "roarr transport for the LogLayer logging library.",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
