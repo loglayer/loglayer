@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/plugin-filter",
   "description": "Filter logs with LogLayer using string patterns, regular expressions, or JSON Queries.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

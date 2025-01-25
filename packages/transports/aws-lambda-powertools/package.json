@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-aws-lambda-powertools",
   "description": "AWS Lambda Powertools logger transport for the LogLayer logging library",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

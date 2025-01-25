@@ -1,5 +1,11 @@
 # LogLayer Docs Site Changelog
 
+## 1.14.0
+
+### Minor Changes
+
+- [#138](https://github.com/loglayer/loglayer/pull/138) [`54b8223`](https://github.com/loglayer/loglayer/commit/54b822362f631891cff92d8279883eee994e66cb) Thanks [@theogravity](https://github.com/theogravity)! - Add withFreshTransports method to `loglayer`
+
 ## 1.13.0
 
 ### Minor Changes

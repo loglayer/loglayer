@@ -1,5 +1,18 @@
 # `loglayer` Changelog
 
+## 5.5.0
+
+### Minor Changes
+
+- [#138](https://github.com/loglayer/loglayer/pull/138) [`54b8223`](https://github.com/loglayer/loglayer/commit/54b822362f631891cff92d8279883eee994e66cb) Thanks [@theogravity](https://github.com/theogravity)! - Add withFreshTransports method to `loglayer`
+
+### Patch Changes
+
+- Updated dependencies [[`54b8223`](https://github.com/loglayer/loglayer/commit/54b822362f631891cff92d8279883eee994e66cb)]:
+  - @loglayer/shared@1.2.0
+  - @loglayer/transport@1.2.3
+  - @loglayer/plugin@1.2.1
+
 ## 5.4.1
 
 ### Patch Changes

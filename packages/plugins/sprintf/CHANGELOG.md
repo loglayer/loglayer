@@ -1,5 +1,13 @@
 # `@loglayer/plugin-sprintf` Changelog
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies [[`54b8223`](https://github.com/loglayer/loglayer/commit/54b822362f631891cff92d8279883eee994e66cb)]:
+  - @loglayer/shared@1.2.0
+  - @loglayer/plugin@1.2.1
+
 ## 1.0.4
 
 ### Patch Changes
