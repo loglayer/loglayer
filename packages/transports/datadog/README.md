@@ -4,7 +4,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-datadog)](https://www.npmjs.com/package/@loglayer/transport-datadog)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-The DataDog transport for [LogLayer](https://loglayer.dev).
+The DataDog transport for the [LogLayer](https://loglayer.dev) logging library.
 
 Ships logs to DataDog using the [datadog-transport-common](https://www.npmjs.com/package/datadog-transport-common) library.
 

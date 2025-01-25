@@ -1,6 +1,6 @@
 {
   "name": "@loglayer/transport-pino",
-  "description": "Pino transport for loglayer.",
+  "description": "Pino transport for the LogLayer logging library.",
   "version": "1.0.13",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -41,12 +41,12 @@
   "devDependencies": {
     "loglayer": "workspace:*",
     "hash-runner": "2.0.1",
-    "@types/node": "22.10.7",
+    "@types/node": "22.10.10",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.3.5",
     "tsx": "4.19.2",
     "typescript": "5.7.3",
-    "vitest": "3.0.2"
+    "vitest": "3.0.4"
   },
   "peerDependencies": {
     "pino": "*"

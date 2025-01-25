@@ -108,32 +108,3 @@ const log = new LogLayer({
   })
 })
 ```
-
-## Transport Instance
-
-You can get the underlying logger for a transport if you've assigned an ID to it:
-
-```typescript
-const log = new LogLayer({
-  transport: new ConsoleTransport({
-    logger: console,
-    id: 'console'
-  })
-})
-
-const consoleLogger = log.getLoggerInstance<typeof console>('console')
-```
-
-```typescript
-import { type P, pino } from "pino";
-import { PinoTransport } from "@loglayer/transport-pino";
-
-const log = new LogLayer({
-  transport: new PinoTransport({
-    logger: pino(),
-    id: 'pino'
-  })
-})
-
-const pinoLogger = log.getLoggerInstance<P.Pino>('pino')
-```

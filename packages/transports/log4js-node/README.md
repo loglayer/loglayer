@@ -4,7 +4,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-log4js)](https://www.npmjs.com/package/@loglayer/transport-log4js)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-The Log4js transport for [LogLayer](https://loglayer.dev).
+The Log4js transport for the [LogLayer](https://loglayer.dev) logging library.
 
 [Log4js-node](https://log4js-node.github.io/log4js-node/) is a conversion of the Log4j framework to Node.js.
 

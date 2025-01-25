@@ -4,7 +4,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-opentelemetry)](https://www.npmjs.com/package/@loglayer/transport-opentelemetry)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-The OpenTelemetry transport for LogLayer sends logs using the [OpenTelemetry Logs SDK](https://www.npmjs.com/package/@opentelemetry/sdk-logs). This allows you to integrate logs with OpenTelemetry's observability ecosystem.
+Transport for the [LogLayer](https://loglayer.dev) logging library for sending logs using the [OpenTelemetry Logs SDK](https://www.npmjs.com/package/@opentelemetry/sdk-logs). This allows you to integrate logs with OpenTelemetry's observability ecosystem.
 
 Compatible with OpenTelemetry JS API and SDK `1.0+`.
 

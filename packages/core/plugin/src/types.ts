@@ -86,6 +86,8 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @returns [Object] The object to be sent to the destination logging
    * library or null / undefined to not pass an object through.
+   *
+   * {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforedataout | Creating Plugins}
    */
   onBeforeDataOut?(params: PluginBeforeDataOutParams, loglayer: ILogLayer): Record<string, any> | null | undefined;
 
@@ -94,6 +96,8 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    * This allows you to modify the message data before it is sent to the destination logging library.
    *
    * @returns [Array] The message data to be sent to the destination logging library.
+   *
+   * {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforemessageout | Creating Plugins}
    */
   onBeforeMessageOut?(params: PluginBeforeMessageOutParams, loglayer: ILogLayer): any[];
 
@@ -107,6 +111,8 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    * transport.
    *
    * @returns boolean If true, sends data to the transport, if false does not.
+   *
+   * {@link https://loglayer.dev/plugins/creating-plugins.html#shouldsendtologger | Creating Plugins}
    */
   shouldSendToLogger?(params: PluginShouldSendToLoggerParams, loglayer: ILogLayer): boolean;
 
@@ -120,6 +126,8 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    * In multiple plugins, the modified metadata will be passed through each plugin in the order they are added.
    *
    * @returns [Object] The metadata object to be sent to the destination logging library.
+   *
+   * {@link https://loglayer.dev/plugins/creating-plugins.html#onmetadatacalled | Creating Plugins}
    */
   onMetadataCalled?: (metadata: Record<string, any>, loglayer: ILogLayer) => Record<string, any> | null | undefined;
 
@@ -133,6 +141,8 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    * In multiple plugins, the modified context will be passed through each plugin in the order they are added.
    *
    * @returns [Object] The context object to be used.
+   *
+   * {@link https://loglayer.dev/plugins/creating-plugins.html#oncontextcalled | Creating Plugins}
    */
   onContextCalled?: (context: Record<string, any>, loglayer: ILogLayer) => Record<string, any> | null | undefined;
 }

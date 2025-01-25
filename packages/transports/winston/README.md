@@ -4,7 +4,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-winston)](https://www.npmjs.com/package/@loglayer/transport-winston)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-The Winston transport for [LogLayer](https://loglayer.dev).
+The Winston transport for the [LogLayer](https://loglayer.dev) logging library.
 
 [Winston](https://github.com/winstonjs/winston) A logger for just about everything.
 

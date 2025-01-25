@@ -7,6 +7,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Jan 24, 2025
+
+- Added a new method [`withFreshTransports()`](/logging-api/transport-management#replacing-transports) to replace existing transports with new ones in `loglayer`.
+
 ## Jan 20, 2025
 
 - Plugin callbacks now pass the `loglayer` instance as the last parameter.

@@ -10,7 +10,7 @@
     "docs:preview": "pnpm copy-changelogs && vitepress build && vitepress preview"
   },
   "devDependencies": {
-    "vitepress": "1.6.1",
+    "vitepress": "1.6.3",
     "glob": "11.0.1"
   },
   "engineStrict": true,

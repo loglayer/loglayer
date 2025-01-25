@@ -4,7 +4,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-dynatrace)](https://www.npmjs.com/package/@loglayer/transport-dynatrace)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-A transport for [LogLayer](https://loglayer.dev) to send logs to Dynatrace using their [Log Monitoring API v2](https://docs.dynatrace.com/docs/discover-dynatrace/references/dynatrace-api/environment-api/log-monitoring-v2/post-ingest-logs).
+A transport for the [LogLayer](https://loglayer.dev) logging library to send logs to Dynatrace using their [Log Monitoring API v2](https://docs.dynatrace.com/docs/discover-dynatrace/references/dynatrace-api/environment-api/log-monitoring-v2/post-ingest-logs).
 
 ## Installation
 

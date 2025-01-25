@@ -60,7 +60,7 @@
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.3.5",
     "typescript": "5.7.3",
-    "vitest": "3.0.2"
+    "vitest": "3.0.4"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {
