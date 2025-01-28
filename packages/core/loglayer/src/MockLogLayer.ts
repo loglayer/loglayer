@@ -27,7 +27,7 @@ export class MockLogLayer implements ILogLayer {
 
   errorOnly(error: any, opts?: ErrorOnlyOpts): void {}
 
-  metadataOnly(metadata: Record<string, any>, logLevel: LogLevel): void {}
+  metadataOnly(metadata: Record<string, any>, logLevel?: LogLevel): void {}
 
   addPlugins(plugins: Array<LogLayerPlugin>) {}
 

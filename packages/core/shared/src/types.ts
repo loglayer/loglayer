@@ -168,7 +168,7 @@ export interface ILogLayer extends ILogBuilder {
    *
    * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  metadataOnly(metadata: Record<string, any>, logLevel: LogLevel): void;
+  metadataOnly(metadata: Record<string, any>, logLevel?: LogLevel): void;
 
   /**
    * Returns the context used

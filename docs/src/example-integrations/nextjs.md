@@ -215,11 +215,11 @@ export async function register() {
   })
  
   if (process.env.NEXT_RUNTIME === "nodejs") {
-    console.error = createConsoleMethod("error");
-    console.log = createConsoleMethod("log");
-    console.info = createConsoleMethod("info");
-    console.warn = createConsoleMethod("warn");
-    console.debug = createConsoleMethod("debug");
+    console.error = createConsoleMethod(logger, "error");
+    console.log = createConsoleMethod(logger, "log");
+    console.info = createConsoleMethod(logger, "info");
+    console.warn = createConsoleMethod(logger, "warn");
+    console.debug = createConsoleMethod(logger, "debug");
   }
 }
 ```

@@ -10,6 +10,7 @@ description: Learn about the latest features and improvements in LogLayer
 ## Jan 27, 2025
 
 - Added an integration doc for [Next.js](/example-integrations/nextjs) to show how to implement LogLayer with Next.js.
+- Fixed the typings for `metadataOnly()` where the 2nd parameter should be optional.
 
 ## Jan 24, 2025
 
