@@ -1,5 +1,11 @@
 # `@loglayer/shared` Changelog
 
+## 1.2.1
+
+### Patch Changes
+
+- [#140](https://github.com/loglayer/loglayer/pull/140) [`d708ff7`](https://github.com/loglayer/loglayer/commit/d708ff76fd23a72343f2a9f8ce3c1fcc180adf74) Thanks [@theogravity](https://github.com/theogravity)! - Fix `metadataOnly` typescript def. The second parameter should always be optional.
+
 ## 1.2.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # `loglayer` Changelog
 
+## 5.5.1
+
+### Patch Changes
+
+- [#140](https://github.com/loglayer/loglayer/pull/140) [`d708ff7`](https://github.com/loglayer/loglayer/commit/d708ff76fd23a72343f2a9f8ce3c1fcc180adf74) Thanks [@theogravity](https://github.com/theogravity)! - Fix `metadataOnly` typescript def. The second parameter should always be optional.
+
+- Updated dependencies [[`d708ff7`](https://github.com/loglayer/loglayer/commit/d708ff76fd23a72343f2a9f8ce3c1fcc180adf74)]:
+  - @loglayer/shared@1.2.1
+  - @loglayer/plugin@1.2.2
+  - @loglayer/transport@1.2.4
+
 ## 5.5.0
 
 ### Minor Changes

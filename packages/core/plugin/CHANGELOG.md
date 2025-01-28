@@ -1,5 +1,12 @@
 # `@loglayer/plugin` Changelog
 
+## 1.2.2
+
+### Patch Changes
+
+- Updated dependencies [[`d708ff7`](https://github.com/loglayer/loglayer/commit/d708ff76fd23a72343f2a9f8ce3c1fcc180adf74)]:
+  - @loglayer/shared@1.2.1
+
 ## 1.2.1
 
 ### Patch Changes
