@@ -149,6 +149,7 @@ export default defineConfig({
         items: [
           { text: 'Express', link: '/example-integrations/express' },
           { text: 'Fastify', link: '/example-integrations/fastify' },
+          { text: 'Next.js', link: '/example-integrations/nextjs' },
         ]
       }
     ],
