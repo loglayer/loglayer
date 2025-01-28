@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-sumo-logic",
   "description": "Sumo Logic transport for the LogLayer logging library.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

@@ -1,5 +1,12 @@
 # `@loglayer/transport-axiom` Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@1.2.4
+
 ## 1.0.1
 
 ### Patch Changes

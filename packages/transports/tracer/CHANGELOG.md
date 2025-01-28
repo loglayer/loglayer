@@ -1,5 +1,12 @@
 # `@loglayer/transport-tracer` Changelog
 
+## 1.0.10
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@1.2.4
+
 ## 1.0.9
 
 ### Patch Changes
