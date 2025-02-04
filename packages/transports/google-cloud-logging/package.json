@@ -24,6 +24,10 @@
     "log",
     "loglayer",
     "stackdriver",
+    "stackdriver logging",
+    "google logging",
+    "google cloud",
+    "google cloud platform",
     "google",
     "cloud",
     "transport"

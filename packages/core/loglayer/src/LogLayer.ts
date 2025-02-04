@@ -217,6 +217,20 @@ export class LogLayer implements ILogLayer {
     return this;
   }
 
+  /**
+   * Replaces all existing plugins with new ones.
+   *
+   * When used with child loggers, it only affects the current logger instance
+   * and does not modify the parent's plugins.
+   *
+   * {@link https://loglayer.dev/plugins/ | Plugins Docs}
+   */
+  withFreshPlugins(plugins: Array<LogLayerPlugin>): LogLayer {
+    this._config.plugins = plugins;
+    this.pluginManager = new PluginManager(plugins);
+    return this;
+  }
+
   protected withPluginManager(pluginManager: PluginManager) {
     this.pluginManager = pluginManager;
     return this;

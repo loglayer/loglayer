@@ -182,10 +182,6 @@ new LogFileRotationTransport({
 });
 ```
 
-::: warning Memory Usage
-When using batch processing, be mindful of memory usage. Setting a very large `batch.size` or `batch.timeout` will cause more logs to be held in memory before being written to disk. In most cases, the default values provide a good balance between performance and memory usage.
-:::
-
 ::: tip Performance Tuning
 For high-throughput applications, you might want to adjust the batch settings based on your needs:
 - Increase `batch.size` for better throughput at the cost of higher memory usage

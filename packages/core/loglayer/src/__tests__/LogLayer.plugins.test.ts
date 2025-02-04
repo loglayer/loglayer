@@ -345,4 +345,118 @@ describe("LogLayer plugin system", () => {
       );
     });
   });
+
+  describe("withFreshPlugins", () => {
+    it("should replace all existing plugins", () => {
+      const log = getLogger();
+
+      // Add initial plugins
+      log.addPlugins([
+        {
+          id: "plugin1",
+          onBeforeDataOut: ({ data }) => {
+            if (data) {
+              data.first = true;
+            }
+            return data;
+          },
+        },
+      ]);
+
+      // Replace with new plugins
+      log.withFreshPlugins([
+        {
+          id: "plugin2",
+          onBeforeDataOut: ({ data }) => {
+            if (data) {
+              data.second = true;
+            }
+            return data;
+          },
+        },
+      ]);
+
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.withMetadata({ original: true }).info("test message");
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              original: true,
+              second: true,
+            },
+            "test message",
+          ],
+        }),
+      );
+    });
+
+    it("should not affect parent logger plugins", () => {
+      const parentLog = getLogger();
+
+      // Add plugin to parent
+      parentLog.addPlugins([
+        {
+          id: "parent-plugin",
+          onBeforeDataOut: ({ data }) => {
+            if (data) {
+              data.parent = true;
+            }
+            return data;
+          },
+        },
+      ]);
+
+      const childLog = parentLog.child();
+
+      // Replace plugins in child
+      childLog.withFreshPlugins([
+        {
+          id: "child-plugin",
+          onBeforeDataOut: ({ data }) => {
+            if (data) {
+              data.child = true;
+            }
+            return data;
+          },
+        },
+      ]);
+
+      const parentLogger = parentLog.getLoggerInstance("console") as TestLoggingLibrary;
+      const childLogger = childLog.getLoggerInstance("console") as TestLoggingLibrary;
+
+      // Test parent logger still has original plugin
+      parentLog.withMetadata({ test: true }).info("parent message");
+      expect(parentLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              test: true,
+              parent: true,
+            },
+            "parent message",
+          ],
+        }),
+      );
+
+      // Test child logger has new plugin
+      childLog.withMetadata({ test: true }).info("child message");
+      expect(childLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              test: true,
+              child: true,
+            },
+            "child message",
+          ],
+        }),
+      );
+    });
+  });
 });

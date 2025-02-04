@@ -7,6 +7,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Feb 3, 2025
+
+- Added a new method [`withFreshPlugins()`](/plugins/#replacing-all-plugins) to replace existing plugins with new ones in `loglayer`.
+
 ## Jan 27, 2025
 
 - Added an integration doc for [Next.js](/example-integrations/nextjs) to show how to implement LogLayer with Next.js.

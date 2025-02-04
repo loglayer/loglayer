@@ -26,6 +26,8 @@
     "file",
     "rotation",
     "rotate",
+    "log rotate",
+    "rotate logs",
     "transport"
   ],
   "scripts": {
