@@ -1,5 +1,18 @@
 # `loglayer` Changelog
 
+## 5.6.0
+
+### Minor Changes
+
+- [#143](https://github.com/loglayer/loglayer/pull/143) [`733ba8f`](https://github.com/loglayer/loglayer/commit/733ba8f754166839fb00e727820e2e8901ceadbb) Thanks [@theogravity](https://github.com/theogravity)! - Add `withFreshPlugins()` to replace existing plugins with new ones.
+
+### Patch Changes
+
+- Updated dependencies [[`733ba8f`](https://github.com/loglayer/loglayer/commit/733ba8f754166839fb00e727820e2e8901ceadbb)]:
+  - @loglayer/plugin@1.3.0
+  - @loglayer/shared@1.3.0
+  - @loglayer/transport@1.2.5
+
 ## 5.5.1
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # `@loglayer/transport-pino` Changelog
 
+## 1.0.16
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@1.2.5
+
 ## 1.0.15
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport",
   "description": "Base transport used to implement logging transports for loglayer.",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

@@ -1,5 +1,12 @@
 # `@loglayer/transport-log-file-rotation` Changelog
 
+## 1.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@1.2.5
+
 ## 1.1.3
 
 ### Patch Changes

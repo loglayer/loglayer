@@ -1,5 +1,11 @@
 # LogLayer Docs Site Changelog
 
+## 1.15.0
+
+### Minor Changes
+
+- [#143](https://github.com/loglayer/loglayer/pull/143) [`733ba8f`](https://github.com/loglayer/loglayer/commit/733ba8f754166839fb00e727820e2e8901ceadbb) Thanks [@theogravity](https://github.com/theogravity)! - Add `withFreshPlugins()` to replace existing plugins with new ones.
+
 ## 1.14.0
 
 ### Minor Changes
