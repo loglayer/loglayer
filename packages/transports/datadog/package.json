@@ -24,6 +24,8 @@
     "log",
     "loglayer",
     "datadog",
+    "datadog logs",
+    "datadog logging",
     "transport"
   ],
   "scripts": {

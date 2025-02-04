@@ -88,4 +88,8 @@ export class MockLogLayer implements ILogLayer {
   withFreshTransports(transports: LogLayerTransport | Array<LogLayerTransport>) {
     return this;
   }
+
+  withFreshPlugins(plugins: Array<LogLayerPlugin>) {
+    return this;
+  }
 }
