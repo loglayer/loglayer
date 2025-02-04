@@ -1,5 +1,12 @@
 # `@loglayer/shared` Changelog
 
+## 1.3.0
+
+### Minor Changes
+
+- [#143](https://github.com/loglayer/loglayer/pull/143) [`733ba8f`](https://github.com/loglayer/loglayer/commit/733ba8f754166839fb00e727820e2e8901ceadbb) Thanks [@theogravity](https://github.com/theogravity)! - Move the plugin types to the shared package to support the new `withFreshPlugins()` method on `ILogLayer`,
+  expose plugin-only types from shared package to plugin package.
+
 ## 1.2.1
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-pino",
   "description": "Pino transport for the LogLayer logging library.",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

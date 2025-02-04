@@ -1,5 +1,12 @@
 # `@loglayer/transport-sumo-logic` Changelog
 
+## 1.0.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@1.2.5
+
 ## 1.0.5
 
 ### Patch Changes
