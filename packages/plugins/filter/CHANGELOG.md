@@ -1,5 +1,11 @@
 # `@loglayer/plugin-filter` Changelog
 
+## 1.0.5
+
+### Patch Changes
+
+- [#146](https://github.com/loglayer/loglayer/pull/146) [`948f614`](https://github.com/loglayer/loglayer/commit/948f614c28ae9e9da80316c709e77d8a975dbd2f) Thanks [@theogravity](https://github.com/theogravity)! - Fix usage of multiple "or" in query
+
 ## 1.0.4
 
 ### Patch Changes
