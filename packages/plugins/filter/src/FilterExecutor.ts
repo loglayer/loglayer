@@ -112,7 +112,6 @@ export class FilterExecutor {
       return false;
     }
 
-    const query = this.config.queries.map((q) => `(${q.replaceAll(`'`, `"`)})`).join(" or ");
     const queryContext = {
       level: this.context.logLevel,
       message: this.context.message,
@@ -120,21 +119,44 @@ export class FilterExecutor {
     };
 
     try {
-      if (this.config.debug) {
-        this.context.debugItems.push(`[filter-plugin] query: filter(${query})`);
-        this.context.debugItems.push(`[filter-plugin] input: ${JSON.stringify(queryContext)}`);
+      // Process each query individually and return true if any match
+      for (const q of this.config.queries) {
+        // Split OR conditions and wrap each in filter()
+        const conditions = q.split(" or ").map((cond) => `filter(${cond.trim().replaceAll(`'`, `"`)})`);
+        const query = conditions.join(" or ");
+
+        if (this.config.debug) {
+          this.context.debugItems.push(`[filter-plugin] query: filter(${query})`);
+          this.context.debugItems.push(`[filter-plugin] input: ${JSON.stringify(queryContext)}`);
+        }
+
+        // Try each condition separately
+        for (const condition of conditions) {
+          try {
+            const output = jsonquery([queryContext], condition) as Array<any>;
+            if (output.length > 0) {
+              if (this.config.debug) {
+                this.context.debugItems.push(`[filter-plugin] query match: ${output.length > 0}`);
+              }
+              return true;
+            }
+          } catch (e) {
+            console.error(`[filter-plugin] Error: ${e}`);
+            console.log(`[filter-plugin] query: ${condition}`);
+            console.log(`[filter-plugin] input: ${JSON.stringify(queryContext)}`);
+            // Continue trying other conditions
+          }
+        }
+
+        if (this.config.debug) {
+          this.context.debugItems.push("[filter-plugin] query match: false");
+        }
       }
 
-      const output = jsonquery([queryContext], `filter(${query})`) as Array<any>;
-
-      if (this.config.debug) {
-        this.context.debugItems.push(`[filter-plugin] query match: ${output.length > 0}`);
-      }
-
-      return output.length > 0;
+      return false;
     } catch (e) {
       console.error(`[filter-plugin] Error: ${e}`);
-      console.log(`[filter-plugin] query: filter(${query})`);
+      console.log(`[filter-plugin] queries: ${JSON.stringify(this.config.queries)}`);
       console.log(`[filter-plugin] input: ${JSON.stringify(queryContext)}`);
       return false;
     }
