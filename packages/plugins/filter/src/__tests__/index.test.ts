@@ -1,5 +1,5 @@
 import type { PluginShouldSendToLoggerParams } from "@loglayer/plugin";
-import type { LogLevel } from "@loglayer/shared";
+import { LogLevel } from "@loglayer/shared";
 import { MockLogLayer } from "loglayer";
 import { describe, expect, it, vi } from "vitest";
 import { filterPlugin } from "../index.js";
@@ -382,5 +382,40 @@ describe("filter plugin", () => {
         ),
       ).toBe(false);
     });
+  });
+
+  it("should handle multiple log levels with OR conditions", () => {
+    const plugin = filterPlugin({
+      id: "test",
+      queries: ['.level == "fatal" or .level == "error" or .level == "warn" or .level == "info" or .level == "debug"'],
+    });
+
+    // Should allow all standard log levels
+    const logLevels = [LogLevel.fatal, LogLevel.error, LogLevel.warn, LogLevel.info, LogLevel.debug];
+
+    for (const level of logLevels) {
+      expect(
+        plugin.shouldSendToLogger(
+          {
+            messages: ["test message"],
+            logLevel: level,
+            data: {},
+          },
+          loglayer,
+        ),
+      ).toBe(true);
+    }
+
+    // Should filter out trace level
+    expect(
+      plugin.shouldSendToLogger(
+        {
+          messages: ["test message"],
+          logLevel: LogLevel.trace,
+          data: {},
+        },
+        loglayer,
+      ),
+    ).toBe(false);
   });
 });
