@@ -1,5 +1,13 @@
 # `loglayer` Changelog
 
+## 5.7.0
+
+### Minor Changes
+
+- [#149](https://github.com/loglayer/loglayer/pull/149) [`213e3bc`](https://github.com/loglayer/loglayer/commit/213e3bc609a23a76e762ff5e25cb89e04a0010dc) Thanks [@theogravity](https://github.com/theogravity)! - - Add `linkParentContext` config option to keep context reference between child and parent
+  - The plugin method `runOnContextCalled` is no longer called during `child()` if context data exists as it'd be a redundant
+    call.
+
 ## 5.6.0
 
 ### Minor Changes
