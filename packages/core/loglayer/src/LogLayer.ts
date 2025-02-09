@@ -107,10 +107,14 @@ export class LogLayer implements ILogLayer {
       }
     }
 
-    this.context = {
-      ...this.context,
-      ...updatedContext,
-    };
+    if (this._config.linkParentContext) {
+      Object.assign(this.context, updatedContext);
+    } else {
+      this.context = {
+        ...this.context,
+        ...updatedContext,
+      };
+    }
 
     this.hasContext = true;
 
@@ -192,15 +196,21 @@ export class LogLayer implements ILogLayer {
       transport: Array.isArray(this._config.transport) ? [...this._config.transport] : this._config.transport,
     };
 
+    const childLogger = new LogLayer(childConfig).withPluginManager(this.pluginManager);
+
     if (this.hasContext) {
-      return new LogLayer(childConfig)
-        .withContext({
+      if (this._config.linkParentContext) {
+        childLogger.context = this.context;
+      } else {
+        childLogger.context = {
           ...this.context,
-        })
-        .withPluginManager(this.pluginManager);
+        };
+      }
+
+      childLogger.hasContext = true;
     }
 
-    return new LogLayer(childConfig).withPluginManager(this.pluginManager);
+    return childLogger;
   }
 
   /**
