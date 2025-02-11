@@ -203,6 +203,65 @@ The parameters passed to `shipToLogger` would be:
 }
 ```
 
+## Resource Cleanup with Disposable
+
+If your transport needs to clean up resources (like network connections, file handles, or external service connections), 
+you can implement the [`Disposable`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management) interface. 
+
+LogLayer will automatically call the dispose method when:
+
+- The transport is replaced using `withFreshTransports()`
+
+### Implementing Disposable
+
+To make your transport disposable:
+
+1. Add `Disposable` to your class implementation
+2. Implement the `[Symbol.dispose]()` method
+3. Add a flag to track the disposed state
+4. Guard your methods against calls after disposal
+
+Here's an example:
+
+```typescript
+export class MyTransport extends LoggerlessTransport implements Disposable {
+  private isDisposed = false;
+  private client: ExternalServiceClient;
+
+  constructor(config: MyTransportConfig) {
+    super(config);
+    this.client = new ExternalServiceClient(config);
+  }
+
+  shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams) {
+    if (this.isDisposed) return messages;
+
+    // Implementation
+    this.client.send({
+      level: logLevel,
+      message: messages.join(" "),
+      ...(data && hasData ? data : {})
+    });
+
+    return messages;
+  }
+
+  [Symbol.dispose](): void {
+    if (this.isDisposed) return;
+    
+    // Clean up resources
+    this.client?.close();
+    this.isDisposed = true;
+  }
+}
+```
+
+:::tip
+Always implement `Disposable` if your transport maintains connections or holds onto resources that need cleanup. This ensures proper resource management and prevents memory leaks.
+:::
+
+For a real-world example of a transport that implements `Disposable`, see the [Log Rotation Transport Source](/transports/log-file-rotation) implementation which properly manages file handles.
+
 ## Examples
 
 ### Logger-Based Example: Console Transport

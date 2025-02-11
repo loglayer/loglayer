@@ -132,17 +132,9 @@ Control how context and metadata are structured in log output:
 
   // Disable context/metadata in log output
   muteContext: false,
-  muteMetadata: false,
-
-  // Link child loggers to their parent's context instead of creating a shallow copy.
-  // When enabled, context changes in either parent or child affect both loggers.
-  linkParentContext: false
+  muteMetadata: false
 }
 ```
-
-::: tip
-For more details about `linkParentContext` and how it affects child loggers, see [Child Loggers - Linked Context](./logging-api/child-loggers.html#linked-context).
-:::
 
 Example output with field names configured:
 ```json
@@ -201,7 +193,6 @@ const log = new LogLayer({
   metadataFieldName: 'metadata',
   muteContext: false,
   muteMetadata: false,
-  linkParentContext: false,
 
   // Plugins
   plugins: [

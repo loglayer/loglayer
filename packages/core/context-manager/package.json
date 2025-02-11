@@ -1,7 +1,7 @@
 {
-  "name": "loglayer",
-  "description": "A modern logging library with a fluent API for specifying log messages, metadata and errors",
-  "version": "5.7.0",
+  "name": "@loglayer/context-manager",
+  "description": "Base context manager used to implement context managers for loglayer.",
+  "version": "0.0.1",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -22,23 +22,10 @@
   "keywords": [
     "logging",
     "log",
-    "multi-transport",
-    "opentelemetry",
-    "otel",
-    "winston",
-    "bunyan",
-    "structured",
-    "standard",
-    "file",
-    "serialize",
-    "error",
-    "abstraction",
-    "pino",
-    "electron",
-    "loglevel",
-    "datadog",
-    "rotation",
-    "rotate"
+    "loglayer",
+    "context manager",
+    "context",
+    "manager"
   ],
   "scripts": {
     "build": "tsup src/index.ts",
@@ -50,10 +37,7 @@
     "verify-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@loglayer/shared": "workspace:*",
-    "@loglayer/plugin": "workspace:*",
-    "@loglayer/transport": "workspace:*",
-    "@loglayer/context-manager": "workspace:*"
+    "@loglayer/shared": "workspace:*"
   },
   "devDependencies": {
     "hash-runner": "2.0.1",

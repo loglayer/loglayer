@@ -1,8 +1,15 @@
-import { type ErrorOnlyOpts, type ILogLayer, LogLevel, type MessageDataType } from "@loglayer/shared";
+import {
+  type ErrorOnlyOpts,
+  type IContextManager,
+  type ILogLayer,
+  LogLevel,
+  type MessageDataType,
+} from "@loglayer/shared";
 import { LogBuilder } from "./LogBuilder.js";
 import { PluginManager } from "./PluginManager.js";
 import type { LogLayerConfig } from "./types/index.js";
 
+import { DefaultContextManager } from "@loglayer/context-manager";
 import { type LogLayerPlugin, PluginCallbackType } from "@loglayer/plugin";
 import type { LogLayerTransport } from "@loglayer/transport";
 
@@ -19,23 +26,21 @@ interface FormatLogParams {
  * a message in a consistent fashion.
  */
 export class LogLayer implements ILogLayer {
-  private context: Record<string, any>;
-  private hasContext: boolean;
   private pluginManager: PluginManager;
   private idToTransport: Record<string, any>;
   private hasMultipleTransports: boolean;
   private singleTransport: LogLayerTransport | null;
+  private contextManager: IContextManager;
 
   _config: LogLayerConfig;
 
   constructor(config: LogLayerConfig) {
-    this.context = {};
-    this.hasContext = false;
     this._config = {
       ...config,
       enabled: config.enabled ?? true,
     };
 
+    this.contextManager = new DefaultContextManager();
     this.pluginManager = new PluginManager(config.plugins || []);
 
     if (!this._config.errorFieldName) {
@@ -47,6 +52,26 @@ export class LogLayer implements ILogLayer {
     }
 
     this._initializeTransports(this._config.transport);
+  }
+
+  /**
+   * Sets the context manager to use for managing context data.
+   */
+  withContextManager(contextManager: IContextManager): LogLayer {
+    // Dispose of existing context manager if it implements Disposable
+    if (this.contextManager && typeof (this.contextManager as any)[Symbol.dispose] === "function") {
+      (this.contextManager as any)[Symbol.dispose]();
+    }
+
+    this.contextManager = contextManager;
+    return this;
+  }
+
+  /**
+   * Returns the context manager instance being used.
+   */
+  getContextManager<M extends IContextManager = IContextManager>(): M {
+    return this.contextManager as M;
   }
 
   private _initializeTransports(transports: LogLayerTransport | Array<LogLayerTransport>) {
@@ -107,27 +132,12 @@ export class LogLayer implements ILogLayer {
       }
     }
 
-    if (this._config.linkParentContext) {
-      Object.assign(this.context, updatedContext);
-    } else {
-      this.context = {
-        ...this.context,
-        ...updatedContext,
-      };
-    }
-
-    this.hasContext = true;
-
+    this.contextManager.appendContext(updatedContext);
     return this;
   }
 
-  /**
-   * Returns the context used
-   *
-   * {@link https://loglayer.dev/logging-api/context.html | Context Docs}
-   */
-  getContext() {
-    return this.context;
+  getContext(): Record<string, any> {
+    return this.contextManager.getContext();
   }
 
   /**
@@ -190,25 +200,23 @@ export class LogLayer implements ILogLayer {
    *
    * {@link https://loglayer.dev/logging-api/child-loggers.html | Child Logging Docs}
    */
-  child() {
+  child(): LogLayer {
     const childConfig = {
       ...this._config,
       transport: Array.isArray(this._config.transport) ? [...this._config.transport] : this._config.transport,
     };
 
-    const childLogger = new LogLayer(childConfig).withPluginManager(this.pluginManager);
+    const childLogger = new LogLayer(childConfig)
+      .withPluginManager(this.pluginManager)
+      .withContextManager(this.contextManager.clone());
 
-    if (this.hasContext) {
-      if (this._config.linkParentContext) {
-        childLogger.context = this.context;
-      } else {
-        childLogger.context = {
-          ...this.context,
-        };
-      }
-
-      childLogger.hasContext = true;
-    }
+    // Notify context manager about child logger creation
+    this.contextManager.onChildLoggerCreated({
+      parentContextManager: this.contextManager,
+      childContextManager: childLogger.contextManager,
+      parentLogger: this,
+      childLogger,
+    });
 
     return childLogger;
   }
@@ -441,18 +449,19 @@ export class LogLayer implements ILogLayer {
 
   private formatContext() {
     const { contextFieldName, muteContext } = this._config;
+    const context = this.contextManager.getContext();
 
-    if (this.hasContext && !muteContext) {
+    if (this.contextManager.hasContextData() && !muteContext) {
       if (contextFieldName) {
         return {
           [contextFieldName]: {
-            ...this.context,
+            ...context,
           },
         };
       }
 
       return {
-        ...this.context,
+        ...context,
       };
     }
 
@@ -517,7 +526,7 @@ export class LogLayer implements ILogLayer {
       return;
     }
 
-    let hasObjData = !!metadata || (muteContext ? false : this.hasContext);
+    let hasObjData = !!metadata || (muteContext ? false : this.contextManager.hasContextData());
 
     let d: Record<string, any> | undefined | null = {};
 
