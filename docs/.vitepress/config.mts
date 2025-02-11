@@ -72,7 +72,7 @@ export default defineConfig({
           { text: 'What is LogLayer?', link: '/introduction' },
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Configuration', link: '/configuration' },
-          { text: 'Migration from 4.x', link: '/migrating' },
+          { text: 'Migrating Versions', link: '/migrating' },
         ]
       },
       {
