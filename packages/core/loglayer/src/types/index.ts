@@ -77,7 +77,7 @@ export interface LogLayerConfig {
    */
   contextFieldName?: string;
   /**
-   * If specified, will set the metadata data to a specific field
+   * If specified, will set the metadata object to a specific field
    * instead of flattening the data alongside the error and message.
    *
    * Default is metadata will be flattened.
@@ -91,12 +91,4 @@ export interface LogLayerConfig {
    * If set to true, will not include metadata data in the log message.
    */
   muteMetadata?: boolean;
-  /**
-   * If set to true, child loggers will link to their parent's context instead of
-   * creating a shallow copy. This means changes to the context in child loggers
-   * will affect the parent logger's context and vice versa.
-   *
-   * Default is false.
-   */
-  linkParentContext?: boolean;
 }

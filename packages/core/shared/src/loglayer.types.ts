@@ -1,6 +1,52 @@
 import type { ErrorOnlyOpts, LogLevel, MessageDataType } from "./common.types.js";
 import type { LogLayerPlugin } from "./plugin.types.js";
 
+export interface OnChildLoggerCreatedParams {
+  /**
+   * The parent logger instance
+   */
+  parentLogger: ILogLayer;
+  /**
+   * The child logger instance
+   */
+  childLogger: ILogLayer;
+  /**
+   * The parent logger's context manager
+   */
+  parentContextManager: IContextManager;
+  /**
+   * The child logger's context manager
+   */
+  childContextManager: IContextManager;
+}
+
+export interface IContextManager {
+  /**
+   * Sets the context data to be included with every log entry. Set to `undefined` to clear the context data.
+   */
+  setContext(context?: Record<string, any>): void;
+  /**
+   * Appends context data to the existing context data.
+   */
+  appendContext(context: Record<string, any>): void;
+  /**
+   * Returns the context data to be included with every log entry.
+   */
+  getContext(): Record<string, any>;
+  /**
+   * Returns true if context data is present.
+   */
+  hasContextData(): boolean;
+  /**
+   * Called when a child logger is created. Use to manipulate context data between parent and child.
+   */
+  onChildLoggerCreated(params: OnChildLoggerCreatedParams): void;
+  /**
+   * Creates a new instance of the context manager with the same context data.
+   */
+  clone(): IContextManager;
+}
+
 export interface LogLayerTransportParams {
   /**
    * The log level of the message
@@ -226,4 +272,14 @@ export interface ILogLayer extends ILogBuilder {
    * {@link https://loglayer.dev/plugins/ | Plugins Docs}
    */
   withFreshPlugins(plugins: Array<LogLayerPlugin>): ILogLayer;
+
+  /**
+   * Sets the context manager to use for managing context data.
+   */
+  withContextManager(manager: IContextManager): ILogLayer;
+
+  /**
+   * Gets the context manager used by the logger.
+   */
+  getContextManager<M extends IContextManager = IContextManager>(): M;
 }

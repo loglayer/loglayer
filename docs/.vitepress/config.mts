@@ -145,6 +145,17 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Context Managers (v6)',
+        items: [
+          { text: 'Overview', link: '/context-managers/' },
+          { text: 'Creating Context Managers', link: '/context-managers/creating-context-managers' },
+          { text: 'Available Context Managers', items: [
+              { text: 'Default', link: '/context-managers/default' },
+              { text: 'Linked', link: '/context-managers/linked' }
+            ]}
+        ]
+      },
+      {
         text: 'Example Integrations',
         items: [
           { text: 'Express', link: '/example-integrations/express' },

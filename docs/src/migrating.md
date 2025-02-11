@@ -1,15 +1,54 @@
 ---
-title: Migrating from LogLayer 4.x to 5.x
-description: Learn how to migrate from LogLayer 4.x to 5.x
+title: Migrating LogLayer to the latest version
+description: Learn how to migrate different versions of LogLayer to the latest version.
 ---
 
-# Migrating from 4.x to 5.x
+# Migrating LogLayer to the latest version
 
-## Node.js version
+## Migrating from 5.x to 6.x
+
+6.x introduces a new feature called [Context Managers](/context-managers/). In 99% of use-cases you do not need to do anything
+as the default context manager is already used when creating a new LogLayer instance.
+
+### linkParentContext
+
+The option `linkParentContext` has been removed. If you need this functionality, then use the [Linked Context Manager](/context-managers/linked):
+
+::: code-group
+```bash [npm]
+npm install @loglayer/context-manager-linked
+```
+
+```bash [yarn]
+yarn add @loglayer/context-manager-linked
+```
+
+```bash [pnpm]
+pnpm add @loglayer/context-manager-linked
+```
+:::
+
+Then, use the plugin like this:
+```typescript
+import { LogLayer, ConsoleTransport } from "loglayer";
+import { LinkedContextManager } from '@loglayer/context-manager-linked';
+
+const parentLog = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console
+  }),
+}).withContextManager(new LinkedContextManager());
+
+// Now any child loggers will now have linked context with the parent and vice versa
+```
+
+## Migrating from 4.x to 5.x
+
+### Node.js version
 
 The minimum Node.js version required is now 18.
 
-## Transport System
+### Transport System
 
 The most significant change in 5.x is the introduction of a new transport system. Instead of specifying a logger type and instance directly, you now need to use transport-specific packages:
 
@@ -34,7 +73,7 @@ const log = new LogLayer({
 
 You can find the full list of transports in the [Transport](/transports/) documentation.
 
-## Configuration Changes
+### Configuration Changes
 
 Several configuration options have been renamed or restructured:
 
@@ -82,7 +121,7 @@ Here's a complete mapping of configuration options from 4.x to 5.x:
 | `plugins` | `plugins` | Unchanged |
 | N/A | `errorFieldInMetadata` | New in 5.x - controls error object placement |
 
-## getLoggerInstance Changes
+### getLoggerInstance Changes
 
 The `getLoggerInstance()` method has been updated to support multiple transports. Each transport must now have a unique ID that is used to retrieve its logger instance:
 
@@ -124,9 +163,9 @@ const winstonLogger = log.getLoggerInstance('winston');
 
 If the transport ID doesn't exist, `undefined` is returned.
 
-## TypeScript Changes
+### TypeScript Changes
 
-### Generic Type Parameters
+#### Generic Type Parameters
 
 The most significant change is the removal of generic type parameters from both the `ILogLayer` interface and `LogLayer` class:
 

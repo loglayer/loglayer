@@ -92,4 +92,12 @@ export class MockLogLayer implements ILogLayer {
   withFreshPlugins(plugins: Array<LogLayerPlugin>) {
     return this;
   }
+
+  withContextManager(contextManager: any) {
+    return this;
+  }
+
+  getContextManager() {
+    return undefined;
+  }
 }

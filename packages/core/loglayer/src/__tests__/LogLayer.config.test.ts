@@ -251,11 +251,9 @@ describe("LogLayer configuration", () => {
     );
   });
 
-  describe("linkParentContext", () => {
-    it("should share context between parent and child when enabled", () => {
-      const log = getLogger({
-        linkParentContext: true,
-      });
+  describe("child logger context", () => {
+    it("should copy parent context to child logger", () => {
+      const log = getLogger({});
       const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
 
       // Set initial context on parent
@@ -269,7 +267,7 @@ describe("LogLayer configuration", () => {
         child: "data",
       });
 
-      // Verify child has both contexts
+      // Verify child has its own context plus parent's context
       childLog.info("child message");
       expect(genericLogger.popLine()).toStrictEqual(
         expect.objectContaining({
@@ -284,74 +282,7 @@ describe("LogLayer configuration", () => {
         }),
       );
 
-      // Verify parent also has both contexts
-      log.info("parent message");
-      expect(genericLogger.popLine()).toStrictEqual(
-        expect.objectContaining({
-          level: LogLevel.info,
-          data: [
-            {
-              parent: "data",
-              child: "data",
-            },
-            "parent message",
-          ],
-        }),
-      );
-
-      // Verify changes in parent affect child
-      log.withContext({
-        newParent: "data",
-      });
-      childLog.info("child message 2");
-      expect(genericLogger.popLine()).toStrictEqual(
-        expect.objectContaining({
-          level: LogLevel.info,
-          data: [
-            {
-              parent: "data",
-              child: "data",
-              newParent: "data",
-            },
-            "child message 2",
-          ],
-        }),
-      );
-    });
-
-    it("should maintain separate contexts when disabled", () => {
-      const log = getLogger({
-        linkParentContext: false,
-      });
-      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
-
-      // Set initial context on parent
-      log.withContext({
-        parent: "data",
-      });
-
-      // Create child and add context
-      const childLog = log.child();
-      childLog.withContext({
-        child: "data",
-      });
-
-      // Verify child has both contexts initially
-      childLog.info("child message");
-      expect(genericLogger.popLine()).toStrictEqual(
-        expect.objectContaining({
-          level: LogLevel.info,
-          data: [
-            {
-              parent: "data",
-              child: "data",
-            },
-            "child message",
-          ],
-        }),
-      );
-
-      // Verify parent only has its own context
+      // Verify parent has only its context
       log.info("parent message");
       expect(genericLogger.popLine()).toStrictEqual(
         expect.objectContaining({
@@ -379,6 +310,24 @@ describe("LogLayer configuration", () => {
               child: "data",
             },
             "child message 2",
+          ],
+        }),
+      );
+
+      // Verify changes in child don't affect parent
+      childLog.withContext({
+        newChild: "data",
+      });
+      log.info("parent message 2");
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              parent: "data",
+              newParent: "data",
+            },
+            "parent message 2",
           ],
         }),
       );
