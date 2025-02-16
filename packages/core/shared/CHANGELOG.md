@@ -1,5 +1,14 @@
 # `@loglayer/shared` Changelog
 
+## 2.1.0
+
+### Minor Changes
+
+- [#153](https://github.com/loglayer/loglayer/pull/153) [`96a5c57`](https://github.com/loglayer/loglayer/commit/96a5c57c787b1cbd92fcc00ecc1d7468ce62fe09) Thanks [@theogravity](https://github.com/theogravity)! - Updates around context and metadata handling.
+
+  - Added `clearContext()` to clear context data.
+  - `withMetadata()` / `metadataOnly()` / `withContext()` now allows an empty value. Empty values will not result in any data mutations or plugin executions.
+
 ## 2.0.0
 
 ### Major Changes

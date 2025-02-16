@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/shared",
   "description": "Shared utilities and types for loglayer packages.",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
