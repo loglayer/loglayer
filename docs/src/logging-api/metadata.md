@@ -34,6 +34,10 @@ By default, this produces a flattened log entry:
 }
 ```
 
+::: info Passing empty metadata
+Passing an empty value (`null`, `undefined`, or an empty object) to `withMetadata` will not add any metadata or call related plugins.
+:::
+
 ## Logging Metadata Only
 
 Sometimes you want to log metadata without a message. Use `metadataOnly` for this:
@@ -53,6 +57,10 @@ log.metadataOnly({
   cpu: '90%'
 }, LogLevel.warn)
 ```
+
+::: info Passing empty metadata
+Passing an empty value (`null`, `undefined`, or an empty object) to `withMetadata` will not add any metadata or call related plugins.
+:::
 
 ## Structuring Metadata
 

@@ -115,9 +115,13 @@ export class LogLayer implements ILogLayer {
    * Appends context data which will be included with
    * every log entry.
    *
+   * Passing in an empty value / object will *not* clear the context.
+   *
+   * To clear the context, use {@link clearContext}.
+   *
    * {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  withContext(context: Record<string, any>): LogLayer {
+  withContext(context?: Record<string, any>): LogLayer {
     let updatedContext = context;
 
     if (this.pluginManager.hasPlugins(PluginCallbackType.onContextCalled)) {
@@ -132,7 +136,24 @@ export class LogLayer implements ILogLayer {
       }
     }
 
+    if (!context) {
+      if (this._config.consoleDebug) {
+        console.debug("[LogLayer] withContext was called with no context; dropping.");
+      }
+
+      return this;
+    }
+
     this.contextManager.appendContext(updatedContext);
+    return this;
+  }
+
+  /**
+   * Clears the context data.
+   */
+  clearContext() {
+    this.contextManager.setContext(undefined);
+
     return this;
   }
 
@@ -181,7 +202,7 @@ export class LogLayer implements ILogLayer {
    *
    * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata: Record<string, any>) {
+  withMetadata(metadata?: Record<string, any>) {
     return new LogBuilder(this).withMetadata(metadata);
   }
 
@@ -280,11 +301,19 @@ export class LogLayer implements ILogLayer {
    *
    * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  metadataOnly(metadata: Record<string, any>, logLevel: LogLevel = LogLevel.info) {
+  metadataOnly(metadata?: Record<string, any>, logLevel: LogLevel = LogLevel.info) {
     const { muteMetadata, consoleDebug } = this._config;
 
     if (muteMetadata) {
       return;
+    }
+
+    if (!metadata) {
+      if (consoleDebug) {
+        console.debug("[LogLayer] metadataOnly was called with no metadata; dropping.");
+      }
+
+      return this;
     }
 
     let data: Record<string, any> | null = metadata;

@@ -160,6 +160,41 @@ describe("LogLayer basic functionality", () => {
     });
   });
 
+  it("should clear context", () => {
+    const log = getLogger();
+    const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+    const levels = ["info", "warn", "error", "debug", "trace"];
+
+    log.withContext({
+      sample: "data",
+    });
+
+    log.clearContext();
+
+    levels.forEach((level, idx) => {
+      log[level](`${level} message`, idx);
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level,
+          data: [`${level} message`, idx],
+        }),
+      );
+    });
+  });
+
+  it("should ignore empty context", () => {
+    const log = getLogger();
+    const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+    log.withContext().info("test");
+    expect(genericLogger.popLine()).toStrictEqual(
+      expect.objectContaining({
+        level: "info",
+        data: ["test"],
+      }),
+    );
+  });
+
   it("should include metadata with a message", () => {
     const log = getLogger();
     const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
@@ -179,6 +214,21 @@ describe("LogLayer basic functionality", () => {
         }),
       );
     });
+  });
+
+  it("should ignore empty metadata", () => {
+    const log = getLogger();
+    const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+    log.withMetadata().info("test");
+    expect(genericLogger.popLine()).toStrictEqual(
+      expect.objectContaining({
+        level: "info",
+        data: ["test"],
+      }),
+    );
+
+    log.metadataOnly();
+    expect(genericLogger.popLine()).not.toBeDefined();
   });
 
   it("should include an error with a message", () => {
