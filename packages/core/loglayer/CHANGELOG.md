@@ -1,5 +1,22 @@
 # `loglayer` Changelog
 
+## 6.1.0
+
+### Minor Changes
+
+- [#153](https://github.com/loglayer/loglayer/pull/153) [`96a5c57`](https://github.com/loglayer/loglayer/commit/96a5c57c787b1cbd92fcc00ecc1d7468ce62fe09) Thanks [@theogravity](https://github.com/theogravity)! - Updates around context and metadata handling.
+
+  - Added `clearContext()` to clear context data.
+  - `withMetadata()` / `metadataOnly()` / `withContext()` now allows an empty value. Empty values will not result in any data mutations or plugin executions.
+
+### Patch Changes
+
+- Updated dependencies [[`96a5c57`](https://github.com/loglayer/loglayer/commit/96a5c57c787b1cbd92fcc00ecc1d7468ce62fe09)]:
+  - @loglayer/shared@2.1.0
+  - @loglayer/context-manager@1.0.1
+  - @loglayer/plugin@2.0.1
+  - @loglayer/transport@2.0.1
+
 ## 6.0.0
 
 ### Major Changes

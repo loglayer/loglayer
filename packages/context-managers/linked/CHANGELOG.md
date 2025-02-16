@@ -1,5 +1,12 @@
 # `@loglayer/context-manager-linked` Changelog
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/context-manager@1.0.1
+
 ## 1.0.0
 
 ### Major Changes
