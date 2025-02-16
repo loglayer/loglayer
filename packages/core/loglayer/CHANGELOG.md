@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 6.1.1
+
+### Patch Changes
+
+- [#155](https://github.com/loglayer/loglayer/pull/155) [`a7175b5`](https://github.com/loglayer/loglayer/commit/a7175b588da71d88c3f3bc345b2bf9443216b8bd) Thanks [@theogravity](https://github.com/theogravity)! - Fix: An empty context should not execute plugins
+
 ## 6.1.0
 
 ### Minor Changes
