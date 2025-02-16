@@ -22,23 +22,22 @@
   "keywords": [
     "logging",
     "log",
-    "multi-transport",
     "opentelemetry",
     "otel",
     "winston",
     "bunyan",
+    "structured logs",
+    "structured logging",
+    "file rotation",
     "structured",
-    "standard",
-    "file",
-    "serialize",
-    "error",
     "abstraction",
     "pino",
     "electron",
     "loglevel",
     "datadog",
+    "log rotation",
     "rotation",
-    "rotate"
+    "rotate logs"
   ],
   "scripts": {
     "build": "tsup src/index.ts",
