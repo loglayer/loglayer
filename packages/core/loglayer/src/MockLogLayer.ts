@@ -27,7 +27,7 @@ export class MockLogLayer implements ILogLayer {
 
   errorOnly(error: any, opts?: ErrorOnlyOpts): void {}
 
-  metadataOnly(metadata: Record<string, any>, logLevel?: LogLevel): void {}
+  metadataOnly(metadata?: Record<string, any>, logLevel?: LogLevel): void {}
 
   addPlugins(plugins: Array<LogLayerPlugin>) {}
 
@@ -41,7 +41,7 @@ export class MockLogLayer implements ILogLayer {
     return new MockLogLayer() as ILogLayer;
   }
 
-  withContext(context: Record<string, any>): ILogLayer {
+  withContext(context?: Record<string, any>): ILogLayer {
     return this as ILogLayer;
   }
 
@@ -49,12 +49,16 @@ export class MockLogLayer implements ILogLayer {
     return new MockLogBuilder();
   }
 
-  withMetadata(metadata: Record<string, any>): ILogBuilder {
+  withMetadata(metadata?: Record<string, any>): ILogBuilder {
     return new MockLogBuilder();
   }
 
   getContext(): Record<string, any> {
     return {};
+  }
+
+  clearContext(): ILogLayer {
+    return this as ILogLayer;
   }
 
   enableLogging() {

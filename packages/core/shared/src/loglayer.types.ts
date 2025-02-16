@@ -138,18 +138,26 @@ export interface ILogBuilder {
   fatal(...messages: MessageDataType[]): void;
   /**
    * Specifies metadata to include with the log message
+   *
+   * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata: Record<string, any>): ILogBuilder;
+  withMetadata(metadata?: Record<string, any>): ILogBuilder;
   /**
    * Specifies an Error to include with the log message
+   *
+   * {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
   withError(error: any): ILogBuilder;
   /**
    * Enable sending logs to the logging library.
+   *
+   * {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   enableLogging(): ILogBuilder;
   /**
    * All logging inputs are dropped and stops sending logs to the logging library.
+   *
+   * {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   disableLogging(): ILogBuilder;
 }
@@ -165,15 +173,25 @@ export interface ILogLayer extends ILogBuilder {
    * Appends context data which will be included with
    * every log entry.
    *
+   * Passing in an empty value / object will *not* clear the context.
+   *
+   * To clear the context, use {@link clearContext}.
+   *
    * {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  withContext(context: Record<string, any>): ILogLayer;
+  withContext(context?: Record<string, any>): ILogLayer;
+  /**
+   * Clears the context data.
+   *
+   * {@link https://loglayer.dev/logging-api/context.html | Context Docs}
+   */
+  clearContext(): void;
   /**
    * Specifies metadata to include with the log message
    *
    * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata: Record<string, any>): ILogBuilder;
+  withMetadata(metadata?: Record<string, any>): ILogBuilder;
   /**
    * Specifies an Error to include with the log message
    *
@@ -191,7 +209,7 @@ export interface ILogLayer extends ILogBuilder {
    *
    * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  metadataOnly(metadata: Record<string, any>, logLevel?: LogLevel): void;
+  metadataOnly(metadata?: Record<string, any>, logLevel?: LogLevel): void;
 
   /**
    * Returns the context used

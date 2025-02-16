@@ -25,15 +25,25 @@ export class LogBuilder implements ILogBuilder {
   }
 
   /**
-   * Adds metadata to the current log entry
+   * Specifies metadata to include with the log message
+   *
+   * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata: Record<string, any>) {
+  withMetadata(metadata?: Record<string, any>) {
     const {
       pluginManager,
       structuredLogger: {
         _config: { consoleDebug },
       },
     } = this;
+
+    if (!metadata) {
+      if (consoleDebug) {
+        console.debug("[LogLayer] withMetadata was called with no metadata; dropping.");
+      }
+
+      return this;
+    }
 
     let data: Record<string, any> | null = metadata;
 
@@ -60,7 +70,9 @@ export class LogBuilder implements ILogBuilder {
   }
 
   /**
-   * Adds an error to the current log entry
+   * Specifies an Error to include with the log message
+   *
+   * {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
   withError(error: any) {
     this.err = error;

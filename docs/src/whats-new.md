@@ -7,6 +7,13 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Feb 15, 2025
+
+in `loglayer`:
+
+- Added `clearContext()` to clear context data.
+- `withMetadata()` / `metadataOnly()` / `withContext()` now allows an empty value. Empty values will not result in any data mutations or plugin executions.
+
 ## Feb 11, 2025
 
 Major version 6 is out! 🎉

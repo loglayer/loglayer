@@ -24,7 +24,7 @@ export class MockLogBuilder implements ILogBuilder {
     return this;
   }
 
-  withMetadata(metadata: Record<string, any>): ILogBuilder {
+  withMetadata(metadata?: Record<string, any>): ILogBuilder {
     return this;
   }
 
