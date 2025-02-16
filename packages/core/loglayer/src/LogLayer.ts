@@ -124,6 +124,14 @@ export class LogLayer implements ILogLayer {
   withContext(context?: Record<string, any>): LogLayer {
     let updatedContext = context;
 
+    if (!context) {
+      if (this._config.consoleDebug) {
+        console.debug("[LogLayer] withContext was called with no context; dropping.");
+      }
+
+      return this;
+    }
+
     if (this.pluginManager.hasPlugins(PluginCallbackType.onContextCalled)) {
       updatedContext = this.pluginManager.runOnContextCalled(context, this);
 
@@ -134,14 +142,6 @@ export class LogLayer implements ILogLayer {
 
         return this;
       }
-    }
-
-    if (!context) {
-      if (this._config.consoleDebug) {
-        console.debug("[LogLayer] withContext was called with no context; dropping.");
-      }
-
-      return this;
     }
 
     this.contextManager.appendContext(updatedContext);
