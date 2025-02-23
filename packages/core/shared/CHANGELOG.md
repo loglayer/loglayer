@@ -1,5 +1,11 @@
 # `@loglayer/shared` Changelog
 
+## 2.1.1
+
+### Patch Changes
+
+- [#160](https://github.com/loglayer/loglayer/pull/160) [`161029a`](https://github.com/loglayer/loglayer/commit/161029ae9d89b600ab19bf15cbd500f5358f2403) Thanks [@theogravity](https://github.com/theogravity)! - external dependency version updates
+
 ## 2.1.0
 
 ### Minor Changes

@@ -1,5 +1,14 @@
 # `@loglayer/plugin-redaction` Changelog
 
+## 2.0.2
+
+### Patch Changes
+
+- [#160](https://github.com/loglayer/loglayer/pull/160) [`161029a`](https://github.com/loglayer/loglayer/commit/161029ae9d89b600ab19bf15cbd500f5358f2403) Thanks [@theogravity](https://github.com/theogravity)! - external dependency version updates
+
+- Updated dependencies [[`161029a`](https://github.com/loglayer/loglayer/commit/161029ae9d89b600ab19bf15cbd500f5358f2403)]:
+  - @loglayer/plugin@2.0.2
+
 ## 2.0.1
 
 ### Patch Changes
