@@ -44,6 +44,9 @@ export class UIManager {
   /** Whether log streaming is paused */
   private isPaused = false;
 
+  /** Whether interactive mode is disabled */
+  private isInteractiveDisabled: boolean;
+
   /** Buffer for logs received while paused */
   private pauseBuffer: LogEntry[] = [];
 
@@ -74,12 +77,17 @@ export class UIManager {
    *
    * @param renderer - Instance for handling log display
    * @param storage - Instance for log persistence
+   * @param disableInteractiveMode - Whether to disable interactive mode
    */
   constructor(
     private renderer: LogRenderer,
     private storage: LogStorage,
+    disableInteractiveMode = false,
   ) {
-    this.setupKeyboardHandling();
+    this.isInteractiveDisabled = disableInteractiveMode;
+    if (!this.isInteractiveDisabled) {
+      this.setupKeyboardHandling();
+    }
     // Update terminal width when window is resized
     process.stdout.on("resize", () => {
       this.termWidth = process.stdout.columns || 80;
@@ -168,15 +176,26 @@ export class UIManager {
         return;
       }
 
-      // Check if we're viewing the latest log
-      const currentLogs = this.storage.getAllLogs();
-      if (currentLogs.length > this.logs.length && this.selectedIndex === this.logs.length - 1) {
-        // Update our logs array and re-render with new next entry
-        this.logs = currentLogs;
+      // Check if total count has changed
+      const totalCount = this.filterText
+        ? this.storage.getFilteredLogCount(this.filterText)
+        : this.storage.getLogCount();
+      if (totalCount !== this.logs.length) {
+        // Only load the logs we need for display
+        const storedLogs = this.filterText ? this.storage.searchLogs(this.filterText) : this.storage.getAllLogs();
+        this.logs = storedLogs;
         const entry = this.logs[this.selectedIndex];
         const prevEntry = this.selectedIndex > 0 ? this.logs[this.selectedIndex - 1] : null;
         const nextEntry = this.selectedIndex < this.logs.length - 1 ? this.logs[this.selectedIndex + 1] : null;
-        this.renderer.renderDetailView(entry, prevEntry, nextEntry, this.renderer.getDetailViewScrollPos());
+        this.renderer.renderDetailView(
+          entry,
+          prevEntry,
+          nextEntry,
+          this.renderer.getDetailViewScrollPos(),
+          this.selectedIndex + 1,
+          totalCount,
+          this.filterText,
+        );
       }
     }, 2000); // Poll every 2 seconds
   }
@@ -188,15 +207,22 @@ export class UIManager {
    * @private
    */
   private updateFilteredLogs(): void {
-    // Always get fresh logs from storage, but don't include buffered logs
-    const storedLogs = this.filterText ? this.storage.searchLogs(this.filterText) : this.storage.getAllLogs();
-    this.logs = storedLogs.slice(0, storedLogs.length - this.selectionBuffer.length);
+    // Get the total count first to check if we need to update
+    const totalCount = this.filterText ? this.storage.getFilteredLogCount(this.filterText) : this.storage.getLogCount();
+    const effectiveCount = totalCount - this.selectionBuffer.length;
 
-    // Ensure selection remains valid after filter
-    if (this.logs.length > 0) {
-      this.selectedIndex = Math.min(this.selectedIndex, Math.max(0, this.logs.length - 1));
-    } else {
-      this.selectedIndex = 0;
+    // Only reload logs if the count has changed
+    if (effectiveCount !== this.logs.length) {
+      // Always get fresh logs from storage, but don't include buffered logs
+      const storedLogs = this.filterText ? this.storage.searchLogs(this.filterText) : this.storage.getAllLogs();
+      this.logs = storedLogs.slice(0, storedLogs.length - this.selectionBuffer.length);
+
+      // Ensure selection remains valid after filter
+      if (this.logs.length > 0) {
+        this.selectedIndex = Math.min(this.selectedIndex, Math.max(0, this.logs.length - 1));
+      } else {
+        this.selectedIndex = 0;
+      }
     }
   }
 
@@ -219,6 +245,12 @@ export class UIManager {
    */
   public handleNewLog(entry: LogEntry): void {
     this.storage.store(entry);
+
+    // If interactive mode is disabled, always render in simple mode
+    if (this.isInteractiveDisabled) {
+      this.renderer.renderLogLine(entry);
+      return;
+    }
 
     // Buffer logs in selection mode
     if (this.isSelectionMode) {
@@ -286,17 +318,45 @@ export class UIManager {
       return;
     }
 
+    // Handle condensed view toggle in simple view
+    if (!this.isSelectionMode && !this.isDetailView && ch === "c") {
+      // Cycle through view modes
+      const newMode = this.renderer.cycleViewMode();
+      // Clear screen and re-render all logs with new view mode
+      console.clear();
+      const logs = this.storage.getAllLogs();
+      for (const entry of logs) {
+        this.renderer.renderLogLine(entry);
+      }
+      // Show view mode indicator with appropriate description
+      const modeDescriptions = {
+        full: "Full view enabled (all data shown without truncation)",
+        truncated: "Truncated view enabled (timestamp, ID, level, message, truncated data)",
+        condensed: "Condensed view enabled (timestamp, level and message only)",
+      };
+      process.stdout.write(`\r${chalk.cyan(`ℹ  ${modeDescriptions[newMode]}`)}${" ".repeat(20)}`);
+      setTimeout(() => {
+        process.stdout.write(`\r${" ".repeat(100)}\r`);
+      }, 3000);
+      return;
+    }
+
     // Enter selection mode from normal view
     if (!this.isSelectionMode && !this.isDetailView && key?.name === "tab") {
-      // Clear any pause state when entering selection mode
-      if (this.isPaused) {
-        this.isPaused = false;
-        this.pauseBuffer = [];
-        process.stdout.write(`\r${" ".repeat(50)}\r`);
-      }
       this.isSelectionMode = true;
       this.filterText = "";
-      this.updateFilteredLogs();
+
+      // If we were paused, move paused logs to selection buffer
+      if (this.isPaused) {
+        this.selectionBuffer = [...this.pauseBuffer];
+        this.pauseBuffer = [];
+        // Get only the logs that were visible before pause
+        const storedLogs = this.storage.getAllLogs();
+        this.logs = storedLogs.slice(0, storedLogs.length - this.selectionBuffer.length);
+      } else {
+        this.updateFilteredLogs();
+      }
+
       this.selectedIndex = Math.max(0, this.logs.length - 1); // Start at most recent log
       this.renderer.renderSelectionView(this.logs, this.selectedIndex, this.filterText, this.selectionBuffer.length);
       this.startSelectionViewPolling(); // Start polling when entering selection mode
@@ -343,7 +403,15 @@ export class UIManager {
               const selectedEntry = this.logs[this.selectedIndex];
               const prevEntry = this.selectedIndex > 0 ? this.logs[this.selectedIndex - 1] : null;
               const nextEntry = this.selectedIndex < this.logs.length - 1 ? this.logs[this.selectedIndex + 1] : null;
-              this.renderer.renderDetailView(selectedEntry, prevEntry, nextEntry);
+              this.renderer.renderDetailView(
+                selectedEntry,
+                prevEntry,
+                nextEntry,
+                0,
+                this.selectedIndex + 1,
+                this.logs.length,
+                this.filterText,
+              );
               this.startDetailViewPolling(); // Start polling when entering detail view
             }
             return;
@@ -372,7 +440,7 @@ export class UIManager {
             this.filterText = "";
             console.clear();
             // Re-render all logs in reverse chronological order
-            const logs = [...this.storage.getAllLogs()].reverse();
+            const logs = this.storage.getAllLogs();
             for (const entry of logs) {
               this.renderer.renderLogLine(entry);
             }
@@ -401,7 +469,15 @@ export class UIManager {
             const entry = this.logs[this.selectedIndex];
             const prevEntry = this.selectedIndex > 0 ? this.logs[this.selectedIndex - 1] : null;
             const nextEntry = this.selectedIndex < this.logs.length - 1 ? this.logs[this.selectedIndex + 1] : null;
-            this.renderer.renderDetailView(entry, prevEntry, nextEntry, this.renderer.getDetailViewScrollPos());
+            this.renderer.renderDetailView(
+              entry,
+              prevEntry,
+              nextEntry,
+              this.renderer.getDetailViewScrollPos(),
+              this.selectedIndex + 1,
+              this.logs.length,
+              this.filterText,
+            );
             break;
           }
           case "down": {
@@ -410,7 +486,15 @@ export class UIManager {
             const entry = this.logs[this.selectedIndex];
             const prevEntry = this.selectedIndex > 0 ? this.logs[this.selectedIndex - 1] : null;
             const nextEntry = this.selectedIndex < this.logs.length - 1 ? this.logs[this.selectedIndex + 1] : null;
-            this.renderer.renderDetailView(entry, prevEntry, nextEntry, this.renderer.getDetailViewScrollPos());
+            this.renderer.renderDetailView(
+              entry,
+              prevEntry,
+              nextEntry,
+              this.renderer.getDetailViewScrollPos(),
+              this.selectedIndex + 1,
+              this.logs.length,
+              this.filterText,
+            );
             break;
           }
           case "left": {
@@ -420,7 +504,15 @@ export class UIManager {
               const entry = this.logs[this.selectedIndex];
               const prevEntry = this.selectedIndex > 0 ? this.logs[this.selectedIndex - 1] : null;
               const nextEntry = this.selectedIndex < this.logs.length - 1 ? this.logs[this.selectedIndex + 1] : null;
-              this.renderer.renderDetailView(entry, prevEntry, nextEntry);
+              this.renderer.renderDetailView(
+                entry,
+                prevEntry,
+                nextEntry,
+                0,
+                this.selectedIndex + 1,
+                this.logs.length,
+                this.filterText,
+              );
             }
             break;
           }
@@ -431,7 +523,15 @@ export class UIManager {
               const entry = this.logs[this.selectedIndex];
               const prevEntry = this.selectedIndex > 0 ? this.logs[this.selectedIndex - 1] : null;
               const nextEntry = this.selectedIndex < this.logs.length - 1 ? this.logs[this.selectedIndex + 1] : null;
-              this.renderer.renderDetailView(entry, prevEntry, nextEntry);
+              this.renderer.renderDetailView(
+                entry,
+                prevEntry,
+                nextEntry,
+                0,
+                this.selectedIndex + 1,
+                this.logs.length,
+                this.filterText,
+              );
             }
             break;
           }
@@ -442,7 +542,15 @@ export class UIManager {
               const entry = this.logs[this.selectedIndex];
               const prevEntry = this.selectedIndex > 0 ? this.logs[this.selectedIndex - 1] : null;
               const nextEntry = this.selectedIndex < this.logs.length - 1 ? this.logs[this.selectedIndex + 1] : null;
-              this.renderer.renderDetailView(entry, prevEntry, nextEntry, this.renderer.getDetailViewScrollPos());
+              this.renderer.renderDetailView(
+                entry,
+                prevEntry,
+                nextEntry,
+                this.renderer.getDetailViewScrollPos(),
+                this.selectedIndex + 1,
+                this.logs.length,
+                this.filterText,
+              );
               break;
             }
 
@@ -474,7 +582,14 @@ export class UIManager {
             const entry = this.logs[this.selectedIndex];
             const prevEntry = this.selectedIndex > 0 ? this.logs[this.selectedIndex - 1] : null;
             const nextEntry = this.selectedIndex < this.logs.length - 1 ? this.logs[this.selectedIndex + 1] : null;
-            this.renderer.renderDetailView(entry, prevEntry, nextEntry, this.renderer.getDetailViewScrollPos());
+            this.renderer.renderDetailView(
+              entry,
+              prevEntry,
+              nextEntry,
+              this.renderer.getDetailViewScrollPos(),
+              this.selectedIndex + 1,
+              this.logs.length,
+            );
             break;
           }
           case "q": {
@@ -483,7 +598,14 @@ export class UIManager {
             const entry = this.logs[this.selectedIndex];
             const prevEntry = this.selectedIndex > 0 ? this.logs[this.selectedIndex - 1] : null;
             const nextEntry = this.selectedIndex < this.logs.length - 1 ? this.logs[this.selectedIndex + 1] : null;
-            this.renderer.renderDetailView(entry, prevEntry, nextEntry, this.renderer.getDetailViewScrollPos());
+            this.renderer.renderDetailView(
+              entry,
+              prevEntry,
+              nextEntry,
+              this.renderer.getDetailViewScrollPos(),
+              this.selectedIndex + 1,
+              this.logs.length,
+            );
             break;
           }
           case "a": {
@@ -493,7 +615,7 @@ export class UIManager {
               const entry = this.logs[this.selectedIndex];
               const prevEntry = null; // No previous entry when at first log
               const nextEntry = this.logs.length > 1 ? this.logs[1] : null;
-              this.renderer.renderDetailView(entry, prevEntry, nextEntry);
+              this.renderer.renderDetailView(entry, prevEntry, nextEntry, 0, 1, this.logs.length);
             }
             break;
           }
@@ -505,7 +627,7 @@ export class UIManager {
               const entry = this.logs[this.selectedIndex];
               const prevEntry = lastIndex > 0 ? this.logs[lastIndex - 1] : null;
               const nextEntry = null; // No next entry when at last log
-              this.renderer.renderDetailView(entry, prevEntry, nextEntry);
+              this.renderer.renderDetailView(entry, prevEntry, nextEntry, 0, this.logs.length, this.logs.length);
             }
             break;
           }
@@ -515,7 +637,14 @@ export class UIManager {
             const entry = this.logs[this.selectedIndex];
             const prevEntry = this.selectedIndex > 0 ? this.logs[this.selectedIndex - 1] : null;
             const nextEntry = this.selectedIndex < this.logs.length - 1 ? this.logs[this.selectedIndex + 1] : null;
-            this.renderer.renderDetailView(entry, prevEntry, nextEntry, this.renderer.getDetailViewScrollPos());
+            this.renderer.renderDetailView(
+              entry,
+              prevEntry,
+              nextEntry,
+              this.renderer.getDetailViewScrollPos(),
+              this.selectedIndex + 1,
+              this.logs.length,
+            );
             break;
           }
           case "j": {
@@ -524,7 +653,7 @@ export class UIManager {
             const entry = this.logs[this.selectedIndex];
             const prevEntry = this.selectedIndex > 0 ? this.logs[this.selectedIndex - 1] : null;
             const nextEntry = this.selectedIndex < this.logs.length - 1 ? this.logs[this.selectedIndex + 1] : null;
-            this.renderer.renderDetailView(entry, prevEntry, nextEntry);
+            this.renderer.renderDetailView(entry, prevEntry, nextEntry, 0, this.selectedIndex + 1, this.logs.length);
             break;
           }
         }

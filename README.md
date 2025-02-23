@@ -72,6 +72,10 @@ log.withPrefix("[my-app]")
 }
 ```
 
+With the [Pretty Terminal Transport](https://loglayer.dev/transports/pretty-terminal):
+
+![Pretty Terminal Transport](https://loglayer.dev/images/pretty-terminal/pretty-terminal.gif)
+
 ## Development Setup
 
 This is a monorepo using [`pnpm`](https://pnpm.io/installation) for package management and [`turbo`](https://turbo.build/repo/docs/getting-started/installation) for build orchestration. 

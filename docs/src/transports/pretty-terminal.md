@@ -21,7 +21,7 @@ src="/asciinema/pretty-terminal.cast"
 :terminal-font-size="'14px'"
 :loop="false"
 :startAt="3"
-:idleTimeLimit=2
+:idleTimeLimit=3
 />
 
 ## Features
@@ -81,10 +81,11 @@ log.withMetadata({ foo: 'bar' }).info('Hello from Pretty Terminal!');
 ::: warning Single-Instance Only
 Because Pretty Terminal is an interactive transport, it may not work well if you run multiple applications in the same terminal window that share the same output stream.
 
-It will definitely not work if you have multiple instances that use Pretty Terminal running in the same terminal window.
+If you need to run multiple applications that use Pretty Terminal in the same terminal window, you can:
+1. Use the `disableInteractiveMode` option to disable keyboard input and navigation features
+2. Keep interactive mode enabled in only one application and disable it in others
 
-It is designed to work as a single instance transport. `getPrettyTerminal()` can be safely used multiple times in the same application as it
-uses the same transport reference.
+The transport is designed to work as a single interactive instance. `getPrettyTerminal()` can be safely used multiple times in the same application as it uses the same transport reference.
 :::
 
 ::: warning Performance Note
@@ -97,33 +98,58 @@ The Pretty Terminal Transport provides an interactive interface with three main 
 
 ### Simple View (Default)
 
-![Simple View](/images/pretty-terminal/simple-view.png)
+![Simple View](/images/pretty-terminal/simple-view.webp)
 
 The default view shows real-time log output with the following controls:
 - `P`: Toggle pause/resume of log output
+- `C`: Cycle through view modes (full → truncated → condensed)
 - `TAB`: Enter selection mode
 
 When paused, new logs are buffered and a counter shows how many logs are waiting. Resuming will display all buffered logs.
 
+The view has three modes:
+- **Full View** (default): Shows all information with complete data structures (no truncation)
+- **Truncated View**: Shows complete log information including timestamp, ID, level, message, with data structures truncated based on `maxInlineDepth` and `maxInlineLength` settings
+- **Condensed View**: Shows only the timestamp, log level and message for a cleaner output (no data shown)
+
+When entering selection mode while paused:
+- Only logs that were visible before pause are shown initially
+- Buffered logs from pause are tracked as new logs
+- The notification shows how many new logs are available
+- Pressing ↓ at the bottom will reveal new logs
+
 ### Selection Mode
 
-![Selection Mode](/images/pretty-terminal/selection-mode.png)
+![Selection Mode](/images/pretty-terminal/selection-mode.webp)
 
 An interactive mode for browsing and filtering logs:
 - `↑/↓`: Navigate through logs
-- `ENTER`: View detailed log information
+- `ENTER`: View detailed log information (preserves current filter)
 - `TAB`: Return to simple view
 - Type to filter logs (searches through all log content)
 - `BACKSPACE`: Edit/clear filter text
 
+When filtering is active:
+- Only matching logs are displayed
+- The filter persists when entering detail view
+- Navigation (↑/↓) only moves through filtered results
+- New logs that match the filter are automatically included
+
+Each log entry in selection mode shows:
+- Timestamp and log ID
+- Log level with color coding
+- Complete message
+- Full structured data inline (like simple view's full mode)
+- Selected entry is highlighted with `►`
+
 ### Detail View
 
-![Detail View](/images/pretty-terminal/detail-view.png)
+![Detail View](/images/pretty-terminal/detail-view.webp)
 
 A full-screen view showing comprehensive log information:
 - `↑/↓`: Scroll through log content line by line
 - `Q/W`: Page up/down through content
-- `←/→`: Navigate to previous/next log entry
+- `←/→`: Navigate to previous/next log entry (respects active filter)
 - `A/S`: Jump to first/last log entry
 - `C`: Toggle array collapse in JSON data
 - `J`: Toggle raw JSON view (for easy copying)
@@ -133,7 +159,8 @@ Features in Detail View:
 - Shows full timestamp and log level
 - Displays complete structured data with syntax highlighting
 - Shows context (previous and next log entries)
-- Auto-updates when viewing latest log
+- Shows active filter in header when filtering is enabled
+- Auto-updates when viewing latest log (respects current filter)
 - Pretty-prints JSON data with color coding
 - Collapsible arrays for better readability
 - Raw JSON view for easy copying
@@ -146,10 +173,10 @@ The Pretty Terminal Transport can be customized with various options:
 import { getPrettyTerminal, moonlight } from '@loglayer/pretty-terminal';
 
 const transport = getPrettyTerminal({
-  // Maximum depth for inline data display
+  // Maximum depth for inline data display in truncated mode
   maxInlineDepth: 4,
   
-  // Maximum length for inline data
+  // Maximum length for inline data in truncated mode
   maxInlineLength: 120,
   
   // Custom theme configuration (default is moonlight)
@@ -160,6 +187,9 @@ const transport = getPrettyTerminal({
 
   // Enable/disable the transport (defaults to true)
   enabled: process.env.NODE_ENV === 'development',
+
+  // Disable interactive mode for multi-app terminal output (defaults to false)
+  disableInteractiveMode: false,
 });
 ```
 
@@ -167,11 +197,12 @@ const transport = getPrettyTerminal({
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `maxInlineDepth` | number | 4 | Maximum depth for displaying nested data inline |
-| `maxInlineLength` | number | 120 | Maximum length for inline data before truncating |
+| `maxInlineDepth` | number | 4 | Maximum depth for displaying nested data inline. Only applies in truncated view mode. Selection mode and detail view always show full depth. |
+| `maxInlineLength` | number | 120 | Maximum length for inline data before truncating. Only applies in truncated view mode. Selection mode and detail view always show full content. |
 | `theme` | PrettyTerminalTheme | moonlight | Theme configuration for colors and styling |
 | `logFile` | string | ":memory:" | Path to SQLite file for persistent storage. Relative paths are resolved from the current working directory. If not provided, uses in-memory database |
 | `enabled` | boolean | true | Whether the transport is enabled. If false, all operations will no-op |
+| `disableInteractiveMode` | boolean | false | Whether to disable interactive mode (keyboard input and navigation). Useful when multiple applications need to print to the same terminal |
 
 ::: warning Security Note
 If using the `logFile` option, be aware that:
@@ -191,7 +222,7 @@ The transport comes with several built-in themes to match your terminal style:
 ### Moonlight Theme (Default)
 A dark theme with cool blue tones, perfect for night-time coding sessions and modern IDEs.
 
-![Moonlight Theme](/images/pretty-terminal/moonlight.png)
+![Moonlight Theme](/images/pretty-terminal/moonlight.webp)
 
 ```typescript
 import { getPrettyTerminal, moonlight } from '@loglayer/pretty-terminal';
@@ -204,7 +235,7 @@ const transport = getPrettyTerminal({
 ### Sunlight Theme
 A light theme with warm tones, ideal for daytime use, high-glare environments, and printed documentation.
 
-![Sunlight Theme](/images/pretty-terminal/sunlight.png)
+![Sunlight Theme](/images/pretty-terminal/sunlight.webp)
 
 ```typescript
 import { getPrettyTerminal, sunlight } from '@loglayer/pretty-terminal';
@@ -217,7 +248,7 @@ const transport = getPrettyTerminal({
 ### Neon Theme
 A vibrant, cyberpunk-inspired theme with electric colors and high contrast, perfect for modern tech-focused applications.
 
-![Neon Theme](/images/pretty-terminal/neon.png)
+![Neon Theme](/images/pretty-terminal/neon.webp)
 
 ```typescript
 import { getPrettyTerminal, neon } from '@loglayer/pretty-terminal';
@@ -230,7 +261,7 @@ const transport = getPrettyTerminal({
 ### Nature Theme
 A light theme with organic, earthy colors inspired by forest landscapes. Great for nature-inspired interfaces and applications focusing on readability.
 
-![Nature Theme](/images/pretty-terminal/nature.png)
+![Nature Theme](/images/pretty-terminal/nature.webp)
 
 ```typescript
 import { getPrettyTerminal, nature } from '@loglayer/pretty-terminal';
@@ -243,7 +274,7 @@ const transport = getPrettyTerminal({
 ### Pastel Theme
 A soft, calming theme with gentle colors inspired by watercolor paintings. Perfect for long coding sessions and reduced visual stress.
 
-![Pastel Theme](/images/pretty-terminal/pastel.png)
+![Pastel Theme](/images/pretty-terminal/pastel.webp)
 
 ```typescript
 import { getPrettyTerminal, pastel } from '@loglayer/pretty-terminal';

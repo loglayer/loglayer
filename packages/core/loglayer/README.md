@@ -72,6 +72,10 @@ log.withPrefix("[my-app]")
 }
 ```
 
+With the [Pretty Terminal Transport](https://loglayer.dev/transports/pretty-terminal):
+
+![Pretty Terminal Transport](https://loglayer.dev/images/pretty-terminal/pretty-terminal.gif)
+
 ## Installation
 
 Install the core package:

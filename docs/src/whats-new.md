@@ -11,7 +11,7 @@ description: Learn about the latest features and improvements in LogLayer
 
 Added the new [Pretty Terminal Transport](/transports/pretty-terminal) for LogLayer that pretty-prints logs in the terminal.
 
-![Simple View](/images/pretty-terminal/simple-view.png)
+![Simple View](/images/pretty-terminal/simple-view.webp)
 
 ### Pretty Terminal Features
 
