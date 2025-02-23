@@ -110,11 +110,13 @@ loglayer/
 ├── docs/                         # Documentation (vitepress)
 ├── packages/
 │   ├── core/                     # Core packages
+│   │   ├── context-managers/     # Context manager system core
 │   │   ├── loglayer/             # Main LogLayer implementation
 │   │   ├── plugin/               # Plugin system core
 │   │   ├── transport/            # Transport system core
 │   │   ├── shared/               # Shared utilities and types
 │   │   └── tsconfig/             # Shared TypeScript configurations
+│   ├── context-managers/         # Official context manager implementations
 │   ├── transports/               # Official transport implementations
 │   └── plugins/                  # Official plugins
 ```

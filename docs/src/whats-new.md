@@ -7,6 +7,23 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Feb 23, 2025
+
+Added the new [Pretty Terminal Transport](/transports/pretty-terminal) for LogLayer that pretty-prints logs in the terminal.
+
+![Simple View](/images/pretty-terminal/simple-view.png)
+
+### Pretty Terminal Features
+
+- 🎨 **Color-coded Log Levels** - Each log level has distinct colors for quick visual identification
+- 🔍 **Interactive Selection Mode** - Browse and inspect logs in a full-screen interactive view
+- 📝 **Detailed Log Inspection** - Examine individual log entries with formatted data and context
+- 🔎 **Search/Filter Functionality** - Find specific logs with powerful filtering capabilities
+- 💅 **JSON Pretty Printing** - Beautifully formatted structured data with syntax highlighting
+- 🎭 **Configurable Themes** - Choose from pre-built themes or customize your own colors
+- 🔄 **Real-time Updates** - See logs as they happen with live updates
+- 📊 **Context Awareness** - View previous and next logs when inspecting entries
+
 ## Feb 15, 2025
 
 in `loglayer`:
