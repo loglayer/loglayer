@@ -13,6 +13,13 @@ export default defineConfig({
   sitemap: {
     hostname: 'https://loglayer.dev'
   },
+  vite: {
+    ssr: {
+      noExternal: [
+        "@nolebase/ui-asciinema",
+      ],
+    },
+  },
   async transformHead ({ pageData }) {
     const head: HeadConfig[] = [
       [
@@ -124,7 +131,8 @@ export default defineConfig({
           ]},
           { text: 'Other Transports', items: [
             { text: 'Log File Rotation', link: '/transports/log-file-rotation' },
-            { text: 'OpenTelemetry', link: '/transports/opentelemetry' }
+            { text: 'OpenTelemetry', link: '/transports/opentelemetry' },
+            { text: 'Pretty Terminal', link: '/transports/pretty-terminal' }
           ]}
         ]
       },
@@ -167,5 +175,5 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/loglayer/loglayer' },
     ],
-  }
+  },
 })

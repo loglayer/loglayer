@@ -1,0 +1,13 @@
+{
+  "extends": ["../../../biome.json"],
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "lineWidth": 120,
+    "ignore": ["node_modules/*", "*.config.*", "*.json", "tsconfig.json", ".turbo", "dist/*", "vendor/*"]
+  },
+  "linter": {
+    "enabled": true,
+    "ignore": ["dist/*", "vendor/*"]
+  }
+}
