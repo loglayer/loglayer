@@ -39,28 +39,28 @@
   },
   "dependencies": {
     "@loglayer/transport": "workspace:*",
-    "@opentelemetry/api-logs": "0.57.1"
+    "@opentelemetry/api-logs": "0.57.2"
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
     "@opentelemetry/api": "1.9.0",
     "@opentelemetry/resources": "1.30.1",
-    "@opentelemetry/sdk-logs": "0.57.1",
-    "@opentelemetry/sdk-node": "0.57.1",
+    "@opentelemetry/sdk-logs": "0.57.2",
+    "@opentelemetry/sdk-node": "0.57.2",
     "@opentelemetry/sdk-trace-node": "1.30.1",
-    "@opentelemetry/semantic-conventions": "1.28.0",
-    "@opentelemetry/instrumentation-express": "0.47.0",
-    "@opentelemetry/instrumentation-http": "0.57.1",
+    "@opentelemetry/semantic-conventions": "1.30.0",
+    "@opentelemetry/instrumentation-express": "0.47.1",
+    "@opentelemetry/instrumentation-http": "0.57.2",
     "@types/express": "5.0.0",
-    "@types/node": "22.10.10",
+    "@types/node": "22.13.5",
     "express": "4.21.2",
     "hash-runner": "2.0.1",
     "loglayer": "workspace:*",
     "serialize-error": "12.0.0",
-    "tsup": "8.3.5",
-    "tsx": "4.19.2",
+    "tsup": "8.3.6",
+    "tsx": "4.19.3",
     "typescript": "5.7.3",
-    "vitest": "3.0.4"
+    "vitest": "3.0.6"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {
