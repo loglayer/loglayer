@@ -1,5 +1,11 @@
 # LogLayer Docs Site Changelog
 
+## 2.2.0
+
+### Minor Changes
+
+- [#158](https://github.com/loglayer/loglayer/pull/158) [`5e9ec91`](https://github.com/loglayer/loglayer/commit/5e9ec9178d2a303ce1bf6e44f96efc636db361ca) Thanks [@theogravity](https://github.com/theogravity)! - Add docs for pretty terminal transport
+
 ## 2.1.0
 
 ### Minor Changes

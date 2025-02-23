@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/plugin-redaction",
   "description": "Log redaction plugin for loglayer.",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
