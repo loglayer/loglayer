@@ -116,4 +116,6 @@ export interface PrettyTerminalConfig extends LoggerlessTransportConfig {
   logFile?: string;
   /** Whether the transport is enabled. If false, all operations will no-op. Defaults to true */
   enabled?: boolean;
+  /** Whether to disable interactive mode (keyboard input and navigation). Useful when multiple applications need to print to the same terminal. Defaults to false */
+  disableInteractiveMode?: boolean;
 }

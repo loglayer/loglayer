@@ -39,7 +39,29 @@ features:
 
 ---
 
+<script setup>
+import { NuAsciinemaPlayer } from '@nolebase/ui-asciinema'
+import 'asciinema-player/dist/bundle/asciinema-player.css'
+</script>
+
 <!--@include: ./_partials/fte-pino-example.md-->
+
+### Pretty Print Logs with Search
+
+Use the [Pretty Terminal Transport](/transports/pretty-terminal.md) to view logs in the terminal with filtering and detailed viewing capabilities.
+
+<NuAsciinemaPlayer
+src="/asciinema/pretty-terminal.cast"
+:preload="true"
+:cols="400"
+:rows="20"
+:auto-play="true"
+:controls="true"
+:terminal-font-size="'14px'"
+:loop="true"
+:startAt="3"
+:idleTimeLimit=3
+/>
 
 <!--@include: ./transports/_partials/transport-list.md-->
 

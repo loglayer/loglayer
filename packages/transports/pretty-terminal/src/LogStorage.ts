@@ -115,6 +115,36 @@ export class LogStorage {
   }
 
   /**
+   * Gets the total number of logs in the database.
+   * Uses an efficient COUNT query instead of loading all logs.
+   *
+   * @returns Total number of log entries
+   */
+  public getLogCount(): number {
+    const result = this.db.prepare("SELECT COUNT(*) as count FROM logs").get() as { count: number };
+    return result.count;
+  }
+
+  /**
+   * Gets the total number of logs matching a search query.
+   * Uses an efficient COUNT query instead of loading all logs.
+   *
+   * @param searchText - Text to search for
+   * @returns Number of matching log entries
+   */
+  public getFilteredLogCount(searchText: string): number {
+    const query = `
+      SELECT COUNT(*) as count FROM logs 
+      WHERE id LIKE ? 
+      OR message LIKE ? 
+      OR data LIKE ?
+    `;
+    const pattern = `%${searchText}%`;
+    const result = this.db.prepare(query).get(pattern, pattern, pattern) as { count: number };
+    return result.count;
+  }
+
+  /**
    * Closes the database connection and performs cleanup.
    * Should be called when the application exits or the transport is destroyed.
    */

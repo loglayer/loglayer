@@ -142,7 +142,7 @@ export class PrettyTerminalTransport extends LoggerlessTransport {
     // Initialize components in dependency order
     this.storage = new LogStorage(logFile);
     this.renderer = new LogRenderer(simpleViewConfig, detailedViewConfig, maxInlineDepth, maxInlineLength);
-    this.uiManager = new UIManager(this.renderer, this.storage);
+    this.uiManager = new UIManager(this.renderer, this.storage, config.disableInteractiveMode);
 
     PrettyTerminalTransport.instance = this;
   }
