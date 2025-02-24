@@ -75,11 +75,11 @@ export class SelectionView implements View {
         const wrappedText = wrap(mainLine, this.termWidth - 2, { hard: true });
 
         if (isSelected) {
-          // For selected items, add indentation to all lines except the first
+          // For selected items, add vertical bar and indentation to all lines except the first
           const lines = wrappedText.split("\n");
           console.log(lines[0]);
           for (const line of lines.slice(1)) {
-            console.log(`    ${line}`);
+            console.log(`  ${this.config.config.selectorColor("│")} ${line}`);
           }
         } else {
           console.log(wrappedText);

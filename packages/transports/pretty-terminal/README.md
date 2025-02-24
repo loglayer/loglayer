@@ -6,7 +6,7 @@
 
 A transport for the [LogLayer](https://loglayer.dev) logging library that pretty-prints logs printed in the terminal.
 
-![Pretty Terminal Transport](https://loglayer.dev/images/pretty-terminal/pretty-terminal-short.gif)
+![Pretty Terminal Transport](https://loglayer.dev/images/pretty-terminal/pretty-terminal-short-v2.gif)
 
 ## Features
 

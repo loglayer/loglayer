@@ -25,11 +25,7 @@ const logger = new LogLayer({
 // Define logging middleware
 app.use((req, res, next) => {
   // Create a new LogLayer instance for each request
-  req.log = logger.child().withContext({
-    reqId: crypto.randomUUID(), // Add unique request ID
-    method: req.method,
-    path: req.path,
-  });
+  req.log = logger.child();
 
   next();
 });
@@ -46,17 +42,13 @@ app.get("/", (req, res) => {
         id: 123,
         name: "Alice",
       },
+      isTrue: true,
+      number: 12345,
+      date: new Date(),
+      array: [1, 2, 3, 4, 5],
+      buffer: Buffer.from("Hello, world!"),
     })
     .warn("This is a warning message");
-
-  // Log with metadata
-  req.log.metadataOnly({
-    isTrue: true,
-    number: 12345,
-    date: new Date(),
-    array: [1, 2, 3, 4, 5],
-    buffer: Buffer.from("Hello, world!"),
-  });
 
   res.send("Hello World! Check your terminal for pretty logs!");
 });

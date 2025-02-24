@@ -74,7 +74,7 @@ log.withPrefix("[my-app]")
 
 With the [Pretty Terminal Transport](https://loglayer.dev/transports/pretty-terminal):
 
-![Pretty Terminal Transport](https://loglayer.dev/images/pretty-terminal/pretty-terminal-short.gif)
+![Pretty Terminal Transport](https://loglayer.dev/images/pretty-terminal/pretty-terminal-short-v2.gif)
 
 ## Development Setup
 
