@@ -1,5 +1,15 @@
 # `@loglayer/transport-pretty-terminal` Changelog
 
+## 3.0.0
+
+### Major Changes
+
+- [#164](https://github.com/loglayer/loglayer/pull/164) [`5647ba1`](https://github.com/loglayer/loglayer/commit/5647ba1b7c4265c92932dd5b549f24b745829540) Thanks [@theogravity](https://github.com/theogravity)! - Breaking: Now uses up/down instead of tab key to get into selection view
+
+### Patch Changes
+
+- [`2dbc3a8`](https://github.com/loglayer/loglayer/commit/2dbc3a897c547a63e885ccf166405ac40865cd3f) Thanks [@theogravity](https://github.com/theogravity)! - Fix link to pretty terminal gif
+
 ## 2.0.0
 
 ### Major Changes

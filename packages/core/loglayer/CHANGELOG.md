@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 6.1.3
+
+### Patch Changes
+
+- [`2dbc3a8`](https://github.com/loglayer/loglayer/commit/2dbc3a897c547a63e885ccf166405ac40865cd3f) Thanks [@theogravity](https://github.com/theogravity)! - Fix link to pretty terminal gif
+
 ## 6.1.2
 
 ### Patch Changes
