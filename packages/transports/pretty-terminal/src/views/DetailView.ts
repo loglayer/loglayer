@@ -62,6 +62,9 @@ export class DetailView implements View {
   public render(): void {
     console.clear();
 
+    // Add padding at the top to handle terminal buffer overflow
+    console.log("\n".repeat(5));
+
     // If in JSON view mode, show raw JSON
     if (this.config.isJsonView) {
       if (this.config.entry.data) {
@@ -147,9 +150,10 @@ export class DetailView implements View {
     const footerHeight = footerContent.length;
     const scrollIndicatorLines = 2; // Space for up/down indicators
     const bufferSpace = 4; // Extra buffer to prevent content from being cut off
+    const topPadding = 2; // Account for the padding we added at the top
     const availableHeight = Math.max(
       0,
-      process.stdout.rows - headerHeight - footerHeight - scrollIndicatorLines - bufferSpace,
+      process.stdout.rows - headerHeight - footerHeight - scrollIndicatorLines - bufferSpace - topPadding,
     );
 
     // Render fixed header
@@ -172,6 +176,8 @@ export class DetailView implements View {
     // Show scroll indicator if there's more content below
     if (this.config.scrollPos + availableHeight < mainContent.length) {
       console.log(chalk.dim("↓ More content below"));
+    } else {
+      console.log(chalk.dim("End of content"));
     }
 
     // Render fixed footer
@@ -188,9 +194,10 @@ export class DetailView implements View {
     const footerHeight = 5;
     const scrollIndicatorLines = 2;
     const bufferSpace = 2;
+    const topPadding = 2; // Account for the padding we added at the top
     const availableHeight = Math.max(
       0,
-      process.stdout.rows - headerHeight - footerHeight - scrollIndicatorLines - bufferSpace,
+      process.stdout.rows - headerHeight - footerHeight - scrollIndicatorLines - bufferSpace - topPadding,
     );
 
     return Math.max(0, this.detailViewContent.length - availableHeight);
