@@ -89,7 +89,7 @@ export class DetailView implements View {
       footerContent.push(nextLine);
     }
     footerContent.push(""); // Empty line before help text
-    footerContent.push(this.config.config.separatorColor("TAB to exit • ↑/↓ scroll • Q/W page up/down • J raw JSON"));
+    footerContent.push(this.config.config.separatorColor("↑/↓ scroll • Q/W page up/down • J raw JSON"));
     footerContent.push(this.config.config.separatorColor("←/→ navigate • A/S first/last log • C toggle arrays"));
 
     // Calculate main scrollable content
