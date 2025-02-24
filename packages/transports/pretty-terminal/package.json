@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-pretty-terminal",
   "description": "Prettifies log output in the terminal for the LogLayer logging library.",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
