@@ -318,6 +318,22 @@ export class UIManager {
       return;
     }
 
+    // Handle entering selection mode from simple view with up/down keys
+    if (!this.isSelectionMode && !this.isDetailView && (key?.name === "up" || key?.name === "down")) {
+      this.isSelectionMode = true;
+      this.filterText = "";
+      this.isPaused = true; // Pause the log stream when entering selection mode
+
+      // Get all logs up to this point
+      const storedLogs = this.storage.getAllLogs();
+      this.logs = storedLogs;
+      this.selectedIndex = key.name === "up" ? Math.max(0, this.logs.length - 1) : Math.max(0, this.logs.length - 1);
+
+      this.renderer.renderSelectionView(this.logs, this.selectedIndex, this.filterText, this.selectionBuffer.length);
+      this.startSelectionViewPolling(); // Start polling when entering selection mode
+      return;
+    }
+
     // Handle condensed view toggle in simple view
     if (!this.isSelectionMode && !this.isDetailView && ch === "c") {
       // Cycle through view modes
@@ -338,28 +354,6 @@ export class UIManager {
       setTimeout(() => {
         process.stdout.write(`\r${" ".repeat(100)}\r`);
       }, 3000);
-      return;
-    }
-
-    // Enter selection mode from normal view
-    if (!this.isSelectionMode && !this.isDetailView && key?.name === "tab") {
-      this.isSelectionMode = true;
-      this.filterText = "";
-
-      // If we were paused, move paused logs to selection buffer
-      if (this.isPaused) {
-        this.selectionBuffer = [...this.pauseBuffer];
-        this.pauseBuffer = [];
-        // Get only the logs that were visible before pause
-        const storedLogs = this.storage.getAllLogs();
-        this.logs = storedLogs.slice(0, storedLogs.length - this.selectionBuffer.length);
-      } else {
-        this.updateFilteredLogs();
-      }
-
-      this.selectedIndex = Math.max(0, this.logs.length - 1); // Start at most recent log
-      this.renderer.renderSelectionView(this.logs, this.selectedIndex, this.filterText, this.selectionBuffer.length);
-      this.startSelectionViewPolling(); // Start polling when entering selection mode
       return;
     }
 
@@ -433,6 +427,7 @@ export class UIManager {
           case "tab": {
             // Exit selection mode back to simple view
             this.isSelectionMode = false;
+            this.isPaused = false; // Resume log stream when exiting selection mode
             if (this.selectionViewPollInterval) {
               clearInterval(this.selectionViewPollInterval);
               this.selectionViewPollInterval = null;
@@ -443,6 +438,13 @@ export class UIManager {
             const logs = this.storage.getAllLogs();
             for (const entry of logs) {
               this.renderer.renderLogLine(entry);
+            }
+            // Also render any buffered logs
+            if (this.selectionBuffer.length > 0) {
+              for (const entry of this.selectionBuffer) {
+                this.renderer.renderLogLine(entry);
+              }
+              this.selectionBuffer = [];
             }
             return;
           }

@@ -102,7 +102,7 @@ The Pretty Terminal Transport provides an interactive interface with three main 
 The default view shows real-time log output with the following controls:
 - `P`: Toggle pause/resume of log output
 - `C`: Cycle through view modes (full → truncated → condensed)
-- `TAB`: Enter selection mode
+- `↑/↓`: Enter selection mode
 
 When paused, new logs are buffered and a counter shows how many logs are waiting. Resuming will display all buffered logs.
 

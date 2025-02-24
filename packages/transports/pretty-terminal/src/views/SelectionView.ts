@@ -72,7 +72,18 @@ export class SelectionView implements View {
 
         // Construct and wrap the main line with full data
         const mainLine = `${prefix}${timestamp} ${chevron}${logId} ${message}${data}`;
-        console.log(wrap(mainLine, this.termWidth - 2, { hard: true }));
+        const wrappedText = wrap(mainLine, this.termWidth - 2, { hard: true });
+
+        if (isSelected) {
+          // For selected items, add indentation to all lines except the first
+          const lines = wrappedText.split("\n");
+          console.log(lines[0]);
+          for (const line of lines.slice(1)) {
+            console.log(`    ${line}`);
+          }
+        } else {
+          console.log(wrappedText);
+        }
       });
 
       // Show scroll indicator if there are logs below
