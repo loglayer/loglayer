@@ -1,5 +1,11 @@
 # `@loglayer/transport-pretty-terminal` Changelog
 
+## 3.0.1
+
+### Patch Changes
+
+- [#166](https://github.com/loglayer/loglayer/pull/166) [`4c4eebb`](https://github.com/loglayer/loglayer/commit/4c4eebb432d27c49294d40e8e7149fb6c049f598) Thanks [@theogravity](https://github.com/theogravity)! - Move the filter search bar to the bottom of the screen
+
 ## 3.0.0
 
 ### Major Changes
