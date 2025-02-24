@@ -27,16 +27,14 @@ export class SelectionView implements View {
   public render(): void {
     console.clear();
 
-    // Calculate available height for logs
-    const headerHeight = this.config.filterText ? 2 : 0; // Filter + separator line
-    const footerHeight = 2; // Help text + blank line before it
-    const availableHeight = process.stdout.rows - headerHeight - footerHeight;
+    // Add padding at the top to handle terminal buffer overflow
+    console.log("\n".repeat(5));
 
-    // Show active filter if any
-    if (this.config.filterText) {
-      console.log(chalk.cyan("Filter:"), chalk.white(this.config.filterText));
-      console.log(chalk.dim("─".repeat(this.termWidth)));
-    }
+    // Calculate available height for logs
+    const filterHeight = this.config.filterText ? 2 : 0; // Filter + separator line
+    const footerHeight = 2; // Help text + blank line before it
+    const topPadding = 5; // Account for the padding we added
+    const availableHeight = process.stdout.rows - filterHeight - footerHeight - topPadding;
 
     if (this.config.logs.length === 0) {
       console.log(chalk.yellow("No matching logs found"));
@@ -98,7 +96,13 @@ export class SelectionView implements View {
       }
     }
 
-    // Show help text
+    // Show help text and filter at the bottom
     console.log(chalk.dim("\nType to filter • Enter to view details • TAB to exit"));
+
+    // Show active filter if any
+    if (this.config.filterText) {
+      console.log(chalk.dim("─".repeat(this.termWidth)));
+      console.log(chalk.cyan("Filter:"), chalk.white(this.config.filterText));
+    }
   }
 }
