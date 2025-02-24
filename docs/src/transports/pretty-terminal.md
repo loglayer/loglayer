@@ -41,9 +41,19 @@ Pretty Terminal has only been tested in MacOS with the native Terminal app and [
 It may not work as expected in other terminal emulators or operating systems.
 :::
 
-```bash
-npm install loglayer @loglayer/pretty-terminal serialize-error
+::: code-group
+```bash [npm]
+npm install loglayer @loglayer/transport-pretty-terminal serialize-error
 ```
+
+```bash [pnpm]
+pnpm add loglayer @loglayer/transport-pretty-terminal serialize-error
+```
+
+```bash [yarn]
+yarn add loglayer @loglayer/transport-pretty-terminal serialize-error
+```
+:::
 
 ## Basic Usage
 
@@ -55,7 +65,7 @@ It is recommended that you disable other transports when using Pretty Terminal t
 
 ```typescript
 import { LogLayer, ConsoleTransport } from 'loglayer';
-import { getPrettyTerminal } from '@loglayer/pretty-terminal';
+import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
 import { serializeError } from "serialize-error";
 
 // Create LogLayer instance with the transport
@@ -169,7 +179,7 @@ Features in Detail View:
 The Pretty Terminal Transport can be customized with various options:
 
 ```typescript
-import { getPrettyTerminal, moonlight } from '@loglayer/pretty-terminal';
+import { getPrettyTerminal, moonlight } from '@loglayer/transport-pretty-terminal';
 
 const transport = getPrettyTerminal({
   // Maximum depth for inline data display in truncated mode
@@ -224,7 +234,7 @@ A dark theme with cool blue tones, perfect for night-time coding sessions and mo
 ![Moonlight Theme](/images/pretty-terminal/moonlight.webp)
 
 ```typescript
-import { getPrettyTerminal, moonlight } from '@loglayer/pretty-terminal';
+import { getPrettyTerminal, moonlight } from '@loglayer/transport-pretty-terminal';
 
 const transport = getPrettyTerminal({
   theme: moonlight,
@@ -237,7 +247,7 @@ A light theme with warm tones, ideal for daytime use, high-glare environments, a
 ![Sunlight Theme](/images/pretty-terminal/sunlight.webp)
 
 ```typescript
-import { getPrettyTerminal, sunlight } from '@loglayer/pretty-terminal';
+import { getPrettyTerminal, sunlight } from '@loglayer/transport-pretty-terminal';
 
 const transport = getPrettyTerminal({
   theme: sunlight,
@@ -250,7 +260,7 @@ A vibrant, cyberpunk-inspired theme with electric colors and high contrast, perf
 ![Neon Theme](/images/pretty-terminal/neon.webp)
 
 ```typescript
-import { getPrettyTerminal, neon } from '@loglayer/pretty-terminal';
+import { getPrettyTerminal, neon } from '@loglayer/transport-pretty-terminal';
 
 const transport = getPrettyTerminal({
   theme: neon,
@@ -263,7 +273,7 @@ A light theme with organic, earthy colors inspired by forest landscapes. Great f
 ![Nature Theme](/images/pretty-terminal/nature.webp)
 
 ```typescript
-import { getPrettyTerminal, nature } from '@loglayer/pretty-terminal';
+import { getPrettyTerminal, nature } from '@loglayer/transport-pretty-terminal';
 
 const transport = getPrettyTerminal({
   theme: nature,
@@ -276,7 +286,7 @@ A soft, calming theme with gentle colors inspired by watercolor paintings. Perfe
 ![Pastel Theme](/images/pretty-terminal/pastel.webp)
 
 ```typescript
-import { getPrettyTerminal, pastel } from '@loglayer/pretty-terminal';
+import { getPrettyTerminal, pastel } from '@loglayer/transport-pretty-terminal';
 
 const transport = getPrettyTerminal({
   theme: pastel,
@@ -288,7 +298,7 @@ const transport = getPrettyTerminal({
 You can create your own theme by implementing the `PrettyTerminalTheme` interface, which uses [`chalk`](https://github.com/chalk/chalk) for color styling:
 
 ```typescript
-import { getPrettyTerminal, chalk } from '@loglayer/pretty-terminal';
+import { getPrettyTerminal, chalk } from '@loglayer/transport-pretty-terminal';
 
 const myCustomTheme = {
   // Configuration for the default log view shown in real-time
