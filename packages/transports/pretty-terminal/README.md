@@ -6,7 +6,7 @@
 
 A transport for the [LogLayer](https://loglayer.dev) logging library that pretty-prints logs printed in the terminal.
 
-[![Pretty Terminal Transport Demo](https://asciinema.org/a/vQ3oaam0ntCUlN3JQQHwbeyKK.svg?t=4)](https://asciinema.org/a/vQ3oaam0ntCUlN3JQQHwbeyKK?t=4)
+![Pretty Terminal Transport](https://loglayer.dev/images/pretty-terminal/pretty-terminal-short.gif)
 
 ## Features
 
@@ -16,10 +16,8 @@ A transport for the [LogLayer](https://loglayer.dev) logging library that pretty
 - 🔎 **Search/Filter Functionality** - Find specific logs with powerful filtering capabilities
 - 💅 **JSON Pretty Printing** - Beautifully formatted structured data with syntax highlighting
 - 🎭 **Configurable Themes** - Choose from pre-built themes or customize your own colors
-- 🔄 **Real-time Updates** - See logs as they happen with live updates
-- 📊 **Context Awareness** - View previous and next logs when inspecting entries
 
-## Installation``
+## Installation
 
 Visit the [Pretty Terminal docs](https://loglayer.dev/transports/pretty-terminal)
 for installation and usage.

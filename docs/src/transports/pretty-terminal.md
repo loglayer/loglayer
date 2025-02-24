@@ -9,14 +9,15 @@ import 'asciinema-player/dist/bundle/asciinema-player.css'
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/pretty-terminal)
 
-The Pretty Terminal Transport provides an interactive and visually appealing terminal output for your logs. It's designed to enhance the development experience with features like real-time log display, interactive browsing, and beautiful themes.
+The Pretty Terminal Transport provides an interactive and visually appealing terminal output for your logs. 
+It has interactive browsing, text search, detailed viewing for large logs, and themes.
 
 <NuAsciinemaPlayer
 src="/asciinema/pretty-terminal.cast"
 :preload="true"
 :cols="400"
 :rows="20"
-:auto-play="false"
+:auto-play="true"
 :controls="true"
 :terminal-font-size="'14px'"
 :loop="false"
@@ -32,8 +33,6 @@ src="/asciinema/pretty-terminal.cast"
 - 🔎 **Search/Filter Functionality** - Find specific logs with powerful filtering capabilities
 - 💅 **JSON Pretty Printing** - Beautifully formatted structured data with syntax highlighting
 - 🎭 **Configurable Themes** - Choose from pre-built themes or customize your own colors
-- 🔄 **Real-time Updates** - See logs as they happen with live updates
-- 📊 **Context Awareness** - View previous and next logs when inspecting entries
 
 ## Installation
 
