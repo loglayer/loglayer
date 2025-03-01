@@ -1,5 +1,19 @@
 # `loglayer` Changelog
 
+## 6.2.0
+
+### Minor Changes
+
+- [#169](https://github.com/loglayer/loglayer/pull/169) [`09e33ab`](https://github.com/loglayer/loglayer/commit/09e33ab216e35502ec9692a5ed44878a26573b1b) Thanks [@theogravity](https://github.com/theogravity)! - All transports now support multiple parameter passing in log methods
+
+### Patch Changes
+
+- Updated dependencies [[`09e33ab`](https://github.com/loglayer/loglayer/commit/09e33ab216e35502ec9692a5ed44878a26573b1b)]:
+  - @loglayer/transport@2.1.0
+  - @loglayer/shared@2.2.0
+  - @loglayer/context-manager@1.0.3
+  - @loglayer/plugin@2.0.3
+
 ## 6.1.3
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-datadog",
   "description": "DataDog transport for the LogLayer logging library.",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
