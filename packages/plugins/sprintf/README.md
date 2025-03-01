@@ -12,7 +12,6 @@ It allows you to format your log messages using familiar printf-style placeholde
 
 - LogLayer does not allow passing items that are not strings or numbers into message methods like `info`, `error`,
 etc, and would recommend that only string and number specifiers be used.
-- Not all logging libraries support multiple parameters in a message method, so this plugin is useful for those that do.
 
 ## Installation
 

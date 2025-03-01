@@ -7,6 +7,11 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Mar 1, 2025
+
+- All transports now support multiple parameter passing in log methods. For example, `log.info('User', 123, 'logged in')`.
+  * The logging library for the transport may not support sprintf-style string formatting. If it does not, you can use the [sprintf plugin](/plugins/sprintf) to enable support.
+
 ## Feb 23, 2025
 
 Added the new [Pretty Terminal Transport](/transports/pretty-terminal) for LogLayer that pretty-prints logs in the terminal.

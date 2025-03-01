@@ -3,38 +3,42 @@ import type { P } from "pino";
 
 export class PinoTransport extends BaseTransport<P.Logger> {
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams) {
+    const toPublish = [];
+
     if (data && hasData) {
       // put object data as the first parameter
-      messages.unshift(data);
+      toPublish.push(data);
     }
+
+    toPublish.push(messages.join(" "));
 
     switch (logLevel) {
       case LogLevel.info:
         // @ts-ignore
-        this.logger.info(...messages);
+        this.logger.info(...toPublish);
         break;
       case LogLevel.warn:
         // @ts-ignore
-        this.logger.warn(...messages);
+        this.logger.warn(...toPublish);
         break;
       case LogLevel.error:
         // @ts-ignore
-        this.logger.error(...messages);
+        this.logger.error(...toPublish);
         break;
       case LogLevel.trace:
         // @ts-ignore
-        this.logger.trace(...messages);
+        this.logger.trace(...toPublish);
         break;
       case LogLevel.debug:
         // @ts-ignore
-        this.logger.debug(...messages);
+        this.logger.debug(...toPublish);
         break;
       case LogLevel.fatal:
         // @ts-ignore
-        this.logger.fatal(...messages);
+        this.logger.fatal(...toPublish);
         break;
     }
 
-    return messages;
+    return toPublish;
   }
 }

@@ -81,9 +81,6 @@ export class LogBuilder implements ILogBuilder {
 
   /**
    * Sends a log message to the logging library under an info log level.
-   *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
    */
   info(...messages: MessageDataType[]) {
     this.structuredLogger._formatMessage(messages);
@@ -92,9 +89,6 @@ export class LogBuilder implements ILogBuilder {
 
   /**
    * Sends a log message to the logging library under the warn log level
-   *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
    */
   warn(...messages: MessageDataType[]) {
     this.structuredLogger._formatMessage(messages);
@@ -103,9 +97,6 @@ export class LogBuilder implements ILogBuilder {
 
   /**
    * Sends a log message to the logging library under the error log level
-   *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
    */
   error(...messages: MessageDataType[]) {
     this.structuredLogger._formatMessage(messages);
