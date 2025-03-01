@@ -354,9 +354,6 @@ export class LogLayer implements ILogLayer {
   /**
    * Sends a log message to the logging library under the warn log level
    *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
-   *
    * {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   warn(...messages: MessageDataType[]) {
@@ -366,9 +363,6 @@ export class LogLayer implements ILogLayer {
 
   /**
    * Sends a log message to the logging library under the error log level
-   *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
    *
    * {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
@@ -380,9 +374,6 @@ export class LogLayer implements ILogLayer {
   /**
    * Sends a log message to the logging library under the debug log level
    *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
-   *
    * {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   debug(...messages: MessageDataType[]) {
@@ -393,9 +384,6 @@ export class LogLayer implements ILogLayer {
   /**
    * Sends a log message to the logging library under the trace log level
    *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
-   *
    * {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   trace(...messages: MessageDataType[]) {
@@ -405,9 +393,6 @@ export class LogLayer implements ILogLayer {
 
   /**
    * Sends a log message to the logging library under the fatal log level
-   *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
    *
    * {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */

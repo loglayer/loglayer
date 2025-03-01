@@ -6,8 +6,6 @@ description: The default context manager used in LogLayer.
 # Default Context Manager
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fcontext-manager)](https://www.npmjs.com/package/@loglayer/context-manager)
-[![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Fcontext-manager)](https://www.npmjs.com/package/@loglayer/context-manager)
-[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
 [Context Manager Source](https://github.com/loglayer/loglayer/tree/master/packages/core/context-manager)
 

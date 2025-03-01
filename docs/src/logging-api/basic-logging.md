@@ -57,13 +57,13 @@ All log methods accept multiple parameters, which can be strings, numbers, null,
 // Multiple parameters
 log.info('User', 123, 'logged in')
 
-// With string formatting (if supported by the logging library)
+// With string formatting
 log.info('User %s logged in from %s', 'john', 'localhost')
 ```
 
-::: warning
-- Support for multiple parameters depends on your logging library. Some libraries may only use the first parameter.
-- It's generally not recommended to use multiple parameters for log messages. Especially if you are going to use multiple logging transports as some may not support it.
+::: tip sprintf-style formatting
+The logging library you use may or may not support sprintf-style string formatting.
+If it does not, you can use the [sprintf plugin](/plugins/sprintf) to enable support.
 :::
 
 ## Message Prefixing

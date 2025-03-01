@@ -151,4 +151,17 @@ describe("structured transport with bunyan", () => {
 
     log.metadataOnly({ test: "data" });
   });
+
+  it("should support multiple parameters", () => {
+    expect.assertions(1);
+    const { log, mockedStream } = getLoggerInstance();
+
+    mockedStream.on("data", (data: Buffer) => {
+      const entry = JSON.parse(data.toString()) as unknown as Record<string, any>;
+      expect(entry.msg).toBe("this is a test message with multiple parameters param1 param2");
+      mockedStream.destroy();
+    });
+
+    log.info("this is a test message with multiple parameters", "param1", "param2");
+  });
 });

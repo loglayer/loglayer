@@ -96,44 +96,26 @@ export interface LogLayerTransport<LogLibrary = any> {
 export interface ILogBuilder {
   /**
    * Sends a log message to the logging library under an info log level.
-   *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
    */
   info(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the warn log level
-   *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
    */
   warn(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the error log level
-   *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
    */
   error(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the debug log level
-   *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
    */
   debug(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the trace log level
-   *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
    */
   trace(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the fatal log level
-   *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
    */
   fatal(...messages: MessageDataType[]): void;
   /**

@@ -23,6 +23,9 @@ export function testTransportOutput(label: string, logLayerInstance: any) {
   console.log("\n===== fatal() ====");
   logLayerInstance.fatal("fatal message");
 
+  console.log("\n===== multiple parameters ====");
+  logLayerInstance.info("multiple info message", "with multiple", "parameters");
+
   console.log("\n===== withMetadata() ====");
   logLayerInstance
     .withMetadata({

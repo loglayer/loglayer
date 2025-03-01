@@ -6,8 +6,6 @@ description: Share context between parent and child logs in LogLayer.
 # Linked Context Manager
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fcontext-manager-linked)](https://www.npmjs.com/package/@loglayer/context-manager-linked)
-[![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Fcontext-manager-linked)](https://www.npmjs.com/package/@loglayer/context-manager-linked)
-[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
 [Context Manager Source](https://github.com/loglayer/loglayer/tree/master/packages/context-managers/linked)
 
