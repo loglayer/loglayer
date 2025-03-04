@@ -92,7 +92,7 @@ export default defineConfig({
           { text: 'Child Loggers', link: '/logging-api/child-loggers' },
           { text: 'Transport Management', link: '/logging-api/transport-management' },
           { text: 'Typescript Tips', link: '/logging-api/typescript' },
-          { text: 'Unit Testing', link: '/logging-api/unit-testing' },
+          { text: 'No-op / Mocking', link: '/logging-api/unit-testing' },
         ]
       },
       {

@@ -7,6 +7,19 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Mar 3, 2025
+
+In `loglayer`:
+
+Updates to the `MockLogLayer` behavior to help with writing unit tests specifically against the logger:
+
+- `MockLogLayer` now creates an internal instance of `MockLogBuilder` when created. This is changed from the prior
+behavior of creating a new instance of `MockLogBuilder` for certain method calls that would return it like `withMetadata`.
+- Added `getMockLogBuilder()`, `resetMockLogBuilder()`, and `setMockLogBuilder()` methods to `MockLogLayer` to allow developers
+to write direct mocks against chained methods like `withMetadata`, `withError`, etc.
+
+The [testing documentation](/logging-api/unit-testing) for this has been updated as well.
+
 ## Mar 1, 2025
 
 - All transports now support multiple parameter passing in log methods. For example, `log.info('User', 123, 'logged in')`.

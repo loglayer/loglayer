@@ -14,6 +14,8 @@ import { MockLogBuilder } from "./MockLogBuilder.js";
 import type { LogLayerPlugin } from "@loglayer/plugin";
 
 export class MockLogLayer implements ILogLayer {
+  private mockLogBuilder: ILogBuilder = new MockLogBuilder();
+
   info(...messages: MessageDataType[]): void {}
   warn(...messages: MessageDataType[]): void {}
   error(...messages: MessageDataType[]): void {}
@@ -38,7 +40,7 @@ export class MockLogLayer implements ILogLayer {
   disablePlugin(id: string) {}
 
   withPrefix(prefix: string) {
-    return new MockLogLayer() as ILogLayer;
+    return this.mockLogBuilder as ILogLayer;
   }
 
   withContext(context?: Record<string, any>): ILogLayer {
@@ -46,11 +48,15 @@ export class MockLogLayer implements ILogLayer {
   }
 
   withError(error: any): ILogBuilder {
-    return new MockLogBuilder();
+    this.mockLogBuilder.withError(error);
+
+    return this.mockLogBuilder;
   }
 
   withMetadata(metadata?: Record<string, any>): ILogBuilder {
-    return new MockLogBuilder();
+    this.mockLogBuilder.withMetadata(metadata);
+
+    return this.mockLogBuilder;
   }
 
   getContext(): Record<string, any> {
@@ -70,7 +76,7 @@ export class MockLogLayer implements ILogLayer {
   }
 
   child() {
-    return new MockLogLayer() as ILogLayer;
+    return this.mockLogBuilder as ILogLayer;
   }
 
   muteContext() {
@@ -103,5 +109,26 @@ export class MockLogLayer implements ILogLayer {
 
   getContextManager() {
     return undefined;
+  }
+
+  /**
+   * Sets the mock log builder to use for testing.
+   */
+  setMockLogBuilder(mockLogBuilder: ILogBuilder) {
+    this.mockLogBuilder = mockLogBuilder;
+  }
+
+  /**
+   * Returns the mock log builder used for testing.
+   */
+  getMockLogBuilder() {
+    return this.mockLogBuilder;
+  }
+
+  /**
+   * Resets the mock log builder to a new instance of MockLogBuilder.
+   */
+  resetMockLogBuilder() {
+    this.mockLogBuilder = new MockLogBuilder();
   }
 }

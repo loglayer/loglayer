@@ -1,5 +1,6 @@
 export { LogLayer } from "./LogLayer.js";
 export { MockLogLayer } from "./MockLogLayer.js";
+export { MockLogBuilder } from "./MockLogBuilder.js";
 export * from "./types/index.js";
 export type { ErrorOnlyOpts, ILogLayer, ILogBuilder } from "@loglayer/shared";
 export { ConsoleTransport } from "./transports/ConsoleTransport.js";
