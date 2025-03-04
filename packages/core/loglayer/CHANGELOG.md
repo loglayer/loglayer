@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 6.3.0
+
+### Minor Changes
+
+- [#172](https://github.com/loglayer/loglayer/pull/172) [`16145f1`](https://github.com/loglayer/loglayer/commit/16145f1da24b81783f8d97a0941795294a2319ff) Thanks [@theogravity](https://github.com/theogravity)! - Adds new methods to `MockLogLayer` for better unit testing against the logger methods directly
+
 ## 6.2.0
 
 ### Minor Changes
