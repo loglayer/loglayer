@@ -4,6 +4,9 @@ import { LogLevelPriority } from "@loglayer/transport";
 
 type ConsoleType = typeof console;
 
+/**
+ * Configuration options for the ConsoleTransport.
+ */
 interface ConsoleTransportConfig extends LogLayerTransportConfig<ConsoleType> {
   /**
    * If true, object data will be appended as the last parameter.

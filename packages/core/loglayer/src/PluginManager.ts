@@ -20,6 +20,10 @@ interface LogLayerPluginWithTimestamp extends LogLayerPlugin {
   registeredAt: number;
 }
 
+/**
+ * A class that manages plugins and runs their callbacks.
+ * Used by LogLayer to run plugins at various stages of the logging process.
+ */
 export class PluginManager {
   private idToPlugin: Record<string, LogLayerPluginWithTimestamp>;
   // Indexes for each plugin type

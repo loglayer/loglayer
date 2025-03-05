@@ -5,7 +5,7 @@ description: Learn how to create a custom context manager for LogLayer
 
 # Creating Context Managers
 
-::: warning
+::: warning Using async libraries
 LogLayer is a synchronous library, so context managers must perform synchronous operations only. 
 
 Integrations that use promises, callbacks, or other asynchronous patterns to set and fetch context data
@@ -143,7 +143,6 @@ export class MyContextManager implements IContextManager, Disposable {
 :::tip
 Always implement `Disposable` if your context manager holds onto resources that need cleanup. This ensures proper resource management and prevents memory leaks.
 :::
-
 
 ## Example Implementation
 

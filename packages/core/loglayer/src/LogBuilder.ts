@@ -27,7 +27,7 @@ export class LogBuilder implements ILogBuilder {
   /**
    * Specifies metadata to include with the log message
    *
-   * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
+   * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
   withMetadata(metadata?: Record<string, any>) {
     const {
@@ -72,7 +72,7 @@ export class LogBuilder implements ILogBuilder {
   /**
    * Specifies an Error to include with the log message
    *
-   * {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
+   * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
   withError(error: any) {
     this.err = error;

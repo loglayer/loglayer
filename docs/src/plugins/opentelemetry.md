@@ -9,7 +9,7 @@ description: Add OpenTelemetry trace context to logs using LogLayer
 
 [Plugin Source](https://github.com/loglayer/loglayer/tree/master/packages/plugins/opentelemetry)
 
-The OpenTelemetry plugin for [LogLayer](https://loglayer.dev) uses the [`@opentelemetry/api`](https://www.npmjs.com/package/@opentelemetry/api)
+The OpenTelemetry plugin for [LogLayer](https://loglayer.dev) uses [`@opentelemetry/api`](https://www.npmjs.com/package/@opentelemetry/api)
 to store the following in the log context:
 
 - `trace_id`
@@ -197,7 +197,8 @@ sdk.start();
 import express from "express";
 import { type ILogLayer, LogLayer } from "loglayer";
 import { serializeError } from "serialize-error";
-import { OpenTelemetryTransport } from "@loglayer/transport-opentelemetry";
+import { openTelemetryPlugin } from "@loglayer/plugin-opentelemetry";
+import { ConsoleTransport } from "loglayer";
 
 const app = express();
 

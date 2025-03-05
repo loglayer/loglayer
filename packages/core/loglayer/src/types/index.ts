@@ -5,6 +5,10 @@ export { LogLevel, type ErrorOnlyOpts, type ILogLayer, type ILogBuilder } from "
 
 export type ErrorSerializerType = (err: any) => Record<string, any> | string;
 
+/**
+ * Configuration options for LogLayer
+ * @see {@link https://loglayer.dev/configuration.html | LogLayer Configuration Docs}
+ */
 export interface LogLayerConfig {
   /**
    * The prefix to prepend to all log messages

@@ -7,6 +7,17 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Mar 5, 2025
+
+Documentation updates. 
+
+- Added new comments and links for interfaces, types, and classes.
+- Added that booleans can be used in a logging method (eg `log.info("value:", true)`) despite saying only strings and numbers only
+
+In `@loglayer/transport-opentelemetry`:
+
+- Internal: Removed LogLayer version imprinting. This shouldn't affect behavior, but please raise an issue if it does. 
+
 ## Mar 3, 2025
 
 In `loglayer`:

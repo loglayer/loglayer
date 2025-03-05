@@ -11,7 +11,7 @@ description: The default context manager used in LogLayer.
 
 The Default Context Manager is the base context manager used by LogLayer. It provides a simple key-value store for managing context data with independent context for each logger instance.
 
-::: info
+::: info Batteries included
 This context manager is automatically used when creating a new LogLayer instance. You should not need to use
 this context manager directly.
 :::

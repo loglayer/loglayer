@@ -7,8 +7,12 @@ export enum LogLevel {
   fatal = "fatal",
 }
 
-export type MessageDataType = string | number | null | undefined;
+export type MessageDataType = string | number | boolean | null | undefined;
 
+/**
+ * Options for the `errorOnly` method.
+ * @see {@link https://loglayer.dev/logging-api/error-handling.html#error-only-logging | Error Only Logging Doc}
+ */
 export interface ErrorOnlyOpts {
   /**
    * Sets the log level of the error

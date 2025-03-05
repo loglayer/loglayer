@@ -7,7 +7,7 @@ description: Learn how to create logs with context data in LogLayer
 
 Context allows you to add persistent data that will be included with every log message. This is particularly useful for adding request IDs, user information, or any other data that should be present across multiple log entries.
 
-::: info
+::: info Message field name
 The output examples use `msg` as the message field. The name of this field may vary depending on the logging library you are using.
 In the `console` logger, this field does not exist, and the message is printed directly.
 :::

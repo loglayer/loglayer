@@ -28,13 +28,12 @@
     "transport"
   ],
   "scripts": {
-    "build": "pnpm run generate-version && tsup src/index.ts",
+    "build": "tsup src/index.ts",
     "test": "vitest --run",
     "build:dev": "hash-runner",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "biome check --write --unsafe src && biome format src --write && biome lint src --fix",
     "verify-types": "tsc --noEmit",
-    "generate-version": "tsx generate-version-file.ts",
     "livetest": "tsx --import ./express-example/instrumentation.ts ./express-example/app.ts"
   },
   "dependencies": {

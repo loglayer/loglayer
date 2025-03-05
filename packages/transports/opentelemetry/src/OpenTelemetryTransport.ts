@@ -1,7 +1,6 @@
 import { type LogLayerTransportParams, LoggerlessTransport, type LoggerlessTransportConfig } from "@loglayer/transport";
 import { type Logger, logs } from "@opentelemetry/api-logs";
 import { emitLogRecord } from "./utils.js";
-import { version } from "./version.js";
 
 export interface OpenTelemetryTransportConfig extends LoggerlessTransportConfig {
   /**
@@ -16,7 +15,7 @@ export class OpenTelemetryTransport extends LoggerlessTransport {
 
   constructor(config: OpenTelemetryTransportConfig = {}) {
     super(config);
-    this._logger = logs.getLogger("loglayer", version);
+    this._logger = logs.getLogger("loglayer");
     this.onError = config.onError;
   }
 

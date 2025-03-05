@@ -3,6 +3,10 @@
 
 import type { ILogBuilder, MessageDataType } from "@loglayer/shared";
 
+/**
+ * A mock implementation of the ILogBuilder interface that does nothing.
+ * Useful for writing unit tests.
+ */
 export class MockLogBuilder implements ILogBuilder {
   debug(...messages: MessageDataType[]): void {}
 
