@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/plugin-sprintf",
   "description": "sprintf plugin for loglayer.",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

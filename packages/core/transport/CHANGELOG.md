@@ -1,5 +1,14 @@
 # `@loglayer/transport` Changelog
 
+## 2.1.1
+
+### Patch Changes
+
+- [#175](https://github.com/loglayer/loglayer/pull/175) [`a66ce9b`](https://github.com/loglayer/loglayer/commit/a66ce9ba4f05d912576d3754fe74c5054ae8230d) Thanks [@theogravity](https://github.com/theogravity)! - Documentation updates
+
+- Updated dependencies [[`a66ce9b`](https://github.com/loglayer/loglayer/commit/a66ce9ba4f05d912576d3754fe74c5054ae8230d)]:
+  - @loglayer/shared@2.2.1
+
 ## 2.1.0
 
 ### Minor Changes
