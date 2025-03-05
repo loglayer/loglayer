@@ -1,3 +1,8 @@
+---
+title: Pretty printing in the Terminal for LogLayer
+description: Interact with pretty printed logs in the terminal
+---
+
 <script setup>
 import { NuAsciinemaPlayer } from '@nolebase/ui-asciinema'
 import 'asciinema-player/dist/bundle/asciinema-player.css'
@@ -9,7 +14,7 @@ import 'asciinema-player/dist/bundle/asciinema-player.css'
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/pretty-terminal)
 
-The Pretty Terminal Transport provides an interactive and visually appealing terminal output for your logs. 
+The Pretty Terminal Transport provides interactivity and pretty printing for your logs in the terminal. 
 It has interactive browsing, text search, detailed viewing for large logs, and themes.
 
 <NuAsciinemaPlayer
@@ -27,7 +32,6 @@ src="/asciinema/pretty-terminal.cast"
 
 ## Features
 
-- 🎨 **Color-coded Log Levels** - Each log level has distinct colors for quick visual identification
 - 🔍 **Interactive Selection Mode** - Browse and inspect logs in a full-screen interactive view
 - 📝 **Detailed Log Inspection** - Examine individual log entries with formatted data and context
 - 🔎 **Search/Filter Functionality** - Find specific logs with powerful filtering capabilities
@@ -215,7 +219,7 @@ const transport = getPrettyTerminal({
 
 ::: warning Security Note
 If using the `logFile` option, be aware that:
-1. All logs will be stored in the specified SQLite database file. If it exists, the log data will be dropped during initialization.
+1. All logs will be stored in the specified SQLite database file.
 2. The file will be purged of any existing data when the transport initializes
 3. Relative paths (e.g., "logs/app.db") are resolved from the current working directory
 4. It is recommended to add the `logFile` path to your `.gitignore` file to avoid committing sensitive log data

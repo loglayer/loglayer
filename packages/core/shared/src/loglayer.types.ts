@@ -1,6 +1,10 @@
 import type { ErrorOnlyOpts, LogLevel, MessageDataType } from "./common.types.js";
 import type { LogLayerPlugin } from "./plugin.types.js";
 
+/**
+ * Context Manager callback function for when a child logger is created.
+ * @see {@link https://loglayer.dev/context-managers/creating-context-managers.html | Creating Context Managers Docs}
+ */
 export interface OnChildLoggerCreatedParams {
   /**
    * The parent logger instance
@@ -20,6 +24,10 @@ export interface OnChildLoggerCreatedParams {
   childContextManager: IContextManager;
 }
 
+/**
+ * Interface for implementing a context manager instance.
+ * @see {@link https://loglayer.dev/context-managers/creating-context-managers.html | Creating Context Managers Docs}
+ */
 export interface IContextManager {
   /**
    * Sets the context data to be included with every log entry. Set to `undefined` to clear the context data.
@@ -47,6 +55,10 @@ export interface IContextManager {
   clone(): IContextManager;
 }
 
+/**
+ * Input to the LogLayer transport shipToLogger() method.
+ * @see {@link https://loglayer.dev/transports/creating-transports.html | Creating Transports Docs}
+ */
 export interface LogLayerTransportParams {
   /**
    * The log level of the message
@@ -66,6 +78,10 @@ export interface LogLayerTransportParams {
   hasData?: boolean;
 }
 
+/**
+ * Interface for implementing a LogLayer transport instance.
+ * @see {@link https://loglayer.dev/transports/creating-transports.html | Creating Transports Docs}
+ */
 export interface LogLayerTransport<LogLibrary = any> {
   /**
    * A user-defined identifier for the transport
@@ -93,6 +109,10 @@ export interface LogLayerTransport<LogLibrary = any> {
   getLoggerInstance(): LogLibrary;
 }
 
+/**
+ * Interface for implementing a LogLayer builder instance.
+ * @see {@link https://loglayer.dev | LogLayer Documentation}
+ */
 export interface ILogBuilder {
   /**
    * Sends a log message to the logging library under an info log level.
@@ -121,34 +141,38 @@ export interface ILogBuilder {
   /**
    * Specifies metadata to include with the log message
    *
-   * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
+   * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
   withMetadata(metadata?: Record<string, any>): ILogBuilder;
   /**
    * Specifies an Error to include with the log message
    *
-   * {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
+   * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
   withError(error: any): ILogBuilder;
   /**
    * Enable sending logs to the logging library.
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   enableLogging(): ILogBuilder;
   /**
    * All logging inputs are dropped and stops sending logs to the logging library.
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   disableLogging(): ILogBuilder;
 }
 
+/**
+ * Interface for implementing a LogLayer logger instance.
+ * @see {@link https://loglayer.dev | LogLayer Documentation}
+ */
 export interface ILogLayer extends ILogBuilder {
   /**
    * Calls child() and sets the prefix to be included with every log message.
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html#message-prefixing | Message Prefixing Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#message-prefixing | Message Prefixing Docs}
    */
   withPrefix(string: string): ILogLayer;
   /**
@@ -159,44 +183,44 @@ export interface ILogLayer extends ILogBuilder {
    *
    * To clear the context, use {@link clearContext}.
    *
-   * {@link https://loglayer.dev/logging-api/context.html | Context Docs}
+   * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
   withContext(context?: Record<string, any>): ILogLayer;
   /**
    * Clears the context data.
    *
-   * {@link https://loglayer.dev/logging-api/context.html | Context Docs}
+   * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
   clearContext(): void;
   /**
    * Specifies metadata to include with the log message
    *
-   * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
+   * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
   withMetadata(metadata?: Record<string, any>): ILogBuilder;
   /**
    * Specifies an Error to include with the log message
    *
-   * {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
+   * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
   withError(error: any): ILogBuilder;
   /**
    * Logs only the error object without a log message
    *
-   * {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
+   * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
   errorOnly(error: any, opts?: ErrorOnlyOpts): void;
   /**
    * Logs only metadata without a log message
    *
-   * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
+   * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
   metadataOnly(metadata?: Record<string, any>, logLevel?: LogLevel): void;
 
   /**
    * Returns the context used
    *
-   * {@link https://loglayer.dev/logging-api/context.html | Context Docs}
+   * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
   getContext(): Record<string, any>;
 
@@ -206,51 +230,51 @@ export interface ILogLayer extends ILogBuilder {
    *
    * The copied context data is a *shallow copy*.
    *
-   * {@link https://loglayer.dev/logging-api/child-loggers.html | Child Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/child-loggers.html | Child Logging Docs}
    */
   child(): ILogLayer;
 
   /**
    * Disables inclusion of context data in the print
    *
-   * {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
+   * @see {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
    */
   muteContext(): ILogLayer;
   /**
    * Enables inclusion of context data in the print
    *
-   * {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
+   * @see {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
    */
   unMuteContext(): ILogLayer;
   /**
    * Disables inclusion of metadata data in the print
    *
-   * {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
+   * @see {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
    */
   muteMetadata(): ILogLayer;
   /**
    * Enables inclusion of metadata data in the print
    *
-   * {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
+   * @see {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
    */
   unMuteMetadata(): ILogLayer;
   /**
    * Enable sending logs to the logging library.
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   enableLogging(): ILogLayer;
   /**
    * All logging inputs are dropped and stops sending logs to the logging library.
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   disableLogging(): ILogLayer;
 
   /**
    * Returns a logger instance for a specific transport
    *
-   * {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
+   * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
    */
   getLoggerInstance<Library>(id: string): Library | undefined;
 
@@ -259,7 +283,7 @@ export interface ILogLayer extends ILogBuilder {
    * When used with child loggers, it only affects the current logger instance
    * and does not modify the parent's transports.
    *
-   * {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
+   * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
    */
   withFreshTransports(transports: LogLayerTransport | Array<LogLayerTransport>): ILogLayer;
 
@@ -269,7 +293,7 @@ export interface ILogLayer extends ILogBuilder {
    * When used with child loggers, it only affects the current logger instance
    * and does not modify the parent's plugins.
    *
-   * {@link https://loglayer.dev/plugins/ | Plugins Docs}
+   * @see {@link https://loglayer.dev/plugins/ | Plugins Docs}
    */
   withFreshPlugins(plugins: Array<LogLayerPlugin>): ILogLayer;
 

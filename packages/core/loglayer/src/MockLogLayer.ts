@@ -13,6 +13,10 @@ import { MockLogBuilder } from "./MockLogBuilder.js";
 
 import type { LogLayerPlugin } from "@loglayer/plugin";
 
+/**
+ * A mock implementation of the ILogLayer interface that does nothing.
+ * Useful for writing unit tests.
+ */
 export class MockLogLayer implements ILogLayer {
   private mockLogBuilder: ILogBuilder = new MockLogBuilder();
 

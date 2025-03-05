@@ -26,6 +26,9 @@ export function testTransportOutput(label: string, logLayerInstance: any) {
   console.log("\n===== multiple parameters ====");
   logLayerInstance.info("multiple info message", "with multiple", "parameters");
 
+  console.log("\n===== multiple parameters with mixed data ====");
+  logLayerInstance.info("mixed data", 1234, undefined, null, true);
+
   console.log("\n===== withMetadata() ====");
   logLayerInstance
     .withMetadata({

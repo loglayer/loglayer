@@ -1,6 +1,10 @@
 import type { LogLevel } from "./common.types.js";
 import type { ILogLayer } from "./loglayer.types.js";
 
+/**
+ * Input for the `onBeforeDataOut` plugin lifecycle method.
+ * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforedataout | Creating Plugins}
+ */
 export interface PluginBeforeDataOutParams {
   /**
    * Log level of the data
@@ -13,6 +17,10 @@ export interface PluginBeforeDataOutParams {
   data?: Record<string, any>;
 }
 
+/**
+ * Input for the `shouldSendToLogger` plugin lifecycle method.
+ * @see {@link https://loglayer.dev/plugins/creating-plugins.html#shouldsendtologger | Creating Plugins}
+ */
 export interface PluginShouldSendToLoggerParams {
   /**
    * Unique identifier for the transport. Can be used to not send to a specific transport.
@@ -33,6 +41,10 @@ export interface PluginShouldSendToLoggerParams {
   data?: Record<string, any>;
 }
 
+/**
+ * Input for the `onBeforeMessageOut` plugin lifecycle method.
+ * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforemessageout | Creating Plugins}
+ */
 export interface PluginBeforeMessageOutParams {
   /**
    * Log level of the message
@@ -44,6 +56,10 @@ export interface PluginBeforeMessageOutParams {
   messages: any[];
 }
 
+/**
+ * Parameters for creating a LogLayer plugin.
+ * @see {@link https://loglayer.dev/plugins/creating-plugins.html | Creating Plugins}
+ */
 export interface LogLayerPluginParams {
   /**
    * Unique identifier for the plugin. Used for selectively disabling / enabling
@@ -56,6 +72,10 @@ export interface LogLayerPluginParams {
   disabled?: boolean;
 }
 
+/**
+ * Interface for implementing a LogLayer plugin.
+ * @see {@link https://loglayer.dev/plugins/creating-plugins.html | Creating Plugins}
+ */
 export interface LogLayerPlugin extends LogLayerPluginParams {
   /**
    * Called after the assembly of the data object that contains
@@ -70,7 +90,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    * @returns [Object] The object to be sent to the destination logging
    * library or null / undefined to not pass an object through.
    *
-   * {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforedataout | Creating Plugins}
+   * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforedataout | Creating Plugins}
    */
   onBeforeDataOut?(params: PluginBeforeDataOutParams, loglayer: ILogLayer): Record<string, any> | null | undefined;
 
@@ -80,7 +100,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @returns [Array] The message data to be sent to the destination logging library.
    *
-   * {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforemessageout | Creating Plugins}
+   * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforemessageout | Creating Plugins}
    */
   onBeforeMessageOut?(params: PluginBeforeMessageOutParams, loglayer: ILogLayer): any[];
 
@@ -95,7 +115,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @returns boolean If true, sends data to the transport, if false does not.
    *
-   * {@link https://loglayer.dev/plugins/creating-plugins.html#shouldsendtologger | Creating Plugins}
+   * @see {@link https://loglayer.dev/plugins/creating-plugins.html#shouldsendtologger | Creating Plugins}
    */
   shouldSendToLogger?(params: PluginShouldSendToLoggerParams, loglayer: ILogLayer): boolean;
 
@@ -110,7 +130,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @returns [Object] The metadata object to be sent to the destination logging library.
    *
-   * {@link https://loglayer.dev/plugins/creating-plugins.html#onmetadatacalled | Creating Plugins}
+   * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onmetadatacalled | Creating Plugins}
    */
   onMetadataCalled?: (metadata: Record<string, any>, loglayer: ILogLayer) => Record<string, any> | null | undefined;
 
@@ -125,7 +145,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @returns [Object] The context object to be used.
    *
-   * {@link https://loglayer.dev/plugins/creating-plugins.html#oncontextcalled | Creating Plugins}
+   * @see {@link https://loglayer.dev/plugins/creating-plugins.html#oncontextcalled | Creating Plugins}
    */
   onContextCalled?: (context: Record<string, any>, loglayer: ILogLayer) => Record<string, any> | null | undefined;
 }

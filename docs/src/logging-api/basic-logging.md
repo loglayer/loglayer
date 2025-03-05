@@ -18,7 +18,7 @@ LogLayer supports six standard log levels, each with its own method:
 - `trace()` - For detailed debugging information
 - `fatal()` - For critical errors that require immediate attention
 
-::: info
+::: info Unsupported Log Levels
 Some logging libraries may not support all levels. In such cases:
 
 - `trace` is mapped to `debug`
@@ -51,7 +51,7 @@ log.fatal('System out of memory')
 
 ## Message Parameters
 
-All log methods accept multiple parameters, which can be strings, numbers, null, or undefined:
+All log methods accept multiple parameters, which can be strings, booleans, numbers, null, or undefined:
 
 ```typescript
 // Multiple parameters

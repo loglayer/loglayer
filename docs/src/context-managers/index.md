@@ -9,7 +9,7 @@ description: Learn how to create and use context managers with LogLayer
 
 Context managers in LogLayer are responsible for managing contextual data that gets included with log entries. They provide a way to store and retrieve context data that will be automatically included with every log message.
 
-::: tip Do you need a context manager?
+::: tip Do you need to specify a context manager?
 Context managers are an advanced feature of LogLayer. 
 
 Unless you need to manage context data in a specific way, you can use the default context manager, which is already automatically used when creating a new LogLayer instance.

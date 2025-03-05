@@ -9,7 +9,7 @@ import {
 /**
  * For implementing libraries that aren't logging libraries
  *
- * {@link https://loglayer.dev/transports/creating-transports.html | Creating Transports}
+ * @see {@link https://loglayer.dev/transports/creating-transports.html | Creating Transports}
  */
 export abstract class LoggerlessTransport implements LogLayerTransport {
   /**

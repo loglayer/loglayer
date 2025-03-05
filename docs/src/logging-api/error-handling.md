@@ -83,6 +83,10 @@ const log = new LogLayer({
 })
 ```
 
+::: tip Use serialize-error
+We strongly recommend the use of `serialize-error` for error serialization.
+:::
+
 ### Error Message Copying
 
 You can configure LogLayer to automatically copy the error's message as the log message:

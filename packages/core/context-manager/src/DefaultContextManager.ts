@@ -3,6 +3,8 @@ import type { OnChildLoggerCreatedParams } from "@loglayer/shared";
 
 /**
  * The default context manager used by LogLayer. It is a simple k/v store for context data.
+ *
+ * @see {@link https://loglayer.dev/context-managers/default.html | Default Context Manager Docs}
  */
 export class DefaultContextManager implements IContextManager {
   private context: Record<string, any> = {};

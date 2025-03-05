@@ -102,7 +102,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Calls child() and sets the prefix to be included with every log message.
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html#message-prefixing | Message Prefixing Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#message-prefixing | Message Prefixing Docs}
    */
   withPrefix(prefix: string): LogLayer {
     const logger = this.child();
@@ -117,9 +117,9 @@ export class LogLayer implements ILogLayer {
    *
    * Passing in an empty value / object will *not* clear the context.
    *
-   * To clear the context, use {@link clearContext}.
+   * To clear the context, use {@link https://loglayer.dev/logging-api/context.html#clearing-context | clearContext()}.
    *
-   * {@link https://loglayer.dev/logging-api/context.html | Context Docs}
+   * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
   withContext(context?: Record<string, any>): LogLayer {
     let updatedContext = context;
@@ -164,7 +164,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Add additional plugins.
    *
-   * {@link https://loglayer.dev/plugins/ | Plugins Docs}
+   * @see {@link https://loglayer.dev/plugins/ | Plugins Docs}
    */
   addPlugins(plugins: Array<LogLayerPlugin>) {
     this.pluginManager.addPlugins(plugins);
@@ -173,7 +173,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Enables a plugin by id.
    *
-   * {@link https://loglayer.dev/plugins/ | Plugins Docs}
+   * @see {@link https://loglayer.dev/plugins/ | Plugins Docs}
    */
   enablePlugin(id: string) {
     this.pluginManager.enablePlugin(id);
@@ -182,7 +182,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Disables a plugin by id.
    *
-   * {@link https://loglayer.dev/plugins/ | Plugins Docs}
+   * @see {@link https://loglayer.dev/plugins/ | Plugins Docs}
    */
   disablePlugin(id: string) {
     this.pluginManager.disablePlugin(id);
@@ -191,7 +191,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Removes a plugin by id.
    *
-   * {@link https://loglayer.dev/plugins/ | Plugins Docs}
+   * @see {@link https://loglayer.dev/plugins/ | Plugins Docs}
    */
   removePlugin(id: string) {
     this.pluginManager.removePlugin(id);
@@ -200,7 +200,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Specifies metadata to include with the log message
    *
-   * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
+   * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
   withMetadata(metadata?: Record<string, any>) {
     return new LogBuilder(this).withMetadata(metadata);
@@ -209,7 +209,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Specifies an Error to include with the log message
    *
-   * {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
+   * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
   withError(error: any) {
     return new LogBuilder(this).withError(error);
@@ -219,7 +219,7 @@ export class LogLayer implements ILogLayer {
    * Creates a new instance of LogLayer but with the initialization
    * configuration and context copied over.
    *
-   * {@link https://loglayer.dev/logging-api/child-loggers.html | Child Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/child-loggers.html | Child Logging Docs}
    */
   child(): LogLayer {
     const childConfig = {
@@ -248,7 +248,7 @@ export class LogLayer implements ILogLayer {
    * When used with child loggers, it only affects the current logger instance
    * and does not modify the parent's transports.
    *
-   * {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
+   * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
    */
   withFreshTransports(transports: LogLayerTransport | Array<LogLayerTransport>): LogLayer {
     this._config.transport = transports;
@@ -262,7 +262,7 @@ export class LogLayer implements ILogLayer {
    * When used with child loggers, it only affects the current logger instance
    * and does not modify the parent's plugins.
    *
-   * {@link https://loglayer.dev/plugins/ | Plugins Docs}
+   * @see {@link https://loglayer.dev/plugins/ | Plugins Docs}
    */
   withFreshPlugins(plugins: Array<LogLayerPlugin>): LogLayer {
     this._config.plugins = plugins;
@@ -278,7 +278,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Logs only the error object without a log message
    *
-   * {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
+   * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
   errorOnly(error: any, opts?: ErrorOnlyOpts) {
     const { copyMsgOnOnlyError } = this._config;
@@ -299,7 +299,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Logs only metadata without a log message
    *
-   * {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
+   * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
   metadataOnly(metadata?: Record<string, any>, logLevel: LogLevel = LogLevel.info) {
     const { muteMetadata, consoleDebug } = this._config;
@@ -344,7 +344,7 @@ export class LogLayer implements ILogLayer {
    * The logging library may or may not support multiple message parameters and only
    * the first parameter would be used.
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   info(...messages: MessageDataType[]) {
     this._formatMessage(messages);
@@ -354,7 +354,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Sends a log message to the logging library under the warn log level
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   warn(...messages: MessageDataType[]) {
     this._formatMessage(messages);
@@ -364,7 +364,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Sends a log message to the logging library under the error log level
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   error(...messages: MessageDataType[]) {
     this._formatMessage(messages);
@@ -374,7 +374,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Sends a log message to the logging library under the debug log level
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   debug(...messages: MessageDataType[]) {
     this._formatMessage(messages);
@@ -384,7 +384,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Sends a log message to the logging library under the trace log level
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   trace(...messages: MessageDataType[]) {
     this._formatMessage(messages);
@@ -394,7 +394,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Sends a log message to the logging library under the fatal log level
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   fatal(...messages: MessageDataType[]) {
     this._formatMessage(messages);
@@ -404,7 +404,7 @@ export class LogLayer implements ILogLayer {
   /**
    * All logging inputs are dropped and stops sending logs to the logging library.
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   disableLogging() {
     this._config.enabled = false;
@@ -414,7 +414,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Enable sending logs to the logging library.
    *
-   * {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   enableLogging() {
     this._config.enabled = true;
@@ -424,7 +424,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Disables inclusion of context data in the print
    *
-   * {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
+   * @see {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
    */
   muteContext(): ILogLayer {
     this._config.muteContext = true;
@@ -434,7 +434,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Enables inclusion of context data in the print
    *
-   * {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
+   * @see {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
    */
   unMuteContext(): ILogLayer {
     this._config.muteContext = false;
@@ -444,7 +444,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Disables inclusion of metadata in the print
    *
-   * {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
+   * @see {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
    */
   muteMetadata(): ILogLayer {
     this._config.muteMetadata = true;
@@ -454,7 +454,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Enables inclusion of metadata in the print
    *
-   * {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
+   * @see {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
    */
   unMuteMetadata(): ILogLayer {
     this._config.muteMetadata = false;
@@ -505,7 +505,7 @@ export class LogLayer implements ILogLayer {
   /**
    * Returns a logger instance for a specific transport
    *
-   * {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
+   * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
    */
   getLoggerInstance<Logger>(id: string): Logger | undefined {
     const transport = this.idToTransport[id];

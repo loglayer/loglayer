@@ -13,8 +13,8 @@ The sprintf plugin provides printf-style string formatting support using [sprint
 It allows you to format your log messages using familiar printf-style placeholders if a logging library does not support this behavior.
 
 ::: warning
-LogLayer does not allow passing items that are not strings or numbers into message methods like `info`, `error`,
-etc. **It is recommended to only use string and number specifiers in your format strings.**
+LogLayer does not allow passing items that are not strings, booleans, or numbers into message methods like `info`, `error`,
+etc. **It is recommended to only use string / boolean / number specifiers in your format strings.**
 :::
 
 ## Installation
