@@ -1,7 +1,13 @@
 import type { LogLayerPlugin } from "@loglayer/plugin";
 import type { LogLayerTransport } from "@loglayer/transport";
 
-export { LogLevel, type ErrorOnlyOpts, type ILogLayer, type ILogBuilder } from "@loglayer/shared";
+export {
+  LogLevel,
+  type ErrorOnlyOpts,
+  type ILogLayer,
+  type ILogBuilder,
+  type LogLayerTransport,
+} from "@loglayer/shared";
 
 export type ErrorSerializerType = (err: any) => Record<string, any> | string;
 
