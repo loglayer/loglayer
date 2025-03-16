@@ -9,7 +9,14 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Mar 16, 2025
 
+Documentation:
+
 - Added an integration doc for [Asynchronous Context Tracking](/example-integrations/async-context) to show how to implement LogLayer with `AsyncLocalStorage`.
+- Added in the [Typescript Tips](/logging-api/typescript) that `LogLayerTransport` can be used to type array of transports.
+
+`loglayer`:
+
+- Added an export for the `LogLayerTransport` type.
 
 ## Mar 5, 2025
 

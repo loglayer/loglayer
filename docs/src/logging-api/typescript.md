@@ -11,12 +11,12 @@ description: Notes on using LogLayer with Typescript
 you will also be able to use the mock `MockLogLayer` class for unit testing.
 
 ```typescript
-import type{ ILogLayer } from 'loglayer'
+import type { ILogLayer } from 'loglayer'
 
 const logger: ILogLayer = new LogLayer()
 ```
 
-## Use `LogLevel` if you need to type your log level when creating a logger.
+## Use `LogLevel` if you need to type your log level when creating a logger
 
 ```typescript
 import type { LogLevel } from 'loglayer'
@@ -25,5 +25,24 @@ const logger = new LogLayer({
   transport: new ConsoleTransport({
     level: process.env.LOG_LEVEL as LogLevel
   })
+})
+```
+
+## Use `LogLayerTransport` if you need to type an array of transports
+
+```typescript
+import type { LogLayerTransport } from 'loglayer'
+
+const transports: LogLayerTransport[] = [
+  new ConsoleTransport({
+    level: process.env.LOG_LEVEL as LogLevel
+  }),
+  new FileTransport({
+    level: process.env.LOG_LEVEL as LogLevel
+  })
+]
+
+const logger = new LogLayer({ 
+  transport: transports,
 })
 ```
