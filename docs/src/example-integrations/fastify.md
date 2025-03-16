@@ -75,3 +75,9 @@ fastify.listen({ port: 3000 }, function (err, address) {
   // Server is now listening on ${address}
 })
 ```
+
+## Example repo
+
+You can find a complete example of using LogLayer with Fastify in the [fastify-starter-turbo-monorepo](https://github.com/theogravity/fastify-starter-turbo-monorepo) example.
+
+It uses [`AsyncLocalStorage`](./async-context) to store the logger for use in request contexts.

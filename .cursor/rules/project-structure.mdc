@@ -1,7 +1,7 @@
 ---
 description: Project directory structure
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 ## LogLayer Project Structure
 
