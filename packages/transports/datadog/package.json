@@ -38,17 +38,17 @@
   },
   "dependencies": {
     "@loglayer/transport": "workspace:*",
-    "@datadog/datadog-api-client": "1.32.0",
+    "@datadog/datadog-api-client": "1.33.1",
     "datadog-transport-common": "3.0.2"
   },
   "devDependencies": {
     "loglayer": "workspace:*",
     "hash-runner": "2.0.1",
-    "@types/node": "22.13.5",
+    "@types/node": "22.13.10",
     "@internal/tsconfig": "workspace:*",
-    "tsup": "8.3.6",
-    "typescript": "5.7.3",
-    "vitest": "3.0.6"
+    "tsup": "8.4.0",
+    "typescript": "5.8.2",
+    "vitest": "3.0.8"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {
