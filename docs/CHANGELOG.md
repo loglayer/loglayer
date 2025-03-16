@@ -1,5 +1,11 @@
 # LogLayer Docs Site Changelog
 
+## 2.4.2
+
+### Patch Changes
+
+- [#179](https://github.com/loglayer/loglayer/pull/179) [`b03eb3a`](https://github.com/loglayer/loglayer/commit/b03eb3af9b4f428dc79bfcf8a84f31e128202c14) Thanks [@theogravity](https://github.com/theogravity)! - Export the `LogLayerTransport` type and add docs for it
+
 ## 2.4.1
 
 ### Patch Changes
