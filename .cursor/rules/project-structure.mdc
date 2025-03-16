@@ -1,0 +1,29 @@
+---
+description: Project directory structure
+globs: 
+alwaysApply: true
+---
+## LogLayer Project Structure
+
+```
+loglayer/
+├── docs/                         # Documentation site (vitepress)
+│   ├── .vitepress/               # vitepress configuration (including sidebar config)
+|   ├── src/                      # Documentation site doc files
+│   │   ├── context-managers/     # LogLayer Context manager site docs
+|   |   ├── example-integrations/ # Example integrations
+|   |   ├── logging-api/          # LogLayer API documentation
+|   |   ├── plugins/              # LogLayer Plugin documentation
+|   |   ├── transports/           # LogLayer Transports documentation
+├── packages/
+│   ├── core/                     # Core packages
+│   │   ├── context-managers/     # Context manager system core
+│   │   ├── loglayer/             # Main LogLayer implementation
+│   │   ├── plugin/               # Plugin system core
+│   │   ├── transport/            # Transport system core
+│   │   ├── shared/               # Shared utilities and types
+│   │   └── tsconfig/             # Shared TypeScript configurations
+│   ├── context-managers/         # Official context manager implementations
+│   ├── transports/               # Official transport implementations
+│   └── plugins/                  # Official plugins
+```

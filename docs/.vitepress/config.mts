@@ -166,6 +166,7 @@ export default defineConfig({
       {
         text: 'Example Integrations',
         items: [
+          { text: 'Async context tracking', link: '/example-integrations/async-context' },
           { text: 'Express', link: '/example-integrations/express' },
           { text: 'Fastify', link: '/example-integrations/fastify' },
           { text: 'Next.js', link: '/example-integrations/nextjs' },

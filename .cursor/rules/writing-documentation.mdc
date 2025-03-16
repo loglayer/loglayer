@@ -1,0 +1,82 @@
+---
+description: Writing documentation
+globs: 
+alwaysApply: true
+---
+# Writing documentation
+
+Documentation consists of the following:
+
+- A package-level `README.md` file.
+- Documentation site files.
+
+The documentation site is written using Vite Press. See the `project-structure.mdc` cursor rule file for
+more information the documentation site folder structure.
+
+- Sidebar configuration is defined in `docs/.vitepress/config.mts`.
+- Any new additions to the project is marked in `docs/whats-new.md` with the current date and what has changed.
+
+When documentation for a package is requested, we will need to create / update the `README.md` file, and then the documentation site file for it.
+
+## Writing README.md documentation
+
+The README.md for a package always has the following:
+
+- An npm version badge
+- A downloads badge
+- A typescript badge
+- A very simple description of what the package does and a link back to the LogLayer site documentation (https://loglayer.dev)
+- A link to the corresponding site documentation
+
+See other README.md files for examples of this.
+
+The README.md should only contain how to install and setup the package using the bare minimum details necessary.
+Deeper details / advanced configuration should be reserved for site documentation.
+
+### Code examples
+
+When writing the code example and you need to show logging usage after initial setup, make sure they are using LogLayer methods.
+
+For example, do not do this:
+
+```
+// LogLayer does not support this!
+log.info("hello world", { test: data })
+```
+
+It should be this:
+
+```
+log.withMetadata({ test: data }).info("hello world")
+```
+
+Likewise with errors:
+
+```
+// LogLayer does not support this!
+log.error("hello world", new Error("test"))
+```
+
+It should be:
+
+```
+log.withError(new Error("test")).error("hello world")
+```
+
+## Writing for the documentation site
+
+When writing new documentation, refer to existing site documentation as past examples. For example, if I'm asking to write site documentation for a transport, then look at prior documentation for transports for a foundation.
+
+- There should always be an npm version badge
+- There should always be a link to the source for the package on GitHub
+- Package install should always have examples for npm / yarn / pnpm. They should be presented in a group like existing documentation.
+- Configuration should always be presented as a table.
+- Code examples should always make sure to use LogLayer methods when using logging examples.
+
+The package usually needs to be added to a list of sorts:
+
+- `context-manager-list.md`: Context managers
+- `plugin-list.md`: Plugins
+- `transport-list.md`: Transports
+
+And added to the documentation site sidebar config (`docs/.vitepress/config.mts`).

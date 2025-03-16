@@ -92,3 +92,8 @@ app.listen(3000, () => {
   console.log('Server started on port 3000')
 })
 ```
+
+## Using Async Local Storage
+
+You will most likely want to use async local storage to avoid passing the logger around in your code. 
+See an example of how to do this [here](./async-context).

@@ -7,6 +7,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Mar 16, 2025
+
+- Added an integration doc for [Asynchronous Context Tracking](/example-integrations/async-context) to show how to implement LogLayer with `AsyncLocalStorage`.
+
 ## Mar 5, 2025
 
 Documentation updates. 
