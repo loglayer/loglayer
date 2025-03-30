@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 6.3.3
+
+### Patch Changes
+
+- [#181](https://github.com/loglayer/loglayer/pull/181) [`a0f6f40`](https://github.com/loglayer/loglayer/commit/a0f6f401355abfa198b646aacf3b5675b64ab149) Thanks [@theogravity](https://github.com/theogravity)! - Fixes `MockLogLayer` where `child()` and `withPrefix()` was not returning itself
+
 ## 6.3.2
 
 ### Patch Changes
