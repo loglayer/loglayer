@@ -7,6 +7,14 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Mar 29, 2025
+
+General dev-only package updates.
+
+`loglayer`:
+
+- Fixed a bug in `MockLogLayer` where `child()` and `withPrefix()` should be returning itself instead of a `MockLogBuilder`
+
 ## Mar 16, 2025
 
 Documentation:

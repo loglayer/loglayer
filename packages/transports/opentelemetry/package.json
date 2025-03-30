@@ -50,8 +50,8 @@
     "@opentelemetry/semantic-conventions": "1.30.0",
     "@opentelemetry/instrumentation-express": "0.47.1",
     "@opentelemetry/instrumentation-http": "0.57.2",
-    "@types/express": "5.0.0",
-    "@types/node": "22.13.10",
+    "@types/express": "5.0.1",
+    "@types/node": "22.13.14",
     "express": "4.21.2",
     "hash-runner": "2.0.1",
     "loglayer": "workspace:*",
@@ -59,7 +59,7 @@
     "tsup": "8.4.0",
     "tsx": "4.19.3",
     "typescript": "5.8.2",
-    "vitest": "3.0.8"
+    "vitest": "3.0.9"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

@@ -37,7 +37,8 @@
     "datadog",
     "log rotation",
     "rotation",
-    "rotate logs"
+    "rotate logs",
+    "typescript"
   ],
   "scripts": {
     "build": "tsup src/index.ts",
@@ -60,7 +61,7 @@
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "vitest": "3.0.8"
+    "vitest": "3.0.9"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

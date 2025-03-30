@@ -43,12 +43,12 @@ export class MockLogLayer implements ILogLayer {
 
   disablePlugin(id: string) {}
 
-  withPrefix(prefix: string) {
-    return this.mockLogBuilder as ILogLayer;
+  withPrefix(prefix: string): ILogLayer {
+    return this;
   }
 
   withContext(context?: Record<string, any>): ILogLayer {
-    return this as ILogLayer;
+    return this;
   }
 
   withError(error: any): ILogBuilder {
@@ -80,7 +80,7 @@ export class MockLogLayer implements ILogLayer {
   }
 
   child() {
-    return this.mockLogBuilder as ILogLayer;
+    return this;
   }
 
   muteContext() {
