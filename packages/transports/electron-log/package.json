@@ -39,11 +39,11 @@
   "devDependencies": {
     "loglayer": "workspace:*",
     "hash-runner": "2.0.1",
-    "@types/node": "22.13.10",
+    "@types/node": "22.13.14",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "vitest": "3.0.8"
+    "vitest": "3.0.9"
   },
   "peerDependencies": {
     "electron-log": "*"
