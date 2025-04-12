@@ -3,7 +3,7 @@ const path = require("node:path");
 const glob = require("glob");
 
 // Directories to omit from copying
-const omitDirectories = ["console"];
+const omitDirectories = ["console", "tsconfig"];
 
 // Create directories if they don't exist
 const docsDir = path.join(__dirname, "..");
