@@ -114,7 +114,7 @@ loglayer/
 ├── docs/                         # Documentation (vitepress)
 ├── packages/
 │   ├── core/                     # Core packages
-│   │   ├── context-managers/     # Context manager system core
+│   │   ├── context-manager/      # Context manager system core
 │   │   ├── loglayer/             # Main LogLayer implementation
 │   │   ├── plugin/               # Plugin system core
 │   │   ├── transport/            # Transport system core
