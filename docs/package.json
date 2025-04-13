@@ -6,7 +6,7 @@
   "scripts": {
     "copy-changelogs": "node scripts/copy-changelogs.js",
     "docs:dev": "pnpm copy-changelogs && vitepress dev",
-    "docs:build": "pnpm copy-changelogs && vitepress build",
+    "docs:build": "pnpm copy-changelogs && vitepress build && ./scripts/cleanup-llms.sh",
     "docs:preview": "pnpm copy-changelogs && vitepress build && vitepress preview"
   },
   "dependencies": {

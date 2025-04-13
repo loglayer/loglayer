@@ -22,6 +22,7 @@ export default defineConfig({
     },
     plugins: [
       llmstxt({
+        domain: 'https://loglayer.dev',
         title: "LogLayer",
         description: "The modern logging library for Typescript / Javascript",
         details: "LogLayer is structured logging library with a fluent API for specifying log messages, " +
