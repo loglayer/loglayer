@@ -37,8 +37,10 @@ export default defineConfig({
           'context-managers/_partials/*',
           'core-changelogs/*',
           '_partials/*',
+          'ai-support.md',
           'whats-new.md',
-          'index.md'
+          'index.md',
+          'migrating.md'
         ]
       })
     ]
@@ -103,6 +105,7 @@ export default defineConfig({
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Configuration', link: '/configuration' },
           { text: 'Migrating Versions', link: '/migrating' },
+          { text: 'AI Support', link: '/ai-support' },
         ]
       },
       {

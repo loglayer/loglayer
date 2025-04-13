@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Apr 12, 2025
+
+Adds support for the [llms.txt](https://llmstxt.org/) format.
+
+- [AI Support](/ai-support)
+
 ## Mar 29, 2025
 
 General dev-only package updates.
