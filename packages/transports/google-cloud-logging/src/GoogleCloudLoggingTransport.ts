@@ -1,6 +1,6 @@
 import type { Log } from "@google-cloud/logging";
 import type { LogEntry } from "@google-cloud/logging/build/src/entry.js";
-import { BaseTransport, LogLevel, LogLevelPriority } from "@loglayer/transport";
+import { BaseTransport, LogLevel, LogLevelPriority, type LogLevelType } from "@loglayer/transport";
 import type { LogLayerTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
 
 export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConfig<Log> {
@@ -14,12 +14,12 @@ export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConf
   /**
    * Minimum log level to process. Defaults to "trace"
    */
-  level?: LogLevel | "trace" | "debug" | "info" | "warn" | "error" | "fatal";
+  level?: LogLevelType;
 }
 
 export class GoogleCloudLoggingTransport extends BaseTransport<Log> {
   private rootLevelData: Omit<LogEntry, "severity" | "timestamp" | "jsonPayload">;
-  private level: LogLevel | "trace" | "debug" | "info" | "warn" | "error" | "fatal";
+  private level: LogLevelType;
 
   constructor(config: GoogleCloudLoggingTransportConfig) {
     super(config);
@@ -27,7 +27,7 @@ export class GoogleCloudLoggingTransport extends BaseTransport<Log> {
     this.level = config.level ?? LogLevel.trace; // Default to trace to allow all logs
   }
 
-  private mapLogLevel(level: LogLevel): string {
+  private mapLogLevel(level: LogLevelType): string {
     switch (level) {
       case LogLevel.fatal:
         return "CRITICAL";

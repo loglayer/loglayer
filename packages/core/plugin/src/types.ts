@@ -13,7 +13,7 @@ export type {
   LogLayerPlugin,
 } from "@loglayer/shared";
 
-export type { LogLevel, ILogLayer } from "@loglayer/shared";
+export { LogLevel, type LogLevelType, type ILogLayer } from "@loglayer/shared";
 
 /**
  * Callback function for transforming the data object containing metadata, context, and error information before it's

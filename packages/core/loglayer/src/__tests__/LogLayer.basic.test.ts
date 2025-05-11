@@ -360,4 +360,176 @@ describe("LogLayer basic functionality", () => {
       }),
     );
   });
+
+  describe("log level management", () => {
+    it("should enable individual log levels", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      // Disable all log levels first
+      log.disableLogging();
+
+      // Verify logging is disabled
+      log.info("test info");
+      expect(genericLogger.popLine()).not.toBeDefined();
+
+      // Enable just the info level
+      log.enableIndividualLevel(LogLevel.info);
+
+      // Info should now work
+      log.info("test info");
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: ["test info"],
+        }),
+      );
+
+      // But other levels should still be disabled
+      log.warn("test warn");
+      expect(genericLogger.popLine()).not.toBeDefined();
+
+      log.error("test error");
+      expect(genericLogger.popLine()).not.toBeDefined();
+    });
+
+    it("should disable individual log levels", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      // Start with all levels enabled
+      log.enableLogging();
+
+      // Disable just the warn level
+      log.disableIndividualLevel(LogLevel.warn);
+
+      // Warn should be disabled
+      log.warn("test warn");
+      expect(genericLogger.popLine()).not.toBeDefined();
+
+      // Other levels should still work
+      log.info("test info");
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: ["test info"],
+        }),
+      );
+
+      log.error("test error");
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.error,
+          data: ["test error"],
+        }),
+      );
+    });
+
+    it("should set minimum log level", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      // Set minimum level to warn
+      log.setLogLevel(LogLevel.warn);
+
+      // Info and debug should be disabled
+      log.info("test info");
+      expect(genericLogger.popLine()).not.toBeDefined();
+
+      log.debug("test debug");
+      expect(genericLogger.popLine()).not.toBeDefined();
+
+      // Warn, error and fatal should be enabled
+      log.warn("test warn");
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.warn,
+          data: ["test warn"],
+        }),
+      );
+
+      log.error("test error");
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.error,
+          data: ["test error"],
+        }),
+      );
+
+      log.fatal("test fatal");
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          // console logger does not have a fatal level
+          level: LogLevel.error,
+          data: ["test fatal"],
+        }),
+      );
+    });
+
+    it("should correctly report if a level is enabled", () => {
+      const log = getLogger();
+
+      // Start with all levels enabled
+      log.enableLogging();
+
+      expect(log.isLogLevelEnabled(LogLevel.info)).toBe(true);
+      expect(log.isLogLevelEnabled(LogLevel.warn)).toBe(true);
+      expect(log.isLogLevelEnabled(LogLevel.error)).toBe(true);
+      expect(log.isLogLevelEnabled(LogLevel.debug)).toBe(true);
+      expect(log.isLogLevelEnabled(LogLevel.trace)).toBe(true);
+      expect(log.isLogLevelEnabled(LogLevel.fatal)).toBe(true);
+
+      // Disable specific levels
+      log.disableIndividualLevel(LogLevel.debug);
+      log.disableIndividualLevel(LogLevel.info);
+
+      expect(log.isLogLevelEnabled(LogLevel.info)).toBe(false);
+      expect(log.isLogLevelEnabled(LogLevel.warn)).toBe(true);
+      expect(log.isLogLevelEnabled(LogLevel.error)).toBe(true);
+      expect(log.isLogLevelEnabled(LogLevel.debug)).toBe(false);
+      expect(log.isLogLevelEnabled(LogLevel.trace)).toBe(true);
+      expect(log.isLogLevelEnabled(LogLevel.fatal)).toBe(true);
+
+      // Set minimum level to error
+      log.setLogLevel(LogLevel.error);
+
+      expect(log.isLogLevelEnabled(LogLevel.info)).toBe(false);
+      expect(log.isLogLevelEnabled(LogLevel.warn)).toBe(false);
+      expect(log.isLogLevelEnabled(LogLevel.error)).toBe(true);
+      expect(log.isLogLevelEnabled(LogLevel.debug)).toBe(false);
+      expect(log.isLogLevelEnabled(LogLevel.trace)).toBe(false);
+      expect(log.isLogLevelEnabled(LogLevel.fatal)).toBe(true);
+    });
+
+    it("should chain log level methods", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      // Chain multiple operations
+      log.disableLogging().enableIndividualLevel(LogLevel.error).enableIndividualLevel(LogLevel.fatal);
+
+      // Debug should be disabled
+      log.debug("test debug");
+      expect(genericLogger.popLine()).not.toBeDefined();
+
+      // Error should be enabled
+      log.error("test error");
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.error,
+          data: ["test error"],
+        }),
+      );
+
+      // Chain with other methods
+      log.setLogLevel(LogLevel.warn).withMetadata({ test: "data" }).warn("test with chain");
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.warn,
+          data: [{ test: "data" }, "test with chain"],
+        }),
+      );
+    });
+  });
 });

@@ -3,6 +3,7 @@ import type { LogLayerTransport } from "@loglayer/transport";
 
 export {
   LogLevel,
+  type LogLevelType,
   type ErrorOnlyOpts,
   type ILogLayer,
   type ILogBuilder,

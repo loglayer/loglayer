@@ -16,14 +16,14 @@ import type { ILogLayer } from 'loglayer'
 const logger: ILogLayer = new LogLayer()
 ```
 
-## Use `LogLevel` if you need to type your log level when creating a logger
+## Use `LogLevelType` if you need to type your log level when creating a logger
 
 ```typescript
-import type { LogLevel } from 'loglayer'
+import type { LogLevelType } from 'loglayer'
 
 const logger = new LogLayer({ 
   transport: new ConsoleTransport({
-    level: process.env.LOG_LEVEL as LogLevel
+    level: process.env.LOG_LEVEL as LogLevelType
   })
 })
 ```

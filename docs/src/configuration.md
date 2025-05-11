@@ -71,11 +71,7 @@ Control whether logging is enabled:
 }
 ```
 
-You can also enable/disable logging programmatically:
-```typescript
-log.enableLogging()  // Enable logging
-log.disableLogging() // Disable logging
-```
+See the [Enabling/Disabling Logging](./logging-api/basic-logging#enabling-disabling-logging) section for more details.
 
 ### Debugging
 

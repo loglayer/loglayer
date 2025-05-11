@@ -1,4 +1,4 @@
-import type { ErrorOnlyOpts, LogLevel, MessageDataType } from "./common.types.js";
+import type { ErrorOnlyOpts, LogLevelType, MessageDataType } from "./common.types.js";
 import type { LogLayerPlugin } from "./plugin.types.js";
 
 /**
@@ -63,7 +63,7 @@ export interface LogLayerTransportParams {
   /**
    * The log level of the message
    */
-  logLevel: LogLevel;
+  logLevel: LogLevelType;
   /**
    * The parameters that were passed to the log message method (eg: info / warn / debug / error)
    */
@@ -215,7 +215,7 @@ export interface ILogLayer extends ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  metadataOnly(metadata?: Record<string, any>, logLevel?: LogLevel): void;
+  metadataOnly(metadata?: Record<string, any>, logLevel?: LogLevelType): void;
 
   /**
    * Returns the context used
@@ -258,6 +258,45 @@ export interface ILogLayer extends ILogBuilder {
    * @see {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
    */
   unMuteMetadata(): ILogLayer;
+  /**
+   * Enables a specific log level
+   *
+   * @param logLevel The log level to enable
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   */
+  enableIndividualLevel(logLevel: LogLevelType): ILogLayer;
+  /**
+   * Disables a specific log level
+   *
+   * @param logLevel The log level to disable
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   */
+  disableIndividualLevel(logLevel: LogLevelType): ILogLayer;
+  /**
+   * Sets the minimum log level to be used by the logger. Only messages with
+   * this level or higher severity will be logged.
+   *
+   * For example, if you setLogLevel(LogLevel.warn), this will:
+   * Enable:
+   * - warn
+   * - error
+   * - fatal
+   * Disable:
+   * - info
+   * - debug
+   * - trace
+   *
+   * @param logLevel The minimum log level to enable
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   */
+  setLogLevel(logLevel: LogLevelType): ILogLayer;
+  /**
+   * Checks if a specific log level is enabled
+   */
+  isLogLevelEnabled(logLevel: LogLevelType): boolean;
   /**
    * Enable sending logs to the logging library.
    *
