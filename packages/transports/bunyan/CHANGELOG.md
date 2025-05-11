@@ -1,5 +1,16 @@
 # `@loglayer/transport-bunyan` Changelog
 
+## 2.2.0
+
+### Minor Changes
+
+- [#190](https://github.com/loglayer/loglayer/pull/190) [`818bae5`](https://github.com/loglayer/loglayer/commit/818bae5efbc4212013ac41878c1e4c4f5594e19c) Thanks [@theogravity](https://github.com/theogravity)! - Update to use new `LogLevelType` instead of `LogLevel` where applicable
+
+### Patch Changes
+
+- Updated dependencies [[`818bae5`](https://github.com/loglayer/loglayer/commit/818bae5efbc4212013ac41878c1e4c4f5594e19c)]:
+  - @loglayer/transport@2.2.0
+
 ## 2.1.1
 
 ### Patch Changes
