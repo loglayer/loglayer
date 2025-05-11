@@ -21,12 +21,14 @@ See [the documentation](/logging-api/basic-logging#enabling-disabling-logging) f
 
 - Fixes a bug in `metadataOnly()` where it was sometimes returning
 the LogLayer instance instead of nothing. It should now return nothing.
+- Source maps have been disabled to save on package file size. If this is an issue please raise one!
 
 For `loglayer`, plugins, and transports:
 
 - Adds a new TypeScript type called `LogLevelType`, which is a union of the `LogLevel` enum and its string representation.
   - This means you can use either `LogLevel.info` or just `info` (string)
   - All usages of `LogLevel` as a parameter type have been replaced with `LogLevelType`.
+- Some packages have source maps disabled to save on package file size. If this is an issue please raise one!
 
 ## Apr 12, 2025
 
