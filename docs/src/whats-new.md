@@ -12,10 +12,10 @@ description: Learn about the latest features and improvements in LogLayer
 *It is advised that if you update `loglayer`, you should update any plugins and transports to the latest versions as well.*
 
 - Added the following new methods to control log levels in `loglayer`:
-  - `setLogLevel()`
+  - `setLevel()`
   - `enableIndividualLevel()`
   - `disableIndividualLevel()`
-  - `isLogLevelEnabled()`
+  - `isLevelEnabled()`
 
 See [the documentation](/logging-api/basic-logging#enabling-disabling-logging) for more information.
 

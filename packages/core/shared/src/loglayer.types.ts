@@ -261,15 +261,11 @@ export interface ILogLayer extends ILogBuilder {
   /**
    * Enables a specific log level
    *
-   * @param logLevel The log level to enable
-   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   enableIndividualLevel(logLevel: LogLevelType): ILogLayer;
   /**
    * Disables a specific log level
-   *
-   * @param logLevel The log level to disable
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
@@ -278,7 +274,7 @@ export interface ILogLayer extends ILogBuilder {
    * Sets the minimum log level to be used by the logger. Only messages with
    * this level or higher severity will be logged.
    *
-   * For example, if you setLogLevel(LogLevel.warn), this will:
+   * For example, if you setLevel(LogLevel.warn), this will:
    * Enable:
    * - warn
    * - error
@@ -288,15 +284,15 @@ export interface ILogLayer extends ILogBuilder {
    * - debug
    * - trace
    *
-   * @param logLevel The minimum log level to enable
-   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  setLogLevel(logLevel: LogLevelType): ILogLayer;
+  setLevel(logLevel: LogLevelType): ILogLayer;
   /**
    * Checks if a specific log level is enabled
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#checking-if-a-log-level-is-enabled | Checking if a Log Level is Enabled Docs}
    */
-  isLogLevelEnabled(logLevel: LogLevelType): boolean;
+  isLevelEnabled(logLevel: LogLevelType): boolean;
   /**
    * Enable sending logs to the logging library.
    *

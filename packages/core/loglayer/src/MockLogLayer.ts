@@ -130,11 +130,11 @@ export class MockLogLayer implements ILogLayer {
     return this;
   }
 
-  setLogLevel(logLevel: LogLevel): ILogLayer {
+  setLevel(logLevel: LogLevel): ILogLayer {
     return this;
   }
 
-  isLogLevelEnabled(logLevel: LogLevel): boolean {
+  isLevelEnabled(logLevel: LogLevel): boolean {
     return true;
   }
 

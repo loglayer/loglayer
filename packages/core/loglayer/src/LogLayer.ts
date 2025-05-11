@@ -309,7 +309,7 @@ export class LogLayer implements ILogLayer {
    */
   errorOnly(error: any, opts?: ErrorOnlyOpts) {
     const logLevel = opts?.logLevel || LogLevel.error;
-    if (!this.isLogLevelEnabled(logLevel)) return;
+    if (!this.isLevelEnabled(logLevel)) return;
 
     const { copyMsgOnOnlyError } = this._config;
 
@@ -332,7 +332,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
   metadataOnly(metadata?: Record<string, any>, logLevel: LogLevelType = LogLevel.info) {
-    if (!this.isLogLevelEnabled(logLevel)) return;
+    if (!this.isLevelEnabled(logLevel)) return;
 
     const { muteMetadata, consoleDebug } = this._config;
 
@@ -379,7 +379,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   info(...messages: MessageDataType[]) {
-    if (!this.isLogLevelEnabled(LogLevel.info)) return;
+    if (!this.isLevelEnabled(LogLevel.info)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.info, params: messages });
   }
@@ -390,7 +390,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   warn(...messages: MessageDataType[]) {
-    if (!this.isLogLevelEnabled(LogLevel.warn)) return;
+    if (!this.isLevelEnabled(LogLevel.warn)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.warn, params: messages });
   }
@@ -401,7 +401,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   error(...messages: MessageDataType[]) {
-    if (!this.isLogLevelEnabled(LogLevel.error)) return;
+    if (!this.isLevelEnabled(LogLevel.error)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.error, params: messages });
   }
@@ -412,7 +412,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   debug(...messages: MessageDataType[]) {
-    if (!this.isLogLevelEnabled(LogLevel.debug)) return;
+    if (!this.isLevelEnabled(LogLevel.debug)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.debug, params: messages });
   }
@@ -423,7 +423,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   trace(...messages: MessageDataType[]) {
-    if (!this.isLogLevelEnabled(LogLevel.trace)) return;
+    if (!this.isLevelEnabled(LogLevel.trace)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.trace, params: messages });
   }
@@ -434,7 +434,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   fatal(...messages: MessageDataType[]) {
-    if (!this.isLogLevelEnabled(LogLevel.fatal)) return;
+    if (!this.isLevelEnabled(LogLevel.fatal)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.fatal, params: messages });
   }
@@ -506,8 +506,6 @@ export class LogLayer implements ILogLayer {
   /**
    * Enables a specific log level
    *
-   * @param logLevel The log level to enable
-   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   enableIndividualLevel(logLevel: LogLevelType): ILogLayer {
@@ -520,8 +518,6 @@ export class LogLayer implements ILogLayer {
 
   /**
    * Disables a specific log level
-   *
-   * @param logLevel The log level to disable
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
@@ -537,7 +533,7 @@ export class LogLayer implements ILogLayer {
    * Sets the minimum log level to be used by the logger. Only messages with
    * this level or higher severity will be logged.
    *
-   * For example, if you setLogLevel(LogLevel.warn), this will:
+   * For example, if you setLevel(LogLevel.warn), this will:
    * Enable:
    * - warn
    * - error
@@ -547,11 +543,9 @@ export class LogLayer implements ILogLayer {
    * - debug
    * - trace
    *
-   * @param logLevel The minimum log level to enable
-   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  setLogLevel(logLevel: LogLevelType): ILogLayer {
+  setLevel(logLevel: LogLevelType): ILogLayer {
     const minLogValue = LogLevelPriority[logLevel];
 
     // Enable levels with value >= minLogValue, disable others
@@ -567,8 +561,10 @@ export class LogLayer implements ILogLayer {
 
   /**
    * Checks if a specific log level is enabled
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#checking-if-a-log-level-is-enabled | Checking if a Log Level is Enabled Docs}
    */
-  isLogLevelEnabled(logLevel: LogLevelType): boolean {
+  isLevelEnabled(logLevel: LogLevelType): boolean {
     const level = logLevel as keyof LogLevelEnabledStatus;
     return this.logLevelEnabledStatus[level];
   }

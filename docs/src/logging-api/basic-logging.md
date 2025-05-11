@@ -104,7 +104,7 @@ log.enableIndividualLevel(LogLevel.debug)  // Enable only debug logs
 log.disableIndividualLevel(LogLevel.debug) // Disable only debug logs
 
 // Enable or disable log levels following the conventional log level hierarchy
-log.setLogLevel(LogLevel.warn)  // Enable warn, error, and fatal (disable info, debug, trace)
+log.setLevel(LogLevel.warn)  // Enable warn, error, and fatal (disable info, debug, trace)
 ```
 
 ::: info Transport log levels
@@ -117,7 +117,7 @@ For example, if LogLayer is set to `debug` but the transport is set to `error`, 
 Log levels follow a hierarchy:
 - `fatal (10)` > `error (20)` > `warn (30)` > `info (40)` > `debug (50)` > `trace (60)`
 
-When using `setLogLevel()`, all levels below it are also enabled. 
+When using `setLevel()`, all levels below it are also enabled. 
 
 For example, if you set the log level to `warn`:
 
@@ -128,10 +128,10 @@ You can also ignore the hierarchy by using `enableIndividualLevel()` and `disabl
 
 ## Checking if a Log Level is Enabled
 
-You can check if a specific log level is enabled using the `isLogLevelEnabled` method:
+You can check if a specific log level is enabled using the `isLevelEnabled` method:
 
 ```typescript
-if (log.isLogLevelEnabled(LogLevel.debug)) {
+if (log.isLevelEnabled(LogLevel.debug)) {
   log.debug('Debugging is enabled')
 } else {
   log.info('Debugging is disabled')

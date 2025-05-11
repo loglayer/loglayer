@@ -83,7 +83,7 @@ export class LogBuilder implements ILogBuilder {
    * Sends a log message to the logging library under an info log level.
    */
   info(...messages: MessageDataType[]) {
-    if (!this.structuredLogger.isLogLevelEnabled(LogLevel.info)) return;
+    if (!this.structuredLogger.isLevelEnabled(LogLevel.info)) return;
     this.structuredLogger._formatMessage(messages);
     this.formatLog(LogLevel.info, messages);
   }
@@ -92,7 +92,7 @@ export class LogBuilder implements ILogBuilder {
    * Sends a log message to the logging library under the warn log level
    */
   warn(...messages: MessageDataType[]) {
-    if (!this.structuredLogger.isLogLevelEnabled(LogLevel.warn)) return;
+    if (!this.structuredLogger.isLevelEnabled(LogLevel.warn)) return;
     this.structuredLogger._formatMessage(messages);
     this.formatLog(LogLevel.warn, messages);
   }
@@ -101,7 +101,7 @@ export class LogBuilder implements ILogBuilder {
    * Sends a log message to the logging library under the error log level
    */
   error(...messages: MessageDataType[]) {
-    if (!this.structuredLogger.isLogLevelEnabled(LogLevel.error)) return;
+    if (!this.structuredLogger.isLevelEnabled(LogLevel.error)) return;
     this.structuredLogger._formatMessage(messages);
     this.formatLog(LogLevel.error, messages);
   }
@@ -113,7 +113,7 @@ export class LogBuilder implements ILogBuilder {
    * the first parameter would be used.
    */
   debug(...messages: MessageDataType[]) {
-    if (!this.structuredLogger.isLogLevelEnabled(LogLevel.debug)) return;
+    if (!this.structuredLogger.isLevelEnabled(LogLevel.debug)) return;
     this.structuredLogger._formatMessage(messages);
     this.formatLog(LogLevel.debug, messages);
   }
@@ -125,7 +125,7 @@ export class LogBuilder implements ILogBuilder {
    * the first parameter would be used.
    */
   trace(...messages: MessageDataType[]) {
-    if (!this.structuredLogger.isLogLevelEnabled(LogLevel.trace)) return;
+    if (!this.structuredLogger.isLevelEnabled(LogLevel.trace)) return;
     this.structuredLogger._formatMessage(messages);
     this.formatLog(LogLevel.trace, messages);
   }
@@ -137,7 +137,7 @@ export class LogBuilder implements ILogBuilder {
    * the first parameter would be used.
    */
   fatal(...messages: MessageDataType[]) {
-    if (!this.structuredLogger.isLogLevelEnabled(LogLevel.fatal)) return;
+    if (!this.structuredLogger.isLevelEnabled(LogLevel.fatal)) return;
     this.structuredLogger._formatMessage(messages);
     this.formatLog(LogLevel.fatal, messages);
   }

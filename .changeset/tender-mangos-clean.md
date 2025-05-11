@@ -3,9 +3,9 @@
 ---
 
 - Added the following new methods to control log levels in `loglayer`:
-  - `setLogLevel()`
+  - `setLevel()`
   - `enableIndividualLevel()`
   - `disableIndividualLevel()`
-  - `isLogLevelEnabled()`
+  - `isLevelEnabled()`
 - Fixes a bug in `metadataOnly()` where it was sometimes returning
 the LogLayer instance instead of nothing. It should now return nothing.
