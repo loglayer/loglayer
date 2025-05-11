@@ -91,20 +91,50 @@ prefixedLogger.info('User logged in')
 You can control whether logs are output using these methods:
 
 ```typescript
+import type { LogLevel } from 'loglayer'
+
 // Disable all logging
 log.disableLogging()
 
 // Enable logging again
 log.enableLogging()
+
+// Enable or disable specific log levels individually
+log.enableIndividualLevel(LogLevel.debug)  // Enable only debug logs
+log.disableIndividualLevel(LogLevel.debug) // Disable only debug logs
+
+// Enable or disable log levels following the conventional log level hierarchy
+log.setLevel(LogLevel.warn)  // Enable warn, error, and fatal (disable info, debug, trace)
 ```
 
-You can also configure this through the initial configuration:
+::: info Transport log levels
+Be aware that transports may have their own log level settings.
+For example, if LogLayer is set to `debug` but the transport is set to `error`, the transport will only handle error and fatal messages.
+:::
+
+### Log Level Hierarchy
+
+Log levels follow a hierarchy:
+- `fatal (10)` > `error (20)` > `warn (30)` > `info (40)` > `debug (50)` > `trace (60)`
+
+When using `setLevel()`, all levels below it are also enabled. 
+
+For example, if you set the log level to `warn`:
+
+- `warn`, `error`, and `fatal` messages will be logged
+- `info`, `debug`, and `trace` messages will be ignored.
+
+You can also ignore the hierarchy by using `enableIndividualLevel()` and `disableIndividualLevel()` methods to enable or disable specific log levels.
+
+## Checking if a Log Level is Enabled
+
+You can check if a specific log level is enabled using the `isLevelEnabled` method:
 
 ```typescript
-const log = new LogLayer({
-  enabled: false, // Starts with logging disabled
-  transport: new ConsoleTransport({
-    logger: console
-  })
-})
+if (log.isLevelEnabled(LogLevel.debug)) {
+  log.debug('Debugging is enabled')
+} else {
+  log.info('Debugging is disabled')
+}
 ```
+

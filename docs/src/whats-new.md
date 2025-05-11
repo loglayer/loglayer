@@ -7,6 +7,29 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## May 10, 2025
+
+*It is advised that if you update `loglayer`, you should update any plugins and transports to the latest versions as well.*
+
+- Added the following new methods to control log levels in `loglayer`:
+  - `setLevel()`
+  - `enableIndividualLevel()`
+  - `disableIndividualLevel()`
+  - `isLevelEnabled()`
+
+See [the documentation](/logging-api/basic-logging#enabling-disabling-logging) for more information.
+
+- Fixes a bug in `metadataOnly()` where it was sometimes returning
+the LogLayer instance instead of nothing. It should now return nothing.
+- Source maps have been disabled to save on package file size. If this is an issue please raise one!
+
+For `loglayer`, plugins, and transports:
+
+- Adds a new TypeScript type called `LogLevelType`, which is a union of the `LogLevel` enum and its string representation.
+  - This means you can use either `LogLevel.info` or just `info` (string)
+  - All usages of `LogLevel` as a parameter type have been replaced with `LogLevelType`.
+- Some packages have source maps disabled to save on package file size. If this is an issue please raise one!
+
 ## Apr 12, 2025
 
 Adds support for the [llms.txt](https://llmstxt.org/) format.

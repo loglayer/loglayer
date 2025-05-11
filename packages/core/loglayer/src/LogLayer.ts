@@ -3,6 +3,8 @@ import {
   type IContextManager,
   type ILogLayer,
   LogLevel,
+  LogLevelPriority,
+  type LogLevelType,
   type MessageDataType,
 } from "@loglayer/shared";
 import { LogBuilder } from "./LogBuilder.js";
@@ -14,10 +16,19 @@ import { type LogLayerPlugin, PluginCallbackType } from "@loglayer/plugin";
 import type { LogLayerTransport } from "@loglayer/transport";
 
 interface FormatLogParams {
-  logLevel: LogLevel;
+  logLevel: LogLevelType;
   params?: any[];
   metadata?: Record<string, any> | null;
   err?: any;
+}
+
+interface LogLevelEnabledStatus {
+  info: boolean;
+  warn: boolean;
+  error: boolean;
+  debug: boolean;
+  trace: boolean;
+  fatal: boolean;
 }
 
 /**
@@ -31,7 +42,19 @@ export class LogLayer implements ILogLayer {
   private hasMultipleTransports: boolean;
   private singleTransport: LogLayerTransport | null;
   private contextManager: IContextManager;
+  private logLevelEnabledStatus: LogLevelEnabledStatus = {
+    info: true,
+    warn: true,
+    error: true,
+    debug: true,
+    trace: true,
+    fatal: true,
+  };
 
+  /**
+   * The configuration object used to initialize the logger.
+   * This is for internal use only and should not be modified directly.
+   */
   _config: LogLayerConfig;
 
   constructor(config: LogLayerConfig) {
@@ -39,6 +62,10 @@ export class LogLayer implements ILogLayer {
       ...config,
       enabled: config.enabled ?? true,
     };
+
+    if (!this._config.enabled) {
+      this.disableLogging();
+    }
 
     this.contextManager = new DefaultContextManager();
     this.pluginManager = new PluginManager(config.plugins || []);
@@ -58,7 +85,7 @@ export class LogLayer implements ILogLayer {
    * Sets the context manager to use for managing context data.
    */
   withContextManager(contextManager: IContextManager): LogLayer {
-    // Dispose of existing context manager if it implements Disposable
+    // Dispose of the existing context manager if it implements Disposable
     if (this.contextManager && typeof (this.contextManager as any)[Symbol.dispose] === "function") {
       (this.contextManager as any)[Symbol.dispose]();
     }
@@ -281,10 +308,13 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
   errorOnly(error: any, opts?: ErrorOnlyOpts) {
+    const logLevel = opts?.logLevel || LogLevel.error;
+    if (!this.isLevelEnabled(logLevel)) return;
+
     const { copyMsgOnOnlyError } = this._config;
 
     const formatLogConf: FormatLogParams = {
-      logLevel: opts?.logLevel || LogLevel.error,
+      logLevel,
       err: error,
     };
 
@@ -301,7 +331,9 @@ export class LogLayer implements ILogLayer {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  metadataOnly(metadata?: Record<string, any>, logLevel: LogLevel = LogLevel.info) {
+  metadataOnly(metadata?: Record<string, any>, logLevel: LogLevelType = LogLevel.info) {
+    if (!this.isLevelEnabled(logLevel)) return;
+
     const { muteMetadata, consoleDebug } = this._config;
 
     if (muteMetadata) {
@@ -313,7 +345,7 @@ export class LogLayer implements ILogLayer {
         console.debug("[LogLayer] metadataOnly was called with no metadata; dropping.");
       }
 
-      return this;
+      return;
     }
 
     let data: Record<string, any> | null = metadata;
@@ -347,6 +379,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   info(...messages: MessageDataType[]) {
+    if (!this.isLevelEnabled(LogLevel.info)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.info, params: messages });
   }
@@ -357,6 +390,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   warn(...messages: MessageDataType[]) {
+    if (!this.isLevelEnabled(LogLevel.warn)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.warn, params: messages });
   }
@@ -367,6 +401,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   error(...messages: MessageDataType[]) {
+    if (!this.isLevelEnabled(LogLevel.error)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.error, params: messages });
   }
@@ -377,6 +412,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   debug(...messages: MessageDataType[]) {
+    if (!this.isLevelEnabled(LogLevel.debug)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.debug, params: messages });
   }
@@ -387,6 +423,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   trace(...messages: MessageDataType[]) {
+    if (!this.isLevelEnabled(LogLevel.trace)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.trace, params: messages });
   }
@@ -397,6 +434,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   fatal(...messages: MessageDataType[]) {
+    if (!this.isLevelEnabled(LogLevel.fatal)) return;
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.fatal, params: messages });
   }
@@ -407,7 +445,9 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   disableLogging() {
-    this._config.enabled = false;
+    for (const level of Object.keys(this.logLevelEnabledStatus)) {
+      this.logLevelEnabledStatus[level as keyof LogLevelEnabledStatus] = false;
+    }
     return this;
   }
 
@@ -417,7 +457,9 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   enableLogging() {
-    this._config.enabled = true;
+    for (const level of Object.keys(this.logLevelEnabledStatus)) {
+      this.logLevelEnabledStatus[level as keyof LogLevelEnabledStatus] = true;
+    }
     return this;
   }
 
@@ -459,6 +501,72 @@ export class LogLayer implements ILogLayer {
   unMuteMetadata(): ILogLayer {
     this._config.muteMetadata = false;
     return this;
+  }
+
+  /**
+   * Enables a specific log level
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   */
+  enableIndividualLevel(logLevel: LogLevelType): ILogLayer {
+    const level = logLevel as keyof LogLevelEnabledStatus;
+    if (level in this.logLevelEnabledStatus) {
+      this.logLevelEnabledStatus[level] = true;
+    }
+    return this;
+  }
+
+  /**
+   * Disables a specific log level
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   */
+  disableIndividualLevel(logLevel: LogLevelType): ILogLayer {
+    const level = logLevel as keyof LogLevelEnabledStatus;
+    if (level in this.logLevelEnabledStatus) {
+      this.logLevelEnabledStatus[level] = false;
+    }
+    return this;
+  }
+
+  /**
+   * Sets the minimum log level to be used by the logger. Only messages with
+   * this level or higher severity will be logged.
+   *
+   * For example, if you setLevel(LogLevel.warn), this will:
+   * Enable:
+   * - warn
+   * - error
+   * - fatal
+   * Disable:
+   * - info
+   * - debug
+   * - trace
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   */
+  setLevel(logLevel: LogLevelType): ILogLayer {
+    const minLogValue = LogLevelPriority[logLevel];
+
+    // Enable levels with value >= minLogValue, disable others
+    for (const level of Object.values(LogLevel)) {
+      const levelKey = level as keyof LogLevelEnabledStatus;
+      const levelValue = LogLevelPriority[level];
+
+      this.logLevelEnabledStatus[levelKey] = levelValue >= minLogValue;
+    }
+
+    return this;
+  }
+
+  /**
+   * Checks if a specific log level is enabled
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#checking-if-a-log-level-is-enabled | Checking if a Log Level is Enabled Docs}
+   */
+  isLevelEnabled(logLevel: LogLevelType): boolean {
+    const level = logLevel as keyof LogLevelEnabledStatus;
+    return this.logLevelEnabledStatus[level];
   }
 
   private formatContext() {
@@ -526,19 +634,8 @@ export class LogLayer implements ILogLayer {
   }
 
   _formatLog({ logLevel, params = [], metadata = null, err }: FormatLogParams) {
-    const {
-      enabled,
-      errorSerializer,
-      errorFieldInMetadata,
-      muteContext,
-      contextFieldName,
-      metadataFieldName,
-      errorFieldName,
-    } = this._config;
-
-    if (!enabled) {
-      return;
-    }
+    const { errorSerializer, errorFieldInMetadata, muteContext, contextFieldName, metadataFieldName, errorFieldName } =
+      this._config;
 
     let hasObjData = !!metadata || (muteContext ? false : this.contextManager.hasContextData());
 

@@ -1,4 +1,4 @@
-import type { LogLevel } from "./common.types.js";
+import type { LogLevelType } from "./common.types.js";
 import type { ILogLayer } from "./loglayer.types.js";
 
 /**
@@ -9,7 +9,7 @@ export interface PluginBeforeDataOutParams {
   /**
    * Log level of the data
    */
-  logLevel: LogLevel;
+  logLevel: LogLevelType;
   /**
    * The object containing metadata / context / error data. This
    * is `undefined` if there is no object with data.
@@ -33,7 +33,7 @@ export interface PluginShouldSendToLoggerParams {
   /**
    * Log level of the message
    */
-  logLevel: LogLevel;
+  logLevel: LogLevelType;
   /**
    * The object containing metadata / context / error data. This
    * is `undefined` if there is no object with data.
@@ -49,7 +49,7 @@ export interface PluginBeforeMessageOutParams {
   /**
    * Log level of the message
    */
-  logLevel: LogLevel;
+  logLevel: LogLevelType;
   /**
    * Message data that is copied from the original.
    */

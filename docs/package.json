@@ -10,13 +10,13 @@
     "docs:preview": "pnpm copy-changelogs && vitepress build && vitepress preview"
   },
   "dependencies": {
-    "@nolebase/ui-asciinema": "2.15.1",
+    "@nolebase/ui-asciinema": "2.17.0",
     "asciinema-player": "3.9.0"
   },
   "devDependencies": {
-    "glob": "11.0.1",
+    "glob": "11.0.2",
     "vitepress": "1.6.3",
-    "vitepress-plugin-llms": "1.1.0"
+    "vitepress-plugin-llms": "1.1.3"
   },
   "engineStrict": true,
   "engines": {

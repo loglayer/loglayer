@@ -7,6 +7,35 @@ export enum LogLevel {
   fatal = "fatal",
 }
 
+/**
+ * Combination of the LogLevel enum and its string representations.
+ */
+export type LogLevelType = LogLevel | `${LogLevel}`;
+
+/**
+ * Mapping of log levels to their numeric values.
+ */
+export const LogLevelPriority: Record<LogLevel, number> = {
+  [LogLevel.trace]: 10,
+  [LogLevel.debug]: 20,
+  [LogLevel.info]: 30,
+  [LogLevel.warn]: 40,
+  [LogLevel.error]: 50,
+  [LogLevel.fatal]: 60,
+};
+
+/**
+ * Mapping of numeric values to their log level names.
+ */
+export const LogLevelPriorityToNames = {
+  10: LogLevel.trace,
+  20: LogLevel.debug,
+  30: LogLevel.info,
+  40: LogLevel.warn,
+  50: LogLevel.error,
+  60: LogLevel.fatal,
+};
+
 export type MessageDataType = string | number | boolean | null | undefined;
 
 /**

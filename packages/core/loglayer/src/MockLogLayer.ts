@@ -122,6 +122,22 @@ export class MockLogLayer implements ILogLayer {
     this.mockLogBuilder = mockLogBuilder;
   }
 
+  enableIndividualLevel(logLevel: LogLevel): ILogLayer {
+    return this;
+  }
+
+  disableIndividualLevel(logLevel: LogLevel): ILogLayer {
+    return this;
+  }
+
+  setLevel(logLevel: LogLevel): ILogLayer {
+    return this;
+  }
+
+  isLevelEnabled(logLevel: LogLevel): boolean {
+    return true;
+  }
+
   /**
    * Returns the mock log builder used for testing.
    */

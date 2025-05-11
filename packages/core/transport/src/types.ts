@@ -1,14 +1,7 @@
-import { LogLevel } from "@loglayer/shared";
-export type { LogLayerTransport, LogLayerTransportParams } from "@loglayer/shared";
+import type { LogLevelType } from "@loglayer/shared";
 
-export const LogLevelPriority: Record<LogLevel, number> = {
-  [LogLevel.trace]: 0,
-  [LogLevel.debug]: 1,
-  [LogLevel.info]: 2,
-  [LogLevel.warn]: 3,
-  [LogLevel.error]: 4,
-  [LogLevel.fatal]: 5,
-};
+export type { LogLayerTransport, LogLayerTransportParams, LogLevelType } from "@loglayer/shared";
+export { LogLevelPriority } from "@loglayer/shared";
 
 /**
  * Logging methods that are common to logging libraries
@@ -39,7 +32,7 @@ export interface LoggerlessTransportConfig {
   /**
    * Minimum log level to process. Defaults to "trace".
    */
-  level?: "trace" | "debug" | "info" | "warn" | "error" | "fatal";
+  level?: LogLevelType;
 }
 
 export interface LogLayerTransportConfig<LogLibrary> extends Omit<LoggerlessTransportConfig, "level"> {
