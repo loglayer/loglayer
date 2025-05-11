@@ -1,5 +1,25 @@
 # `loglayer` Changelog
 
+## 6.4.0
+
+### Minor Changes
+
+- [#190](https://github.com/loglayer/loglayer/pull/190) [`818bae5`](https://github.com/loglayer/loglayer/commit/818bae5efbc4212013ac41878c1e4c4f5594e19c) Thanks [@theogravity](https://github.com/theogravity)! - - Added the following new methods to control log levels in `loglayer`:
+  - `setLevel()`
+  - `enableIndividualLevel()`
+  - `disableIndividualLevel()`
+  - `isLevelEnabled()`
+  - Fixes a bug in `metadataOnly()` where it was sometimes returning
+    the LogLayer instance instead of nothing. It should now return nothing.
+
+### Patch Changes
+
+- Updated dependencies [[`818bae5`](https://github.com/loglayer/loglayer/commit/818bae5efbc4212013ac41878c1e4c4f5594e19c), [`818bae5`](https://github.com/loglayer/loglayer/commit/818bae5efbc4212013ac41878c1e4c4f5594e19c)]:
+  - @loglayer/shared@2.3.0
+  - @loglayer/transport@2.2.0
+  - @loglayer/plugin@2.1.0
+  - @loglayer/context-manager@1.1.0
+
 ## 6.3.3
 
 ### Patch Changes

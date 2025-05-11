@@ -1,5 +1,11 @@
 # `@loglayer/shared` Changelog
 
+## 2.3.0
+
+### Minor Changes
+
+- [#190](https://github.com/loglayer/loglayer/pull/190) [`818bae5`](https://github.com/loglayer/loglayer/commit/818bae5efbc4212013ac41878c1e4c4f5594e19c) Thanks [@theogravity](https://github.com/theogravity)! - Adds new log level control methods to `ILogLayer` and adds the `LogLayerType` type.
+
 ## 2.2.1
 
 ### Patch Changes
