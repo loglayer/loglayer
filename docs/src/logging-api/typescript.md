@@ -35,10 +35,10 @@ import type { LogLayerTransport } from 'loglayer'
 
 const transports: LogLayerTransport[] = [
   new ConsoleTransport({
-    level: process.env.LOG_LEVEL as LogLevel
+    level: process.env.LOG_LEVEL as LogLevelType
   }),
   new FileTransport({
-    level: process.env.LOG_LEVEL as LogLevel
+    level: process.env.LOG_LEVEL as LogLevelType
   })
 ]
 
