@@ -7,6 +7,13 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## May 23, 2025
+
+For `loglayer`:
+
+Fixes a potential issue where you can't import from `loglayer` due to the package exporting the `LogLevel` enum
+from different LogLayer core packages.
+
 ## May 10, 2025
 
 *It is advised that if you update `loglayer`, you should update any plugins and transports to the latest versions as well.*
