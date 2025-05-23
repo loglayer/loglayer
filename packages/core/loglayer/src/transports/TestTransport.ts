@@ -1,4 +1,5 @@
-import { BaseTransport, type LogLayerTransportParams, LogLevel } from "@loglayer/transport";
+import { LogLevel } from "@loglayer/shared";
+import { BaseTransport, type LogLayerTransportParams } from "@loglayer/transport";
 import type { TestLoggingLibrary } from "../TestLoggingLibrary.js";
 
 /**

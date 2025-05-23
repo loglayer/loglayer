@@ -1,15 +1,6 @@
 import type { LogLayerPlugin } from "@loglayer/plugin";
 import type { LogLayerTransport } from "@loglayer/transport";
 
-export {
-  LogLevel,
-  type LogLevelType,
-  type ErrorOnlyOpts,
-  type ILogLayer,
-  type ILogBuilder,
-  type LogLayerTransport,
-} from "@loglayer/shared";
-
 export type ErrorSerializerType = (err: any) => Record<string, any> | string;
 
 /**
@@ -22,7 +13,7 @@ export interface LogLayerConfig {
    */
   prefix?: string;
   /**
-   * Set to false to drop all log input and stop sending to the logging
+   * Set false to drop all log input and stop sending to the logging
    * library.
    *
    * Can be re-enabled with `enableLogging()`.
@@ -72,7 +63,7 @@ export interface LogLayerConfig {
    */
   copyMsgOnOnlyError?: boolean;
   /**
-   * If set to true, the error will be included as part of metadata instead of
+   * If set to true, the error will be included as part of metadata instead
    * of the root of the log data.
    *
    * metadataFieldName must be set to true for this to work.

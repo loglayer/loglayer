@@ -1,4 +1,4 @@
-import { LogLevel } from "@loglayer/shared";
+import { LogLevel, type LogLevelType } from "@loglayer/shared";
 
 /**
  * A test logging library that can be used to test LogLayer plugins and transports.
@@ -9,7 +9,7 @@ export class TestLoggingLibrary {
    * An array of log lines that have been logged.
    */
   lines: Array<{
-    level: LogLevel;
+    level: LogLevelType;
     data: any[];
   }>;
 
