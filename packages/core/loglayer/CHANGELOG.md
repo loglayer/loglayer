@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 6.4.1
+
+### Patch Changes
+
+- [#192](https://github.com/loglayer/loglayer/pull/192) [`449a6ad`](https://github.com/loglayer/loglayer/commit/449a6ad63686f6390adbb77e84479a61d25825ca) Thanks [@theogravity](https://github.com/theogravity)! - Fixes an import issue caused by exporting LogLevel from multiple packages.
+
 ## 6.4.0
 
 ### Minor Changes
