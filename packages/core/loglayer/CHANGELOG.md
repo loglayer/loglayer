@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 6.4.2
+
+### Patch Changes
+
+- [`98252b5`](https://github.com/loglayer/loglayer/commit/98252b5420315892b29877ef3f901dd709b4b061) Thanks [@theogravity](https://github.com/theogravity)! - Export type `PluginBeforeDataOutParams`, `PluginBeforeMessageOutParams`, `PluginShouldSendToLoggerParams`
+
 ## 6.4.1
 
 ### Patch Changes
