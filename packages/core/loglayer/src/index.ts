@@ -22,6 +22,9 @@ export type {
   ILogLayer,
   ILogBuilder,
   LogLayerTransport,
+  PluginBeforeDataOutParams,
+  PluginBeforeMessageOutParams,
+  PluginShouldSendToLoggerParams,
 } from "@loglayer/shared";
 
 export { LogLevel } from "@loglayer/shared";

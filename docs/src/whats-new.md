@@ -7,6 +7,16 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## May 24, 2025
+
+For `loglayer`:
+
+Adds the following type exports for assistance with writing plugins directly:
+
+- `PluginBeforeDataOutParams`, 
+- `PluginBeforeMessageOutParams`, 
+- `PluginShouldSendToLoggerParams`
+
 ## May 23, 2025
 
 For `loglayer`:
