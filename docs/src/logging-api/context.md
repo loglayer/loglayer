@@ -40,13 +40,16 @@ By default, context data is flattened into the root of the log object:
 Passing an empty value (`null`, `undefined`, or an empty object) to `withContext` will *not* clear the context; it does nothing. Use the `clearContext()` method to remove all context data.
 :::
 
-## Context Behavior
+## Context Behavior / Management
 
 How the context behaves between a parent and child logger is defined by the [Context Manager](/context-managers/) being used. By default, the [Default Context Manager](/context-managers/default) is used for managing context when creating an instance of LogLayer.
 
-When creating child loggers, the Default Context Manager will:
-1. Copy the parent's context to the child logger at creation time
-2. Maintain independent context after creation, meaning that modifying the context on the parent will not affect the child, and vice versa
+<!--@include: ../context-managers/_partials/default-context-manager-behavior.md-->
+
+::: tip Altering context behavior
+You can create custom context managers to define how context data should be stored and retrieved, and how it behaves between parent and child loggers. This allows you to implement custom logic for context propagation, isolation, or any other specific requirements you may have.
+See [Creating Context Managers](/context-managers/creating-context-managers) for more details.
+:::
 
 ## Structuring Context
 
