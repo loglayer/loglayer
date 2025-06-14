@@ -3,14 +3,14 @@ When creating child loggers, the Default Context Manager will:
 2. Maintain independent context after creation
 
 ```typescript
-parentLogger.setContext({ requestId: "123" });
+parentLogger.withContext({ requestId: "123" });
 
 const childLogger = parentLogger.child();
 // Child inherits parent's context at creation via shallow-copy
 childLogger.info("Initial log"); // Includes requestId: "123"
 
 // Child can modify its context independently
-childLogger.appendContext({ userId: "456" });
+childLogger.withContext({ userId: "456" });
 childLogger.info("User action"); // Includes requestId: "123" and userId: "456"
 
 // Parent's context remains unchanged
