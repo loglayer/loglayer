@@ -98,6 +98,11 @@ const log = new LogLayer({
 });
 ```
 
+### HTTP / Cloud Service Transports
+
+For services that have an HTTP API to ship logs to and do not provide an SDK, you can extend the
+`HTTPTransport` class using the [HTTP Transport](http.md).
+
 ### Loggerless Transports
 
 For services or libraries that don't follow the common logging interface (e.g., analytics services, monitoring tools), extend the `LoggerlessTransport` class. 
@@ -305,6 +310,10 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
 ### Loggerless Example: DataDog Transport
 
 For an example of a loggerless transport that sends logs to a third-party service, see the [Datadog Transport](https://github.com/loglayer/loglayer/blob/master/packages/transports/datadog/src/DataDogTransport.ts) implementation.
+
+### HTTP Transport Example
+
+For an example of a transport that wraps the [HTTP Transport](http.md), see the source code for the [VictoriaLogs Transport](victoria-logs.md).
 
 ## Boilerplate / Template Code
 

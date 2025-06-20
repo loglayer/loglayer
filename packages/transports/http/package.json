@@ -55,12 +55,12 @@
     "vitest": "3.2.4"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
-  "packageManager": "pnpm@10.10.0",
   "engines": {
     "node": ">=18"
   },
   "files": [
     "dist"
   ],
-  "homepage": "https://loglayer.dev"
+  "homepage": "https://loglayer.dev",
+  "packageManager": "pnpm@10.10.0"
 }

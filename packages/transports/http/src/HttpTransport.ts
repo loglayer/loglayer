@@ -318,11 +318,17 @@ export class HttpTransport extends LoggerlessTransport {
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams): any[] {
     try {
       const message = messages.join(" ");
-      const payload = this.payloadTemplate({
+
+      const payloadTemplate = {
         logLevel,
         message,
-        data,
-      });
+      };
+
+      if (hasData) {
+        payloadTemplate["data"] = data;
+      }
+
+      const payload = this.payloadTemplate(payloadTemplate);
 
       if (this.onDebug) {
         this.onDebug({ logLevel, message, data });

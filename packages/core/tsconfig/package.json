@@ -2,8 +2,8 @@
   "name": "@internal/tsconfig",
   "version": "2.1.0",
   "private": true,
-  "packageManager": "pnpm@10.10.0",
   "files": [
     "tsconfig.json"
-  ]
+  ],
+  "packageManager": "pnpm@10.10.0"
 }

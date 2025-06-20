@@ -4,18 +4,31 @@
   "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     }
   },
-  "files": [
-    "dist"
+  "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loglayer/loglayer.git",
+    "directory": "packages/transports/victoria-logs"
+  },
+  "author": "Theo Gravity <theo@suteki.nu>",
+  "keywords": [
+    "loglayer",
+    "transport",
+    "victoria",
+    "victoria metrics",
+    "victoria logs",
+    "logging",
+    "logs"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup src/index.ts",
     "dev": "tsup --watch",
     "test": "vitest --run",
     "test:watch": "vitest",
@@ -36,25 +49,10 @@
     "typescript": "5.8.3",
     "vitest": "3.2.4"
   },
-  "keywords": [
-    "loglayer",
-    "transport",
-    "victoria",
-    "victoria metrics",
-    "victoria logs",
-    "logging",
-    "logs"
+  "bugs": "https://github.com/loglayer/loglayer/issues",
+  "files": [
+    "dist"
   ],
-  "author": "Theo Gravity <theo@suteki.nu>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/loglayer/loglayer.git",
-    "directory": "packages/transports/victoria-logs"
-  },
-  "bugs": {
-    "url": "https://github.com/loglayer/loglayer/issues"
-  },
-  "packageManager": "pnpm@10.10.0",
-  "homepage": "https://loglayer.dev/transports/victoria-logs"
+  "homepage": "https://loglayer.dev/transports/victoria-logs",
+  "packageManager": "pnpm@10.10.0"
 }
