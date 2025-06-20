@@ -1,5 +1,11 @@
 # `@loglayer/transport-http` Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- [`3d429fe`](https://github.com/loglayer/loglayer/commit/3d429fe09817c6c170bf42ac79d3b2d0743277c0) Thanks [@theogravity](https://github.com/theogravity)! - Documentation and build fixes
+
 ## 1.0.1
 
 ### Patch Changes
