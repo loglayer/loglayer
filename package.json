@@ -27,16 +27,16 @@
     "test": "turbo test"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.0.0",
     "@changesets/changelog-github": "0.5.1",
-    "@changesets/cli": "2.29.3",
+    "@changesets/cli": "2.29.5",
     "@commitlint/cli": "19.8.1",
     "@commitlint/config-conventional": "19.8.1",
     "@internal/tsconfig": "workspace:*",
     "@types/node": "22.15.17",
-    "lefthook": "1.11.12",
+    "lefthook": "1.11.14",
     "syncpack": "13.0.4",
-    "turbo": "2.5.3",
+    "turbo": "2.5.4",
     "typescript": "5.8.3"
   },
   "engineStrict": true,

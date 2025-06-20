@@ -19,9 +19,9 @@ import { LoggerlessTransport } from "@loglayer/transport";
 import chalk from "chalk";
 import { LogRenderer } from "./LogRenderer.js";
 import { LogStorage } from "./LogStorage.js";
-import { UIManager } from "./UIManager.js";
 import { moonlight } from "./themes.js";
 import type { DetailedViewConfig, PrettyTerminalConfig, ViewConfig } from "./types.js";
+import { UIManager } from "./UIManager.js";
 
 /**
  * Main transport class that handles pretty terminal output and interactive features.

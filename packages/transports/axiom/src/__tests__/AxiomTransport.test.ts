@@ -1,6 +1,5 @@
 import type { Axiom } from "@axiomhq/js";
-import { LogLayer } from "loglayer";
-import { LogLevel } from "loglayer";
+import { LogLayer, LogLevel } from "loglayer";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { type AxiomLevelMap, AxiomTransport } from "../AxiomTransport.js";
 

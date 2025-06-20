@@ -1,6 +1,7 @@
 /* eslint @typescript-eslint/no-empty-function: 0 */
 /* istanbul ignore file */
 
+import type { LogLayerPlugin } from "@loglayer/plugin";
 import type {
   ErrorOnlyOpts,
   ILogBuilder,
@@ -11,8 +12,6 @@ import type {
 } from "@loglayer/shared";
 import { MockLogBuilder } from "./MockLogBuilder.js";
 
-import type { LogLayerPlugin } from "@loglayer/plugin";
-
 /**
  * A mock implementation of the ILogLayer interface that does nothing.
  * Useful for writing unit tests.
@@ -20,34 +19,34 @@ import type { LogLayerPlugin } from "@loglayer/plugin";
 export class MockLogLayer implements ILogLayer {
   private mockLogBuilder: ILogBuilder = new MockLogBuilder();
 
-  info(...messages: MessageDataType[]): void {}
-  warn(...messages: MessageDataType[]): void {}
-  error(...messages: MessageDataType[]): void {}
-  debug(...messages: MessageDataType[]): void {}
-  trace(...messages: MessageDataType[]): void {}
-  fatal(...messages: MessageDataType[]): void {}
+  info(..._messages: MessageDataType[]): void {}
+  warn(..._messages: MessageDataType[]): void {}
+  error(..._messages: MessageDataType[]): void {}
+  debug(..._messages: MessageDataType[]): void {}
+  trace(..._messages: MessageDataType[]): void {}
+  fatal(..._messages: MessageDataType[]): void {}
 
-  getLoggerInstance<T extends LogLayerTransport>(id: string) {
+  getLoggerInstance<_T extends LogLayerTransport>(_id: string) {
     return undefined;
   }
 
-  errorOnly(error: any, opts?: ErrorOnlyOpts): void {}
+  errorOnly(_error: any, _opts?: ErrorOnlyOpts): void {}
 
-  metadataOnly(metadata?: Record<string, any>, logLevel?: LogLevel): void {}
+  metadataOnly(_metadata?: Record<string, any>, _logLevel?: LogLevel): void {}
 
-  addPlugins(plugins: Array<LogLayerPlugin>) {}
+  addPlugins(_plugins: Array<LogLayerPlugin>) {}
 
-  removePlugin(id: string) {}
+  removePlugin(_id: string) {}
 
-  enablePlugin(id: string) {}
+  enablePlugin(_id: string) {}
 
-  disablePlugin(id: string) {}
+  disablePlugin(_id: string) {}
 
-  withPrefix(prefix: string): ILogLayer {
+  withPrefix(_prefix: string): ILogLayer {
     return this;
   }
 
-  withContext(context?: Record<string, any>): ILogLayer {
+  withContext(_context?: Record<string, any>): ILogLayer {
     return this;
   }
 
@@ -99,15 +98,15 @@ export class MockLogLayer implements ILogLayer {
     return this;
   }
 
-  withFreshTransports(transports: LogLayerTransport | Array<LogLayerTransport>) {
+  withFreshTransports(_transports: LogLayerTransport | Array<LogLayerTransport>) {
     return this;
   }
 
-  withFreshPlugins(plugins: Array<LogLayerPlugin>) {
+  withFreshPlugins(_plugins: Array<LogLayerPlugin>) {
     return this;
   }
 
-  withContextManager(contextManager: any) {
+  withContextManager(_contextManager: any) {
     return this;
   }
 
@@ -122,19 +121,19 @@ export class MockLogLayer implements ILogLayer {
     this.mockLogBuilder = mockLogBuilder;
   }
 
-  enableIndividualLevel(logLevel: LogLevel): ILogLayer {
+  enableIndividualLevel(_logLevel: LogLevel): ILogLayer {
     return this;
   }
 
-  disableIndividualLevel(logLevel: LogLevel): ILogLayer {
+  disableIndividualLevel(_logLevel: LogLevel): ILogLayer {
     return this;
   }
 
-  setLevel(logLevel: LogLevel): ILogLayer {
+  setLevel(_logLevel: LogLevel): ILogLayer {
     return this;
   }
 
-  isLevelEnabled(logLevel: LogLevel): boolean {
+  isLevelEnabled(_logLevel: LogLevel): boolean {
     return true;
   }
 

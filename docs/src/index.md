@@ -66,3 +66,5 @@ src="/asciinema/pretty-terminal.cast"
 <!--@include: ./transports/_partials/transport-list.md-->
 
 <!--@include: ./plugins/_partials/plugin-list.md-->
+
+LogLayer is made with ❤️ by [Theo Gravity](https://suteki.nu).

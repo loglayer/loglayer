@@ -1,5 +1,4 @@
-import type { LogLayerTransportParams } from "@loglayer/transport";
-import type { LoggerlessTransportConfig } from "@loglayer/transport";
+import type { LoggerlessTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
 import { LoggerlessTransport } from "@loglayer/transport";
 
 /**
@@ -82,11 +81,7 @@ export interface HttpTransportConfig extends LoggerlessTransportConfig {
   /**
    * Function to transform log data into the payload format
    */
-  payloadTemplate: (data: {
-    logLevel: string;
-    message: string;
-    data?: Record<string, any>;
-  }) => string;
+  payloadTemplate: (data: { logLevel: string; message: string; data?: Record<string, any> }) => string;
   /**
    * Whether to use gzip compression
    * @default false
@@ -266,11 +261,7 @@ export class HttpTransport extends LoggerlessTransport {
   private batchContentType: string;
   private onError?: (err: Error) => void;
   private onDebug?: (entry: Record<string, any>) => void;
-  private payloadTemplate: (data: {
-    logLevel: string;
-    message: string;
-    data?: Record<string, any>;
-  }) => string;
+  private payloadTemplate: (data: { logLevel: string; message: string; data?: Record<string, any> }) => string;
   private compression: boolean;
   private maxRetries: number;
   private retryDelay: number;

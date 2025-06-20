@@ -1,9 +1,9 @@
 import { LogLevel, type LogLevelType } from "@loglayer/shared";
 import {
+  type LoggerlessTransportConfig,
   type LogLayerTransport,
   type LogLayerTransportParams,
   LogLevelPriority,
-  type LoggerlessTransportConfig,
 } from "./types.js";
 
 /**
@@ -34,7 +34,7 @@ export abstract class LoggerlessTransport implements LogLayerTransport {
 
   constructor(config: LoggerlessTransportConfig) {
     // loglayer still needs an id, so we generate one even if it won't really be used
-    this.id = new Date().getTime().toString() + Math.random().toString();
+    this.id = Date.now().toString() + Math.random().toString();
     this.enabled = config.enabled ?? true;
     this.consoleDebug = config.consoleDebug ?? false;
     this.level = config.level ?? "trace";

@@ -1,7 +1,7 @@
 import type { Log } from "@google-cloud/logging";
 import type { LogEntry } from "@google-cloud/logging/build/src/entry.js";
-import { BaseTransport, LogLevel, LogLevelPriority, type LogLevelType } from "@loglayer/transport";
 import type { LogLayerTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
+import { BaseTransport, LogLevel, LogLevelPriority, type LogLevelType } from "@loglayer/transport";
 
 export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConfig<Log> {
   /**

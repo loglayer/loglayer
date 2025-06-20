@@ -1,4 +1,4 @@
-import { type LogLayerTransportParams, LoggerlessTransport, type LoggerlessTransportConfig } from "@loglayer/transport";
+import { LoggerlessTransport, type LoggerlessTransportConfig, type LogLayerTransportParams } from "@loglayer/transport";
 import { type Logger, logs } from "@opentelemetry/api-logs";
 import { emitLogRecord } from "./utils.js";
 

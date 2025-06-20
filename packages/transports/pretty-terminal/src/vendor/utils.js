@@ -1,12 +1,9 @@
-// @ts-nocheck
-'use strict';
-
 /**
  * Creates a string with the same length as `numSpaces` parameter
  **/
 export function indent(numSpaces) {
-  return new Array(numSpaces+1).join(' ');
-};
+  return new Array(numSpaces + 1).join(" ");
+}
 
 /**
  * Gets the string length of the longer index in a hash
@@ -14,7 +11,7 @@ export function indent(numSpaces) {
 export function getMaxIndexLength(input) {
   var maxWidth = 0;
 
-  Object.getOwnPropertyNames(input).forEach(function(key) {
+  Object.getOwnPropertyNames(input).forEach((key) => {
     // Skip undefined values.
     if (input[key] === undefined) {
       return;
@@ -23,10 +20,10 @@ export function getMaxIndexLength(input) {
     maxWidth = Math.max(maxWidth, key.length);
   });
   return maxWidth;
-};
+}
 
-export function isIsoStringDate (isoString) {
-  if (typeof isoString !== 'string') {
+export function isIsoStringDate(isoString) {
+  if (typeof isoString !== "string") {
     return false;
   }
   // More flexible regex that handles:
@@ -38,4 +35,4 @@ export function isIsoStringDate (isoString) {
   }
   const testDate = new Date(isoString);
   return !Number.isNaN(testDate.getTime());
-};
+}

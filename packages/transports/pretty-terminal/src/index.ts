@@ -1,5 +1,6 @@
 import { PrettyTerminalTransport } from "./PrettyTerminalTransport.js";
 import type { PrettyTerminalConfig } from "./types.js";
+
 export * as chalk from "chalk";
 
 export * from "./PrettyTerminalTransport.js";

@@ -1,7 +1,6 @@
-import type { LogLayerTransportParams } from "@loglayer/transport";
-import type { LoggerlessTransportConfig } from "@loglayer/transport";
+import type { LoggerlessTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
 import { LoggerlessTransport } from "@loglayer/transport";
-import { type DDTransportOptions, DataDogTransport as DatadogTransportCommon } from "datadog-transport-common";
+import { DataDogTransport as DatadogTransportCommon, type DDTransportOptions } from "datadog-transport-common";
 
 export interface DatadogTransportConfig extends LoggerlessTransportConfig {
   /**

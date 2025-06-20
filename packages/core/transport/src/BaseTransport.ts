@@ -29,7 +29,7 @@ export abstract class BaseTransport<LogLibrary> implements LogLayerTransport<Log
   protected consoleDebug?: boolean;
 
   constructor(config: LogLayerTransportConfig<LogLibrary>) {
-    this.id = config.id ?? new Date().getTime().toString() + Math.random().toString();
+    this.id = config.id ?? Date.now().toString() + Math.random().toString();
     this.logger = config.logger;
     this.enabled = config.enabled ?? true;
     this.consoleDebug = config.consoleDebug ?? false;

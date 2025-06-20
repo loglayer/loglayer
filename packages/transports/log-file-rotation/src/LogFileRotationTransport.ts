@@ -3,7 +3,7 @@ import { createReadStream, createWriteStream, writeFileSync } from "node:fs";
 import { access, unlink } from "node:fs/promises";
 import { pipeline } from "node:stream/promises";
 import { createGzip } from "node:zlib";
-import type { LogLayerTransportParams, LoggerlessTransportConfig } from "@loglayer/transport";
+import type { LoggerlessTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
 import { LoggerlessTransport } from "@loglayer/transport";
 import FileStreamRotator from "file-stream-rotator";
 
@@ -572,7 +572,7 @@ export class LogFileRotationTransport extends LoggerlessTransport implements Dis
           break;
         }
       }
-    } catch (error) {
+    } catch (_error) {
       finalPath = `${filePath}.${Date.now()}.gz`;
     }
 

@@ -1,8 +1,6 @@
 import type { Axiom } from "@axiomhq/js";
-import type { LogLayerTransportParams, LogLevel } from "@loglayer/transport";
-import { BaseTransport } from "@loglayer/transport";
-import type { LogLayerTransportConfig } from "@loglayer/transport";
-import { LogLevelPriority } from "@loglayer/transport";
+import type { LogLayerTransportConfig, LogLayerTransportParams, LogLevel } from "@loglayer/transport";
+import { BaseTransport, LogLevelPriority } from "@loglayer/transport";
 
 export interface AxiomFieldNames {
   /**

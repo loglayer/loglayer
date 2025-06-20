@@ -5,9 +5,8 @@ import {
   PluginCallbackType,
   type PluginShouldSendToLoggerParams,
 } from "@loglayer/plugin";
-import { beforeEach, describe, expect, it, vi, vitest } from "vitest";
-
 import { type ILogLayer, LogLevel } from "@loglayer/shared";
+import { beforeEach, describe, expect, it, vi, vitest } from "vitest";
 import { PluginManager } from "../PluginManager.js";
 
 describe("PluginManager", () => {

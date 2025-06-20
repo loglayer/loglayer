@@ -27,7 +27,7 @@ describe("LogLayer plugin system", () => {
       },
     ]);
 
-    const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+    const _genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
 
     const child = log.child();
 
@@ -108,7 +108,7 @@ describe("LogLayer plugin system", () => {
       const log = getLogger();
       log.addPlugins([
         {
-          onBeforeMessageOut: ({ messages }) => {
+          onBeforeMessageOut: () => {
             return ["Modified message"];
           },
         },

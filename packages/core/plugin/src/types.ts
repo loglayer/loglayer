@@ -1,19 +1,19 @@
-import type { ILogLayer } from "@loglayer/shared";
 import type {
+  ILogLayer,
   PluginBeforeDataOutParams,
   PluginBeforeMessageOutParams,
   PluginShouldSendToLoggerParams,
 } from "@loglayer/shared";
 
 export type {
+  LogLayerPlugin,
+  LogLayerPluginParams,
   PluginBeforeDataOutParams,
   PluginBeforeMessageOutParams,
   PluginShouldSendToLoggerParams,
-  LogLayerPluginParams,
-  LogLayerPlugin,
 } from "@loglayer/shared";
 
-export { LogLevel, type LogLevelType, type ILogLayer } from "@loglayer/shared";
+export { type ILogLayer, LogLevel, type LogLevelType } from "@loglayer/shared";
 
 /**
  * Callback function for transforming the data object containing metadata, context, and error information before it's
