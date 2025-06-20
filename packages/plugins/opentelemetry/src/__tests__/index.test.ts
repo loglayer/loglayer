@@ -1,4 +1,4 @@
-import { type Span, type SpanContext, context, trace } from "@opentelemetry/api";
+import { context, type Span, type SpanContext, trace } from "@opentelemetry/api";
 import { LogLayer, TestLoggingLibrary, TestTransport } from "loglayer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { openTelemetryPlugin } from "../index.js";

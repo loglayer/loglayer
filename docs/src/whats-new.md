@@ -9,6 +9,8 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## June 19, 2025
 
+- (all packages) Dev dependency package updates
+
 Added the new [HTTP Transport](/transports/http) for LogLayer that allows you to send logs to any HTTP endpoint.
 
 ### HTTP Transport Features

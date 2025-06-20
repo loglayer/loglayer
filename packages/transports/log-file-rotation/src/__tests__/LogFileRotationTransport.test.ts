@@ -1,5 +1,5 @@
 import { createReadStream, createWriteStream } from "node:fs";
-import { access, mkdir, readFile, readdir, readlink, rm } from "node:fs/promises";
+import { access, mkdir, readdir, readFile, readlink, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { pipeline } from "node:stream/promises";
 import { createGunzip } from "node:zlib";

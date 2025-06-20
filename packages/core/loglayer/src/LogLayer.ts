@@ -1,3 +1,5 @@
+import { DefaultContextManager } from "@loglayer/context-manager";
+import { type LogLayerPlugin, PluginCallbackType } from "@loglayer/plugin";
 import {
   type ErrorOnlyOpts,
   type IContextManager,
@@ -7,13 +9,10 @@ import {
   type LogLevelType,
   type MessageDataType,
 } from "@loglayer/shared";
+import type { LogLayerTransport } from "@loglayer/transport";
 import { LogBuilder } from "./LogBuilder.js";
 import { PluginManager } from "./PluginManager.js";
 import type { LogLayerConfig } from "./types/index.js";
-
-import { DefaultContextManager } from "@loglayer/context-manager";
-import { type LogLayerPlugin, PluginCallbackType } from "@loglayer/plugin";
-import type { LogLayerTransport } from "@loglayer/transport";
 
 interface FormatLogParams {
   logLevel: LogLevelType;

@@ -23,7 +23,7 @@ const logger = new LogLayer({
 });
 
 // Define logging middleware
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   // Create a new LogLayer instance for each request
   req.log = logger.child();
 

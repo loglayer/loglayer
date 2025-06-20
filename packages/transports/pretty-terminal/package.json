@@ -17,7 +17,11 @@
   },
   "types": "./dist/index.d.ts",
   "license": "MIT",
-  "repository": "loglayer/loglayer.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loglayer/loglayer.git",
+    "directory": "packages/transports/pretty-terminal"
+  },
   "author": "Theo Gravity <theo@suteki.nu>",
   "keywords": [
     "logging",
@@ -48,15 +52,15 @@
     "@internal/tsconfig": "workspace:*",
     "@types/better-sqlite3": "7.6.13",
     "@types/chalk": "2.2.4",
-    "@types/express": "5.0.1",
+    "@types/express": "5.0.3",
     "@types/keypress": "2.0.30",
     "@types/node": "22.15.17",
     "express": "4.21.2",
     "hash-runner": "2.0.1",
     "loglayer": "workspace:*",
     "serialize-error": "12.0.0",
-    "tsup": "8.4.0",
-    "tsx": "4.19.4",
+    "tsup": "8.5.0",
+    "tsx": "4.20.3",
     "typescript": "5.8.3"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
@@ -67,5 +71,5 @@
     "dist"
   ],
   "homepage": "https://loglayer.dev",
-  "packageManager": "pnpm@9.12.2"
+  "packageManager": "pnpm@10.10.0"
 }

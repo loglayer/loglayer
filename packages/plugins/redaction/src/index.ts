@@ -1,5 +1,4 @@
-import type { LogLayerPlugin } from "@loglayer/plugin";
-import type { LogLayerPluginParams } from "@loglayer/plugin";
+import type { LogLayerPlugin, LogLayerPluginParams } from "@loglayer/plugin";
 import type { RedactOptions } from "fast-redact";
 import fastRedact from "fast-redact";
 

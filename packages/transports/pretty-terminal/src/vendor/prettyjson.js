@@ -3,7 +3,7 @@ import chalk from "chalk";
 import * as Utils from "./utils.js";
 import { isIsoStringDate } from "./utils.js";
 
-const conflictChars = /[^\w\s\n\r\v\t\.,]/i;
+const conflictChars = /[^\w\s\n\r\v\t.,]/i;
 
 // Helper function to detect if an object should be printed or ignored
 const isPrintable = (input, options) => input !== undefined || options.renderUndefined;
@@ -42,7 +42,7 @@ const getColorRenderer = (colorFn, options) => {
     return (text) => text;
   }
 
-  if (typeof colorFn !== 'function') {
+  if (typeof colorFn !== "function") {
     return (text) => text;
   }
 
@@ -128,7 +128,7 @@ const renderToArray = (data, options, indentation) => {
 
     // If arrays should be collapsed and there's data, show [...]
     if (options.collapseArrays && data.length > 0) {
-      return [Utils.indent(indentation) + `[... ${data.length} items]`];
+      return [`${Utils.indent(indentation)}[... ${data.length} items]`];
     }
 
     const outputArray = [];
@@ -273,7 +273,7 @@ export function render(data, options, indentation) {
   options = validateOptionsAndSetDefaults(options);
 
   return renderToArray(data, options, indentation).join("\n");
-};
+}
 
 /**
  * ### Render from string function
@@ -318,7 +318,7 @@ export function renderString(data, options, indentation) {
 
   try {
     parsedData = JSON.parse(data);
-  } catch (e) {
+  } catch (_e) {
     // Return an error in case of an invalid JSON
     return `${chalk.red("Error:")} Not valid JSON!`;
   }
@@ -326,4 +326,4 @@ export function renderString(data, options, indentation) {
   // Call the real render() method
   output += exports.render(parsedData, options, indentation);
   return output;
-};
+}

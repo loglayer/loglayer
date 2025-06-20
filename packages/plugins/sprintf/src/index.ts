@@ -1,5 +1,4 @@
-import type { LogLayerPlugin } from "@loglayer/plugin";
-import type { LogLayerPluginParams } from "@loglayer/plugin";
+import type { LogLayerPlugin, LogLayerPluginParams } from "@loglayer/plugin";
 import { sprintf } from "sprintf-js";
 
 export interface SprintfPluginParams extends LogLayerPluginParams {}
@@ -22,7 +21,7 @@ export function sprintfPlugin(config: SprintfPluginParams = {}): LogLayerPlugin 
 
       try {
         return [sprintf(format, ...args)];
-      } catch (error) {
+      } catch (_error) {
         // If sprintf fails, return original messages
         return messages;
       }

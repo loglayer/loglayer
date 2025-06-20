@@ -1,7 +1,6 @@
 import { LogLevel } from "@loglayer/shared";
 import type { LogLayerTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
-import { BaseTransport } from "@loglayer/transport";
-import { LogLevelPriority } from "@loglayer/transport";
+import { BaseTransport, LogLevelPriority } from "@loglayer/transport";
 
 type ConsoleType = typeof console;
 

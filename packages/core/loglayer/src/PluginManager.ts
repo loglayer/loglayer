@@ -42,14 +42,14 @@ export class PluginManager {
   private mapPlugins(plugins: Array<LogLayerPlugin>) {
     for (const plugin of plugins) {
       if (!plugin.id) {
-        plugin.id = new Date().getTime().toString() + Math.random().toString();
+        plugin.id = Date.now().toString() + Math.random().toString();
       }
 
       if (this.idToPlugin[plugin.id]) {
         throw new Error(`[LogLayer] Plugin with id ${plugin.id} already exists.`);
       }
 
-      plugin["registeredAt"] = new Date().getTime();
+      plugin["registeredAt"] = Date.now();
       this.idToPlugin[plugin.id] = plugin as LogLayerPluginWithTimestamp;
     }
   }

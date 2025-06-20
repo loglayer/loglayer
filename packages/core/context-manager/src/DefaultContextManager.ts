@@ -1,5 +1,4 @@
-import type { IContextManager } from "@loglayer/shared";
-import type { OnChildLoggerCreatedParams } from "@loglayer/shared";
+import type { IContextManager, OnChildLoggerCreatedParams } from "@loglayer/shared";
 
 /**
  * The default context manager used by LogLayer. It is a simple k/v store for context data.

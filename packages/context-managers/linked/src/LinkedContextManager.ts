@@ -16,7 +16,7 @@ export class LinkedContextManager implements IContextManager {
     if (!context) {
       // We can't just assign an empty object else that would break the link between parent and child.
       for (const key in this.contextContainer.data) {
-        if (Object.prototype.hasOwnProperty.call(this.contextContainer.data, key)) {
+        if (Object.hasOwn(this.contextContainer.data, key)) {
           delete this.contextContainer.data[key];
         }
       }

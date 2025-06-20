@@ -1,5 +1,4 @@
-import type { LogLayerTransportParams } from "@loglayer/transport";
-import type { LoggerlessTransportConfig } from "@loglayer/transport";
+import type { LoggerlessTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
 import { LoggerlessTransport } from "@loglayer/transport";
 
 // Constants defining New Relic's API limits
@@ -197,7 +196,7 @@ export class NewRelicTransport extends LoggerlessTransport {
       }
 
       const logEntry: Record<string, any> = {
-        timestamp: new Date().getTime(),
+        timestamp: Date.now(),
         level: logLevel,
         log: message,
       };

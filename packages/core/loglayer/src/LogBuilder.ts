@@ -1,7 +1,6 @@
 import { PluginCallbackType } from "@loglayer/plugin";
+import type { ILogBuilder, MessageDataType } from "@loglayer/shared";
 import { LogLevel, type LogLevelType } from "@loglayer/shared";
-import type { MessageDataType } from "@loglayer/shared";
-import type { ILogBuilder } from "@loglayer/shared";
 import type { LogLayer } from "./LogLayer.js";
 import type { PluginManager } from "./PluginManager.js";
 

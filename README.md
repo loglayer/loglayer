@@ -125,10 +125,12 @@ loglayer/
 │   └── plugins/                  # Official plugins
 ```
 
+## Documentation
+
+For detailed documentation, visit [https://loglayer.dev](https://loglayer.dev)
+
 ## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-## Documentation
-
-For detailed documentation, visit [https://loglayer.dev](https://loglayer.dev)
+Made with ❤️ by [Theo Gravity](https://suteki.nu).
