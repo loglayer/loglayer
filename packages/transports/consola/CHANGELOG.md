@@ -1,5 +1,14 @@
 # `@loglayer/transport-consola` Changelog
 
+## 2.1.1
+
+### Patch Changes
+
+- [#200](https://github.com/loglayer/loglayer/pull/200) [`a2f5a17`](https://github.com/loglayer/loglayer/commit/a2f5a17626279f9545c96796ca181938fe1ed905) Thanks [@theogravity](https://github.com/theogravity)! - Package dev dep updates, linting updates
+
+- Updated dependencies [[`a2f5a17`](https://github.com/loglayer/loglayer/commit/a2f5a17626279f9545c96796ca181938fe1ed905)]:
+  - @loglayer/transport@2.2.1
+
 ## 2.1.0
 
 ### Minor Changes

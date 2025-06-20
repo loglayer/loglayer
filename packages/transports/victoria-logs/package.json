@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-victoria-logs",
   "description": "VictoriaLogs transport for the LogLayer logging library.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -56,4 +56,4 @@
   },
   "packageManager": "pnpm@10.10.0",
   "homepage": "https://loglayer.dev/transports/victoria-logs"
-} 
+}
