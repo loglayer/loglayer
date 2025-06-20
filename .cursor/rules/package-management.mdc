@@ -15,3 +15,22 @@ This project uses `turbo` to run package scripts.
 
 - `turbo build` will build all packages in the project
 - `turbo test` will run all tests in the project. Only use this if you mean to test all packages at once.
+
+## Referencing project packages
+
+If a new package uses a project package as a dependency or devDependency, use `workspace:*` for the version in the package.json entry since we use `pnpm` workspaces.
+
+Example `package.json`:
+
+```json
+{
+  "dependencies": {
+    "@loglayer/http-transport": "workspace:*"
+  },
+  "devDependencies": {
+    "loglayer": "workspace:*"
+  }
+}
+```
+
+Then run `pnpm i` to have them linked in the project.
