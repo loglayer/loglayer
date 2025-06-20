@@ -466,3 +466,7 @@ When `respectRateLimit` is enabled:
 ### Error Handling
 
 The transport provides detailed error information through the `onError`
+
+### Implementation Example
+
+- [VictoriaLogs Transport](victoria-logs.md) wraps around this transport to add support for [VictoriaLogs](https://victoriametrics.com/products/victorialogs/) using their [JSON Stream API](https://docs.victoriametrics.com/victorialogs/data-ingestion/#json-stream-api).

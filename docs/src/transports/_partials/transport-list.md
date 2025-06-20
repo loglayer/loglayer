@@ -27,6 +27,7 @@
 | [Google Cloud Logging](/transports/google-cloud-logging) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-google-cloud-logging)](https://www.npmjs.com/package/@loglayer/transport-google-cloud-logging) | [Changelog](/transports/changelogs/google-cloud-logging-changelog.md) | Server-side logging for Google Cloud Platform |
 | [New Relic](/transports/new-relic) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-new-relic)](https://www.npmjs.com/package/@loglayer/transport-new-relic) | [Changelog](/transports/changelogs/new-relic-changelog.md) | Server-side logging for New Relic |
 | [Sumo Logic](/transports/sumo-logic) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-sumo-logic)](https://www.npmjs.com/package/@loglayer/transport-sumo-logic) | [Changelog](/transports/changelogs/sumo-logic-changelog.md) | Send logs to Sumo Logic via HTTP Source |
+| [VictoriaLogs](/transports/victoria-logs) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-victoria-logs)](https://www.npmjs.com/package/@loglayer/transport-victoria-logs) | [Changelog](/transports/changelogs/victoria-logs-changelog.md) | Send logs to [VictoriaLogs](https://victoriametrics.com/products/victorialogs/) using JSON stream API |
 
 ### Other Transports
 

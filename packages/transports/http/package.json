@@ -57,6 +57,5 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://loglayer.dev",
-  "packageManager": "pnpm@9.12.2"
-} 
+  "homepage": "https://loglayer.dev"
+}

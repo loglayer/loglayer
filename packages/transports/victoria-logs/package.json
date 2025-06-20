@@ -1,0 +1,60 @@
+{
+  "name": "@loglayer/transport-victoria-logs",
+  "description": "VictoriaLogs transport for the LogLayer logging library.",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write ."
+  },
+  "dependencies": {
+    "@loglayer/transport-http": "workspace:*"
+  },
+  "devDependencies": {
+    "dotenv": "16.5.0",
+    "loglayer": "workspace:*",
+    "hash-runner": "2.0.1",
+    "@types/node": "22.15.17",
+    "@internal/tsconfig": "workspace:*",
+    "serialize-error": "12.0.0",
+    "tsx": "4.19.4",
+    "tsup": "8.4.0",
+    "typescript": "5.8.3",
+    "vitest": "3.1.3"
+  },
+  "keywords": [
+    "loglayer",
+    "transport",
+    "victoria",
+    "victorialogs",
+    "logging",
+    "logs"
+  ],
+  "author": "Theo Gravity <theo@suteki.nu>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loglayer/loglayer.git",
+    "directory": "packages/transports/victoria-logs"
+  },
+  "bugs": {
+    "url": "https://github.com/loglayer/loglayer/issues"
+  },
+  "homepage": "https://loglayer.dev/transports/victoria-logs"
+} 

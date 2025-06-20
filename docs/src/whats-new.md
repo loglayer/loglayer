@@ -7,7 +7,7 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
-## Jun 19, 2025
+## June 19, 2025
 
 Added the new [HTTP Transport](/transports/http) for LogLayer that allows you to send logs to any HTTP endpoint.
 
@@ -21,6 +21,17 @@ Added the new [HTTP Transport](/transports/http) for LogLayer that allows you to
 - ⏱️ **Rate Limiting** - Respect HTTP 429 responses with configurable behavior
 - 🎯 **Dynamic Headers** - Use functions to generate headers dynamically
 - 🐛 **Error Handling** - Comprehensive error callbacks for debugging and monitoring
+
+Added the new [VictoriaLogs Transport](/transports/victoria-logs) for LogLayer that allows you to send logs to [VictoriaLogs](https://victoriametrics.com/products/victorialogs/) using the [JSON stream API](https://docs.victoriametrics.com/victorialogs/data-ingestion/#json-stream-api).
+
+### VictoriaLogs Transport Features
+
+- 🚀 **VictoriaLogs Integration** - Send logs to VictoriaLogs using the JSON stream API
+- 🔧 **Pre-configured Setup** - Thin wrapper around HTTP transport with VictoriaLogs specific defaults
+- 📝 **Automatic URL Construction** - Automatically appends `/insert/jsonline` path to your VictoriaLogs host URL
+- 🎯 **VictoriaLogs Format** - Pre-configured payload template with `_msg`, `_time`, `level`, `stream`, `service`, and `environment` fields
+- 🔄 **Full HTTP Transport Features** - Inherits all features from HTTP transport (batching, compression, retries, etc.)
+- ⚡ **High Performance** - Supports unlimited log lines in a single request with stream-based processing
 
 ## May 24, 2025
 
