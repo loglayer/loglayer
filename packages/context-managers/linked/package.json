@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/context-manager-linked",
   "description": "Context manager for loglayer that keeps context between parent and all children.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
