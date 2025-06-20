@@ -40,7 +40,8 @@
     "loglayer",
     "transport",
     "victoria",
-    "victorialogs",
+    "victoria metrics",
+    "victoria logs",
     "logging",
     "logs"
   ],

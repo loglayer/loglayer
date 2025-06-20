@@ -4,7 +4,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/%40loglayer%2Ftransport-victoria-logs)](https://www.npmjs.com/package/@loglayer/transport-victoria-logs)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-A [VictoriaLogs](https://victoriametrics.com/products/victorialogs/) transport for the [LogLayer](https://loglayer.dev) logging library.
+A transport for [Victoria Metrics](https://victoriametrics.com/)' [VictoriaLogs](https://victoriametrics.com/products/victorialogs/) for the [LogLayer](https://loglayer.dev) logging library.
 
 This transport is a wrapper around the [HTTP transport](https://loglayer.dev/transports/http) using the [VictoriaLogs JSON stream API](https://docs.victoriametrics.com/victorialogs/data-ingestion/#json-stream-api).
 

@@ -1,13 +1,13 @@
 ---
 title: VictoriaLogs Transport for LogLayer
-description: Send logs to VictoriaLogs with the LogLayer logging library
+description: Send logs to Victoria Metrics' VictoriaLogs with the LogLayer logging library
 ---
 
 # VictoriaLogs Transport
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-victoria-logs)](https://www.npmjs.com/package/@loglayer/transport-victoria-logs)
 
-This transport adds support for [VictoriaLogs](https://victoriametrics.com/products/victorialogs/) and is a wrapper around the [HTTP transport](https://loglayer.dev/transports/http) using the [VictoriaLogs JSON stream API](https://docs.victoriametrics.com/victorialogs/data-ingestion/#json-stream-api).
+This transport adds support for [Victoria Metrics](https://victoriametrics.com/)' [VictoriaLogs](https://victoriametrics.com/products/victorialogs/) and is a wrapper around the [HTTP transport](https://loglayer.dev/transports/http) using the [VictoriaLogs JSON stream API](https://docs.victoriametrics.com/victorialogs/data-ingestion/#json-stream-api).
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/victoria-logs)
 
