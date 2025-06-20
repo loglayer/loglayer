@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- [`28cc479`](https://github.com/loglayer/loglayer/commit/28cc4792b385179c833424b01c025d7d985bb80d) Thanks [@theogravity](https://github.com/theogravity)! - Docs update
+
 ## 1.0.1
 
 ### Patch Changes
