@@ -7,6 +7,21 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Jun 19, 2025
+
+Added the new [HTTP Transport](/transports/http) for LogLayer that allows you to send logs to any HTTP endpoint.
+
+### HTTP Transport Features
+
+- 🌐 **Generic HTTP Support** - Send logs to any HTTP endpoint with configurable method and headers
+- 📦 **Custom Payload Templates** - Transform log data into any format your API expects
+- 🔄 **Batching Support** - Queue logs and send them in batches for better performance
+- 🗜️ **Gzip Compression** - Reduce bandwidth usage with optional compression
+- 🔁 **Retry Logic** - Automatic retries with exponential backoff
+- ⏱️ **Rate Limiting** - Respect HTTP 429 responses with configurable behavior
+- 🎯 **Dynamic Headers** - Use functions to generate headers dynamically
+- 🐛 **Error Handling** - Comprehensive error callbacks for debugging and monitoring
+
 ## May 24, 2025
 
 For `loglayer`:

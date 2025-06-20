@@ -1,0 +1,17 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Repo operations
+
+## Package management
+
+This project uses `pnpm` as the package manager. You can run package-level scripts with `pnpm run <script>` such as `pnpm run test`.
+
+## Project management
+
+This project uses `turbo` to run package scripts.
+
+- `turbo build` will build all packages in the project
+- `turbo test` will run all tests in the project. Only use this if you mean to test all packages at once.

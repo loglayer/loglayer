@@ -156,6 +156,7 @@ export default defineConfig({
             { text: "Sumo Logic", link: '/transports/sumo-logic'}
           ]},
           { text: 'Other Transports', items: [
+            { text: 'HTTP', link: '/transports/http' },
             { text: 'Log File Rotation', link: '/transports/log-file-rotation' },
             { text: 'OpenTelemetry', link: '/transports/opentelemetry' },
             { text: 'Pretty Terminal', link: '/transports/pretty-terminal' }
