@@ -17,9 +17,9 @@ A transport for the [LogLayer](https://loglayer.dev) logging library that pretty
 - 💅 **JSON Pretty Printing** - Beautifully formatted structured data with syntax highlighting
 - 🎭 **Configurable Themes** - Choose from pre-built themes or customize your own colors
 
-## Next.js support
+## Next.js / browser support
 
-The Pretty Terminal does not work in Next.js as Pretty Terminal has dependencies that are incompatible with
+The Pretty Terminal does not work in a browser or Next.js as Pretty Terminal has dependencies that are incompatible with
 in a Next.js environment.
 
 Use [Simple Pretty terminal](https://loglayer.dev/transports/simple-pretty-terminal) instead.

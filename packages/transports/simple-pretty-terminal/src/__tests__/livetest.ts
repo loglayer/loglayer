@@ -17,6 +17,7 @@ declare global {
 // Create a transport instance with some nice defaults for demo
 const transport = getSimplePrettyTerminal({
   viewMode: "message-only",
+  runtime: "node",
 });
 
 const logger = new LogLayer({

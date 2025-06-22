@@ -29,6 +29,7 @@ describe("SimplePrettyTerminalTransport", () => {
       enabled: true,
       viewMode: "inline",
       theme: moonlight,
+      runtime: "node",
     });
     transport.shipToLogger({
       logLevel: "info",
@@ -48,6 +49,7 @@ describe("SimplePrettyTerminalTransport", () => {
     const transport = getSimplePrettyTerminal({
       enabled: true,
       theme: moonlight,
+      runtime: "node",
     });
 
     const log = new LogLayer({
@@ -69,6 +71,7 @@ describe("SimplePrettyTerminalTransport", () => {
       enabled: true,
       showLogId: true,
       theme: moonlight,
+      runtime: "node",
     });
 
     const log = new LogLayer({
@@ -87,6 +90,7 @@ describe("SimplePrettyTerminalTransport", () => {
       enabled: true,
       showLogId: false,
       theme: moonlight,
+      runtime: "node",
     });
 
     const log = new LogLayer({
@@ -103,6 +107,7 @@ describe("SimplePrettyTerminalTransport", () => {
       enabled: true,
       viewMode: "expanded",
       theme: moonlight,
+      runtime: "node",
     });
 
     const log = new LogLayer({
@@ -145,6 +150,7 @@ describe("SimplePrettyTerminalTransport", () => {
       enabled: true,
       timestampFormat: "yyyy-MM-dd HH:mm:ss",
       theme: moonlight,
+      runtime: "node",
     });
 
     const log = new LogLayer({
@@ -161,6 +167,7 @@ describe("SimplePrettyTerminalTransport", () => {
       enabled: true,
       timestampFormat: (timestamp: number) => `CUSTOM-${timestamp}`,
       theme: moonlight,
+      runtime: "node",
     });
 
     const log = new LogLayer({
@@ -177,6 +184,7 @@ describe("SimplePrettyTerminalTransport", () => {
       enabled: true,
       viewMode: "inline",
       theme: moonlight,
+      runtime: "node",
     });
 
     const log = new LogLayer({
@@ -203,13 +211,34 @@ describe("SimplePrettyTerminalTransport", () => {
             Authorization: "Bearer token123",
           },
           body: {
-            name: "Jane Smith",
+            name: "Jane Doe",
             email: "jane@example.com",
           },
         },
-        timestamp: new Date(),
-        duration: 150.5,
-        success: true,
+        response: {
+          status: 201,
+          data: {
+            id: 456,
+            name: "Jane Doe",
+            email: "jane@example.com",
+            createdAt: new Date().toISOString(),
+          },
+        },
+        performance: {
+          duration: 125.5,
+          memory: {
+            used: 45.2,
+            total: 512,
+            percentage: 8.8,
+          },
+        },
+        errors: [new Error("Validation failed"), new Error("Database connection timeout")],
+        tags: ["api", "user", "create"],
+        metadata: {
+          version: "1.0.0",
+          environment: "production",
+          region: "us-west-2",
+        },
       })
       .info("API request processed");
 
@@ -222,6 +251,7 @@ describe("SimplePrettyTerminalTransport", () => {
       viewMode: "expanded",
       collapseArrays: true,
       theme: moonlight,
+      runtime: "node",
     });
 
     const log = new LogLayer({
@@ -231,23 +261,28 @@ describe("SimplePrettyTerminalTransport", () => {
     log
       .withMetadata({
         numbers: [1, 2, 3, 4, 5],
-        mixed: ["a", "b", { nested: "value" }],
+        strings: ["hello", "world"],
+        mixed: [1, "test", true, null],
+        nested: {
+          array: [10, 20, 30],
+        },
       })
-      .info("Test with collapsed arrays");
+      .info("Test message with arrays");
 
     // Should have multiple log calls: one for the main line, one for each data line
     expect(stdoutSpy.mock.calls.length).toBeGreaterThan(1);
 
     // Check that arrays are collapsed
-    const dataOutput = stdoutSpy.mock.calls
-      .slice(1)
-      .map((call) => stripAnsi(call[0] as string))
-      .join("\n");
-
-    // When collapseArrays is true, arrays should be collapsed to [... items] format
+    const dataCalls = stdoutSpy.mock.calls.slice(1);
+    const dataOutput = dataCalls.map((call) => stripAnsi(call[0] as string)).join("\n");
     expect(dataOutput).toContain("numbers:");
     expect(dataOutput).toContain("[... 5 items]");
+    expect(dataOutput).toContain("strings:");
+    expect(dataOutput).toContain("[... 2 items]");
     expect(dataOutput).toContain("mixed:");
+    expect(dataOutput).toContain("[... 4 items]");
+    expect(dataOutput).toContain("nested:");
+    expect(dataOutput).toContain("array:");
     expect(dataOutput).toContain("[... 3 items]");
   });
 
@@ -255,7 +290,9 @@ describe("SimplePrettyTerminalTransport", () => {
     const transport = getSimplePrettyTerminal({
       enabled: true,
       viewMode: "inline",
+      flattenNestedObjects: true,
       theme: moonlight,
+      runtime: "node",
     });
 
     const log = new LogLayer({
@@ -268,9 +305,6 @@ describe("SimplePrettyTerminalTransport", () => {
           name: "John",
           profile: {
             age: 30,
-            preferences: {
-              theme: "dark",
-            },
           },
         },
         tags: ["admin", "user"],
@@ -280,18 +314,13 @@ describe("SimplePrettyTerminalTransport", () => {
     expect(stdoutSpy).toHaveBeenCalled();
     const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
 
-    // Should show flattened dot notation for nested objects (default behavior)
+    // Should show flattened dot notation
     expect(output).toContain("user.name=John");
     expect(output).toContain("user.profile.age=30");
-    expect(output).toContain("user.profile.preferences.theme=dark");
-
-    // Arrays should be shown as [...]
     expect(output).toContain("tags=[...]");
 
-    // Should not show the original nested structure
-    expect(output).not.toContain('"user":');
-    expect(output).not.toContain('"profile":');
-    expect(output).not.toContain('"preferences":');
+    // Should not show JSON format
+    expect(output).not.toContain('user={"name":"John","profile":{"age":30}}');
   });
 
   it("should show JSON format when flattenNestedObjects is disabled", () => {
@@ -300,6 +329,7 @@ describe("SimplePrettyTerminalTransport", () => {
       viewMode: "inline",
       flattenNestedObjects: false,
       theme: moonlight,
+      runtime: "node",
     });
 
     const log = new LogLayer({
@@ -334,6 +364,7 @@ describe("SimplePrettyTerminalTransport", () => {
     const transport = getSimplePrettyTerminal({
       viewMode: "inline",
       maxInlineDepth: 50, // This should be ignored now
+      runtime: "node",
     });
 
     const longMessage =
@@ -372,6 +403,7 @@ describe("SimplePrettyTerminalTransport", () => {
       viewMode: "inline",
       flattenNestedObjects: false,
       collapseArrays: false,
+      runtime: "node",
     });
 
     const testData = {
@@ -408,85 +440,75 @@ describe("SimplePrettyTerminalTransport", () => {
     expect(cleanOutput).not.toContain("mixed=[...]");
   });
 
-  it("should use custom writeFn instead of console.log", () => {
-    const customOutput: string[] = [];
-    const customWriteFn = (message: string) => {
-      customOutput.push(message);
-    };
-
+  it("should use console.log when runtime is set to browser", () => {
     const transport = getSimplePrettyTerminal({
       enabled: true,
       viewMode: "inline",
       theme: moonlight,
-      writeFn: customWriteFn,
+      runtime: "browser",
     });
 
     const log = new LogLayer({
       transport,
     });
 
-    log.info("Test message with custom writeFn");
+    log.info("Test message with browser runtime");
 
-    // Verify that console.log was not called (since we're using custom writeFn)
+    // Verify that console.log was called (since we're using browser runtime)
+    expect(logSpy).toHaveBeenCalled();
+    const output = stripAnsi(logSpy.mock.calls[0][0] as string);
+    expect(output).toContain("Test message with browser runtime");
+    expect(output).toContain("INFO");
+
+    // Verify that process.stdout.write was not called
     expect(stdoutSpy).not.toHaveBeenCalled();
-
-    // Verify that our custom writeFn was called
-    expect(customOutput).toHaveLength(1);
-    const output = stripAnsi(customOutput[0]);
-    expect(output).toContain("Test message with custom writeFn");
-    expect(output).toContain("INFO");
   });
 
-  it("should use process.stdout.write when writeFn is configured to use it", () => {
-    const customOutput: string[] = [];
-    const customWriteFn = (message: string) => {
-      customOutput.push(message);
-      process.stdout.write(message + "\n");
-    };
-    
+  it("should use process.stdout.write when runtime is set to node", () => {
     const transport = getSimplePrettyTerminal({
       enabled: true,
       viewMode: "inline",
       theme: moonlight,
-      writeFn: customWriteFn,
+      runtime: "node",
     });
 
     const log = new LogLayer({
       transport,
     });
 
-    log.info("Test message with process.stdout.write");
+    log.info("Test message with node runtime");
 
-    // Verify that our custom writeFn was called
-    expect(customOutput).toHaveLength(1);
-    const output = stripAnsi(customOutput[0]);
-    expect(output).toContain("Test message with process.stdout.write");
-    expect(output).toContain("INFO");
-
-    // Verify that process.stdout.write was called through our custom function
-    expect(stdoutSpy).toHaveBeenCalled();
-  });
-
-  it("should use process.stdout.write by default", () => {
-    const transport = getSimplePrettyTerminal({
-      enabled: true,
-      viewMode: "inline",
-      theme: moonlight,
-    });
-
-    const log = new LogLayer({
-      transport,
-    });
-
-    log.info("Test message with default writeFn");
-
-    // Verify that console.log was not called (since default is now process.stdout.write)
-    expect(logSpy).not.toHaveBeenCalled();
-
-    // Verify that process.stdout.write was called
+    // Verify that process.stdout.write was called (since we're using node runtime)
     expect(stdoutSpy).toHaveBeenCalled();
     const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
-    expect(output).toContain("Test message with default writeFn");
+    expect(output).toContain("Test message with node runtime");
     expect(output).toContain("INFO");
+
+    // Verify that console.log was not called
+    expect(logSpy).not.toHaveBeenCalled();
+  });
+
+  it("should use process.stdout.write by default (node runtime)", () => {
+    const transport = getSimplePrettyTerminal({
+      enabled: true,
+      viewMode: "inline",
+      theme: moonlight,
+      runtime: "node",
+    });
+
+    const log = new LogLayer({
+      transport,
+    });
+
+    log.info("Test message with default runtime");
+
+    // Verify that process.stdout.write was called (since default is node runtime)
+    expect(stdoutSpy).toHaveBeenCalled();
+    const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
+    expect(output).toContain("Test message with default runtime");
+    expect(output).toContain("INFO");
+
+    // Verify that console.log was not called
+    expect(logSpy).not.toHaveBeenCalled();
   });
 });

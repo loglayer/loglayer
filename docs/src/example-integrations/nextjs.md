@@ -9,20 +9,20 @@ description: Learn how to implement LogLayer with Next.js
 
 This guide assumes you already have [Next.js](https://nextjs.org/) set up.
 
-First, install the required packages. You can use any transport you prefer - we'll use [Pino](/transports/pino) in this example:
+First, install the required packages. We'll use [Pino](/transports/pino) for production and [Simple Pretty Terminal](/transports/simple-pretty-terminal) for development:
 
 ::: code-group
 
 ```sh [npm]
-npm i loglayer @loglayer/transport-pino pino serialize-error
+npm i loglayer @loglayer/transport-pino @loglayer/transport-simple-pretty-terminal pino serialize-error
 ```
 
 ```sh [pnpm]
-pnpm add loglayer @loglayer/transport-pino pino serialize-error
+pnpm add loglayer @loglayer/transport-pino @loglayer/transport-simple-pretty-terminal pino serialize-error
 ```
 
 ```sh [yarn]
-yarn add loglayer @loglayer/transport-pino pino serialize-error
+yarn add loglayer @loglayer/transport-pino @loglayer/transport-simple-pretty-terminal pino serialize-error
 ```
 :::
 
@@ -32,8 +32,12 @@ yarn add loglayer @loglayer/transport-pino pino serialize-error
 // logger.ts
 import { LogLayer } from 'loglayer'
 import { PinoTransport } from '@loglayer/transport-pino'
+import { getSimplePrettyTerminal } from '@loglayer/transport-simple-pretty-terminal'
 import { serializeError } from 'serialize-error'
 import pino from 'pino'
+
+// Detect if we're on the server or client
+const isServer = typeof window === 'undefined'
 
 // Create a Pino instance (only needs to be done once)
 const pinoLogger = pino({
@@ -42,9 +46,19 @@ const pinoLogger = pino({
 
 const log = new LogLayer({
   errorSerializer: serializeError,
-  transport: new PinoTransport({
-    logger: pinoLogger
-  })
+  transport: [
+    // Simple Pretty Terminal for development
+    getSimplePrettyTerminal({
+      enabled: process.env.NODE_ENV === 'development',
+      runtime: isServer ? 'node' : 'browser',
+      viewMode: 'inline',
+    }),
+    // Pino for production (both server and client)
+    new PinoTransport({
+      enabled: process.env.NODE_ENV === 'production',
+      logger: pinoLogger
+    })
+  ]
 })
 
 export function getLogger() {
@@ -90,11 +104,19 @@ const isServer = typeof window === 'undefined'
 
 const log = new LogLayer({
   errorSerializer: serializeError,
-  transport: new PinoTransport({
-    
-    enabled: isServer, // runs server-side only
-    logger: pinoLogger
-  }),
+  transport: [
+    // Simple Pretty Terminal for development
+    getSimplePrettyTerminal({
+      enabled: process.env.NODE_ENV === 'development',
+      runtime: isServer ? 'node' : 'browser',
+      viewMode: 'inline',
+    }),
+    // Pino for production (both server and client)
+    new PinoTransport({
+      enabled: process.env.NODE_ENV === 'production',
+      logger: pinoLogger
+    })
+  ],
   plugins: [
     {
       // Add a plugin to label the log entry as coming from the server or client
@@ -125,13 +147,14 @@ Next.js [does not](https://github.com/vercel/next.js/discussions/63787) have a w
 
 To use LogLayer for this, you will need to create an [instrumentation file](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation) in the root of your project.
 
-Here's an example using the [Pino](/transports/pino) and [DataDog](/transports/datadog) transports:
+Here's an example using the [Simple Pretty Terminal](/transports/simple-pretty-terminal), [Pino](/transports/pino), and [DataDog](/transports/datadog) transports:
 
 ```typescript
 // instrumentation.ts
 import { LogLayer, type ILogLayer } from 'loglayer';
 import { DataDogTransport } from "@loglayer/transport-datadog";
 import { PinoTransport } from "@loglayer/transport-pino";
+import { getSimplePrettyTerminal } from '@loglayer/transport-simple-pretty-terminal';
 import pino from "pino";
 import { serializeError } from "serialize-error";
 
@@ -207,10 +230,21 @@ export async function register() {
   const logger = new LogLayer({
     errorSerializer: serializeError,
     transport: [
+      // Simple Pretty Terminal for development
+      getSimplePrettyTerminal({
+        enabled: process.env.NODE_ENV === 'development',
+        runtime: 'node', // Server-side only in instrumentation
+        viewMode: 'inline',
+      }),
+      // Pino for production
       new PinoTransport({
+        enabled: process.env.NODE_ENV === 'production',
         logger: pino(),
       }),
-      new DataDogTransport(...),
+      new DataDogTransport({
+        enabled: process.env.NODE_ENV === 'production'
+      ...
+      }),
     ]
   })
  

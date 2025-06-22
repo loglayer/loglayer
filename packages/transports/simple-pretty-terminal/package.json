@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-simple-pretty-terminal",
-  "description": "Non-interactive pretty log output in the terminal for the LogLayer logging library.",
-  "version": "1.1.0",
+  "description": "Pretty log output in the terminal / browser / Next.js for the LogLayer logging library.",
+  "version": "1.2.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -30,7 +30,8 @@
     "pretty",
     "logging",
     "simple",
-    "nextjs"
+    "nextjs",
+    "browser"
   ],
   "scripts": {
     "build": "tsup src/index.ts",

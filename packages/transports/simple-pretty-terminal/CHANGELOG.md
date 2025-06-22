@@ -1,5 +1,20 @@
 # `@loglayer/transport-simple-pretty-terminal` Changelog
 
+## 1.2.0
+
+### Major Changes
+
+- Added browser compatibility with new `runtime` configuration option
+- Removed `writeFn` configuration option in favor of `runtime` option
+- Made all `process.stdout` references optional for browser compatibility
+
+### Features
+
+- Added `runtime` configuration option with values `'node'` or `'browser'`
+- In `'node'` runtime, logs are written using `process.stdout.write`
+- In `'browser'` runtime, logs are written using `console.log`
+- Default runtime is `'node'` for backward compatibility
+
 ## 1.1.0
 
 ### Minor Changes

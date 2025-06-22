@@ -30,8 +30,8 @@ src="/asciinema/pretty-terminal.cast"
 :idleTimeLimit=3
 />
 
-::: warn Using Next.js?
-This transport has dependencies that are not supported in Next.js.
+::: warn Using Next.js or LogLayer in a browser?
+This transport has dependencies that are not supported in Next.js or a browser.
 Use the [Simple Pretty Terminal](/transports/simple-pretty-terminal) instead.
 :::
 
