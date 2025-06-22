@@ -7,6 +7,13 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## June 21, 2025
+
+Added the new [Simple Pretty Transport](/transports/simple-pretty-terminal.md) that is designed for Next.js and
+apps that run concurrently.
+
+![Simple View](/images/pretty-terminal/simple-view.webp)
+
 ## June 19, 2025
 
 - (all packages) Dev dependency package updates

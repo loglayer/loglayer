@@ -17,6 +17,10 @@ If you are writing unit tests for a transport, then it's best to look at other t
 
 The transports are located in `packages/transports`, and the tests are found in their respective `src/__tests__` directory. The backing library for the transport tends to be mocked.
 
+#### Running tests
+
+You run tests with `pnpm run test`.
+
 ### Live tests
 
 Live tests test the transport with the backing library (non-mocked). They are not unit tests. They are defined in `__tests__/livetest.ts` and mostly use `import { testTransportOutput } from "@loglayer/transport";` to test the transport.

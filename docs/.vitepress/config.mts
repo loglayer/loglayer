@@ -160,7 +160,8 @@ export default defineConfig({
             { text: 'HTTP', link: '/transports/http' },
             { text: 'Log File Rotation', link: '/transports/log-file-rotation' },
             { text: 'OpenTelemetry', link: '/transports/opentelemetry' },
-            { text: 'Pretty Terminal', link: '/transports/pretty-terminal' }
+            { text: 'Pretty Terminal', link: '/transports/pretty-terminal' },
+            { text: 'Simple Pretty Terminal', link: '/transports/simple-pretty-terminal' },
           ]}
         ]
       },
