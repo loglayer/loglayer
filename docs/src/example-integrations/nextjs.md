@@ -34,7 +34,7 @@ import { LogLayer } from 'loglayer'
 import { PinoTransport } from '@loglayer/transport-pino'
 import { getSimplePrettyTerminal } from '@loglayer/transport-simple-pretty-terminal'
 import { serializeError } from 'serialize-error'
-import pino from 'pino'
+import { pino } from 'pino'
 
 // Detect if we're on the server or client
 const isServer = typeof window === 'undefined'

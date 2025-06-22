@@ -7,6 +7,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## June 22, 2025
+
+Added a new [Hono integration guide](/example-integrations/hono).
+
 ## June 21, 2025
 
 Added the new [Simple Pretty Transport](/transports/simple-pretty-terminal.md) that is designed for Next.js, browsers and

@@ -34,7 +34,7 @@ yarn add loglayer @loglayer/transport-pino pino
 ## Setup
 
 ```typescript
-import pino, { P } from 'pino'
+import { pino } from 'pino'
 import { LogLayer } from 'loglayer'
 import { PinoTransport } from "@loglayer/transport-pino"
 
