@@ -1,5 +1,5 @@
 import wrap from "wrap-ansi";
-import type { LogEntry, PrettyTerminalViewMode, SimpleViewConfig } from "../types.js";
+import type { LogEntry, PrettyTerminalViewMode, Runtime, SimpleViewConfig } from "../types.js";
 import * as prettyjson from "../vendor/prettyjson.js";
 import { formatInlineData, formatTimestamp, getLevelColor } from "./utils.js";
 
@@ -19,7 +19,7 @@ export class SimpleView {
   private timestampFormat: string | ((timestamp: number) => string);
   private collapseArrays: boolean;
   private flattenNestedObjects: boolean;
-  private writeFn: (message: string) => void;
+  private runtime: Runtime;
 
   constructor(config: SimpleViewConfig) {
     this.config = config;
@@ -29,8 +29,15 @@ export class SimpleView {
     this.timestampFormat = config.timestampFormat;
     this.collapseArrays = config.collapseArrays !== false;
     this.flattenNestedObjects = config.flattenNestedObjects !== false;
-    this.termWidth = process.stdout.columns || 120;
-    this.writeFn = config.writeFn;
+    this.runtime = config.runtime;
+
+    // Set terminal width based on runtime
+    if (this.runtime === "node") {
+      this.termWidth = process?.stdout?.columns || 120;
+    } else {
+      // For browser, use a reasonable default width
+      this.termWidth = 120;
+    }
   }
 
   public updateTerminalWidth(width: number): void {
@@ -46,6 +53,19 @@ export class SimpleView {
   }
 
   /**
+   * Writes a message to the appropriate output based on runtime
+   */
+  private writeMessage(message: string): void {
+    if (this.runtime === "node") {
+      // Use process.stdout.write for Node.js
+      process?.stdout?.write?.(`${message}\n`);
+    } else {
+      // Use console.log for browser
+      console.log(message);
+    }
+  }
+
+  /**
    * Renders a single log entry based on the current view mode
    */
   public renderLogLine(entry: LogEntry): void {
@@ -58,7 +78,7 @@ export class SimpleView {
       case "message-only": {
         // Message-only view shows timestamp, level and message
         const condensedLine = `${timestamp} ${chevron}${message}`;
-        this.writeFn(wrap(condensedLine, this.termWidth, { hard: true }));
+        this.writeMessage(wrap(condensedLine, this.termWidth, { hard: true }));
         break;
       }
 
@@ -76,7 +96,7 @@ export class SimpleView {
           : "";
         const expandedLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}${fullData ? ` ${fullData}` : ""}`;
         // Don't wrap inline mode to preserve full content
-        this.writeFn(expandedLine);
+        this.writeMessage(expandedLine);
         break;
       }
 
@@ -84,7 +104,7 @@ export class SimpleView {
         // Expanded view shows timestamp, level, and message on first line, with data on indented separate lines
         const logId = this.showLogId ? this.config.config.logIdColor(`[${entry.id}]`) : "";
         const firstLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}`;
-        this.writeFn(wrap(firstLine, this.termWidth, { hard: true }));
+        this.writeMessage(wrap(firstLine, this.termWidth, { hard: true }));
 
         if (entry.data) {
           const jsonLines = prettyjson
@@ -108,9 +128,9 @@ export class SimpleView {
           for (const line of jsonLines) {
             // Skip empty lines
             if (line.trim() === "") {
-              this.writeFn("  ");
+              this.writeMessage("  ");
             } else {
-              this.writeFn(`  ${line}`);
+              this.writeMessage(`  ${line}`);
             }
           }
         }
@@ -124,7 +144,7 @@ export class SimpleView {
           ? formatInlineData(JSON.parse(entry.data), this.config.config, this.maxInlineDepth, true, this.collapseArrays)
           : "";
         const expandedLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}${fullData ? ` ${fullData}` : ""}`;
-        this.writeFn(wrap(expandedLine, this.termWidth, { hard: true }));
+        this.writeMessage(wrap(expandedLine, this.termWidth, { hard: true }));
         break;
       }
     }

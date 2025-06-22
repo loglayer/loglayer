@@ -9,10 +9,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## June 21, 2025
 
-Added the new [Simple Pretty Transport](/transports/simple-pretty-terminal.md) that is designed for Next.js and
+Added the new [Simple Pretty Transport](/transports/simple-pretty-terminal.md) that is designed for Next.js, browsers and
 apps that run concurrently.
 
 ![Simple View](/images/pretty-terminal/simple-view.webp)
+
+Updated the [Next.js integration guide](example-integrations/nextjs.md) to incorporate the Simple Pretty Transport.
 
 ## June 19, 2025
 

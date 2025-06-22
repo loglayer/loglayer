@@ -8,6 +8,7 @@
  * - Three view modes: inline, message-only, expanded
  * - JSON data pretty printing
  * - No interactive features (no keyboard navigation, no input)
+ * - Browser and Node.js runtime support
  *
  * Usage:
  * ```typescript
@@ -15,7 +16,8 @@
  *   maxInlineDepth: 4,
  *   maxInlineLength: 120,
  *   theme: customTheme,
- *   viewMode: "inline"
+ *   viewMode: "inline",
+ *   runtime: "node" // or "browser"
  * });
  * ```
  */
@@ -51,7 +53,7 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
    *
    * @param config - Configuration options for the transport
    */
-  constructor(config: SimplePrettyTerminalConfig = {}) {
+  constructor(config: SimplePrettyTerminalConfig) {
     super(config);
 
     // Store configuration
@@ -70,7 +72,7 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
     const timestampFormat = config.timestampFormat || "HH:mm:ss.SSS";
     const collapseArrays = config.collapseArrays !== false; // Default to true
     const flattenNestedObjects = config.flattenNestedObjects !== false; // Default to true
-    const writeFn = config.writeFn || ((message: string) => process.stdout.write(message + "\n"));
+    const runtime = config.runtime;
 
     // Initialize view configuration with defaults
     const viewConfig = {
@@ -88,7 +90,13 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
       dataKeyColor: theme.dataKeyColor || chalk.dim,
     };
 
-    this.termWidth = process.stdout.columns || 80;
+    // Set terminal width based on runtime
+    if (runtime === "node") {
+      this.termWidth = process?.stdout?.columns || 80;
+    } else {
+      // For browser, use a reasonable default width
+      this.termWidth = 80;
+    }
 
     // Initialize the renderer
     this.renderer = new SimpleView({
@@ -98,15 +106,17 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
       timestampFormat,
       collapseArrays,
       flattenNestedObjects,
-      writeFn,
+      runtime,
       config: viewConfig,
     });
 
-    // Update terminal width when window is resized
-    process.stdout.on("resize", () => {
-      this.termWidth = process.stdout.columns || 80;
-      this.renderer.updateTerminalWidth(this.termWidth);
-    });
+    // Update terminal width when window is resized (Node.js only)
+    if (runtime === "node" && process?.stdout?.on) {
+      process.stdout.on("resize", () => {
+        this.termWidth = process?.stdout?.columns || 80;
+        this.renderer.updateTerminalWidth(this.termWidth);
+      });
+    }
   }
 
   /**
@@ -164,7 +174,7 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
 
     // Rebuild the viewConfig as in the constructor
     const theme = this.config.theme || moonlight;
-    const writeFn = this.config.writeFn || ((message: string) => process.stdout.write(message + "\n"));
+    const runtime = this.config.runtime;
     const viewConfig = {
       colors: {
         trace: chalk.gray,
@@ -187,7 +197,7 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
       timestampFormat: this.config.timestampFormat || "HH:mm:ss.SSS",
       collapseArrays: this.config.collapseArrays !== false,
       flattenNestedObjects: this.config.flattenNestedObjects !== false,
-      writeFn,
+      runtime,
       config: viewConfig,
     });
   }

@@ -53,6 +53,12 @@ export interface ViewConfig {
 }
 
 /**
+ * Runtime environment for the transport.
+ * Determines how logs are output.
+ */
+export type Runtime = "node" | "browser";
+
+/**
  * Configuration for the SimpleView renderer.
  */
 export interface SimpleViewConfig {
@@ -70,8 +76,8 @@ export interface SimpleViewConfig {
   collapseArrays: boolean;
   /** Whether to flatten nested objects with dot notation in inline mode */
   flattenNestedObjects: boolean;
-  /** Custom function to write messages to the terminal. Defaults to console.log */
-  writeFn: (message: string) => void;
+  /** Runtime environment for output */
+  runtime: Runtime;
 }
 
 /**
@@ -111,6 +117,6 @@ export interface SimplePrettyTerminalConfig extends LoggerlessTransportConfig {
   collapseArrays?: boolean;
   /** Whether to flatten nested objects with dot notation in inline mode. Defaults to true */
   flattenNestedObjects?: boolean;
-  /** Custom function to write messages to the terminal. Defaults to process.stdout.write */
-  writeFn?: (message: string) => void;
+  /** Runtime environment for output */
+  runtime: Runtime;
 }

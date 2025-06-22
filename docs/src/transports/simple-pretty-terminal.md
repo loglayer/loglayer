@@ -10,12 +10,12 @@ description: Simple, pretty log output for LogLayer in the terminal (no interact
 
 ![Inline mode](/images/simple-pretty-terminal/terminal-inline.webp)
 
-The Simple Pretty Terminal Transport provides beautiful, themed log output in your terminal, with no interactive features. It is ideal for local development, CI, or anywhere you want clean, readable logs without keyboard navigation or input.
+The Simple Pretty Terminal Transport provides beautiful, themed log output in your terminal, with no interactive features. Supports both Node.js and browser environments.
 
 ::: tip Looking for a powerful alternative?
 This transport is built for frameworks like Next.js and for use with multiple projects running concurrently. 
 
-The Simple Pretty Terminal does not support keyboard navigation, search / filtering, or interactive features. For more advanced terminal printing for a non-Next.js / single application, use the [Pretty Terminal Transport](/transports/pretty-terminal).
+The Simple Pretty Terminal does not support keyboard navigation, search / filtering, or interactive features. For more advanced terminal printing for a non-Next.js / non-browser / single application, use the [Pretty Terminal Transport](/transports/pretty-terminal).
 :::
 
 ## Installation
@@ -34,10 +34,19 @@ yarn add loglayer @loglayer/transport-simple-pretty-terminal
 
 ## Basic Usage
 
-::: warning Development Only
-Simple Pretty Terminal is designed to work in a terminal only for local development. It should not be used for production environments.
+::: warning Pair with another logger for production
+Simple Pretty Terminal is really meant for local development. Although there's
+nothing wrong with running it in production, the log output is not designed to be
+injested by 3rd party log collection systems.
 
 It is recommended that you disable other transports when using Pretty Terminal to avoid duplicate log output.
+:::
+
+::: warning Required Runtime Configuration
+You **must** specify the `runtime` option when creating the transport.
+
+- `runtime: "node"` — Use in Node.js environments. Logs are written using `process.stdout.write`.
+- `runtime: "browser"` — Use in browser environments. Logs are written using `console.log`.
 :::
 
 ```typescript
@@ -52,6 +61,7 @@ const log = new LogLayer({
     }),
     getSimplePrettyTerminal({
       enabled: process.env.NODE_ENV === 'development',
+      runtime: "node", // Required: "node" or "browser"
       viewMode: "expanded", // "inline" | "message-only" | "expanded"
       theme: moonlight
     }),
@@ -63,17 +73,63 @@ log.withMetadata({ foo: "bar" }).info("Hello from Simple Pretty Terminal!");
 
 ## Configuration Options
 
-| Option             | Type    | Default   | Description                                                                                      |
-|--------------------|---------|-----------|--------------------------------------------------------------------------------------------------|
-| `enabled`          | boolean | `true`      | Enable/disable the transport                                                                     |
-| `viewMode`         | string  | "inline"  | Log view: "inline", "message-only", or "expanded"                                                |
-| `theme`            | object  | `moonlight` | Theme for log output (see built-in themes)                                                       |
-| `maxInlineDepth`   | number  | `4`         | Max depth for inline data in inline mode                                                         |
-| `showLogId`        | boolean | `false`     | Whether to show log IDs in the output                                                            |
-| `timestampFormat`  | string \| function | "HH:mm:ss.SSS" | Custom timestamp format ([date-fns format string](https://date-fns.org/docs/format) or function) |
-| `collapseArrays`   | boolean | `true`      | Whether to collapse arrays in expanded mode for cleaner output                                   |
-| `flattenNestedObjects` | boolean | `true` | Whether to flatten nested objects with dot notation in inline mode                               |
-| `writeFn`          | function | `process.stdout.write` | Custom function to write messages to the terminal                                                |
+| Option             | Type    | Required | Description                                                                                      |
+|--------------------|---------|----------|--------------------------------------------------------------------------------------------------|
+| `runtime`          | string  | ✅ Yes   | Runtime environment: "node" or "browser"                                                         |
+| `enabled`          | boolean | No       | `true`      | Enable/disable the transport                                                                     |
+| `viewMode`         | string  | No       | `"inline"`  | Log view: "inline", "message-only", or "expanded"                                                |
+| `theme`            | object  | No       | `moonlight` | Theme for log output (see built-in themes)                                                       |
+| `maxInlineDepth`   | number  | No       | `4`         | Max depth for inline data in inline mode                                                         |
+| `showLogId`        | boolean | No       | `false`     | Whether to show log IDs in the output                                                            |
+| `timestampFormat`  | string \| function | No | `"HH:mm:ss.SSS"` | Custom timestamp format ([date-fns format string](https://date-fns.org/docs/format) or function) |
+| `collapseArrays`   | boolean | No       | `true`      | Whether to collapse arrays in expanded mode for cleaner output                                   |
+| `flattenNestedObjects` | boolean | No | `true` | Whether to flatten nested objects with dot notation in inline mode                               |
+
+## Runtime Environments
+
+The transport supports two runtime environments:
+
+### Node.js Runtime
+
+Use `runtime: "node"` for Node.js applications:
+
+```typescript
+const transport = getSimplePrettyTerminal({
+  runtime: "node",
+  viewMode: "inline",
+  theme: moonlight,
+});
+```
+
+In Node.js runtime, logs are written using `process.stdout.write` for optimal terminal output.
+
+### Browser Runtime
+
+Use `runtime: "browser"` for browser applications:
+
+```typescript
+const transport = getSimplePrettyTerminal({
+  runtime: "browser",
+  viewMode: "inline",
+  theme: moonlight,
+});
+```
+
+In browser runtime, logs are written using `console.log` for browser console compatibility.
+
+## Next.js usage
+
+To configure with Next.js, use the following code to use both server and client-side rendering:
+
+```typescript
+const isServer = typeof window === "undefined";
+
+const transport = getSimplePrettyTerminal({
+  runtime: isServer ? "node" : "browser",
+  viewMode: "inline",
+  theme: moonlight,
+});
+```
 
 ## View Modes
 
@@ -168,17 +224,19 @@ const darkBlueTheme = {
 };
 
 const transport = getSimplePrettyTerminal({
+  runtime: "node",
   theme: darkBlueTheme,
 });
 ```
 
 ## Custom Timestamp Formatting
 
-You can customize timestamp formatting using date-fns format strings or custom functions:
+You can customize timestamp formatting using [date-fns format strings](https://date-fns.org/docs/format) or custom functions:
 
 ```typescript
 // Using date-fns format strings
 const transport1 = getSimplePrettyTerminal({
+  runtime: "node",
   timestampFormat: "yyyy-MM-dd HH:mm:ss", // 2024-01-15 14:30:25
   timestampFormat: "MMM dd, yyyy 'at' HH:mm", // Jan 15, 2024 at 14:30
   timestampFormat: "HH:mm:ss.SSS", // 14:30:25.123 (default)
@@ -186,30 +244,10 @@ const transport1 = getSimplePrettyTerminal({
 
 // Using custom functions
 const transport2 = getSimplePrettyTerminal({
+  runtime: "node",
   timestampFormat: (timestamp: number) => {
     const date = new Date(timestamp);
     return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   },
-});
-```
-
-Common date-fns format patterns:
-- `"HH:mm:ss.SSS"` - Time with milliseconds (default)
-- `"yyyy-MM-dd HH:mm:ss"` - Full date and time
-- `"MMM dd, yyyy HH:mm"` - Readable date format
-- `"HH:mm:ss"` - Time without milliseconds
-- `"yyyy-MM-dd"` - Date only
-
-## Custom Output Function
-
-You can customize how log messages are written to the terminal using the `writeFn` option. By default, the transport uses `process.stdout.write` with a newline, but you can provide your own function for more control over output.
-
-### Using console.log
-
-If you prefer to use `console.log` instead of the default `process.stdout.write`:
-
-```typescript
-const transport = getSimplePrettyTerminal({
-  writeFn: (message: string) => console.log(message),
 });
 ```

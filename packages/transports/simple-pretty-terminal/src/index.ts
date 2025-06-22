@@ -1,5 +1,10 @@
 import { SimplePrettyTerminalTransport } from "./SimplePrettyTerminalTransport.js";
-import type { PrettyTerminalViewMode, SimplePrettyTerminalConfig, SimplePrettyTerminalTheme } from "./types.js";
+import type {
+  PrettyTerminalViewMode,
+  Runtime,
+  SimplePrettyTerminalConfig,
+  SimplePrettyTerminalTheme,
+} from "./types.js";
 
 // Export chalk for custom theme creation
 export * from "chalk";
@@ -11,9 +16,9 @@ export { SimplePrettyTerminalTransport };
 export * from "./themes.js";
 
 // Export essential types for configuration and custom themes
-export type { SimplePrettyTerminalConfig, SimplePrettyTerminalTheme, PrettyTerminalViewMode };
+export type { SimplePrettyTerminalConfig, SimplePrettyTerminalTheme, PrettyTerminalViewMode, Runtime };
 
 // Main convenience function for creating the transport
-export function getSimplePrettyTerminal(config: SimplePrettyTerminalConfig = {}) {
+export function getSimplePrettyTerminal(config: SimplePrettyTerminalConfig) {
   return new SimplePrettyTerminalTransport(config);
 }
