@@ -172,10 +172,12 @@ function stripAnsiCodes(str: string): string {
  * Create a console method that logs to LogLayer
  */
 function createConsoleMethod(log: ILogLayer, method: "error" | "info" | "warn" | "debug" | "log") {
-  let mappedMethod = method;
+  let mappedMethod: "error" | "info" | "warn" | "debug";
 
   if (method === "log") {
     mappedMethod = "info";
+  } else {
+    mappedMethod = method;
   }
 
   return (...args: unknown[]) => {

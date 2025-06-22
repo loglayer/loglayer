@@ -131,6 +131,8 @@ const transport = getSimplePrettyTerminal({
 });
 ```
 
+For full integration instructions, see the [Next.js integration guide](/example-integrations/nextjs.md)
+
 ## View Modes
 
 The transport supports three view modes:
