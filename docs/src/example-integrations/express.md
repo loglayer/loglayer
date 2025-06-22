@@ -31,7 +31,7 @@ yarn add loglayer @loglayer/transport-pino pino express serialize-error
 
 ```typescript
 import express from 'express'
-import pino from 'pino'
+import { pino } from 'pino'
 import { ILogLayer, LogLayer } from 'loglayer'
 import { PinoTransport } from '@loglayer/transport-pino'
 import { serializeError } from 'serialize-error';
