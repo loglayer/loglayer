@@ -1,5 +1,11 @@
 # `@loglayer/transport-pretty-terminal` Changelog
 
+## 3.1.3
+
+### Patch Changes
+
+- [#207](https://github.com/loglayer/loglayer/pull/207) [`738ebe4`](https://github.com/loglayer/loglayer/commit/738ebe405715662ad9d1417dffe8ab547695afff) Thanks [@theogravity](https://github.com/theogravity)! - Doc updates
+
 ## 3.1.2
 
 ### Patch Changes

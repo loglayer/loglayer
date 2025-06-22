@@ -1,5 +1,11 @@
 # LogLayer Docs Site Changelog
 
+## 3.0.0
+
+### Major Changes
+
+- [#207](https://github.com/loglayer/loglayer/pull/207) [`738ebe4`](https://github.com/loglayer/loglayer/commit/738ebe405715662ad9d1417dffe8ab547695afff) Thanks [@theogravity](https://github.com/theogravity)! - Remove writeFn, add in a `runtime` mode, which adds browser-rendering support
+
 ## 2.4.3
 
 ### Patch Changes
