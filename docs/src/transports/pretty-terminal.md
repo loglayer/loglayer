@@ -30,12 +30,12 @@ src="/asciinema/pretty-terminal.cast"
 :idleTimeLimit=3
 />
 
-::: warn Using Next.js or LogLayer in a browser?
+::: warning Using Next.js or LogLayer in a browser?
 This transport has dependencies that are not supported in Next.js or a browser.
 Use the [Simple Pretty Terminal](/transports/simple-pretty-terminal) instead.
 :::
 
-::: warn Running multiple applications concurrently?
+::: warning Running multiple applications concurrently?
 This transport has interactive features that are designed for a single app. If you are running multiple apps concurrently in the same terminal, then it is recommended you use the the [Simple Pretty Terminal](/transports/simple-pretty-terminal) instead.
 :::
 
