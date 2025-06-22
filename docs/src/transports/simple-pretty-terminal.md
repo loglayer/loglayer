@@ -65,14 +65,15 @@ log.withMetadata({ foo: "bar" }).info("Hello from Simple Pretty Terminal!");
 
 | Option             | Type    | Default   | Description                                                                                      |
 |--------------------|---------|-----------|--------------------------------------------------------------------------------------------------|
-| `enabled`          | boolean | true      | Enable/disable the transport                                                                     |
+| `enabled`          | boolean | `true`      | Enable/disable the transport                                                                     |
 | `viewMode`         | string  | "inline"  | Log view: "inline", "message-only", or "expanded"                                                |
-| `theme`            | object  | moonlight | Theme for log output (see built-in themes)                                                       |
-| `maxInlineDepth`   | number  | 4         | Max depth for inline data in inline mode                                                         |
-| `showLogId`        | boolean | false     | Whether to show log IDs in the output                                                            |
+| `theme`            | object  | `moonlight` | Theme for log output (see built-in themes)                                                       |
+| `maxInlineDepth`   | number  | `4`         | Max depth for inline data in inline mode                                                         |
+| `showLogId`        | boolean | `false`     | Whether to show log IDs in the output                                                            |
 | `timestampFormat`  | string \| function | "HH:mm:ss.SSS" | Custom timestamp format ([date-fns format string](https://date-fns.org/docs/format) or function) |
-| `collapseArrays`   | boolean | true      | Whether to collapse arrays in expanded mode for cleaner output                                   |
-| `flattenNestedObjects` | boolean | true | Whether to flatten nested objects with dot notation in inline mode                               |
+| `collapseArrays`   | boolean | `true`      | Whether to collapse arrays in expanded mode for cleaner output                                   |
+| `flattenNestedObjects` | boolean | `true` | Whether to flatten nested objects with dot notation in inline mode                               |
+| `writeFn`          | function | `process.stdout.write` | Custom function to write messages to the terminal                                                |
 
 ## View Modes
 
@@ -198,3 +199,17 @@ Common date-fns format patterns:
 - `"MMM dd, yyyy HH:mm"` - Readable date format
 - `"HH:mm:ss"` - Time without milliseconds
 - `"yyyy-MM-dd"` - Date only
+
+## Custom Output Function
+
+You can customize how log messages are written to the terminal using the `writeFn` option. By default, the transport uses `process.stdout.write` with a newline, but you can provide your own function for more control over output.
+
+### Using console.log
+
+If you prefer to use `console.log` instead of the default `process.stdout.write`:
+
+```typescript
+const transport = getSimplePrettyTerminal({
+  writeFn: (message: string) => console.log(message),
+});
+```

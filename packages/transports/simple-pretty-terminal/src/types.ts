@@ -70,6 +70,8 @@ export interface SimpleViewConfig {
   collapseArrays: boolean;
   /** Whether to flatten nested objects with dot notation in inline mode */
   flattenNestedObjects: boolean;
+  /** Custom function to write messages to the terminal. Defaults to console.log */
+  writeFn: (message: string) => void;
 }
 
 /**
@@ -93,7 +95,7 @@ export type PrettyTerminalViewMode = "inline" | "message-only" | "expanded";
  * Extends the base transport configuration with simple pretty terminal specific options.
  */
 export interface SimplePrettyTerminalConfig extends LoggerlessTransportConfig {
-  /** Maximum depth for inline data display before collapsing */
+  /** Maximum depth for inline data display before collapsing. Default is 4. */
   maxInlineDepth?: number;
   /** Custom theme configuration for log display */
   theme?: SimplePrettyTerminalTheme;
@@ -109,4 +111,6 @@ export interface SimplePrettyTerminalConfig extends LoggerlessTransportConfig {
   collapseArrays?: boolean;
   /** Whether to flatten nested objects with dot notation in inline mode. Defaults to true */
   flattenNestedObjects?: boolean;
+  /** Custom function to write messages to the terminal. Defaults to process.stdout.write */
+  writeFn?: (message: string) => void;
 }

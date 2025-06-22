@@ -70,6 +70,7 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
     const timestampFormat = config.timestampFormat || "HH:mm:ss.SSS";
     const collapseArrays = config.collapseArrays !== false; // Default to true
     const flattenNestedObjects = config.flattenNestedObjects !== false; // Default to true
+    const writeFn = config.writeFn || ((message: string) => process.stdout.write(message + "\n"));
 
     // Initialize view configuration with defaults
     const viewConfig = {
@@ -97,6 +98,7 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
       timestampFormat,
       collapseArrays,
       flattenNestedObjects,
+      writeFn,
       config: viewConfig,
     });
 
@@ -162,6 +164,7 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
 
     // Rebuild the viewConfig as in the constructor
     const theme = this.config.theme || moonlight;
+    const writeFn = this.config.writeFn || ((message: string) => process.stdout.write(message + "\n"));
     const viewConfig = {
       colors: {
         trace: chalk.gray,
@@ -184,6 +187,7 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
       timestampFormat: this.config.timestampFormat || "HH:mm:ss.SSS",
       collapseArrays: this.config.collapseArrays !== false,
       flattenNestedObjects: this.config.flattenNestedObjects !== false,
+      writeFn,
       config: viewConfig,
     });
   }

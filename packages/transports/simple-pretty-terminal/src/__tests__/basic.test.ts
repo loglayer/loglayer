@@ -12,13 +12,16 @@ function stripAnsi(str: string): string {
 
 describe("SimplePrettyTerminalTransport", () => {
   let logSpy: ReturnType<typeof vi.spyOn>;
+  let stdoutSpy: any;
 
   beforeEach(() => {
     logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    stdoutSpy = vi.spyOn(process.stdout, "write").mockImplementation(() => true);
   });
 
   afterEach(() => {
     logSpy.mockRestore();
+    stdoutSpy.mockRestore();
   });
 
   it("prints a log line in inline mode", () => {
@@ -33,8 +36,8 @@ describe("SimplePrettyTerminalTransport", () => {
       data: { foo: "bar" },
       hasData: true,
     });
-    expect(logSpy).toHaveBeenCalled();
-    const output = logSpy.mock.calls[0][0] as string;
+    expect(stdoutSpy).toHaveBeenCalled();
+    const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
     expect(output).toContain(logMsg);
     expect(output).toContain("INFO");
     expect(output).toContain("foo");
@@ -58,7 +61,7 @@ describe("SimplePrettyTerminalTransport", () => {
     log.error("Error message");
     log.fatal("Fatal message");
 
-    expect(logSpy).toHaveBeenCalledTimes(6);
+    expect(stdoutSpy).toHaveBeenCalledTimes(6);
   });
 
   it("should show log IDs when showLogId is enabled", () => {
@@ -75,7 +78,7 @@ describe("SimplePrettyTerminalTransport", () => {
     log.info("Test message with ID");
 
     // The log ID appears after the log level, e.g. [timestamp] ▶ INFO [logid] message
-    const output = stripAnsi(logSpy.mock.calls[0][0] as string);
+    const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
     expect(output).toMatch(/\[\d{2}:\d{2}:\d{2}\.\d{3}\] ▶ INFO \[[a-z0-9]{6}\] Test message with ID/);
   });
 
@@ -92,7 +95,7 @@ describe("SimplePrettyTerminalTransport", () => {
 
     log.info("Test message without ID");
 
-    expect(logSpy).toHaveBeenCalledWith(expect.not.stringMatching(/\[[a-z0-9]{6}\]/));
+    expect(stdoutSpy).toHaveBeenCalledWith(expect.not.stringMatching(/\[[a-z0-9]{6}\]/));
   });
 
   it("should format expanded mode with proper JSON indentation", () => {
@@ -118,14 +121,14 @@ describe("SimplePrettyTerminalTransport", () => {
       .error("error message with metadata and error instance");
 
     // Should have multiple log calls: one for the main line, one for each data line
-    expect(logSpy.mock.calls.length).toBeGreaterThan(1);
+    expect(stdoutSpy.mock.calls.length).toBeGreaterThan(1);
 
     // Check that the first call contains the main log line
-    const firstCall = stripAnsi(logSpy.mock.calls[0][0] as string);
+    const firstCall = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
     expect(firstCall).toMatch(/\[\d{2}:\d{2}:\d{2}\.\d{3}\] ▶ ERROR error message with metadata and error instance/);
 
     // Check that subsequent calls contain formatted data
-    const dataCalls = logSpy.mock.calls.slice(1);
+    const dataCalls = stdoutSpy.mock.calls.slice(1);
     expect(dataCalls.length).toBeGreaterThan(0);
 
     // Check that data lines contain the expected content
@@ -150,7 +153,7 @@ describe("SimplePrettyTerminalTransport", () => {
 
     log.info("Test message with custom timestamp");
 
-    expect(logSpy).toHaveBeenCalledWith(expect.stringMatching(/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]/));
+    expect(stdoutSpy).toHaveBeenCalledWith(expect.stringMatching(/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]/));
   });
 
   it("should use custom timestamp function", () => {
@@ -166,7 +169,7 @@ describe("SimplePrettyTerminalTransport", () => {
 
     log.info("Test message with custom timestamp function");
 
-    expect(logSpy).toHaveBeenCalledWith(expect.stringMatching(/\[CUSTOM-\d+\]/));
+    expect(stdoutSpy).toHaveBeenCalledWith(expect.stringMatching(/\[CUSTOM-\d+\]/));
   });
 
   it("should handle complex data structures", () => {
@@ -210,7 +213,7 @@ describe("SimplePrettyTerminalTransport", () => {
       })
       .info("API request processed");
 
-    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("API request processed"));
+    expect(stdoutSpy).toHaveBeenCalledWith(expect.stringContaining("API request processed"));
   });
 
   it("should respect collapseArrays configuration", () => {
@@ -233,10 +236,10 @@ describe("SimplePrettyTerminalTransport", () => {
       .info("Test with collapsed arrays");
 
     // Should have multiple log calls: one for the main line, one for each data line
-    expect(logSpy.mock.calls.length).toBeGreaterThan(1);
+    expect(stdoutSpy.mock.calls.length).toBeGreaterThan(1);
 
     // Check that arrays are collapsed
-    const dataOutput = logSpy.mock.calls
+    const dataOutput = stdoutSpy.mock.calls
       .slice(1)
       .map((call) => stripAnsi(call[0] as string))
       .join("\n");
@@ -274,8 +277,8 @@ describe("SimplePrettyTerminalTransport", () => {
       })
       .info("User logged in");
 
-    expect(logSpy).toHaveBeenCalled();
-    const output = stripAnsi(logSpy.mock.calls[0][0] as string);
+    expect(stdoutSpy).toHaveBeenCalled();
+    const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
 
     // Should show flattened dot notation for nested objects (default behavior)
     expect(output).toContain("user.name=John");
@@ -315,8 +318,8 @@ describe("SimplePrettyTerminalTransport", () => {
       })
       .info("User logged in");
 
-    expect(logSpy).toHaveBeenCalled();
-    const output = stripAnsi(logSpy.mock.calls[0][0] as string);
+    expect(stdoutSpy).toHaveBeenCalled();
+    const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
 
     // Should show JSON format instead of dot notation
     expect(output).toContain('user={"name":"John","profile":{"age":30}}');
@@ -343,39 +346,25 @@ describe("SimplePrettyTerminalTransport", () => {
       },
     };
 
-    // Mock console.log to capture output
-    const originalLog = console.log;
-    const logOutput: string[] = [];
-    console.log = vi.fn((...args: any[]) => {
-      logOutput.push(args.join(" "));
+    transport.shipToLogger({
+      logLevel: "info",
+      messages: [longMessage],
+      data: longData,
+      hasData: true,
     });
 
-    try {
-      transport.shipToLogger({
-        logLevel: "info",
-        messages: [longMessage],
-        data: longData,
-        hasData: true,
-      });
+    // Verify that process.stdout.write was called
+    expect(stdoutSpy).toHaveBeenCalled();
+    const cleanOutput = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
 
-      // Debug: Log what we actually got
-      console.log = originalLog;
-      const cleanOutput = stripAnsi(logOutput[0]);
-      console.log("Actual output:", cleanOutput);
-      console.log("Expected to contain:", longMessage);
-      console.log("Expected to contain:", "veryLongKey=This is a very long value that should not be truncated");
+    // Verify that the output contains the full message and data
+    expect(cleanOutput).toContain(longMessage);
+    expect(cleanOutput).toContain("veryLongKey=This is a very long value that should not be truncated");
+    expect(cleanOutput).toContain("anotherLongKey=Another long value that should be preserved in full");
+    expect(cleanOutput).toContain("nested.deepLongKey=A deeply nested long value that should also be preserved");
 
-      // Verify that the output contains the full message and data
-      expect(cleanOutput).toContain(longMessage);
-      expect(cleanOutput).toContain("veryLongKey=This is a very long value that should not be truncated");
-      expect(cleanOutput).toContain("anotherLongKey=Another long value that should be preserved in full");
-      expect(cleanOutput).toContain("nested.deepLongKey=A deeply nested long value that should also be preserved");
-
-      // Verify that nothing was truncated (no ellipsis or cut-off text)
-      expect(cleanOutput).not.toContain("...");
-    } finally {
-      console.log = originalLog;
-    }
+    // Verify that nothing was truncated (no ellipsis or cut-off text)
+    expect(cleanOutput).not.toContain("...");
   });
 
   it("should expand arrays when both flattenNestedObjects and collapseArrays are false", () => {
@@ -394,37 +383,110 @@ describe("SimplePrettyTerminalTransport", () => {
       },
     };
 
-    // Mock console.log to capture output
-    const originalLog = console.log;
-    const logOutput: string[] = [];
-    console.log = vi.fn((...args: any[]) => {
-      logOutput.push(args.join(" "));
+    transport.shipToLogger({
+      logLevel: "info",
+      messages: ["Test message"],
+      data: testData,
+      hasData: true,
     });
 
-    try {
-      transport.shipToLogger({
-        logLevel: "info",
-        messages: ["Test message"],
-        data: testData,
-        hasData: true,
-      });
+    // Verify that process.stdout.write was called
+    expect(stdoutSpy).toHaveBeenCalled();
+    const cleanOutput = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
 
-      const cleanOutput = stripAnsi(logOutput[0]);
+    // Verify that arrays are expanded (not collapsed to [...])
+    expect(cleanOutput).toContain("numbers=[1,2,3,4,5]");
+    expect(cleanOutput).toContain('strings=["hello","world"]');
+    expect(cleanOutput).toContain('mixed=[1,"test",true,null]');
 
-      // Verify that arrays are expanded (not collapsed to [...])
-      expect(cleanOutput).toContain("numbers=[1,2,3,4,5]");
-      expect(cleanOutput).toContain('strings=["hello","world"]');
-      expect(cleanOutput).toContain('mixed=[1,"test",true,null]');
+    // Verify that nested objects are also expanded (not flattened)
+    expect(cleanOutput).toContain('nested={"array":[10,20,30]}');
 
-      // Verify that nested objects are also expanded (not flattened)
-      expect(cleanOutput).toContain('nested={"array":[10,20,30]}');
+    // Verify that arrays are not collapsed
+    expect(cleanOutput).not.toContain("numbers=[...]");
+    expect(cleanOutput).not.toContain("strings=[...]");
+    expect(cleanOutput).not.toContain("mixed=[...]");
+  });
 
-      // Verify that arrays are not collapsed
-      expect(cleanOutput).not.toContain("numbers=[...]");
-      expect(cleanOutput).not.toContain("strings=[...]");
-      expect(cleanOutput).not.toContain("mixed=[...]");
-    } finally {
-      console.log = originalLog;
-    }
+  it("should use custom writeFn instead of console.log", () => {
+    const customOutput: string[] = [];
+    const customWriteFn = (message: string) => {
+      customOutput.push(message);
+    };
+
+    const transport = getSimplePrettyTerminal({
+      enabled: true,
+      viewMode: "inline",
+      theme: moonlight,
+      writeFn: customWriteFn,
+    });
+
+    const log = new LogLayer({
+      transport,
+    });
+
+    log.info("Test message with custom writeFn");
+
+    // Verify that console.log was not called (since we're using custom writeFn)
+    expect(stdoutSpy).not.toHaveBeenCalled();
+
+    // Verify that our custom writeFn was called
+    expect(customOutput).toHaveLength(1);
+    const output = stripAnsi(customOutput[0]);
+    expect(output).toContain("Test message with custom writeFn");
+    expect(output).toContain("INFO");
+  });
+
+  it("should use process.stdout.write when writeFn is configured to use it", () => {
+    const customOutput: string[] = [];
+    const customWriteFn = (message: string) => {
+      customOutput.push(message);
+      process.stdout.write(message + "\n");
+    };
+    
+    const transport = getSimplePrettyTerminal({
+      enabled: true,
+      viewMode: "inline",
+      theme: moonlight,
+      writeFn: customWriteFn,
+    });
+
+    const log = new LogLayer({
+      transport,
+    });
+
+    log.info("Test message with process.stdout.write");
+
+    // Verify that our custom writeFn was called
+    expect(customOutput).toHaveLength(1);
+    const output = stripAnsi(customOutput[0]);
+    expect(output).toContain("Test message with process.stdout.write");
+    expect(output).toContain("INFO");
+
+    // Verify that process.stdout.write was called through our custom function
+    expect(stdoutSpy).toHaveBeenCalled();
+  });
+
+  it("should use process.stdout.write by default", () => {
+    const transport = getSimplePrettyTerminal({
+      enabled: true,
+      viewMode: "inline",
+      theme: moonlight,
+    });
+
+    const log = new LogLayer({
+      transport,
+    });
+
+    log.info("Test message with default writeFn");
+
+    // Verify that console.log was not called (since default is now process.stdout.write)
+    expect(logSpy).not.toHaveBeenCalled();
+
+    // Verify that process.stdout.write was called
+    expect(stdoutSpy).toHaveBeenCalled();
+    const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
+    expect(output).toContain("Test message with default writeFn");
+    expect(output).toContain("INFO");
   });
 });

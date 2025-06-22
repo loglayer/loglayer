@@ -19,6 +19,7 @@ export class SimpleView {
   private timestampFormat: string | ((timestamp: number) => string);
   private collapseArrays: boolean;
   private flattenNestedObjects: boolean;
+  private writeFn: (message: string) => void;
 
   constructor(config: SimpleViewConfig) {
     this.config = config;
@@ -29,6 +30,7 @@ export class SimpleView {
     this.collapseArrays = config.collapseArrays !== false;
     this.flattenNestedObjects = config.flattenNestedObjects !== false;
     this.termWidth = process.stdout.columns || 120;
+    this.writeFn = config.writeFn;
   }
 
   public updateTerminalWidth(width: number): void {
@@ -56,7 +58,7 @@ export class SimpleView {
       case "message-only": {
         // Message-only view shows timestamp, level and message
         const condensedLine = `${timestamp} ${chevron}${message}`;
-        console.log(wrap(condensedLine, this.termWidth, { hard: true }));
+        this.writeFn(wrap(condensedLine, this.termWidth, { hard: true }));
         break;
       }
 
@@ -74,7 +76,7 @@ export class SimpleView {
           : "";
         const expandedLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}${fullData ? ` ${fullData}` : ""}`;
         // Don't wrap inline mode to preserve full content
-        console.log(expandedLine);
+        this.writeFn(expandedLine);
         break;
       }
 
@@ -82,7 +84,7 @@ export class SimpleView {
         // Expanded view shows timestamp, level, and message on first line, with data on indented separate lines
         const logId = this.showLogId ? this.config.config.logIdColor(`[${entry.id}]`) : "";
         const firstLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}`;
-        console.log(wrap(firstLine, this.termWidth, { hard: true }));
+        this.writeFn(wrap(firstLine, this.termWidth, { hard: true }));
 
         if (entry.data) {
           const jsonLines = prettyjson
@@ -106,9 +108,9 @@ export class SimpleView {
           for (const line of jsonLines) {
             // Skip empty lines
             if (line.trim() === "") {
-              console.log("  ");
+              this.writeFn("  ");
             } else {
-              console.log(`  ${line}`);
+              this.writeFn(`  ${line}`);
             }
           }
         }
@@ -122,7 +124,7 @@ export class SimpleView {
           ? formatInlineData(JSON.parse(entry.data), this.config.config, this.maxInlineDepth, true, this.collapseArrays)
           : "";
         const expandedLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}${fullData ? ` ${fullData}` : ""}`;
-        console.log(wrap(expandedLine, this.termWidth, { hard: true }));
+        this.writeFn(wrap(expandedLine, this.termWidth, { hard: true }));
         break;
       }
     }
