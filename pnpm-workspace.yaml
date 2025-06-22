@@ -1,6 +1,6 @@
 packages:
-  - "packages/core/*"
-  - "packages/transports/*"
-  - "packages/plugins/*"
-  - "packages/context-managers/*"
-  - "docs"
+  - packages/core/*
+  - packages/transports/*
+  - packages/plugins/*
+  - packages/context-managers/*
+  - docs

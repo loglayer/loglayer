@@ -1,7 +1,7 @@
 {
-  "name": "@loglayer/transport-pretty-terminal",
-  "description": "Interactive pretty log output in the terminal for the LogLayer logging library.",
-  "version": "3.1.1",
+  "name": "@loglayer/transport-simple-pretty-terminal",
+  "description": "Non-interactive pretty log output in the terminal for the LogLayer logging library.",
+  "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -20,21 +20,21 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/loglayer/loglayer.git",
-    "directory": "packages/transports/pretty-terminal"
+    "directory": "packages/transports/simple-pretty-terminal"
   },
   "author": "Theo Gravity <theo@suteki.nu>",
   "keywords": [
-    "logging",
-    "log",
     "loglayer",
+    "transport",
     "terminal",
-    "search",
-    "filter",
-    "pretty print",
-    "transport"
+    "pretty",
+    "logging",
+    "simple",
+    "nextjs"
   ],
   "scripts": {
     "build": "tsup src/index.ts",
+    "test": "vitest --run",
     "build:dev": "hash-runner",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "biome check --write --unsafe src && biome format src --write && biome lint src --fix",
@@ -42,35 +42,28 @@
     "livetest": "tsx src/__tests__/livetest.ts"
   },
   "dependencies": {
-    "@loglayer/shared": "workspace:*",
     "@loglayer/transport": "workspace:*",
-    "better-sqlite3": "11.10.0",
     "chalk": "5.4.1",
-    "cli-truncate": "4.0.0",
-    "keypress": "0.2.1",
+    "date-fns": "3.6.0",
     "wrap-ansi": "9.0.0"
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/better-sqlite3": "7.6.13",
+    "@types/chalk": "2.2.4",
     "@types/express": "5.0.3",
-    "@types/keypress": "2.0.30",
     "@types/node": "22.15.17",
     "express": "4.21.2",
     "hash-runner": "2.0.1",
     "loglayer": "workspace:*",
     "serialize-error": "12.0.0",
     "tsup": "8.5.0",
+    "typescript": "5.8.3",
     "tsx": "4.20.3",
-    "typescript": "5.8.3"
+    "vitest": "3.2.4"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
-  "engines": {
-    "node": ">=18"
-  },
   "files": [
     "dist"
   ],
-  "homepage": "https://loglayer.dev",
-  "packageManager": "pnpm@10.10.0"
+  "homepage": "https://loglayer.dev"
 }

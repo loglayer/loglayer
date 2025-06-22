@@ -30,6 +30,15 @@ src="/asciinema/pretty-terminal.cast"
 :idleTimeLimit=3
 />
 
+::: warn Using Next.js?
+This transport has dependencies that are not supported in Next.js.
+Use the [Simple Pretty Terminal](/transports/simple-pretty-terminal) instead.
+:::
+
+::: warn Running multiple applications concurrently?
+This transport has interactive features that are designed for a single app. If you are running multiple apps concurrently in the same terminal, then it is recommended you use the the [Simple Pretty Terminal](/transports/simple-pretty-terminal) instead.
+:::
+
 ## Features
 
 - 🔍 **Interactive Selection Mode** - Browse and inspect logs in a full-screen interactive view
@@ -97,6 +106,7 @@ Because Pretty Terminal is an interactive transport, it may not work well if you
 If you need to run multiple applications that use Pretty Terminal in the same terminal window, you can:
 1. Use the `disableInteractiveMode` option to disable keyboard input and navigation features
 2. Keep interactive mode enabled in only one application and disable it in others
+3. Use the [Simple Pretty Terminal](/transports/simple-pretty-terminal) instead.
 
 The transport is designed to work as a single interactive instance. `getPrettyTerminal()` can be safely used multiple times in the same application as it uses the same transport reference.
 :::

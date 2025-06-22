@@ -31,3 +31,5 @@ tsup.config.json
 .hashes.json
 .hash-runnerrc.json
 .pnpm-store/
+PROMPTS.md
+
