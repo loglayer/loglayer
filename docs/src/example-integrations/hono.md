@@ -16,7 +16,7 @@ First, install the required packages. You can use any transport you prefer - we'
 ::: code-group
 
 ```sh [npm]
-npm i loglayer @loglayer/transport-pino pino
+npm i loglayer @loglayer/transport-pino pino serialize-error
 ```
 
 ```sh [pnpm]
