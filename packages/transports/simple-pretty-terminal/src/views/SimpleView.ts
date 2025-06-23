@@ -55,13 +55,33 @@ export class SimpleView {
   /**
    * Writes a message to the appropriate output based on runtime
    */
-  private writeMessage(message: string): void {
+  private writeMessage(message: string, level?: string): void {
     if (this.runtime === "node") {
       // Use process.stdout.write for Node.js
       process?.stdout?.write?.(`${message}\n`);
     } else {
-      // Use console.log for browser
-      console.log(message);
+      // Use appropriate console method based on log level for browser
+      switch (level) {
+        case "trace":
+          console.debug(message);
+          break;
+        case "debug":
+          console.debug(message);
+          break;
+        case "info":
+          console.info(message);
+          break;
+        case "warn":
+          console.warn(message);
+          break;
+        case "error":
+        case "fatal":
+          console.error(message);
+          break;
+        default:
+          console.log(message);
+          break;
+      }
     }
   }
 
@@ -78,7 +98,7 @@ export class SimpleView {
       case "message-only": {
         // Message-only view shows timestamp, level and message
         const condensedLine = `${timestamp} ${chevron}${message}`;
-        this.writeMessage(wrap(condensedLine, this.termWidth, { hard: true }));
+        this.writeMessage(wrap(condensedLine, this.termWidth, { hard: true }), entry.level);
         break;
       }
 
@@ -96,7 +116,7 @@ export class SimpleView {
           : "";
         const expandedLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}${fullData ? ` ${fullData}` : ""}`;
         // Don't wrap inline mode to preserve full content
-        this.writeMessage(expandedLine);
+        this.writeMessage(expandedLine, entry.level);
         break;
       }
 
@@ -104,7 +124,7 @@ export class SimpleView {
         // Expanded view shows timestamp, level, and message on first line, with data on indented separate lines
         const logId = this.showLogId ? this.config.config.logIdColor(`[${entry.id}]`) : "";
         const firstLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}`;
-        this.writeMessage(wrap(firstLine, this.termWidth, { hard: true }));
+        this.writeMessage(wrap(firstLine, this.termWidth, { hard: true }), entry.level);
 
         if (entry.data) {
           const jsonLines = prettyjson
@@ -128,9 +148,9 @@ export class SimpleView {
           for (const line of jsonLines) {
             // Skip empty lines
             if (line.trim() === "") {
-              this.writeMessage("  ");
+              this.writeMessage("  ", entry.level);
             } else {
-              this.writeMessage(`  ${line}`);
+              this.writeMessage(`  ${line}`, entry.level);
             }
           }
         }
@@ -144,7 +164,7 @@ export class SimpleView {
           ? formatInlineData(JSON.parse(entry.data), this.config.config, this.maxInlineDepth, true, this.collapseArrays)
           : "";
         const expandedLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}${fullData ? ` ${fullData}` : ""}`;
-        this.writeMessage(wrap(expandedLine, this.termWidth, { hard: true }));
+        this.writeMessage(wrap(expandedLine, this.termWidth, { hard: true }), entry.level);
         break;
       }
     }

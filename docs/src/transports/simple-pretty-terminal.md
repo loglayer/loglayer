@@ -115,7 +115,13 @@ const transport = getSimplePrettyTerminal({
 });
 ```
 
-In browser runtime, logs are written using `console.log` for browser console compatibility.
+In browser runtime, logs are written using appropriate console methods based on log level:
+- `trace` and `debug` levels → `console.debug()`
+- `info` level → `console.info()`
+- `warn` level → `console.warn()`
+- `error` and `fatal` levels → `console.error()`
+
+This ensures proper log level filtering and styling in browser developer tools.
 
 ## Next.js usage
 
