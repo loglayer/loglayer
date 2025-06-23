@@ -1,5 +1,11 @@
 # `@loglayer/transport-simple-pretty-terminal` Changelog
 
+## 2.1.0
+
+### Minor Changes
+
+- [#210](https://github.com/loglayer/loglayer/pull/210) [`3f761bb`](https://github.com/loglayer/loglayer/commit/3f761bbe13dc4da24673cac5a1c412ee8aecbcf3) Thanks [@theogravity](https://github.com/theogravity)! - In browser mode, use the appropriate console level method (eg console.error) instead of console.log for everything
+
 ## 2.0.0
 
 ### Major Changes
