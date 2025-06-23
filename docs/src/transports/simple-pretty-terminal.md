@@ -84,6 +84,7 @@ log.withMetadata({ foo: "bar" }).info("Hello from Simple Pretty Terminal!");
 | `timestampFormat`  | string \| function | No | `"HH:mm:ss.SSS"` | Custom timestamp format ([date-fns format string](https://date-fns.org/docs/format) or function) |
 | `collapseArrays`   | boolean | No       | `true`      | Whether to collapse arrays in expanded mode for cleaner output                                   |
 | `flattenNestedObjects` | boolean | No | `true` | Whether to flatten nested objects with dot notation in inline mode                               |
+| `includeDataInBrowserConsole` | boolean | No | `false` | When enabled, also passes the data object as a second argument to browser console methods for easier inspection. Recommended with `viewMode: "inline"` or `"message-only"`. |
 
 ## Runtime Environments
 
@@ -259,3 +260,29 @@ const transport2 = getSimplePrettyTerminal({
   },
 });
 ```
+
+## Browser Console Data Inspection
+
+### `includeDataInBrowserConsole` Option
+
+When running in the browser, you can enable the `includeDataInBrowserConsole` option to pass the log data object as a second argument to the browser's console methods (e.g., `console.info(message, data)` vs `console.info(message)`).
+
+This allows you to expand and inspect the data object directly in your browser's developer tools, making debugging much easier.
+
+**Recommended:** Use this option with `"message-only"` to avoid redundant data printing (otherwise, the data will be printed both inline and as an expandable object).
+
+```typescript
+const transport = getSimplePrettyTerminal({
+  runtime: "browser",
+  viewMode: "message-only"
+  includeDataInBrowserConsole: true,
+});
+```
+
+**Example output in browser devtools:**
+
+```js
+INFO [12:34:56.789] ▶ INFO User logged in { user: { id: 123, name: "Alice" } }
+```
+
+You can expand the object in the console for deeper inspection.

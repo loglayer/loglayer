@@ -1,4 +1,3 @@
-import wrap from "wrap-ansi";
 import type { LogEntry, PrettyTerminalViewMode, Runtime, SimpleViewConfig } from "../types.js";
 import * as prettyjson from "../vendor/prettyjson.js";
 import { formatInlineData, formatTimestamp, getLevelColor } from "./utils.js";
@@ -11,7 +10,6 @@ import { formatInlineData, formatTimestamp, getLevelColor } from "./utils.js";
  * - Expanded: Shows timestamp, level, and message on first line, with data on indented separate lines
  */
 export class SimpleView {
-  private termWidth: number;
   private config: SimpleViewConfig;
   private viewMode: PrettyTerminalViewMode;
   private maxInlineDepth: number;
@@ -20,6 +18,7 @@ export class SimpleView {
   private collapseArrays: boolean;
   private flattenNestedObjects: boolean;
   private runtime: Runtime;
+  private includeDataInBrowserConsole: boolean;
 
   constructor(config: SimpleViewConfig) {
     this.config = config;
@@ -30,18 +29,7 @@ export class SimpleView {
     this.collapseArrays = config.collapseArrays !== false;
     this.flattenNestedObjects = config.flattenNestedObjects !== false;
     this.runtime = config.runtime;
-
-    // Set terminal width based on runtime
-    if (this.runtime === "node") {
-      this.termWidth = process?.stdout?.columns || 120;
-    } else {
-      // For browser, use a reasonable default width
-      this.termWidth = 120;
-    }
-  }
-
-  public updateTerminalWidth(width: number): void {
-    this.termWidth = width;
+    this.includeDataInBrowserConsole = config.includeDataInBrowserConsole || false;
   }
 
   public getConfig(): SimpleViewConfig {
@@ -55,31 +43,57 @@ export class SimpleView {
   /**
    * Writes a message to the appropriate output based on runtime
    */
-  private writeMessage(message: string, level?: string): void {
+  private writeMessage(message: string, level?: string, data?: any): void {
     if (this.runtime === "node") {
       // Use process.stdout.write for Node.js
       process?.stdout?.write?.(`${message}\n`);
     } else {
       // Use appropriate console method based on log level for browser
+      const shouldIncludeData = this.includeDataInBrowserConsole && data !== undefined;
+
       switch (level) {
         case "trace":
-          console.debug(message);
+          if (shouldIncludeData) {
+            console.debug(message, data);
+          } else {
+            console.debug(message);
+          }
           break;
         case "debug":
-          console.debug(message);
+          if (shouldIncludeData) {
+            console.debug(message, data);
+          } else {
+            console.debug(message);
+          }
           break;
         case "info":
-          console.info(message);
+          if (shouldIncludeData) {
+            console.info(message, data);
+          } else {
+            console.info(message);
+          }
           break;
         case "warn":
-          console.warn(message);
+          if (shouldIncludeData) {
+            console.warn(message, data);
+          } else {
+            console.warn(message);
+          }
           break;
         case "error":
         case "fatal":
-          console.error(message);
+          if (shouldIncludeData) {
+            console.error(message, data);
+          } else {
+            console.error(message);
+          }
           break;
         default:
-          console.log(message);
+          if (shouldIncludeData) {
+            console.log(message, data);
+          } else {
+            console.log(message);
+          }
           break;
       }
     }
@@ -94,11 +108,14 @@ export class SimpleView {
     const message = entry.message || "(no message)";
     const timestamp = formatTimestamp(entry.timestamp, this.config.config.logIdColor, this.timestampFormat);
 
+    // Parse data for browser console inclusion
+    const parsedData = entry.data ? JSON.parse(entry.data) : undefined;
+
     switch (this.viewMode) {
       case "message-only": {
         // Message-only view shows timestamp, level and message
         const condensedLine = `${timestamp} ${chevron}${message}`;
-        this.writeMessage(wrap(condensedLine, this.termWidth, { hard: true }), entry.level);
+        this.writeMessage(condensedLine, entry.level, parsedData);
         break;
       }
 
@@ -116,7 +133,7 @@ export class SimpleView {
           : "";
         const expandedLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}${fullData ? ` ${fullData}` : ""}`;
         // Don't wrap inline mode to preserve full content
-        this.writeMessage(expandedLine, entry.level);
+        this.writeMessage(expandedLine, entry.level, parsedData);
         break;
       }
 
@@ -124,7 +141,7 @@ export class SimpleView {
         // Expanded view shows timestamp, level, and message on first line, with data on indented separate lines
         const logId = this.showLogId ? this.config.config.logIdColor(`[${entry.id}]`) : "";
         const firstLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}`;
-        this.writeMessage(wrap(firstLine, this.termWidth, { hard: true }), entry.level);
+        this.writeMessage(firstLine, entry.level, parsedData);
 
         if (entry.data) {
           const jsonLines = prettyjson
@@ -164,7 +181,7 @@ export class SimpleView {
           ? formatInlineData(JSON.parse(entry.data), this.config.config, this.maxInlineDepth, true, this.collapseArrays)
           : "";
         const expandedLine = `${timestamp} ${chevron}${logId ? `${logId} ` : ""}${message}${fullData ? ` ${fullData}` : ""}`;
-        this.writeMessage(wrap(expandedLine, this.termWidth, { hard: true }), entry.level);
+        this.writeMessage(expandedLine, entry.level, parsedData);
         break;
       }
     }
