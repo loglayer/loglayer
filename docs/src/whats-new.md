@@ -7,13 +7,22 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## June 23, 2025
+
+Updated [Simple Pretty Terminal](/transports/simple-pretty-terminal.md):
+
+In the `browser` runtime mode, we were printing all logs using `console.log()`. 
+This behavior has changed to use the appropriate console method depending on
+log level, and should now allow proper filtering from a browser's devtools when
+filtering by level.
+
 ## June 22, 2025
 
 Added a new [Hono integration guide](/example-integrations/hono).
 
 ## June 21, 2025
 
-Added the new [Simple Pretty Transport](/transports/simple-pretty-terminal.md) that is designed for Next.js, browsers and
+Added the new [Simple Pretty Terminal](/transports/simple-pretty-terminal.md) that is designed for Next.js, browsers and
 apps that run concurrently.
 
 ![Simple View](/images/pretty-terminal/simple-view.webp)

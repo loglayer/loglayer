@@ -12,15 +12,27 @@ function stripAnsi(str: string): string {
 
 describe("SimplePrettyTerminalTransport", () => {
   let logSpy: ReturnType<typeof vi.spyOn>;
+  let infoSpy: ReturnType<typeof vi.spyOn>;
+  let warnSpy: ReturnType<typeof vi.spyOn>;
+  let errorSpy: ReturnType<typeof vi.spyOn>;
+  let debugSpy: ReturnType<typeof vi.spyOn>;
   let stdoutSpy: any;
 
   beforeEach(() => {
     logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    infoSpy = vi.spyOn(console, "info").mockImplementation(() => {});
+    warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    debugSpy = vi.spyOn(console, "debug").mockImplementation(() => {});
     stdoutSpy = vi.spyOn(process.stdout, "write").mockImplementation(() => true);
   });
 
   afterEach(() => {
     logSpy.mockRestore();
+    infoSpy.mockRestore();
+    warnSpy.mockRestore();
+    errorSpy.mockRestore();
+    debugSpy.mockRestore();
     stdoutSpy.mockRestore();
   });
 
@@ -440,7 +452,7 @@ describe("SimplePrettyTerminalTransport", () => {
     expect(cleanOutput).not.toContain("mixed=[...]");
   });
 
-  it("should use console.log when runtime is set to browser", () => {
+  it("should use console.info when runtime is set to browser", () => {
     const transport = getSimplePrettyTerminal({
       enabled: true,
       viewMode: "inline",
@@ -454,11 +466,44 @@ describe("SimplePrettyTerminalTransport", () => {
 
     log.info("Test message with browser runtime");
 
-    // Verify that console.log was called (since we're using browser runtime)
-    expect(logSpy).toHaveBeenCalled();
-    const output = stripAnsi(logSpy.mock.calls[0][0] as string);
+    // Verify that console.info was called (since we're using browser runtime and info level)
+    expect(infoSpy).toHaveBeenCalled();
+    const output = stripAnsi(infoSpy.mock.calls[0][0] as string);
     expect(output).toContain("Test message with browser runtime");
     expect(output).toContain("INFO");
+
+    // Verify that process.stdout.write was not called
+    expect(stdoutSpy).not.toHaveBeenCalled();
+  });
+
+  it("should use appropriate console methods for different log levels in browser runtime", () => {
+    const transport = getSimplePrettyTerminal({
+      enabled: true,
+      viewMode: "inline",
+      theme: moonlight,
+      runtime: "browser",
+    });
+
+    const log = new LogLayer({
+      transport,
+    });
+
+    // Test different log levels
+    log.trace("Trace message");
+    log.debug("Debug message");
+    log.info("Info message");
+    log.warn("Warning message");
+    log.error("Error message");
+    log.fatal("Fatal message");
+
+    // Verify that appropriate console methods were called
+    expect(debugSpy).toHaveBeenCalledTimes(2); // trace and debug both use console.debug
+    expect(infoSpy).toHaveBeenCalledTimes(1); // info uses console.info
+    expect(warnSpy).toHaveBeenCalledTimes(1); // warn uses console.warn
+    expect(errorSpy).toHaveBeenCalledTimes(2); // error and fatal both use console.error
+
+    // Verify that console.log was not called (since we have specific mappings)
+    expect(logSpy).not.toHaveBeenCalled();
 
     // Verify that process.stdout.write was not called
     expect(stdoutSpy).not.toHaveBeenCalled();
