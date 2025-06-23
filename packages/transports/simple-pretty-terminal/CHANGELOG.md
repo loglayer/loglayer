@@ -1,5 +1,11 @@
 # `@loglayer/transport-simple-pretty-terminal` Changelog
 
+## 2.2.0
+
+### Minor Changes
+
+- [#212](https://github.com/loglayer/loglayer/pull/212) [`fc0cdfd`](https://github.com/loglayer/loglayer/commit/fc0cdfde7e3ef70c28a41e2ae35864f950d1eba0) Thanks [@theogravity](https://github.com/theogravity)! - Remove algorithmic wrapping of text (decided it was better for the user's terminal to handle wrapping), add `includeDataInBrowserConsole` option to give users the ability to inspect object data when using browser devtools
+
 ## 2.1.0
 
 ### Minor Changes
