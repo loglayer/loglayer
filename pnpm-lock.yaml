@@ -1125,9 +1125,6 @@ importers:
       date-fns:
         specifier: 3.6.0
         version: 3.6.0
-      wrap-ansi:
-        specifier: 9.0.0
-        version: 9.0.0
     devDependencies:
       '@internal/tsconfig':
         specifier: workspace:*

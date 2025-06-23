@@ -78,6 +78,8 @@ export interface SimpleViewConfig {
   flattenNestedObjects: boolean;
   /** Runtime environment for output */
   runtime: Runtime;
+  /** Whether to include data object as second parameter in browser console calls for better debugging */
+  includeDataInBrowserConsole?: boolean;
 }
 
 /**
@@ -119,4 +121,6 @@ export interface SimplePrettyTerminalConfig extends LoggerlessTransportConfig {
   flattenNestedObjects?: boolean;
   /** Runtime environment for output */
   runtime: Runtime;
+  /** Whether to include data object as second parameter in browser console calls for better debugging. Defaults to false */
+  includeDataInBrowserConsole?: boolean;
 }

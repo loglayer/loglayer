@@ -45,9 +45,6 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
   /** Configuration options */
   private config: SimplePrettyTerminalConfig;
 
-  /** Current terminal width in characters */
-  private termWidth: number;
-
   /**
    * Creates a new SimplePrettyTerminalTransport instance.
    *
@@ -73,6 +70,7 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
     const collapseArrays = config.collapseArrays !== false; // Default to true
     const flattenNestedObjects = config.flattenNestedObjects !== false; // Default to true
     const runtime = config.runtime;
+    const includeDataInBrowserConsole = config.includeDataInBrowserConsole || false;
 
     // Initialize view configuration with defaults
     const viewConfig = {
@@ -90,14 +88,6 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
       dataKeyColor: theme.dataKeyColor || chalk.dim,
     };
 
-    // Set terminal width based on runtime
-    if (runtime === "node") {
-      this.termWidth = process?.stdout?.columns || 80;
-    } else {
-      // For browser, use a reasonable default width
-      this.termWidth = 80;
-    }
-
     // Initialize the renderer
     this.renderer = new SimpleView({
       viewMode,
@@ -107,16 +97,9 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
       collapseArrays,
       flattenNestedObjects,
       runtime,
+      includeDataInBrowserConsole,
       config: viewConfig,
     });
-
-    // Update terminal width when window is resized (Node.js only)
-    if (runtime === "node" && process?.stdout?.on) {
-      process.stdout.on("resize", () => {
-        this.termWidth = process?.stdout?.columns || 80;
-        this.renderer.updateTerminalWidth(this.termWidth);
-      });
-    }
   }
 
   /**
@@ -198,6 +181,7 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
       collapseArrays: this.config.collapseArrays !== false,
       flattenNestedObjects: this.config.flattenNestedObjects !== false,
       runtime,
+      includeDataInBrowserConsole: this.config.includeDataInBrowserConsole || false,
       config: viewConfig,
     });
   }

@@ -45,8 +45,7 @@
   "dependencies": {
     "@loglayer/transport": "workspace:*",
     "chalk": "5.4.1",
-    "date-fns": "3.6.0",
-    "wrap-ansi": "9.0.0"
+    "date-fns": "3.6.0"
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",

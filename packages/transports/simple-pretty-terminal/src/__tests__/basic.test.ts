@@ -556,4 +556,70 @@ describe("SimplePrettyTerminalTransport", () => {
     // Verify that console.log was not called
     expect(logSpy).not.toHaveBeenCalled();
   });
+
+  it("should include data in browser console when includeDataInBrowserConsole is enabled", () => {
+    const transport = getSimplePrettyTerminal({
+      enabled: true,
+      viewMode: "inline",
+      theme: moonlight,
+      runtime: "browser",
+      includeDataInBrowserConsole: true,
+    });
+
+    const testData = { foo: "bar", nested: { value: 123 } };
+
+    transport.shipToLogger({
+      logLevel: "info",
+      messages: ["Test message with data"],
+      data: testData,
+      hasData: true,
+    });
+
+    // Verify that console.info was called with both message and data
+    expect(infoSpy).toHaveBeenCalledWith(expect.stringContaining("Test message with data"), testData);
+  });
+
+  it("should not include data in browser console when includeDataInBrowserConsole is disabled", () => {
+    const transport = getSimplePrettyTerminal({
+      enabled: true,
+      viewMode: "inline",
+      theme: moonlight,
+      runtime: "browser",
+      includeDataInBrowserConsole: false,
+    });
+
+    const testData = { foo: "bar" };
+
+    transport.shipToLogger({
+      logLevel: "info",
+      messages: ["Test message with data"],
+      data: testData,
+      hasData: true,
+    });
+
+    // Verify that console.info was called with only the message
+    expect(infoSpy).toHaveBeenCalledWith(expect.stringContaining("Test message with data"));
+    expect(infoSpy).not.toHaveBeenCalledWith(expect.any(String), testData);
+  });
+
+  it("should not include undefined data in browser console even when includeDataInBrowserConsole is enabled", () => {
+    const transport = getSimplePrettyTerminal({
+      enabled: true,
+      viewMode: "inline",
+      theme: moonlight,
+      runtime: "browser",
+      includeDataInBrowserConsole: true,
+    });
+
+    transport.shipToLogger({
+      logLevel: "info",
+      messages: ["Test message without data"],
+      data: undefined,
+      hasData: false,
+    });
+
+    // Verify that console.info was called with only the message (no second parameter)
+    expect(infoSpy).toHaveBeenCalledWith(expect.stringContaining("Test message without data"));
+    expect(infoSpy).not.toHaveBeenCalledWith(expect.any(String), undefined);
+  });
 });

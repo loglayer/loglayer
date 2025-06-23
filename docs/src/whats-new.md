@@ -11,10 +11,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 Updated [Simple Pretty Terminal](/transports/simple-pretty-terminal.md):
 
-In the `browser` runtime mode, we were printing all logs using `console.log()`. 
+- In the `browser` runtime mode, we were printing all logs using `console.log()`. 
 This behavior has changed to use the appropriate console method depending on
 log level, and should now allow proper filtering from a browser's devtools when
 filtering by level.
+- Removed algorithmic word-wrapping in the terminal view, which looks awkward when using tools like `turbo` concurrently with other apps. The user's terminal should handle wrapping instead.
+- Added a new option `includeDataInBrowserConsole`, which will add the raw data object to the `console` print (eg `console.info(message, data)`), allowing for deep inspection from the devtools.
 
 ## June 22, 2025
 
