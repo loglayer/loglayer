@@ -10,12 +10,10 @@ description: Simple, pretty log output for LogLayer in the terminal (no interact
 
 ![Inline mode](/images/simple-pretty-terminal/terminal-inline.webp)
 
-The Simple Pretty Terminal Transport provides beautiful, themed log output in your terminal, with no interactive features. Supports both Node.js and browser environments.
+The Simple Pretty Terminal Transport provides beautiful, themed log output in your console, with no interactive features. Supports printing in both Node.js and browser environments as well as Next.js (client and server-side).
 
 ::: tip Looking for a powerful alternative?
-This transport is built for frameworks like Next.js and for use with multiple projects running concurrently. 
-
-The Simple Pretty Terminal does not support keyboard navigation, search / filtering, or interactive features. For more advanced terminal printing for a non-Next.js / non-browser / single application, use the [Pretty Terminal Transport](/transports/pretty-terminal).
+The Simple Pretty Terminal does not support keyboard navigation, search / filtering, or interactive features. For more advanced console printing for a non-Next.js / non-browser / single application, use the [Pretty Terminal Transport](/transports/pretty-terminal).
 :::
 
 ## Installation
@@ -37,7 +35,7 @@ yarn add loglayer @loglayer/transport-simple-pretty-terminal
 ::: warning Pair with another logger for production
 Simple Pretty Terminal is really meant for local development. Although there's
 nothing wrong with running it in production, the log output is not designed to be
-injested by 3rd party log collection systems.
+ingested by 3rd party log collection systems.
 
 It is recommended that you disable other transports when using Pretty Terminal to avoid duplicate log output.
 :::
