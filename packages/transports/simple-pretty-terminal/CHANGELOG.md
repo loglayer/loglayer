@@ -1,5 +1,11 @@
 # `@loglayer/transport-simple-pretty-terminal` Changelog
 
+## 2.2.1
+
+### Patch Changes
+
+- [`a211dc7`](https://github.com/loglayer/loglayer/commit/a211dc75bdf25df642dff77aac23e023b1569530) Thanks [@theogravity](https://github.com/theogravity)! - Fixes a bug in expanded mode where if there is no data to print, will print out an empty line
+
 ## 2.2.0
 
 ### Minor Changes
