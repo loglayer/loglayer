@@ -7,6 +7,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## June 30, 2025
+
+- `@loglayer/transport-simple-pretty-terminal`: Fixes a bug where in `expanded` mode, empty lines were being printed when no metadata is being used with a log entry
+
 ## June 23, 2025
 
 Updated [Simple Pretty Terminal](/transports/simple-pretty-terminal.md):

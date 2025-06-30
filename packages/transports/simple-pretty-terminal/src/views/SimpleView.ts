@@ -163,10 +163,7 @@ export class SimpleView {
 
           // Add each line with proper indentation (2 spaces at the beginning)
           for (const line of jsonLines) {
-            // Skip empty lines
-            if (line.trim() === "") {
-              this.writeMessage("  ", entry.level);
-            } else {
+            if (line.trim() !== "") {
               this.writeMessage(`  ${line}`, entry.level);
             }
           }

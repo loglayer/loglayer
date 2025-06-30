@@ -16,7 +16,7 @@ declare global {
 
 // Create a transport instance with some nice defaults for demo
 const transport = getSimplePrettyTerminal({
-  viewMode: "message-only",
+  viewMode: "expanded",
   runtime: "node",
 });
 
