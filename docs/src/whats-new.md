@@ -22,6 +22,12 @@ filtering by level.
 - Removed algorithmic word-wrapping in the terminal view, which looks awkward when using tools like `turbo` concurrently with other apps. The user's terminal should handle wrapping instead.
 - Added a new option `includeDataInBrowserConsole`, which will add the raw data object to the `console` print (eg `console.info(message, data)`), allowing for deep inspection from the devtools.
 
+## July 10, 2025
+
+`loglayer`:
+
+The built-in [Console Transport](/transports/console.md) has new options to stamp out a timestamp and/or a log level with your log.
+
 ## June 22, 2025
 
 Added a new [Hono integration guide](/example-integrations/hono).

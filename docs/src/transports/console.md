@@ -104,6 +104,124 @@ log.withMetadata({ user: 'john' }).info('User logged in', 'successfully');
 // console.info({ user: 'john', msg: 'User logged in successfully' })
 ```
 
+### `dateField`
+
+If defined, populates the field with the ISO date. If `dateFn` is defined, will call `dateFn` to derive the date.
+- Type: `string`
+- Default: `undefined`
+
+Example with `dateField: 'timestamp'`:
+```typescript
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+    dateField: 'timestamp'
+  })
+});
+
+log.info('User logged in');
+// console.info({ timestamp: '2023-12-01T10:30:00.000Z' })
+```
+
+### `levelField`
+
+If defined, populates the field with the log level. If `levelFn` is defined, will call `levelFn` to derive the level.
+- Type: `string`
+- Default: `undefined`
+
+Example with `levelField: 'level'`:
+```typescript
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+    levelField: 'level'
+  })
+});
+
+log.warn('User session expired');
+// console.warn({ level: 'warn' })
+```
+
+### `dateFn`
+
+If defined, a function that returns a string or number for the value to be used for the `dateField`.
+- Type: `() => string | number`
+- Default: `undefined`
+
+Example with custom date function:
+```typescript
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+    dateField: 'timestamp',
+    dateFn: () => Date.now() // Returns Unix timestamp
+  })
+});
+
+log.info('User logged in');
+// console.info({ timestamp: 1701437400000 })
+```
+
+### `levelFn`
+
+If defined, a function that returns a string or number for a given log level. The input should be the logLevel.
+- Type: `(logLevel: LogLevelType) => string | number`
+- Default: `undefined`
+
+Example with custom level function:
+```typescript
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+    levelField: 'level',
+    levelFn: (level) => level.toUpperCase()
+  })
+});
+
+log.warn('User session expired');
+// console.warn({ level: 'WARN' })
+```
+
+Example with numeric level mapping:
+```typescript
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+    levelField: 'level',
+    levelFn: (level) => {
+      const levels = { trace: 10, debug: 20, info: 30, warn: 40, error: 50, fatal: 60 };
+      return levels[level as keyof typeof levels] || 0;
+    }
+  })
+});
+
+log.error('Database connection failed');
+// console.error({ level: 50 })
+```
+
+## Combining Fields
+
+You can combine multiple fields to create structured log objects:
+
+```typescript
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+    messageField: 'msg',
+    dateField: 'timestamp',
+    levelField: 'level'
+  })
+});
+
+log.withMetadata({ user: 'john' }).info('User logged in');
+// console.info({ 
+//   user: 'john', 
+//   msg: 'User logged in', 
+//   timestamp: '2023-12-01T10:30:00.000Z', 
+//   level: 'info' 
+// })
+```
+
 ## Log Level Mapping
 
 | LogLayer | Console   |
