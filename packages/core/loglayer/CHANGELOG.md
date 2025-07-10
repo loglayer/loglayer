@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 6.6.0
+
+### Minor Changes
+
+- [#222](https://github.com/loglayer/loglayer/pull/222) [`8407ce5`](https://github.com/loglayer/loglayer/commit/8407ce56eab789b96c4da256d9efc3c3485cb545) Thanks [@theogravity](https://github.com/theogravity)! - Adds the new built-in `BlankTransport`, which allows quick creation of transports.
+
 ## 6.5.0
 
 ### Minor Changes
