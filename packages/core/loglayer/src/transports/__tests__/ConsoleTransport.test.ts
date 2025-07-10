@@ -341,7 +341,7 @@ describe("ConsoleTransport", () => {
       const customDate = "2023-01-01T00:00:00.000Z";
       const dateFn = vi.fn(() => customDate);
       const levelFn = vi.fn((level) => level.toUpperCase());
-      
+
       const transport = new ConsoleTransport({
         logger: mockConsole,
         messageField: "msg",

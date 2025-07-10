@@ -1,10 +1,16 @@
+### Built-in Transports
+
+| Name | Description |
+|------|-------------|
+| [Console](/transports/console) | Simple console-based logging for development |
+| [Blank Transport](/transports/blank-transport) | For quickly creating / prototyping new transports |
+
 ### Logging Libraries
 
 | Name | Package | Changelog                                                              | Description |
 |------|---------|------------------------------------------------------------------------|-------------|
 | [AWS Lambda Powertools Logger](/transports/aws-lambda-powertools) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-aws-lambda-powertools)](https://www.npmjs.com/package/@loglayer/transport-aws-lambda-powertools) | [Changelog](/transports/changelogs/aws-lambda-powertools-changelog.md) | Logging for AWS Lambdas |
 | [Bunyan](/transports/bunyan) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-bunyan)](https://www.npmjs.com/package/@loglayer/transport-bunyan) | [Changelog](/transports/changelogs/bunyan-changelog.md)                | JSON logging library for Node.js |
-| [Console](/transports/console) | Built-in | N/A                                                                    | Simple console-based logging for development |
 | [Consola](/transports/consola) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-consola)](https://www.npmjs.com/package/@loglayer/transport-consola) | [Changelog](/transports/changelogs/consola-changelog.md)               | Elegant console logger for Node.js and browser |
 | [Electron-log](/transports/electron-log) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-electron-log)](https://www.npmjs.com/package/@loglayer/transport-electron-log) | [Changelog](/transports/changelogs/electron-log-changelog.md)          | Logging library for Electron applications |
 | [Log4js](/transports/log4js) | [![npm](https://img.shields.io/npm/v/@loglayer/transport-log4js)](https://www.npmjs.com/package/@loglayer/transport-log4js) | [Changelog](/transports/changelogs/log4js-node-changelog.md)           | Port of Log4j framework to Node.js |
