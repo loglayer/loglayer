@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 6.5.0
+
+### Minor Changes
+
+- [#218](https://github.com/loglayer/loglayer/pull/218) [`615e257`](https://github.com/loglayer/loglayer/commit/615e2571058933f87618d161d23ad6ca9c4aaed2) Thanks [@theogravity](https://github.com/theogravity)! - Add new options to the `ConsoleTransport` to allow auto-stamping a log level and/or date.
+
 ## 6.4.3
 
 ### Patch Changes
