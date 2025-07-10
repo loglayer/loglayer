@@ -7,9 +7,43 @@ description: Learn how to create custom transports for LogLayer
 
 To integrate a logging library with LogLayer, you must create a transport. A transport is a class that translates LogLayer's standardized logging format into the format expected by your target logging library or service.
 
-## Installation
+## Quick Start: Blank Transport
 
-To implement a transport, you must install the `@loglayer/transport` package.
+For most users who want to quickly create / prototype a transport, the [Blank Transport](/transports/blank-transport) is the easiest option. It's built into the core `loglayer` package and doesn't require any additional installation.
+
+The `BlankTransport` allows you to create a transport by simply providing a `shipToLogger` function:
+
+```typescript
+import { LogLayer, BlankTransport } from 'loglayer'
+
+const log = new LogLayer({
+  transport: new BlankTransport({
+    shipToLogger: ({ logLevel, messages, data, hasData }) => {
+      // Your custom logging logic here
+      console.log(`[${logLevel}]`, ...messages, data && hasData ? data : '');
+
+      // Return value is used for debugging when consoleDebug is enabled
+      return messages;
+    }
+  })
+})
+```
+
+The `BlankTransport` is perfect for:
+- Simple custom logging logic
+- Prototyping new transport ideas
+- Quick integrations with custom services
+- Testing and debugging
+
+For detailed documentation and examples, see the [Blank Transport documentation](/transports/blank-transport).
+
+## Creating Full Transport Classes
+
+If you need to create a reusable transport library or require more complex functionality, you can create a full transport class by extending `BaseTransport` or `LoggerlessTransport`.
+
+### Installation
+
+To implement a full transport class, you must install the `@loglayer/transport` package:
 
 ::: code-group
 ```bash [npm]
@@ -25,15 +59,15 @@ pnpm add @loglayer/transport
 ```
 :::
 
-## Implementing a Transport
+### Implementing a Transport
 
 The key requirement for any transport is extending the `BaseTransport` or `LoggerlessTransport` class and implementing the `shipToLogger` method. 
 
-This method is called by LogLayer whenever a log needs to be sent, and it's where you transform LogLayer's standardized format into the format your target library or service expects.
+This method is called by LogLayer whenever a log needs to be sent, and it's where you transform LogLayer's standardized format into the format your target library or service expects. The method must return an array (`any[]`) which is used for debugging purposes when `consoleDebug` is enabled.
 
 ## Types of Transports
 
-LogLayer supports two types of transports:
+LogLayer supports three types of transports:
 
 ### Logger-Based Transports
 
@@ -76,6 +110,7 @@ export class CustomLoggerTransport extends BaseTransport<YourLoggerType> {
       // ... handle other log levels
     }
 
+    // Return value is used for debugging when consoleDebug is enabled
     return messages;
   }
 }
@@ -144,6 +179,7 @@ export class CustomServiceTransport extends LoggerlessTransport {
     // Send to your service
     this.service.send(payload);
 
+    // Return value is used for debugging when consoleDebug is enabled
     return messages;
   }
 }
@@ -168,6 +204,8 @@ const log = new LogLayer({
 
 LogLayer calls the `shipToLogger` method of a transport at the end of log processing to send the log to the target logging library. 
 
+**Return Value**: The `shipToLogger` method must return an array (`any[]`). This return value is used for debugging purposes when `consoleDebug` is enabled - it will be logged to the console using the appropriate console method based on the log level.
+
 It receives a `LogLayerTransportParams` object with these fields:
 
 ```typescript
@@ -191,22 +229,8 @@ interface LogLayerTransportParams {
 }
 ```
 
-For example, if a user does the following:
+<!--@include: ./_partials/ship-to-logger-note.md-->
 
-```typescript
-logger.withMetadata({foo: 'bar'}).info('hello world', 'foo');
-```
-
-The parameters passed to `shipToLogger` would be:
-
-```typescript
-{
-  logLevel: LogLevel.info,
-  messages: ['hello world', 'foo'],
-  data: {foo: 'bar'},
-  hasData: true
-}
-```
 
 ## Resource Cleanup with Disposable
 
@@ -248,6 +272,7 @@ export class MyTransport extends LoggerlessTransport implements Disposable {
       ...(data && hasData ? data : {})
     });
 
+    // Return value is used for debugging when consoleDebug is enabled
     return messages;
   }
 
@@ -302,6 +327,7 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
         break;
     }
 
+    // Return value is used for debugging when consoleDebug is enabled
     return messages;
   }
 }

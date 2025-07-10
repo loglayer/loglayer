@@ -129,9 +129,13 @@ export default defineConfig({
           { text: 'Multiple Transports', link: '/transports/multiple-transports' },
           { text: 'Creating Transports', link: '/transports/creating-transports' },
           { text: 'Testing Transports', link: '/transports/testing-transports' },
+          { text: 'Built-in Transports', items: [
+              { text: 'Console', link: '/transports/console' },
+              { text: 'Blank', link: '/transports/blank-transport' },
+            ] 
+          },
           { text: 'Supported Loggers', items:
             [
-              { text: 'Console', link: '/transports/console' },
               { text: 'AWS Lambda Powertools', link: '/transports/aws-lambda-powertools' },
               { text: 'Bunyan', link: '/transports/bunyan' },
               { text: 'Consola', link: '/transports/consola' },

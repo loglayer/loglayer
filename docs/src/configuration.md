@@ -110,6 +110,39 @@ Configure how errors are handled and serialized:
 }
 ```
 
+#### Recommended Error Serializer
+
+For production applications, we recommend using the [`serialize-error`](https://www.npmjs.com/package/serialize-error) package as your error serializer. This package properly serializes Error objects including nested errors, circular references, and non-enumerable properties.
+
+**Installation:**
+
+::: code-group
+
+```sh [npm]
+npm install serialize-error
+```
+
+```sh [yarn]
+yarn add serialize-error
+```
+
+```sh [pnpm]
+pnpm add serialize-error
+```
+
+:::
+
+**Usage:**
+
+```typescript
+import { serializeError } from 'serialize-error'
+
+const log = new LogLayer({
+  errorSerializer: serializeError,
+  transport: new ConsoleTransport({ logger: console }),
+})
+```
+
 ### Data Structure Configuration
 
 ::: tip

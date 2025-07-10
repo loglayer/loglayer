@@ -11,7 +11,8 @@ description: Learn about the latest features and improvements in LogLayer
 
 `loglayer`:
 
-The built-in [Console Transport](/transports/console.md) has new options to stamp out a timestamp and/or a log level with your log.
+- Added the new [Blank Transport](/transports/blank-transport) that allows you to quickly create custom transports by providing your own `shipToLogger` function. This is perfect for simple custom logging logic, prototyping new transport ideas, or quick integrations with custom services.
+- The built-in [Console Transport](/transports/console.md) has new options to stamp out a timestamp and/or a log level with your log.
 
 ## June 30, 2025
 

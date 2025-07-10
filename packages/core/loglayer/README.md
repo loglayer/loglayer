@@ -7,7 +7,6 @@
 `loglayer` is a unified Typescript logger that routes logs to various logging libraries, cloud providers, files, and OpenTelemetry while providing a fluent API for specifying log messages, metadata and errors.
 
 - For full documentation, read the [docs](https://loglayer.dev).
-- [Older 4.x documentation](https://github.com/loglayer/loglayer/tree/4.x)
 
 ```javascript
 // Example using the Pino logging library with LogLayer
@@ -100,3 +99,6 @@ log
   .withError(new Error('test'))
   .info('my message')
 ```
+
+- See the [LogLayer configuration documentation](https://loglayer.dev/configuration.html) for more configuration options.
+- See the [Console Transport documentation](https://loglayer.dev/transports/console.html) for more configuration options.
