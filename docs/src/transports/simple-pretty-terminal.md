@@ -6,6 +6,7 @@ description: Simple, pretty log output for LogLayer in the terminal (no interact
 # Simple Pretty Terminal Transport
 
 [![NPM Version](https://img.shields.io/npm/v/@loglayer/transport-simple-pretty-terminal)](https://www.npmjs.com/package/@loglayer/transport-simple-pretty-terminal)
+
 [Source on GitHub](https://github.com/loglayer/loglayer/tree/master/packages/transports/simple-pretty-terminal)
 
 ![Inline mode](/images/simple-pretty-terminal/terminal-inline.webp)

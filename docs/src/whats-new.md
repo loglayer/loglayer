@@ -7,6 +7,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## July 22, 2025
+
+Added the new [Isolated Context Manager](/context-managers/isolated) - a context manager that does not copy context data from parent loggers to child loggers when a child is created.
+
 ## July 10, 2025
 
 `loglayer`:
