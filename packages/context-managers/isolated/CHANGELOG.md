@@ -1,5 +1,11 @@
 # @loglayer/context-manager-isolated
 
+## 2.0.1
+
+### Patch Changes
+
+- [`ee1ed3b`](https://github.com/loglayer/loglayer/commit/ee1ed3bb3379414f94d94faf4260f8f8d34633a3) Thanks [@theogravity](https://github.com/theogravity)! - Fix broken example in readme.
+
 ## 2.0.0
 
 ### Major Changes
