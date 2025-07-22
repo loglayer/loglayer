@@ -27,9 +27,8 @@ import { LogLayer } from "loglayer";
 import { IsolatedContextManager } from "@loglayer/context-manager-isolated";
 
 const log = new LogLayer({
-  contextManager: new IsolatedContextManager(),
   // ... other configuration
-});
+}).withContextManager(new IsolatedContextManager());
 
 // Set context on parent logger
 log.withContext({ userId: "123", requestId: "abc" });
