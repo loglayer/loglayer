@@ -61,6 +61,34 @@ importers:
         specifier: 1.1.3
         version: 1.1.3
 
+  packages/context-managers/isolated:
+    dependencies:
+      '@loglayer/context-manager':
+        specifier: workspace:*
+        version: link:../../core/context-manager
+    devDependencies:
+      '@internal/tsconfig':
+        specifier: workspace:*
+        version: link:../../core/tsconfig
+      '@types/node':
+        specifier: 22.15.17
+        version: 22.15.17
+      hash-runner:
+        specifier: 2.0.1
+        version: 2.0.1
+      loglayer:
+        specifier: workspace:*
+        version: link:../../core/loglayer
+      tsup:
+        specifier: 8.5.0
+        version: 8.5.0(jiti@2.4.2)(postcss@8.5.6)(tsx@4.20.3)(typescript@5.8.3)(yaml@2.5.1)
+      typescript:
+        specifier: 5.8.3
+        version: 5.8.3
+      vitest:
+        specifier: 3.2.4
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.17)(jsdom@25.0.1)(less@4.3.0)
+
   packages/context-managers/linked:
     dependencies:
       '@loglayer/context-manager':

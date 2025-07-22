@@ -192,6 +192,7 @@ export default defineConfig({
           { text: 'Creating Context Managers', link: '/context-managers/creating-context-managers' },
           { text: 'Available Context Managers', items: [
               { text: 'Default', link: '/context-managers/default' },
+              { text: 'Isolated', link: '/context-managers/isolated' },
               { text: 'Linked', link: '/context-managers/linked' }
             ]}
         ]

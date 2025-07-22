@@ -48,29 +48,6 @@ const childLog = parentLog.child()
 
 ### Context Inheritance
 
-By default, context data is shallow copied from the parent:
+Context inheritance behavior depends on the [Context Manager](/context-managers/) being used. By default, the [Default Context Manager](/context-managers/default) is used.
 
-```typescript
-const parentLog = new LogLayer({}).withContext({
-  app: 'myapp',
-  version: '1.0.0'
-})
-
-// Child inherits parent's context
-const childLog = parentLog.child()
-
-childLog.info('Hello')
-// Output includes: { app: 'myapp', version: '1.0.0' }
-
-// Add additional context to child
-childLog.withContext({
-  module: 'users'
-})
-
-childLog.info('User created')
-// Output includes: { app: 'myapp', version: '1.0.0', module: 'users' }
-
-// Parent's context remains unchanged
-parentLog.info('Parent log')
-// Output includes: { app: 'myapp', version: '1.0.0' }
-```
+<!--@include: ../context-managers/_partials/default-context-manager-behavior.md-->
