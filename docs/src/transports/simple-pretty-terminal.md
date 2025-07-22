@@ -152,7 +152,7 @@ Shows all information with complete data structures inline using key=value forma
 
 ### Expanded
 
-![Expanded mode](/images/simple-pretty-terminal/terminal-inline.webp)
+![Expanded mode](/images/simple-pretty-terminal/terminal-expanded.webp)
 
 - `viewMode: 'expanded'`
 
