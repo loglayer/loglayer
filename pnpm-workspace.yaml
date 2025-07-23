@@ -4,5 +4,6 @@ packages:
   - packages/plugins/*
   - packages/context-managers/*
   - docs
+
 onlyBuiltDependencies:
   - lefthook

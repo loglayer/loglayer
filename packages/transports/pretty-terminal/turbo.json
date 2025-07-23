@@ -1,0 +1,32 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "clean": {},
+    "lint": {
+      "inputs": [
+        "*.ts",
+        "src/**",
+        "*.json"
+      ]
+    },
+    "verify-types": {
+      "inputs": [
+        "*.ts",
+        "src/**",
+        "*.json"
+      ]
+    },
+    "build": {
+      "dependsOn": [
+        "@loglayer/shared#build",
+        "@loglayer/transport#build"
+      ],
+      "inputs": [
+        "src/**",
+        "*.json"
+      ],
+      "outputs": ["dist/**"]
+    }
+  }
+}

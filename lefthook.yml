@@ -1,14 +1,24 @@
 pre-commit:
   parallel: true
   commands:
-    "lint and format files":
-      run: pnpm run lint
+    "lint and format staged files":
+      run: turbo lint:staged
       stage_fixed: true
     "check package.json files":
       run: pnpm run syncpack:format && pnpm run lint:packages
       stage_fixed: true
-    "verify typescript types":
-      run: pnpm run typecheck
+    "[repo] verify types":
+      run: turbo verify-types
+      tags:
+        - types
+
+pre-push:
+  parallel: true
+  commands:
+    "[repo] lint and format files":
+      run: turbo lint
+      tags:
+        - lint
 
 commit-msg:
   commands:

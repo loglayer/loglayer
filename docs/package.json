@@ -6,21 +6,21 @@
   "scripts": {
     "copy-changelogs": "node scripts/copy-changelogs.js",
     "docs:dev": "pnpm copy-changelogs && vitepress dev",
-    "docs:build": "pnpm copy-changelogs && vitepress build && ./scripts/cleanup-llms.sh",
+    "docs:build": "pnpm copy-changelogs && vitepress build",
     "docs:preview": "pnpm copy-changelogs && vitepress build && vitepress preview"
   },
   "dependencies": {
-    "@nolebase/ui-asciinema": "2.17.2",
+    "@nolebase/ui-asciinema": "2.18.0",
     "asciinema-player": "3.10.0"
   },
   "devDependencies": {
     "glob": "11.0.3",
     "vitepress": "1.6.3",
-    "vitepress-plugin-llms": "1.1.3"
+    "vitepress-plugin-llms": "1.7.1"
   },
   "engineStrict": true,
   "engines": {
     "node": ">=20.16.0"
   },
-  "packageManager": "pnpm@10.10.0"
+  "packageManager": "pnpm@10.13.1"
 }

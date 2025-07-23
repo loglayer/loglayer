@@ -18,23 +18,34 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Not needed if lastUpdated is not enabled
+
       - name: Use pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm # or pnpm / yarn
+
+      - name: Install turbo
+        run: pnpm install turbo --global
+
       - name: Install dependencies
         run: pnpm install
         working-directory: docs
+
       - name: Build with VitePress
-        run: pnpm run docs:build
+        run: turbo docs:build
         working-directory: docs
         env:
           BASE_URL: 'https://loglayer.dev'
