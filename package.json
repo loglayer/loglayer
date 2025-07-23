@@ -5,15 +5,14 @@
   "private": true,
   "scripts": {
     "add-changeset": "changeset add",
-    "build": "turbo run build",
     "docs": "cd docs && pnpm run docs:dev",
     "docs:build": "cd docs && pnpm run docs:build",
     "changeset": "changeset",
+    "clean": "rm -rf .turbo node_modules dist",
     "clean:repo": "git add --all && git reset --hard",
     "clean:workspaces": "turbo clean",
     "clean:node_modules": "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' +\n",
     "commitlint": "commitlint",
-    "lint": "turbo run lint --continue --",
     "lint:packages": "pnpm run lint:packages:semver && pnpm run lint:packages:mismatches",
     "lint:packages:semver": "syncpack lint-semver-ranges",
     "lint:packages:mismatches": "syncpack list-mismatches",
@@ -23,25 +22,24 @@
     "syncpack:format": "syncpack format",
     "syncpack:lint": "syncpack lint",
     "release": "changeset publish",
-    "version-packages": "changeset version",
-    "test": "turbo test"
+    "version-packages": "changeset version"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.0",
+    "@biomejs/biome": "2.1.2",
     "@changesets/changelog-github": "0.5.1",
     "@changesets/cli": "2.29.5",
     "@commitlint/cli": "19.8.1",
     "@commitlint/config-conventional": "19.8.1",
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "22.15.17",
-    "lefthook": "1.11.14",
+    "@types/node": "24.1.0",
+    "lefthook": "1.12.2",
     "syncpack": "13.0.4",
-    "turbo": "2.5.4",
+    "turbo": "2.5.5",
     "typescript": "5.8.3"
   },
   "engineStrict": true,
   "engines": {
     "node": ">=20.16.0"
   },
-  "packageManager": "pnpm@10.10.0"
+  "packageManager": "pnpm@10.13.1"
 }

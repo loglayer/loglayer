@@ -37,7 +37,8 @@
     "build": "tsup src/index.ts",
     "build:dev": "hash-runner",
     "clean": "rm -rf .turbo node_modules dist",
-    "lint": "biome check --write --unsafe src && biome format src --write && biome lint src --fix",
+    "lint": "biome check --no-errors-on-unmatched --write --unsafe src",
+    "lint:staged": "biome check --no-errors-on-unmatched --write --unsafe --staged src",
     "verify-types": "tsc --noEmit",
     "livetest": "tsx src/__tests__/livetest.ts"
   },
@@ -55,8 +56,8 @@
     "@types/better-sqlite3": "7.6.13",
     "@types/express": "5.0.3",
     "@types/keypress": "2.0.30",
-    "@types/node": "22.15.17",
-    "express": "4.21.2",
+    "@types/node": "24.1.0",
+    "express": "5.1.0",
     "hash-runner": "2.0.1",
     "loglayer": "workspace:*",
     "serialize-error": "12.0.0",
@@ -72,5 +73,5 @@
     "dist"
   ],
   "homepage": "https://loglayer.dev",
-  "packageManager": "pnpm@10.10.0"
+  "packageManager": "pnpm@10.13.1"
 }

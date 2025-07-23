@@ -40,7 +40,11 @@
         "useLiteralKeys": "off"
       },
       "correctness": {
-        "noUnusedImports": "error"
+        "noUnusedImports": "error",
+        "noUnusedPrivateClassMembers": {
+          "level": "off",
+          "fix": "none"
+        }
       },
       "suspicious": {
         "noImplicitAnyLet": "off",

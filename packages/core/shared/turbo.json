@@ -1,0 +1,31 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "clean": {},
+    "lint": {
+      "inputs": [
+        "*.ts",
+        "src/**",
+        "tsconfig.json"
+      ]
+    },
+    "verify-types": {
+      "inputs": [
+        "*.ts",
+        "src/**",
+        "tsconfig.json"
+      ]
+    },
+    "build": {
+      "inputs": [
+        "src/**",
+        "*.json"
+      ],
+      "outputs": ["dist/**"]
+    },
+    "build:dev": {
+      "cache": false
+    }
+  }
+}

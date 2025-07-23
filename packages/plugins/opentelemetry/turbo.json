@@ -1,0 +1,46 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "clean": {},
+    "test": {
+      "inputs": [
+        "*.ts",
+        "src/**",
+        "tsconfig.json"
+      ]
+    },
+    "lint": {
+      "inputs": [
+        "*.ts",
+        "src/**",
+        "tsconfig.json"
+      ]
+    },
+    "verify-types": {
+      "inputs": [
+        "*.ts",
+        "src/**",
+        "tsconfig.json"
+      ]
+    },
+    "build": {
+      "dependsOn": [
+        "@loglayer/shared#build",
+        "@loglayer/plugin#build"
+      ],
+      "inputs": [
+        "src/**",
+        "*.json"
+      ],
+      "outputs": ["dist/**"]
+    },
+    "build:dev": {
+      "dependsOn": [
+        "@loglayer/shared#build",
+        "@loglayer/plugin#build"
+      ],
+      "cache": false
+    }
+  }
+}

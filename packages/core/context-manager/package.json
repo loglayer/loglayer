@@ -37,7 +37,8 @@
     "test:debug": "vitest --debug",
     "build:dev": "node_modules/.bin/hash-runner",
     "clean": "rm -rf .turbo node_modules dist",
-    "lint": "biome check --write --unsafe src && biome format src --write && biome lint src --fix",
+    "lint": "biome check --no-errors-on-unmatched --write --unsafe src",
+    "lint:staged": "biome check --no-errors-on-unmatched --write --unsafe --staged src",
     "verify-types": "tsc --noEmit"
   },
   "dependencies": {
@@ -59,5 +60,5 @@
     "dist"
   ],
   "homepage": "https://loglayer.dev",
-  "packageManager": "pnpm@10.10.0"
+  "packageManager": "pnpm@10.13.1"
 }

@@ -9,9 +9,6 @@ on:
       - 'docs/**'
       - 'packages/**'
 
-env:
-  PNPM_CACHE_FOLDER: .pnpm-store
-
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
@@ -26,32 +23,40 @@ jobs:
   release:
     name: Releasing
     runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9.4.0
+        uses: pnpm/action-setup@v4
 
-      - name: setup pnpm config
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm # or pnpm / yarn
+
+      - name: Install turbo
+        run: pnpm install turbo --global
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build workspace packages
-        run: pnpm build
+        run: turbo build
 
       - name: Run package checking
         run: pnpm run lint:packages
 
       - name: Run type checking
-        run: pnpm run typecheck
+        run: turbo verify-types
 
       - name: Run linting
-        run: pnpm run lint
+        run: turbo lint
 
       - name: Create Release Pull Request / Publish Packages
         uses: changesets/action@v1
