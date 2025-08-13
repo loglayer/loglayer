@@ -47,10 +47,10 @@
   "devDependencies": {
     "@types/sprintf-js": "1.1.4",
     "loglayer": "workspace:*",
-    "@types/node": "24.1.0",
+    "@types/node": "24.2.1",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.5.0",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "vitest": "3.2.4"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",

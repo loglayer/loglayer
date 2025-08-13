@@ -41,15 +41,15 @@
     "@loglayer/transport-http": "workspace:*"
   },
   "devDependencies": {
-    "dotenv": "17.2.0",
+    "dotenv": "17.2.1",
     "loglayer": "workspace:*",
-    "@types/node": "24.1.0",
+    "@types/node": "24.2.1",
     "@internal/tsconfig": "workspace:*",
     "@loglayer/transport": "workspace:*",
     "serialize-error": "12.0.0",
-    "tsx": "4.20.3",
+    "tsx": "4.20.4",
     "tsup": "8.5.0",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "vitest": "3.2.4"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
