@@ -23,7 +23,6 @@ import tracer from 'dd-trace';
 import { LogLayer } from 'loglayer';
 import { datadogTraceInjectorPlugin } from '@loglayer/plugin-datadog-apm-trace-injector';
 
-// Initialize dd-trace (must be done before any other imports)
 tracer.init();
 
 // Create the plugin
