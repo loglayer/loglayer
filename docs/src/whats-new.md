@@ -7,6 +7,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## August 13, 2025
+
+Added the new [Datadog APM Trace Injector Plugin](/plugins/datadog-apm-trace-injector) - a plugin that automatically injects Datadog APM trace context into your LogLayer logs, enabling correlation between application logs and distributed traces in Datadog.
+
 ## July 22, 2025
 
 Added the new [Isolated Context Manager](/context-managers/isolated) - a context manager that does not copy context data from parent loggers to child loggers when a child is created.
