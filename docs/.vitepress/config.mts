@@ -181,6 +181,7 @@ export default defineConfig({
               { text: 'OpenTelemetry', link: '/plugins/opentelemetry' },
               { text: 'Redaction', link: '/plugins/redaction' },
               { text: 'Sprintf', link: '/plugins/sprintf' },
+              { text: 'Datadog APM Trace Injector', link: '/plugins/datadog-apm-trace-injector' },
             ]
           }
         ]
