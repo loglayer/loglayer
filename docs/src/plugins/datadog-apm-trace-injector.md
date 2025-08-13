@@ -48,7 +48,6 @@ tracer.init();
 
 // Create the plugin
 const traceInjector = datadogTraceInjectorPlugin({
-  id: 'datadog-apm-trace-injector',
   tracerInstance: tracer,
   // Enable the plugin only if the Datadog API key is set
   enabled: !!process.env.DD_API_KEY
@@ -67,7 +66,6 @@ log.info('User action completed');
 
 ```typescript
 const traceInjectorWithErrorHandling = datadogTraceInjectorPlugin({
-  id: 'datadog-apm-trace-injector',
   tracerInstance: tracer,
   onError: (error, data) => {
     console.error('Datadog trace injection failed:', error.message, data);
@@ -154,3 +152,7 @@ When a trace is active, the following fields are automatically added to your log
 - `dd.span_id`: The current span ID
 - `dd.service`: The service name (if configured in dd-trace)
 - `dd.version`: The service version (if configured in dd-trace)
+
+## Changelog
+
+View the changelog [here](./changelogs/datadog-apm-trace-injector-changelog.md).

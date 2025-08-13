@@ -63,6 +63,8 @@ It should be:
 log.withError(new Error("test")).error("hello world")
 ```
 
+The `id` configuration field on plugins and transports are always optional and should not be included in the code examples unless it is specifically required for the example to work.
+
 ## Importing LogLayer
 
 In writing code samples, importing LogLayer looks like this:
