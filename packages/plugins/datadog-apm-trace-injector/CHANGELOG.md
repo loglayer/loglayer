@@ -1,5 +1,11 @@
 # `@loglayer/plugin-filter` Changelog
 
+## 0.0.2
+
+### Patch Changes
+
+- [#230](https://github.com/loglayer/loglayer/pull/230) [`655b0a3`](https://github.com/loglayer/loglayer/commit/655b0a3496e1ee305cfb59e993164a72af1694e8) Thanks [@theogravity](https://github.com/theogravity)! - First version
+
 ## 2.1.1
 
 ### Patch Changes
