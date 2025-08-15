@@ -83,7 +83,7 @@ const log = new LogLayer({
 import tracer from 'dd-trace';
 import express from 'express';
 import { LogLayer, ConsoleTransport } from 'loglayer';
-import { datadogTraceInjectorPlugin } from '../index.js';
+import { datadogTraceInjectorPlugin } from '@loglayer/plugin-datadog-apm-trace-injector';
 
 // Initialize dd-trace
 tracer.init();
