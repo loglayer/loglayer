@@ -1,5 +1,11 @@
 # `@loglayer/transport-datadog-browser-logs` Changelog
 
+## 2.2.2
+
+### Patch Changes
+
+- [#233](https://github.com/loglayer/loglayer/pull/233) [`67f4091`](https://github.com/loglayer/loglayer/commit/67f4091b743432f9ac80c79bbcfa60a7456343f3) Thanks [@theogravity](https://github.com/theogravity)! - Update usage docs
+
 ## 2.2.1
 
 ### Patch Changes
