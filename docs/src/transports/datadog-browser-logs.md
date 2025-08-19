@@ -55,7 +55,7 @@ datadogLogs.init({
 // Basic setup
 const log = new LogLayer({
   transport: new DataDogBrowserLogsTransport({
-    logger: datadogLogs
+    logger: datadogLogs.logger
   })
 })
 
@@ -71,10 +71,10 @@ const log = new LogLayer({
 
 ## Configuration Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `logger` | `datadogLogs` | - | **Required.** The DataDog browser logs instance |
-| `enabled` | `boolean` | `true` | Whether the transport is enabled |
+| Option | Type                                                           | Default | Description |
+|--------|----------------------------------------------------------------|---------|-------------|
+| `logger` | `datadogLogs.logger`                                           | - | **Required.** The DataDog browser logs instance |
+| `enabled` | `boolean`                                                      | `true` | Whether the transport is enabled |
 | `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
 
 ## Changelog

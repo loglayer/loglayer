@@ -37,7 +37,7 @@ datadogLogs.init({
 
 const log = new LogLayer({
   transport: new DataDogBrowserLogsTransport({
-    logger: datadogLogs
+    logger: datadogLogs.logger
   })
 })
 ```
