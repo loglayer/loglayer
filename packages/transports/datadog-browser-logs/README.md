@@ -25,7 +25,7 @@ npm install loglayer @loglayer/transport-datadog-browser-logs @datadog/browser-l
 ```typescript
 import { datadogLogs } from '@datadog/browser-logs'
 import { LogLayer } from 'loglayer'
-import { DatadogBrowserLogsTransport } from "@loglayer/transport-datadog-browser-logs"
+import { DataDogBrowserLogsTransport } from "@loglayer/transport-datadog-browser-logs"
 
 // Initialize Datadog
 datadogLogs.init({
@@ -36,7 +36,7 @@ datadogLogs.init({
 })
 
 const log = new LogLayer({
-  transport: new DatadogBrowserLogsTransport({
+  transport: new DataDogBrowserLogsTransport({
     logger: datadogLogs
   })
 })
