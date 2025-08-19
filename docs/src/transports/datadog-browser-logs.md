@@ -42,7 +42,7 @@ yarn add loglayer @loglayer/transport-datadog-browser-logs @datadog/browser-logs
 ```typescript
 import { datadogLogs } from '@datadog/browser-logs'
 import { LogLayer } from 'loglayer'
-import { DatadogBrowserLogsTransport } from "@loglayer/transport-datadog-browser-logs"
+import { DataDogBrowserLogsTransport } from "@loglayer/transport-datadog-browser-logs"
 
 // Initialize Datadog
 datadogLogs.init({
@@ -54,7 +54,7 @@ datadogLogs.init({
 
 // Basic setup
 const log = new LogLayer({
-  transport: new DatadogBrowserLogsTransport({
+  transport: new DataDogBrowserLogsTransport({
     logger: datadogLogs
   })
 })
@@ -63,7 +63,7 @@ const log = new LogLayer({
 const logger = datadogLogs.createLogger('my-logger')
 
 const log = new LogLayer({
-  transport: new DatadogBrowserLogsTransport({
+  transport: new DataDogBrowserLogsTransport({
     logger
   })
 })
@@ -73,7 +73,7 @@ const log = new LogLayer({
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `logger` | `DatadogLogs` | - | **Required.** The DataDog browser logs instance |
+| `logger` | `datadogLogs` | - | **Required.** The DataDog browser logs instance |
 | `enabled` | `boolean` | `true` | Whether the transport is enabled |
 | `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
 
