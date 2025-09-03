@@ -29,7 +29,7 @@ tracer.init();
 const traceInjector = datadogTraceInjectorPlugin({
   tracerInstance: tracer,
   // Enable the plugin only if the Datadog API key is set
-  enabled: !!process.env.DD_API_KEY
+  disabled: !process.env.DD_API_KEY
 });
 
 // Add to your LogLayer instance
