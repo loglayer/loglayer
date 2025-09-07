@@ -143,22 +143,19 @@ This setup assumes you have Typescript configured and have `tsx` installed as a 
 ```bash [npm]
 npm install express loglayer @loglayer/plugin-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
-  @opentelemetry/resources @opentelemetry/sdk-node \
-  @opentelemetry/semantic-conventions
+  @opentelemetry/sdk-node
 ```
 
 ```bash [yarn]
 yarn add express loglayer @loglayer/plugin-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
-  @opentelemetry/resources @opentelemetry/sdk-node \
-  @opentelemetry/semantic-conventions
+  @opentelemetry/sdk-node
 ```
 
 ```bash [pnpm]
 pnpm add express loglayer @loglayer/plugin-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
-  @opentelemetry/resources @opentelemetry/sdk-node \
-  @opentelemetry/semantic-conventions
+  @opentelemetry/sdk-node
 ```
 
 :::
@@ -171,15 +168,9 @@ pnpm add express loglayer @loglayer/plugin-opentelemetry serialize-error \
 // instrumentation.ts
 import { ExpressInstrumentation } from "@opentelemetry/instrumentation-express";
 import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
-import { Resource } from "@opentelemetry/resources";
 import { NodeSDK } from "@opentelemetry/sdk-node";
-import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from "@opentelemetry/semantic-conventions";
 
 const sdk = new NodeSDK({
-  resource: new Resource({
-    [ATTR_SERVICE_NAME]: "yourServiceName",
-    [ATTR_SERVICE_VERSION]: "1.0",
-  }),
   instrumentations: [
     // Express instrumentation expects HTTP layer to be instrumented
     new HttpInstrumentation(),
