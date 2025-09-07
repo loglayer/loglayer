@@ -9,9 +9,10 @@ import { InMemoryLogRecordExporter, LoggerProvider, SimpleLogRecordProcessor } f
 import { beforeEach, describe, expect, it } from "vitest";
 import { OpenTelemetryTransport } from "../OpenTelemetryTransport.js";
 
-const loggerProvider = new LoggerProvider();
 const memoryLogExporter = new InMemoryLogRecordExporter();
-loggerProvider.addLogRecordProcessor(new SimpleLogRecordProcessor(memoryLogExporter));
+const loggerProvider = new LoggerProvider({
+  processors: [new SimpleLogRecordProcessor(memoryLogExporter)],
+});
 logs.setGlobalLoggerProvider(loggerProvider);
 
 const kMessage = "log-message";

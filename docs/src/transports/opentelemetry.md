@@ -123,21 +123,21 @@ This setup assumes you have Typescript configured and have `tsx` installed as a 
 ```bash [npm]
 npm install express loglayer @loglayer/transport-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
-  @opentelemetry/resources @opentelemetry/sdk-logs @opentelemetry/sdk-node \
+  @opentelemetry/sdk-logs @opentelemetry/sdk-node \
   @opentelemetry/sdk-trace-node @opentelemetry/semantic-conventions
 ```
 
 ```bash [yarn]
 yarn add express loglayer @loglayer/transport-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
-  @opentelemetry/resources @opentelemetry/sdk-logs @opentelemetry/sdk-node \
+  @opentelemetry/sdk-logs @opentelemetry/sdk-node \
   @opentelemetry/sdk-trace-node @opentelemetry/semantic-conventions
 ```
 
 ```bash [pnpm]
 pnpm add express loglayer @loglayer/transport-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
-  @opentelemetry/resources @opentelemetry/sdk-logs @opentelemetry/sdk-node \
+  @opentelemetry/sdk-logs @opentelemetry/sdk-node \
   @opentelemetry/sdk-trace-node @opentelemetry/semantic-conventions
 ```
 
@@ -151,17 +151,12 @@ pnpm add express loglayer @loglayer/transport-opentelemetry serialize-error \
 // instrumentation.ts
 import { ExpressInstrumentation } from "@opentelemetry/instrumentation-express";
 import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
-import { Resource } from "@opentelemetry/resources";
 import { ConsoleLogRecordExporter, SimpleLogRecordProcessor } from "@opentelemetry/sdk-logs";
 import { NodeSDK } from "@opentelemetry/sdk-node";
 import { ConsoleSpanExporter } from "@opentelemetry/sdk-trace-node";
 import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from "@opentelemetry/semantic-conventions";
 
 const sdk = new NodeSDK({
-  resource: new Resource({
-    [ATTR_SERVICE_NAME]: "yourServiceName",
-    [ATTR_SERVICE_VERSION]: "1.0",
-  }),
   traceExporter: new ConsoleSpanExporter(),
   logRecordProcessors: [new SimpleLogRecordProcessor(new ConsoleLogRecordExporter())],
   instrumentations: [
