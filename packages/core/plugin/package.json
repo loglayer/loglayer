@@ -40,7 +40,7 @@
     "@loglayer/shared": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "24.2.1",
+    "@types/node": "24.3.1",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.5.0",
     "typescript": "5.9.2",

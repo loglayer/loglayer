@@ -42,7 +42,7 @@
   "dependencies": {
     "@loglayer/plugin": "workspace:*",
     "@loglayer/shared": "workspace:*",
-    "@jsonquerylang/jsonquery": "^5.0.4"
+    "@jsonquerylang/jsonquery": "5.0.4"
   },
   "devDependencies": {
     "loglayer": "workspace:*",
