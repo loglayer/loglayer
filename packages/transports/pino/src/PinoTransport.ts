@@ -1,7 +1,7 @@
 import { BaseTransport, type LogLayerTransportParams, LogLevel } from "@loglayer/transport";
-import type { P } from "pino";
+import type { Logger } from "pino";
 
-export class PinoTransport extends BaseTransport<P.Logger> {
+export class PinoTransport extends BaseTransport<Logger> {
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams) {
     const toPublish = [];
 

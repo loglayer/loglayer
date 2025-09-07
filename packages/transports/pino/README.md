@@ -17,7 +17,7 @@ npm install loglayer @loglayer/transport-pino pino
 ## Usage
 
 ```typescript
-import pino, { P } from 'pino'
+import { pino } from 'pino'
 import { LogLayer } from 'loglayer'
 import { PinoTransport } from "@loglayer/transport-pino"
 
