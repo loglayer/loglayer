@@ -7,6 +7,20 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Sept 6, 2025
+
+Potentially breaking:
+
+- `@loglayer/plugin-filter@3.0.0`: Updates `@jsonquerylang/jsonquery` to 5.x. See See [notes](https://github.com/jsonquerylang/jsonquery/releases/tag/v5.0.0) for breaking changes.
+- `@loglayer/transport-opentelemetry@3.0.0`: Updates `@opentelemetry/api-logs` to 0.204.0. Examples have been updated.
+- `@loglayer/transport-pretty-terminal@4.0.0`: Update dependencies. `better-sqlite3` has been updated from 11 to 12 which removes support for node 18
+
+Non-breaking:
+
+- `@loglayer/transport-datadog@3.2.0`: Update `@datadog/datadog-api-client` to 1.41.0
+- `@loglayer/transport-pino@2.2.2`: Update pino import type for transport
+- `@loglayer/transport-simple-pretty-terminal@2.2.2`: Update `chalk` and `date-fns` packages
+
 ## August 13, 2025
 
 Added the new [Datadog APM Trace Injector Plugin](/plugins/datadog-apm-trace-injector) - a plugin that automatically injects Datadog APM trace context into your LogLayer logs, enabling correlation between application logs and distributed traces in Datadog.
