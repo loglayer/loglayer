@@ -97,6 +97,46 @@ describe("PluginManager", () => {
     expect(plugins[1].onBeforeDataOut).toHaveBeenCalledOnce();
   });
 
+  it("runs onBeforeDataOut with metadata, error, and context parameters", () => {
+    const testError = new Error("test error");
+    const testMetadata = { metaKey: "metaValue" };
+    const testContext = { contextKey: "contextValue" };
+
+    const initialParams: PluginBeforeDataOutParams = {
+      logLevel: LogLevel.error,
+      data: { initial: "data" },
+      metadata: testMetadata,
+      error: testError,
+      context: testContext,
+    };
+
+    const result = pluginManager.runOnBeforeDataOut(initialParams, mockLogLayer);
+
+    expect(result).toEqual({ initial: "data", added: "test", modified: "yes" });
+    
+    // Verify that plugins received the correct metadata, error, and context parameters
+    // Note: The data parameter gets mutated as plugins run, so we focus on the other parameters
+    expect(plugins[0].onBeforeDataOut).toHaveBeenCalledWith(
+      expect.objectContaining({
+        logLevel: LogLevel.error,
+        error: testError,
+        metadata: testMetadata,
+        context: testContext,
+      }),
+      mockLogLayer
+    );
+    
+    expect(plugins[1].onBeforeDataOut).toHaveBeenCalledWith(
+      expect.objectContaining({
+        logLevel: LogLevel.error,
+        error: testError,
+        metadata: testMetadata,
+        context: testContext,
+      }),
+      mockLogLayer
+    );
+  });
+
   it("runs onBeforeMessageOut and properly respects plugin responses", () => {
     pluginManager.addPlugins([
       {
@@ -138,6 +178,39 @@ describe("PluginManager", () => {
     expect(plugins[0].shouldSendToLogger).toHaveBeenCalledTimes(1);
     expect(plugins[1].shouldSendToLogger).toHaveBeenCalledTimes(1);
     expect(plugins[2].shouldSendToLogger).toHaveBeenCalledTimes(1);
+  });
+
+  it("runs shouldSendToLogger with metadata, error, and context parameters", () => {
+    const testError = new Error("test error");
+    const testMetadata = { metaKey: "metaValue" };
+    const testContext = { contextKey: "contextValue" };
+
+    const params: PluginShouldSendToLoggerParams = {
+      logLevel: LogLevel.error,
+      messages: ["Test message"],
+      data: { key: "value" },
+      metadata: testMetadata,
+      error: testError,
+      context: testContext,
+      transportId: "test-transport",
+    };
+
+    const shouldSend = pluginManager.runShouldSendToLogger(params, mockLogLayer);
+    expect(shouldSend).toBe(false);
+    
+    // Verify that plugins received the correct parameters
+    expect(plugins[0].shouldSendToLogger).toHaveBeenCalledWith(
+      {
+        logLevel: LogLevel.error,
+        messages: ["Test message"],
+        data: { key: "value" },
+        metadata: testMetadata,
+        error: testError,
+        context: testContext,
+        transportId: "test-transport",
+      },
+      mockLogLayer
+    );
   });
 
   it("disables a plugin", () => {

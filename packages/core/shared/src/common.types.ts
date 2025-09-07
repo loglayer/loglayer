@@ -56,3 +56,23 @@ export interface ErrorOnlyOpts {
    */
   copyMsg?: boolean;
 }
+
+export interface LogLayerCommonDataParams {
+  /**
+   * Combined object data containing the metadata, context, and / or error data in a
+   * structured format configured by the user.
+   */
+  data?: Record<string, any>;
+  /**
+   * Individual metadata object passed to the log message method.
+   */
+  metadata?: Record<string, any>;
+  /**
+   * Error passed to the log message method.
+   */
+  error?: any;
+  /**
+   * Context data that is included with each log entry.
+   */
+  context?: Record<string, any>;
+}

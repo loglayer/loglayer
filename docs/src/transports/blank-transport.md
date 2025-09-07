@@ -75,13 +75,26 @@ interface LogLayerTransportParams {
    */
   messages: any[];
   /**
-   * Object data such as metadata, context, and / or error data
+   * Combined object data containing the metadata, context, and / or error data in a
+   * structured format configured by the user.
    */
   data?: Record<string, any>;
   /**
    * If true, the data object is included in the message parameters
    */
   hasData?: boolean;
+  /**
+   * Individual metadata object passed to the log message method.
+   */
+  metadata?: Record<string, any>;
+  /**
+   * Error passed to the log message method.
+   */
+  error?: any;
+  /**
+   * Context data that is included with each log entry.
+   */
+  context?: Record<string, any>;
 }
 ```
 
