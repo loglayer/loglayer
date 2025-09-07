@@ -1,5 +1,11 @@
 # `@loglayer/transport-datadog` Changelog
 
+## 3.2.0
+
+### Minor Changes
+
+- [`e91149e`](https://github.com/loglayer/loglayer/commit/e91149e3476c970ac84b92e55188479a26e2ed78) Thanks [@theogravity](https://github.com/theogravity)! - Update @datadog/datadog-api-client to 1.41.0
+
 ## 3.1.1
 
 ### Patch Changes
