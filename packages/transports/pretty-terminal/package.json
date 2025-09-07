@@ -44,9 +44,9 @@
   "dependencies": {
     "@loglayer/shared": "workspace:*",
     "@loglayer/transport": "workspace:*",
-    "better-sqlite3": "11.10.0",
-    "chalk": "5.4.1",
-    "cli-truncate": "4.0.0",
+    "better-sqlite3": "12.2.0",
+    "chalk": "5.6.0",
+    "cli-truncate": "5.0.0",
     "keypress": "0.2.1",
     "wrap-ansi": "9.0.0"
   },
@@ -55,12 +55,12 @@
     "@types/better-sqlite3": "7.6.13",
     "@types/express": "5.0.3",
     "@types/keypress": "2.0.30",
-    "@types/node": "24.2.1",
+    "@types/node": "24.3.1",
     "express": "5.1.0",
     "loglayer": "workspace:*",
     "serialize-error": "12.0.0",
     "tsup": "8.5.0",
-    "tsx": "4.20.4",
+    "tsx": "4.20.5",
     "typescript": "5.9.2"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
