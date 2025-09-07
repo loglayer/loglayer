@@ -141,7 +141,7 @@ describe("datadog trace injector plugin", () => {
     expect(result).toEqual(existingData);
   });
 
-  it("should respect disabled flag", () => {
+  it("should respect enabled flag", () => {
     const plugin = datadogTraceInjectorPlugin({
       id: "test-trace-injector",
       tracerInstance: mockTracer as any,

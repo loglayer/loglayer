@@ -50,12 +50,12 @@
   },
   "devDependencies": {
     "loglayer": "workspace:*",
-    "@types/node": "24.2.1",
+    "@types/node": "24.3.1",
     "@internal/tsconfig": "workspace:*",
     "express": "5.1.0",
-    "dd-trace": "5.62.0",
+    "dd-trace": "5.65.0",
     "tsup": "8.5.0",
-    "tsx": "4.20.4",
+    "tsx": "4.20.5",
     "typescript": "5.9.2",
     "vitest": "3.2.4"
   },
