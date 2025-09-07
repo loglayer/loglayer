@@ -176,7 +176,7 @@ describe("filter plugin", () => {
     ).toBe(false);
   });
 
-  it("should respect disabled flag", () => {
+  it("should respect enabled flag", () => {
     const plugin = filterPlugin({
       id: "test",
       queries: ["this.level == 'error'"],

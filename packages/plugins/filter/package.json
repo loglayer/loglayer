@@ -42,11 +42,11 @@
   "dependencies": {
     "@loglayer/plugin": "workspace:*",
     "@loglayer/shared": "workspace:*",
-    "@jsonquerylang/jsonquery": "4.1.1"
+    "@jsonquerylang/jsonquery": "^5.0.4"
   },
   "devDependencies": {
     "loglayer": "workspace:*",
-    "@types/node": "24.2.1",
+    "@types/node": "24.3.1",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.5.0",
     "typescript": "5.9.2",
