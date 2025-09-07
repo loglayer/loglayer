@@ -1,5 +1,11 @@
 # `@loglayer/transport-pretty-terminal` Changelog
 
+## 4.0.0
+
+### Major Changes
+
+- [`8060739`](https://github.com/loglayer/loglayer/commit/806073901bda7497243ff24a0c588609a70bd6a1) Thanks [@theogravity](https://github.com/theogravity)! - Update dependencies. `better-sqlite3` has been updated from `11` to `12` which removes support for node 18
+
 ## 3.1.3
 
 ### Patch Changes

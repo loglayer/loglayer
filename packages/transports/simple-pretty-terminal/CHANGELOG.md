@@ -1,5 +1,11 @@
 # `@loglayer/transport-simple-pretty-terminal` Changelog
 
+## 2.2.2
+
+### Patch Changes
+
+- [`edf99c8`](https://github.com/loglayer/loglayer/commit/edf99c8d2a740d2f706646c895848088b272a1be) Thanks [@theogravity](https://github.com/theogravity)! - Update chalk and date-fns packages
+
 ## 2.2.1
 
 ### Patch Changes

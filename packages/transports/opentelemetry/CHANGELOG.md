@@ -1,5 +1,11 @@
 # `@loglayer/transport-opentelemetry` Changelog
 
+## 3.0.0
+
+### Major Changes
+
+- [`c091d75`](https://github.com/loglayer/loglayer/commit/c091d75d693fa682ad59872947392c512ad35efb) Thanks [@theogravity](https://github.com/theogravity)! - Updates @opentelemetry/api-logs to 0.204.0
+
 ## 2.2.1
 
 ### Patch Changes

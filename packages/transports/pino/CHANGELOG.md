@@ -1,5 +1,11 @@
 # `@loglayer/transport-pino` Changelog
 
+## 2.2.2
+
+### Patch Changes
+
+- [`f4400e9`](https://github.com/loglayer/loglayer/commit/f4400e9a806b9ca0bad9ad2aada031f50b3a9e93) Thanks [@theogravity](https://github.com/theogravity)! - Update pino import type for transport
+
 ## 2.2.1
 
 ### Patch Changes

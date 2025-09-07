@@ -1,5 +1,11 @@
 # `@loglayer/datadog-apm-trace-injector` Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- [`ea59346`](https://github.com/loglayer/loglayer/commit/ea59346b1fd223b6c1e4573283d629d0a196850a) Thanks [@theogravity](https://github.com/theogravity)! - Dev dep package updates
+
 ## 1.0.1
 
 ### Patch Changes
