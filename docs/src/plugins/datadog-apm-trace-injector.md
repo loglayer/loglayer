@@ -28,12 +28,19 @@ pnpm add @loglayer/plugin-datadog-apm-trace-injector dd-trace
 
 ## Configuration
 
-| Option | Type | Description                                           |
-|--------|------|-------------------------------------------------------|
-| `tracerInstance` | `Tracer` | Required. The dd-trace tracer instance                |
-| `id` | `string` | Optional. Unique identifier for the plugin            |
-| `disabled` | `boolean` | Optional. Disable the plugin                          |
-| `onError` | `(error: Error, data?: Record<string, any>) => void` | Optional. Error handler for tracer operation failures |
+### Required Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| `tracerInstance` | `Tracer` | The `dd-trace` tracer instance |
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `id` | `string` | - | Unique identifier for the plugin |
+| `disabled` | `boolean` | `false` | Disable the plugin |
+| `onError` | `(error: Error, data?: Record<string, any>) => void` | - | Error handler for tracer operation failures |
 
 ## Usage
 

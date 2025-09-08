@@ -9,28 +9,17 @@ All LogLayer transports share a common set of configuration options that control
 
 ## Common Configuration Options
 
-```typescript
-interface TransportConfig {
-  /**
-   * A unique identifier for the transport. If not provided, a random ID will be generated. This is used if you need to call getLoggerInstance() on the LogLayer instance.
-   */
-  id?: string;
+### Required Parameters
 
-  /**
-   * If false, the transport will not send any logs to the logger.
-   * Useful for temporarily disabling a transport.
-   * @default true
-   */
-  enabled?: boolean;
+None - all parameters are optional.
 
-  /**
-   * If true, the transport will also log messages to the console.
-   * Useful for debugging transport behavior.
-   * @default false
-   */
-  consoleDebug?: boolean;
-}
-```
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `id` | `string` | - | A unique identifier for the transport. If not provided, a random ID will be generated. This is used if you need to call getLoggerInstance() on the LogLayer instance |
+| `enabled` | `boolean` | `true` | If false, the transport will not send any logs to the logger. Useful for temporarily disabling a transport |
+| `consoleDebug` | `boolean` | `false` | If true, the transport will also log messages to the console. Useful for debugging transport behavior |
 
 ## Example Usage
 

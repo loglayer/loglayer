@@ -51,16 +51,16 @@ logger.info("Hello from LogLayer!");
 
 ## Configuration Options
 
-### Required Options
+### Required Parameters
 
-| Option | Type | Description |
-|--------|------|-------------|
+| Name | Type | Description |
+|------|------|-------------|
 | `url` | `string` | The URL of your HTTP Source endpoint |
 
-### Optional Options
+### Optional Parameters
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
 | `useCompression` | `boolean` | `true` | Whether to use gzip compression |
 | `sourceCategory` | `string` | - | Source category to assign to the logs |
 | `sourceName` | `string` | - | Source name to assign to the logs |
@@ -70,11 +70,6 @@ logger.info("Hello from LogLayer!");
 | `messageField` | `string` | `"message"` | Field name to use for the log message |
 | `onError` | `(error: Error \| string) => void` | - | Callback for error handling |
 | `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
-
-### Retry Configuration
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
 | `retryConfig.maxRetries` | `number` | `3` | Maximum number of retry attempts |
 | `retryConfig.initialRetryMs` | `number` | `1000` | Initial retry delay in milliseconds |
 

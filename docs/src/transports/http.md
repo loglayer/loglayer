@@ -91,10 +91,17 @@ log.withMetadata({ userId: "123" }).error("User not found");
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `url` | `string` | - | **Required.** The URL to send logs to |
-| `payloadTemplate` | `(data: { logLevel: string; message: string; data?: Record<string, any> }) => string` | - | **Required.** Function to transform log data into the payload format |
+### Required Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| `url` | `string` | The URL to send logs to |
+| `payloadTemplate` | `(data: { logLevel: string; message: string; data?: Record<string, any> }) => string` | Function to transform log data into the payload format |
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
 | `method` | `string` | `"POST"` | HTTP method to use for requests |
 | `headers` | `Record<string, string> \| (() => Record<string, string>)` | `{}` | Headers to include in the request. Can be an object or a function that returns headers |
 | `contentType` | `string` | `"application/json"` | Content type for single log requests. User-specified headers take precedence |

@@ -86,56 +86,56 @@ Child loggers do not have this problem as they inherit the transport instance fr
 
 ### Required Parameters
 
-| Option | Type | Description                                                                                                                        |
-|--------|------|------------------------------------------------------------------------------------------------------------------------------------|
+| Name | Type | Description |
+|------|------|-------------|
 | `filename` | `string` | The filename pattern to use for the log files. Supports date format using numerical values (e.g., `"./logs/application-%DATE%.log"`) |
 
 ### Optional Parameters
 
-| Option | Type | Description                                                                                                                                        | Default |
-|--------|------|----------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `auditFile` | `string` | Location to store the log audit file                                                                                                               | None |
-| `auditHashType` | `"md5" \| "sha256"` | Hashing algorithm for audit file. Use 'sha256' for FIPS compliance                                                                                 | `"md5"` |
-| `batch` | `object` | Batch processing configuration. See [Batch Configuration](#batch-configuration) for details                                                           | None |
-| `callbacks` | `object` | Event callbacks for various file stream events. See [Callbacks](#callbacks) for details                                                              | None |
-| `compressOnRotate` | `boolean` | Whether to compress rotated log files using gzip                                                                                                   | `false` |
-| `createSymlink` | `boolean` | Create a tailable symlink to the current active log file                                                                                           | `false` |
-| `dateFormat` | `string` | The date format to use in the filename. Uses single characters: 'Y' (full year), 'M' (month), 'D' (day), 'H' (hour), 'm' (minutes), 's' (seconds)  | `"YMD"` |
-| `delimiter` | `string` | Delimiter between log entries                                                                                                                      | `"\n"` |
-| `extension` | `string` | File extension to be appended to the filename                                                                                                      | None |
-| `fieldNames` | `object` | Custom field names for the log entry JSON. See [Field Names](#field-names) for details                                                              | See below |
-| `fileMode` | `number` | File mode (permissions) to be used when creating log files | `0o640` |
-| `fileOptions` | `object` | Options passed to fs.createWriteStream                                                                                                             | `{ flags: 'a' }` |
-| `frequency` | `string` | The frequency of rotation. Can be 'daily', 'date', '[1-30]m' for minutes, or '[1-12]h' for hours                                                   | None |
-| `levelMap` | `object` | Custom mapping for log levels. See [Level Mapping](#level-mapping) for details                                                                      | None |
-| `maxLogs` | `string \| number` | Maximum number of logs to keep. Can be a number of files or days (e.g., "10d" for 10 days)                                                         | None |
-| `size` | `string` | The size at which to rotate. Must include a unit suffix: "k"/"K" for kilobytes, "m"/"M" for megabytes, "g"/"G" for gigabytes (e.g., "10M", "100K") | None |
-| `staticData` | `(() => Record<string, any>) \| Record<string, any>` | Static data to be included in every log entry. Can be either a function that returns an object, or a direct object. If it's a function, it's called for each log entry. | None |
-| `symlinkName` | `string` | Name to use when creating the symbolic link                                                                                                        | `"current.log"` |
-| `timestampFn` | `() => string \| number` | Custom function to generate timestamps                                                                                                             | `() => new Date().toISOString()` |
-| `utc` | `boolean` | Use UTC time for date in filename                                                                                                                  | `false` |
-| `verbose` | `boolean` | Whether to enable verbose mode in the underlying file-stream-rotator. See [Verbose Mode](#verbose-mode) for details                                   | `false` |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `auditFile` | `string` | - | Location to store the log audit file |
+| `auditHashType` | `"md5" \| "sha256"` | `"md5"` | Hashing algorithm for audit file. Use 'sha256' for FIPS compliance |
+| `batch` | `object` | - | Batch processing configuration. See [Batch Configuration](#batch-configuration) for details |
+| `callbacks` | `object` | - | Event callbacks for various file stream events. See [Callbacks](#callbacks) for details |
+| `compressOnRotate` | `boolean` | `false` | Whether to compress rotated log files using gzip |
+| `createSymlink` | `boolean` | `false` | Create a tailable symlink to the current active log file |
+| `dateFormat` | `string` | `"YMD"` | The date format to use in the filename. Uses single characters: 'Y' (full year), 'M' (month), 'D' (day), 'H' (hour), 'm' (minutes), 's' (seconds) |
+| `delimiter` | `string` | `"\n"` | Delimiter between log entries |
+| `extension` | `string` | - | File extension to be appended to the filename |
+| `fieldNames` | `object` | - | Custom field names for the log entry JSON. See [Field Names](#field-names) for details |
+| `fileMode` | `number` | `0o640` | File mode (permissions) to be used when creating log files |
+| `fileOptions` | `object` | `{ flags: 'a' }` | Options passed to fs.createWriteStream |
+| `frequency` | `string` | - | The frequency of rotation. Can be 'daily', 'date', '[1-30]m' for minutes, or '[1-12]h' for hours |
+| `levelMap` | `object` | - | Custom mapping for log levels. See [Level Mapping](#level-mapping) for details |
+| `maxLogs` | `string \| number` | - | Maximum number of logs to keep. Can be a number of files or days (e.g., "10d" for 10 days) |
+| `size` | `string` | - | The size at which to rotate. Must include a unit suffix: "k"/"K" for kilobytes, "m"/"M" for megabytes, "g"/"G" for gigabytes (e.g., "10M", "100K") |
+| `staticData` | `(() => Record<string, any>) \| Record<string, any>` | - | Static data to be included in every log entry. Can be either a function that returns an object, or a direct object. If it's a function, it's called for each log entry |
+| `symlinkName` | `string` | `"current.log"` | Name to use when creating the symbolic link |
+| `timestampFn` | `() => string \| number` | `() => new Date().toISOString()` | Custom function to generate timestamps |
+| `utc` | `boolean` | `false` | Use UTC time for date in filename |
+| `verbose` | `boolean` | `false` | Whether to enable verbose mode in the underlying file-stream-rotator. See [Verbose Mode](#verbose-mode) for details |
 
 ### Field Names
 
 The `fieldNames` object allows you to customize the field names in the log entry JSON:
 
-| Field | Type | Description                                                      | Default |
-|-------|------|------------------------------------------------------------------|---------|
-| `level` | `string` | Field name for the log level                                     | `"level"` |
-| `message` | `string` | Field name for the log message                                   | `"message"` |
-| `timestamp` | `string` | Field name for the timestamp                                     | `"timestamp"` |
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `level` | `string` | No | Field name for the log level. Default: "level" |
+| `message` | `string` | No | Field name for the log message. Default: "message" |
+| `timestamp` | `string` | No | Field name for the timestamp. Default: "timestamp" |
 
 ### Callbacks
 
 The `callbacks` object supports the following event handlers:
 
-| Callback | Parameters | Description |
-|----------|------------|-------------|
-| `onClose` | `() => void` | Called when a log file is closed |
-| `onError` | `(error: Error) => void` | Called when an error occurs |
-| `onFinish` | `() => void` | Called when the stream is finished |
-| `onLogRemoved` | `(info: { date: number; name: string; hash: string }) => void` | Called when a log file is removed due to retention policy |
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `onClose` | `() => void` | No | Called when a log file is closed |
+| `onError` | `(error: Error) => void` | No | Called when an error occurs |
+| `onFinish` | `() => void` | No | Called when the stream is finished |
+| `onLogRemoved` | `(info: { date: number; name: string; hash: string }) => void` | No | Called when a log file is removed due to retention policy |
 | `onNew` | `(newFile: string) => void` | Called when a new log file is created |
 | `onOpen` | `() => void` | Called when a log file is opened |
 | `onRotate` | `(oldFile: string, newFile: string) => void` | Called when a log file is rotated |

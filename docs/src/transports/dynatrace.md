@@ -59,19 +59,21 @@ log.info('Hello world')
 
 The transport accepts the following configuration options:
 
-### Required Options
+### Required Parameters
 
-- `url`: The URL to post logs to. Should be in one of these formats:
-  - `https://<env-id>.live.dynatrace.com/api/v2/logs/ingest`
-  - `https://{your-activegate-domain}:9999/e/{your-environment-id}/api/v2/logs/ingest`
-- `ingestToken`: An API token with the `logs.ingest` scope
+| Name | Type | Description |
+|------|------|-------------|
+| `url` | `string` | The URL to post logs to. Should be in one of these formats: `https://<env-id>.live.dynatrace.com/api/v2/logs/ingest` or `https://{your-activegate-domain}:9999/e/{your-environment-id}/api/v2/logs/ingest` |
+| `ingestToken` | `string` | An API token with the `logs.ingest` scope |
 
-### Optional Options
+### Optional Parameters
 
-- `onError`: A callback function that will be called when there's an error sending logs to Dynatrace
-- `enabled`: If set to `false`, the transport will not send any logs (defaults to `true`)
-- `consoleDebug`: If set to `true`, logs will also be output to the console (defaults to `false`)
-- `level`: Minimum log level to process. Logs below this level will be filtered out (defaults to `"trace"`)
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `onError` | `(error: Error) => void` | - | A callback function that will be called when there's an error sending logs to Dynatrace |
+| `enabled` | `boolean` | `true` | If set to `false`, the transport will not send any logs |
+| `consoleDebug` | `boolean` | `false` | If set to `true`, logs will also be output to the console |
+| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
 
 ## Log Format
 

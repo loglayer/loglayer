@@ -45,13 +45,25 @@ const log = new LogLayer({
 
 ## Configuration Options
 
-### `level`
+### Required Parameters
 
-Sets the minimum log level to process. Messages with a lower priority level will be ignored.
-- Type: `"trace" | "debug" | "info" | "warn" | "error" | "fatal"`
-- Default: `"trace"` (processes all log levels)
+None - all parameters are optional.
 
-Example with minimum level set to `"info"`:
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Sets the minimum log level to process. Messages with a lower priority level will be ignored |
+| `appendObjectData` | `boolean` | `false` | Controls where object data (metadata, context, errors) appears in the log messages. `false`: Object data appears as the first parameter. `true`: Object data appears as the last parameter. Has no effect if `messageField` is defined |
+| `messageField` | `string` | - | If defined, places the message into the specified field in the log object, joins multi-parameter messages with a space (use the sprintf plugin for formatted messages), and only logs the object to the console |
+| `dateField` | `string` | - | If defined, populates the field with the ISO date. If `dateFn` is defined, will call `dateFn` to derive the date |
+| `levelField` | `string` | - | If defined, populates the field with the log level. If `levelFn` is defined, will call `levelFn` to derive the level |
+| `dateFn` | `() => string \| number` | - | If defined, a function that returns a string or number for the value to be used for the `dateField` |
+| `levelFn` | `(logLevel: LogLevelType) => string \| number` | - | If defined, a function that returns a string or number for a given log level. The input should be the logLevel |
+
+### Examples
+
+#### Level Configuration
 ```typescript
 const log = new LogLayer({
   transport: new ConsoleTransport({
@@ -64,34 +76,18 @@ log.debug('This message will be ignored');
 log.info('This message will be logged');
 ```
 
-### `appendObjectData`
-
-Controls where object data (metadata, context, errors) appears in the log messages:
-- `false` (default): Object data appears as the first parameter
-- `true`: Object data appears as the last parameter
-
-*Has no effect if `messageField` is defined.*
-
-Example with `appendObjectData: false` (default):
+#### Object Data Positioning
 ```typescript
+// appendObjectData: false (default)
 log.withMetadata({ user: 'john' }).info('User logged in');
 // console.info({ user: 'john' }, 'User logged in')
-```
 
-Example with `appendObjectData: true`:
-```typescript
+// appendObjectData: true
 log.withMetadata({ user: 'john' }).info('User logged in');
 // console.info('User logged in', { user: 'john' })
 ```
 
-### `messageField`
-
-If defined, this option will:
-- Place the message into the specified field in the log object
-- Join multi-parameter messages with a space (use the sprintf plugin for formatted messages)
-- Only log the object to the console
-
-Example with `messageField: 'msg'`:
+#### Message Field
 ```typescript
 const log = new LogLayer({
   transport: new ConsoleTransport({
@@ -104,13 +100,7 @@ log.withMetadata({ user: 'john' }).info('User logged in', 'successfully');
 // console.info({ user: 'john', msg: 'User logged in successfully' })
 ```
 
-### `dateField`
-
-If defined, populates the field with the ISO date. If `dateFn` is defined, will call `dateFn` to derive the date.
-- Type: `string`
-- Default: `undefined`
-
-Example with `dateField: 'timestamp'`:
+#### Date Field
 ```typescript
 const log = new LogLayer({
   transport: new ConsoleTransport({
@@ -123,13 +113,7 @@ log.info('User logged in');
 // console.info({ timestamp: '2023-12-01T10:30:00.000Z' })
 ```
 
-### `levelField`
-
-If defined, populates the field with the log level. If `levelFn` is defined, will call `levelFn` to derive the level.
-- Type: `string`
-- Default: `undefined`
-
-Example with `levelField: 'level'`:
+#### Level Field
 ```typescript
 const log = new LogLayer({
   transport: new ConsoleTransport({
@@ -142,13 +126,7 @@ log.warn('User session expired');
 // console.warn({ level: 'warn' })
 ```
 
-### `dateFn`
-
-If defined, a function that returns a string or number for the value to be used for the `dateField`.
-- Type: `() => string | number`
-- Default: `undefined`
-
-Example with custom date function:
+#### Custom Date Function
 ```typescript
 const log = new LogLayer({
   transport: new ConsoleTransport({
@@ -162,13 +140,7 @@ log.info('User logged in');
 // console.info({ timestamp: 1701437400000 })
 ```
 
-### `levelFn`
-
-If defined, a function that returns a string or number for a given log level. The input should be the logLevel.
-- Type: `(logLevel: LogLevelType) => string | number`
-- Default: `undefined`
-
-Example with custom level function:
+#### Custom Level Function
 ```typescript
 const log = new LogLayer({
   transport: new ConsoleTransport({
@@ -182,7 +154,7 @@ log.warn('User session expired');
 // console.warn({ level: 'WARN' })
 ```
 
-Example with numeric level mapping:
+#### Numeric Level Mapping
 ```typescript
 const log = new LogLayer({
   transport: new ConsoleTransport({

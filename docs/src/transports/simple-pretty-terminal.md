@@ -72,18 +72,25 @@ log.withMetadata({ foo: "bar" }).info("Hello from Simple Pretty Terminal!");
 
 ## Configuration Options
 
-| Option             | Type    | Required | Description                                                                                      |
-|--------------------|---------|----------|--------------------------------------------------------------------------------------------------|
-| `runtime`          | string  | ✅ Yes   | Runtime environment: "node" or "browser"                                                         |
-| `enabled`          | boolean | No       | `true`      | Enable/disable the transport                                                                     |
-| `viewMode`         | string  | No       | `"inline"`  | Log view: "inline", "message-only", or "expanded"                                                |
-| `theme`            | object  | No       | `moonlight` | Theme for log output (see built-in themes)                                                       |
-| `maxInlineDepth`   | number  | No       | `4`         | Max depth for inline data in inline mode                                                         |
-| `showLogId`        | boolean | No       | `false`     | Whether to show log IDs in the output                                                            |
-| `timestampFormat`  | string \| function | No | `"HH:mm:ss.SSS"` | Custom timestamp format ([date-fns format string](https://date-fns.org/docs/format) or function) |
-| `collapseArrays`   | boolean | No       | `true`      | Whether to collapse arrays in expanded mode for cleaner output                                   |
-| `flattenNestedObjects` | boolean | No | `true` | Whether to flatten nested objects with dot notation in inline mode                               |
-| `includeDataInBrowserConsole` | boolean | No | `false` | When enabled, also passes the data object as a second argument to browser console methods for easier inspection. Recommended with `viewMode: "inline"` or `"message-only"`. |
+### Required Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| `runtime` | `string` | Runtime environment: "node" or "browser" |
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `enabled` | `boolean` | `true` | Enable/disable the transport |
+| `viewMode` | `string` | `"inline"` | Log view: "inline", "message-only", or "expanded" |
+| `theme` | `object` | `moonlight` | Theme for log output (see built-in themes) |
+| `maxInlineDepth` | `number` | `4` | Max depth for inline data in inline mode |
+| `showLogId` | `boolean` | `false` | Whether to show log IDs in the output |
+| `timestampFormat` | `string \| function` | `"HH:mm:ss.SSS"` | Custom timestamp format ([date-fns format string](https://date-fns.org/docs/format) or function) |
+| `collapseArrays` | `boolean` | `true` | Whether to collapse arrays in expanded mode for cleaner output |
+| `flattenNestedObjects` | `boolean` | `true` | Whether to flatten nested objects with dot notation in inline mode |
+| `includeDataInBrowserConsole` | `boolean` | `false` | When enabled, also passes the data object as a second argument to browser console methods for easier inspection. Recommended with `viewMode: "inline"` or `"message-only"` |
 
 ## Runtime Environments
 

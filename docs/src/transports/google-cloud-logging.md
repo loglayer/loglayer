@@ -15,9 +15,16 @@ This transport sends logs to [Google Cloud Logging](https://cloud.google.com/log
 
 ## Configuration Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `logger` | `Log` | - | **Required.** The Google Cloud Logging instance |
+### Required Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| `logger` | `Log` | The Google Cloud Logging instance |
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
 | `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | The minimum log level to process. Logs below this level will be filtered out |
 | `rootLevelData` | `Record<string, any>` | - | Data to be included in the metadata portion of the log entry |
 | `onError` | `(error: Error) => void` | - | Error handling callback |

@@ -63,20 +63,20 @@ logger.info("Hello from LogLayer!");
 
 ### Required Parameters
 
-| Option | Type | Description |
-|--------|------|-------------|
+| Name | Type | Description |
+|------|------|-------------|
 | `logger` | `Axiom` | Instance of the Axiom client |
 | `dataset` | `string` | The Axiom dataset name to send logs to |
 
 ### Optional Parameters
 
-| Option | Type | Description | Default |
-|--------|------|-------------|---------|
-| `fieldNames` | `AxiomFieldNames` | Custom field names for log entries | See [Field Names](#field-names) |
-| `timestampFn` | `() => string \| number` | Function to generate timestamps | `() => new Date().toISOString()` |
-| `onError` | `(error: Error) => void` | Callback for error handling | `undefined` |
-| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | Minimum log level to process | `"trace"` |
-| `levelMap` | `AxiomLevelMap` | Custom mapping for log levels | `undefined` |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `fieldNames` | `AxiomFieldNames` | - | Custom field names for log entries. See [Field Names](#field-names) |
+| `timestampFn` | `() => string \| number` | `() => new Date().toISOString()` | Function to generate timestamps |
+| `onError` | `(error: Error) => void` | - | Callback for error handling |
+| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process |
+| `levelMap` | `AxiomLevelMap` | - | Custom mapping for log levels |
 
 ### Field Names
 

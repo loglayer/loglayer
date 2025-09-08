@@ -63,34 +63,19 @@ const logger = new LogLayer({
 
 The plugin accepts the following configuration options:
 
-```typescript
-interface OpenTelemetryPluginParams {
-  /**
-   * If specified, all trace fields will be nested under this key
-   */
-  traceFieldName?: string;
-  
-  /**
-   * Field name for the trace ID. Defaults to 'trace_id'
-   */
-  traceIdFieldName?: string;
-  
-  /**
-   * Field name for the span ID. Defaults to 'span_id'
-   */
-  spanIdFieldName?: string;
-  
-  /**
-   * Field name for the trace flags. Defaults to 'trace_flags'
-   */
-  traceFlagsFieldName?: string;
-  
-  /**
-   * Whether the plugin is disabled
-   */
-  disabled?: boolean;
-}
-```
+### Required Parameters
+
+None - all parameters are optional.
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `traceFieldName` | `string` | - | If specified, all trace fields will be nested under this key |
+| `traceIdFieldName` | `string` | `'trace_id'` | Field name for the trace ID |
+| `spanIdFieldName` | `string` | `'span_id'` | Field name for the span ID |
+| `traceFlagsFieldName` | `string` | `'trace_flags'` | Field name for the trace flags |
+| `disabled` | `boolean` | `false` | Whether the plugin is disabled |
 
 ### Example with Custom Configuration
 

@@ -59,9 +59,16 @@ log.withMetadata({ userId: "123" }).error("User not found");
 
 ## Configuration Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `apiKey` | `string` | - | **Required.** Your New Relic API key |
+### Required Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| `apiKey` | `string` | Your New Relic API key |
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
 | `endpoint` | `string` | `"https://log-api.newrelic.com/log/v1"` | The New Relic Log API endpoint |
 | `useCompression` | `boolean` | `true` | Whether to use gzip compression |
 | `maxRetries` | `number` | `3` | Maximum number of retry attempts |

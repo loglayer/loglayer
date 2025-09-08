@@ -90,3 +90,14 @@ The package usually needs to be added to a list of sorts:
 - `transport-list.md`: Transports
 
 And added to the documentation site sidebar config (`docs/.vitepress/config.mts`).
+
+### Configuration parameters
+
+A table should be generated for configuration parameters and a separate table should be created for required and optional parameters.
+
+The tables should have the following headers:
+
+- Name: The parameter / property name
+- Type: The parameter / property type 
+- Default: The default value for the parameter if any. Use backticks to format the type if applicable
+- Description: The description of what the parameter / property does

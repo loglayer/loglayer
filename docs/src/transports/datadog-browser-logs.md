@@ -71,10 +71,17 @@ const log = new LogLayer({
 
 ## Configuration Options
 
-| Option | Type                                                           | Default | Description |
-|--------|----------------------------------------------------------------|---------|-------------|
-| `logger` | `datadogLogs.logger`                                           | - | **Required.** The DataDog browser logs instance |
-| `enabled` | `boolean`                                                      | `true` | Whether the transport is enabled |
+### Required Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| `logger` | `datadogLogs.logger` | The DataDog browser logs instance |
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `enabled` | `boolean` | `true` | Whether the transport is enabled |
 | `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
 
 ## Changelog

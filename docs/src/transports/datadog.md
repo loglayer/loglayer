@@ -70,38 +70,22 @@ const log = new LogLayer({
 
 ## Transport Configuration
 
-```typescript
-interface DatadogTransportConfig {
-  /**
-   * Whether the transport is enabled. Default is true.
-   */
-  enabled?: boolean
-  /**
-   * The field name to use for the message. Default is "message".
-   */
-  messageField?: string;
-  /**
-   * The field name to use for the log level. Default is "level".
-   */
-  levelField?: string;
-  /**
-   * The field name to use for the timestamp. Default is "time".
-   */
-  timestampField?: string;
-  /**
-   * A custom function to stamp the timestamp. The default timestamp uses the ISO 8601 format.
-   */
-  timestampFunction?: () => any;
-  /**
-   * Minimum log level to process. Logs below this level will be filtered out. Default is "trace".
-   */
-  level?: "trace" | "debug" | "info" | "warn" | "error" | "fatal";
-  /**
-   * The options for the transport.
-   */
-  options: DDTransportOptions
-}
-```
+### Required Parameters
+
+| Name | Type                                                                                                                                        | Description |
+|------|---------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| `options` | [`DDTransportOptions`](https://github.com/theogravity/datadog-transports/tree/main/packages/datadog-transport-common#configuration-options) | The options for the transport |
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `enabled` | `boolean` | `true` | Whether the transport is enabled |
+| `messageField` | `string` | `"message"` | The field name to use for the message |
+| `levelField` | `string` | `"level"` | The field name to use for the log level |
+| `timestampField` | `string` | `"time"` | The field name to use for the timestamp |
+| `timestampFunction` | `() => any` | - | A custom function to stamp the timestamp. The default timestamp uses the ISO 8601 format |
+| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
 
 ## Changelog
 

@@ -50,19 +50,25 @@ const loglayer = new LogLayer({
 
 ## Configuration Options
 
-### `appendObjectData`
+### Required Parameters
 
-Controls where object data (metadata, context, errors) appears in the log messages:
-- `false` (default): Object data appears as the first parameter
-- `true`: Object data appears as the last parameter
+None - all parameters are optional.
 
-Example with `appendObjectData: false` (default):
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `appendObjectData` | `boolean` | `false` | Controls where object data (metadata, context, errors) appears in the log messages. `false`: Object data appears as the first parameter. `true`: Object data appears as the last parameter |
+
+### Examples
+
+#### appendObjectData: false (default)
 ```typescript
 loglayer.withMetadata({ user: 'john' }).info('User logged in');
 // logger.info({ user: 'john' }, 'User logged in')
 ```
 
-Example with `appendObjectData: true`:
+#### appendObjectData: true
 ```typescript
 loglayer.withMetadata({ user: 'john' }).info('User logged in');
 // logger.info('User logged in', { user: 'john' })

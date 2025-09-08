@@ -218,14 +218,20 @@ const transport = getPrettyTerminal({
 
 ### Configuration Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `maxInlineDepth` | number | 4 | Maximum depth for displaying nested data inline. Only applies in truncated view mode. Selection mode and detail view always show full depth. |
-| `maxInlineLength` | number | 120 | Maximum length for inline data before truncating. Only applies in truncated view mode. Selection mode and detail view always show full content. |
-| `theme` | PrettyTerminalTheme | moonlight | Theme configuration for colors and styling |
-| `logFile` | string | ":memory:" | Path to SQLite file for persistent storage. Relative paths are resolved from the current working directory. If not provided, uses in-memory database |
-| `enabled` | boolean | true | Whether the transport is enabled. If false, all operations will no-op |
-| `disableInteractiveMode` | boolean | false | Whether to disable interactive mode (keyboard input and navigation). Useful when multiple applications need to print to the same terminal |
+### Required Parameters
+
+None - all parameters are optional.
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `maxInlineDepth` | `number` | `4` | Maximum depth for displaying nested data inline. Only applies in truncated view mode. Selection mode and detail view always show full depth |
+| `maxInlineLength` | `number` | `120` | Maximum length for inline data before truncating. Only applies in truncated view mode. Selection mode and detail view always show full content |
+| `theme` | `PrettyTerminalTheme` | `moonlight` | Theme configuration for colors and styling |
+| `logFile` | `string` | `:memory:` | Path to SQLite file for persistent storage. Relative paths are resolved from the current working directory. If not provided, uses in-memory database |
+| `enabled` | `boolean` | `true` | Whether the transport is enabled. If false, all operations will no-op |
+| `disableInteractiveMode` | `boolean` | `false` | Whether to disable interactive mode (keyboard input and navigation). Useful when multiple applications need to print to the same terminal |
 
 ::: warning Security Note
 If using the `logFile` option, be aware that:

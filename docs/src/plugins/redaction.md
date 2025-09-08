@@ -56,44 +56,20 @@ log.metadataOnly({
 
 ## Configuration Options
 
-```typescript
-interface RedactionPluginOptions {
-  /**
-   * Unique identifier for the plugin. Used for selectively disabling / enabling
-   * and removing the plugin.
-   */
-  id?: string;
+### Required Parameters
 
-  /**
-   * If true, the plugin will skip execution
-   */
-  disabled?: boolean;
-  
-  /**
-   * An array of strings describing the nested location of a key in an object.
-   * See https://www.npmjs.com/package/fast-redact for path syntax.
-   */
-  paths?: string[];
+None - all parameters are optional.
 
-  /**
-   * This is the value which overwrites redacted properties.
-   * Default: "[REDACTED]"
-   */
-  censor?: string | ((v: any) => any);
+### Optional Parameters
 
-  /**
-   * When set to true, will cause keys to be removed from the serialized output.
-   * Default: false
-   */
-  remove?: boolean;
-
-  /**
-   * When set to true, will cause the redactor function to throw if instead of an object it finds a primitive.
-   * Default: false
-   */
-  strict?: boolean;
-}
-```
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `id` | `string` | - | Unique identifier for the plugin. Used for selectively disabling / enabling and removing the plugin |
+| `disabled` | `boolean` | `false` | If true, the plugin will skip execution |
+| `paths` | `string[]` | - | An array of strings describing the nested location of a key in an object. See https://www.npmjs.com/package/fast-redact for path syntax |
+| `censor` | `string \| ((v: any) => any)` | `"[REDACTED]"` | This is the value which overwrites redacted properties |
+| `remove` | `boolean` | `false` | When set to true, will cause keys to be removed from the serialized output |
+| `strict` | `boolean` | `false` | When set to true, will cause the redactor function to throw if instead of an object it finds a primitive |
 
 ## Examples
 
