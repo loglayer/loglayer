@@ -5,6 +5,8 @@ description: Learn how to implement LogLayer with Next.js
 
 # Custom logging in Next.js
 
+This guide shows you how to integrate the [LogLayer](/introduction) logging library to replace Next.js' default logging behavior using popular logging libraries like `pino` and `winston` along with seamless integration to log collection platforms like DataDog.
+
 ## Installation
 
 This guide assumes you already have [Next.js](https://nextjs.org/) set up.
@@ -58,7 +60,28 @@ const log = new LogLayer({
       enabled: process.env.NODE_ENV === 'production',
       logger: pinoLogger
     })
+  ],
+  plugins: [
+    {
+      // Add a plugin to label the log entry as coming from the server or client
+      onBeforeMessageOut(params: PluginBeforeMessageOutParams) {
+        const tag = isServer ? "Server" : "Client";
+
+        if (params.messages && params.messages.length > 0) {
+          if (typeof params.messages[0] === "string") {
+            params.messages[0] = `[${tag}] ${params.messages[0]}`;
+          }
+        }
+
+        return params.messages;
+      },
+    },
   ]
+})
+
+// Add server/client context to all log entries
+log.withContext({
+  isServer
 })
 
 export function getLogger() {
@@ -87,59 +110,9 @@ export default function Page() {
 }
 ```
 
-## Distinguish between server and client logs
+### Using environment-specific transports
 
-If you use transports that are only client-side or server-side (such as the [DataDog](/transports/datadog) and [DataDog Browser](/transports/datadog-browser-logs) Transports), you can conditionally enable them based on the environment.
-
-Add a const to detect if the code is running on the server or client:
-
-```typescript
-const isServer = typeof window === 'undefined'
-```
-
-Modify your transport to run only on the server:
-
-```typescript
-const isServer = typeof window === 'undefined'
-
-const log = new LogLayer({
-  errorSerializer: serializeError,
-  transport: [
-    // Simple Pretty Terminal for development
-    getSimplePrettyTerminal({
-      enabled: process.env.NODE_ENV === 'development',
-      runtime: isServer ? 'node' : 'browser',
-      viewMode: 'inline',
-    }),
-    // Pino for production (both server and client)
-    new PinoTransport({
-      enabled: process.env.NODE_ENV === 'production',
-      logger: pinoLogger
-    })
-  ],
-  plugins: [
-    {
-      // Add a plugin to label the log entry as coming from the server or client
-      onBeforeMessageOut(params: PluginBeforeMessageOutParams) {
-        const tag = isServer ? "Server" : "Client";
-
-        if (params.messages && params.messages.length > 0) {
-          if (typeof params.messages[0] === "string") {
-            params.messages[0] = `[${tag}] ${params.messages[0]}`;
-          }
-        }
-
-        return params.messages;
-      },
-    },
-  ]
-})
-
-// Can also add to context data too; would be stamped on every log entry
-log.withContext({
-  isServer
-})
-```
+If you use transports that are only client-side or server-side (such as the [DataDog](/transports/datadog) and [DataDog Browser](/transports/datadog-browser-logs) Transports), you can conditionally enable them based on the environment by adding them to the transport array with appropriate `enabled` conditions.
 
 ## Handling server-side uncaught exceptions and rejections
 

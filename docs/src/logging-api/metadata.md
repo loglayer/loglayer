@@ -64,14 +64,13 @@ Passing an empty value (`null`, `undefined`, or an empty object) to `withMetadat
 
 ## Structuring Metadata
 
-By default, metadata is flattened into the root of the log object. You can change this by configuring a dedicated metadata field:
+### Using a Dedicated Metadata Field
+
+By default, metadata is flattened into the root of the log object. You can configure LogLayer to place metadata in a dedicated field by setting the `metadataFieldName` option:
 
 ```typescript
 const log = new LogLayer({
-  metadataFieldName: 'metadata',
-  transport: new ConsoleTransport({
-    logger: console
-  })
+  metadataFieldName: 'metadata'
 })
 
 log.withMetadata({

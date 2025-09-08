@@ -55,9 +55,13 @@ See [Creating Context Managers](/context-managers/creating-context-managers) for
 
 ### Using a Dedicated Context Field
 
-You can configure LogLayer to place context data in a dedicated field:
+You can configure LogLayer to place context data in a dedicated field by setting the `contextFieldName` option:
 
 ```typescript
+const log = new LogLayer({
+  contextFieldName: 'context'
+})
+
 log.withContext({
   requestId: '123',
   userId: 'user_456'
