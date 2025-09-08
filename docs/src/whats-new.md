@@ -21,7 +21,7 @@ This change should allow a plugin or transport developer to inspect data without
 
 Potentially breaking:
 
-- `@loglayer/plugin-filter@3.0.0`: Updates `@jsonquerylang/jsonquery` to 5.x. See See [notes](https://github.com/jsonquerylang/jsonquery/releases/tag/v5.0.0) for breaking changes.
+- `@loglayer/plugin-filter@3.0.0`: Updates `@jsonquerylang/jsonquery` to 5.x. See [notes](https://github.com/jsonquerylang/jsonquery/releases/tag/v5.0.0) for breaking changes.
 - `@loglayer/transport-opentelemetry@3.0.0`: Updates `@opentelemetry/api-logs` to 0.204.0. Examples have been updated.
 - `@loglayer/transport-pretty-terminal@4.0.0`: Update dependencies. `better-sqlite3` has been updated from 11 to 12 which removes support for node 18
 
