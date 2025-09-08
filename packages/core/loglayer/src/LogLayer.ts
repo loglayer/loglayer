@@ -568,9 +568,8 @@ export class LogLayer implements ILogLayer {
     return this.logLevelEnabledStatus[level];
   }
 
-  private formatContext() {
+  private formatContext(context: Record<string, any> | null) {
     const { contextFieldName, muteContext } = this._config;
-    const context = this.contextManager.getContext();
 
     if (this.contextManager.hasContextData() && !muteContext) {
       if (contextFieldName) {
@@ -636,6 +635,8 @@ export class LogLayer implements ILogLayer {
     const { errorSerializer, errorFieldInMetadata, muteContext, contextFieldName, metadataFieldName, errorFieldName } =
       this._config;
 
+    const context = this.contextManager.getContext();
+
     let hasObjData = !!metadata || (muteContext ? false : this.contextManager.hasContextData());
 
     let d: Record<string, any> | undefined | null = {};
@@ -643,7 +644,7 @@ export class LogLayer implements ILogLayer {
     if (hasObjData) {
       // Field names for context and metadata is the same, merge the metadata into the same field name
       if (contextFieldName && contextFieldName === metadataFieldName) {
-        const contextData = this.formatContext()[contextFieldName];
+        const contextData = this.formatContext(context)[contextFieldName];
         const updatedMetadata = this.formatMetadata(metadata)[metadataFieldName];
 
         d = {
@@ -654,7 +655,7 @@ export class LogLayer implements ILogLayer {
         };
       } else {
         d = {
-          ...this.formatContext(),
+          ...this.formatContext(context),
           ...this.formatMetadata(metadata),
         };
       }
@@ -690,6 +691,9 @@ export class LogLayer implements ILogLayer {
         {
           data: hasObjData ? d : undefined,
           logLevel,
+          error: err,
+          metadata,
+          context
         },
         this,
       );
@@ -720,6 +724,9 @@ export class LogLayer implements ILogLayer {
                 data: hasObjData ? d : undefined,
                 logLevel,
                 transportId: transport.id,
+                error: err,
+                metadata,
+                context,
               },
               this,
             );
@@ -734,6 +741,9 @@ export class LogLayer implements ILogLayer {
             messages: [...params],
             data: hasObjData ? d : undefined,
             hasData: hasObjData,
+            error: err,
+            metadata,
+            context,
           });
         });
 
@@ -756,6 +766,9 @@ export class LogLayer implements ILogLayer {
             data: hasObjData ? d : undefined,
             logLevel,
             transportId: this.singleTransport.id,
+            error: err,
+            metadata,
+            context,
           },
           this,
         );
@@ -771,6 +784,9 @@ export class LogLayer implements ILogLayer {
         messages: [...params],
         data: hasObjData ? d : undefined,
         hasData: hasObjData,
+        error: err,
+        metadata,
+        context,
       });
     }
   }

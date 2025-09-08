@@ -133,6 +133,9 @@ export class PluginManager {
           {
             data: initialData.data,
             logLevel: initialData.logLevel,
+            error: initialData.error,
+            metadata: initialData.metadata,
+            context: initialData.context,
           },
           loglayer,
         );

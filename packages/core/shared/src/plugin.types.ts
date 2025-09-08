@@ -1,27 +1,22 @@
-import type { LogLevelType } from "./common.types.js";
+import {LogLayerCommonDataParams, LogLevelType} from "./common.types.js";
 import type { ILogLayer } from "./loglayer.types.js";
 
 /**
  * Input for the `onBeforeDataOut` plugin lifecycle method.
  * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforedataout | Creating Plugins}
  */
-export interface PluginBeforeDataOutParams {
+export interface PluginBeforeDataOutParams extends LogLayerCommonDataParams{
   /**
    * Log level of the data
    */
   logLevel: LogLevelType;
-  /**
-   * The object containing metadata / context / error data. This
-   * is `undefined` if there is no object with data.
-   */
-  data?: Record<string, any>;
 }
 
 /**
  * Input for the `shouldSendToLogger` plugin lifecycle method.
  * @see {@link https://loglayer.dev/plugins/creating-plugins.html#shouldsendtologger | Creating Plugins}
  */
-export interface PluginShouldSendToLoggerParams {
+export interface PluginShouldSendToLoggerParams extends LogLayerCommonDataParams {
   /**
    * Unique identifier for the transport. Can be used to not send to a specific transport.
    */
@@ -34,11 +29,6 @@ export interface PluginShouldSendToLoggerParams {
    * Log level of the message
    */
   logLevel: LogLevelType;
-  /**
-   * The object containing metadata / context / error data. This
-   * is `undefined` if there is no object with data.
-   */
-  data?: Record<string, any>;
 }
 
 /**

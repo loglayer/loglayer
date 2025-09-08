@@ -1,4 +1,4 @@
-import type { ErrorOnlyOpts, LogLevelType, MessageDataType } from "./common.types.js";
+import {ErrorOnlyOpts, LogLayerCommonDataParams, LogLevelType, MessageDataType} from "./common.types.js";
 import type { LogLayerPlugin } from "./plugin.types.js";
 
 /**
@@ -59,7 +59,7 @@ export interface IContextManager {
  * Input to the LogLayer transport shipToLogger() method.
  * @see {@link https://loglayer.dev/transports/creating-transports.html | Creating Transports Docs}
  */
-export interface LogLayerTransportParams {
+export interface LogLayerTransportParams extends LogLayerCommonDataParams {
   /**
    * The log level of the message
    */
@@ -68,10 +68,6 @@ export interface LogLayerTransportParams {
    * The parameters that were passed to the log message method (eg: info / warn / debug / error)
    */
   messages: any[];
-  /**
-   * Object data such as metadata, context, and / or error data
-   */
-  data?: Record<string, any>;
   /**
    * If true, the data object is included in the message parameters
    */

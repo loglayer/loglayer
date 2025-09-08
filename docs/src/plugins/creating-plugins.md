@@ -149,17 +149,19 @@ onBeforeDataOut?(params: PluginBeforeDataOutParams, loglayer: ILogLayer): Record
 ```
 
 **Parameters:**
-```typescript
-interface PluginBeforeDataOutParams {
-  data?: Record<string, any>;  // The object containing metadata / context / error data
-  logLevel: LogLevel;          // Log level of the data
-}
-```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `logLevel` | `LogLevel` | Log level of the data |
+| `data` | `Record<string, any>` (optional) | Combined object data containing the metadata, context, and / or error data in a structured format configured by the user |
+| `metadata` | `Record<string, any>` (optional) | Individual metadata object passed to the log message method |
+| `error` | `any` (optional) | Error passed to the log message method |
+| `context` | `Record<string, any>` (optional) | Context data that is included with each log entry |
 
 **Example:**
 ```typescript
 const dataEnrichmentPlugin = {
-  onBeforeDataOut: ({ data, logLevel }: PluginBeforeDataOutParams, loglayer: ILogLayer) => {
+  onBeforeDataOut: ({ data, logLevel, metadata, error, context }: PluginBeforeDataOutParams, loglayer: ILogLayer) => {
     return {
       ...(data || {}),
       environment: process.env.NODE_ENV,
@@ -180,12 +182,11 @@ onBeforeMessageOut?(params: PluginBeforeMessageOutParams, loglayer: ILogLayer): 
 ```
 
 **Parameters:**
-```typescript
-interface PluginBeforeMessageOutParams {
-  messages: any[];    // Message data that is copied from the original
-  logLevel: LogLevel; // Log level of the message
-}
-```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `messages` | `any[]` | Message data that is copied from the original |
+| `logLevel` | `LogLevel` | Log level of the message |
 
 **Example:**
 ```typescript
@@ -206,19 +207,21 @@ shouldSendToLogger?(params: PluginShouldSendToLoggerParams, loglayer: ILogLayer)
 ```
 
 **Parameters:**
-```typescript
-interface PluginShouldSendToLoggerParams {
-  transportId?: string;        // ID of the transport that will send the log
-  messages: any[];              // Message data that is copied from the original
-  logLevel: LogLevel;          // Log level of the message
-  data?: Record<string, any>;  // The object containing metadata / context / error data
-}
-```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `messages` | `any[]` | Message data that is copied from the original |
+| `logLevel` | `LogLevel` | Log level of the message |
+| `transportId` | `string` (optional) | ID of the transport that will send the log |
+| `data` | `Record<string, any>` (optional) | Combined object data containing the metadata, context, and / or error data in a structured format configured by the user |
+| `metadata` | `Record<string, any>` (optional) | Individual metadata object passed to the log message method |
+| `error` | `any` (optional) | Error passed to the log message method |
+| `context` | `Record<string, any>` (optional) | Context data that is included with each log entry |
 
 **Example:**
 ```typescript
 const productionFilterPlugin = {
-  shouldSendToLogger: ({ logLevel, data }: PluginShouldSendToLoggerParams, loglayer: ILogLayer) => {
+  shouldSendToLogger: ({ logLevel, data, metadata, error, context }: PluginShouldSendToLoggerParams, loglayer: ILogLayer) => {
     // Filter out debug logs in production
     if (process.env.NODE_ENV === 'production') {
       return logLevel !== 'debug'
@@ -234,8 +237,8 @@ const productionFilterPlugin = {
 
 **Example:**
 ```typescript
-const productionFilterPlugin = {
-  shouldSendToLogger: ({ transportId, logLevel, data }: PluginShouldSendToLoggerParams, loglayer: ILogLayer) => {
+const transportFilterPlugin = {
+  shouldSendToLogger: ({ transportId, logLevel, data, metadata, error, context }: PluginShouldSendToLoggerParams, loglayer: ILogLayer) => {
     // don't send logs if the transportId is 'console'
     if (transportId === 'console') {
       return false
@@ -258,8 +261,11 @@ onMetadataCalled?(metadata: Record<string, any>, loglayer: ILogLayer): Record<st
 ```
 
 **Parameters:**
-- `metadata`: Record<string, any> - The metadata object being added
-- `loglayer`: ILogLayer - The LogLayer instance
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `metadata` | `Record<string, any>` | The metadata object being added |
+| `loglayer` | `ILogLayer` | The LogLayer instance |
 
 **Example:**
 ```typescript
@@ -286,8 +292,11 @@ onContextCalled?(context: Record<string, any>, loglayer: ILogLayer): Record<stri
 ```
 
 **Parameters:**
-- `context`: Record<string, any> - The context object being added
-- `loglayer`: ILogLayer - The LogLayer instance
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `context` | `Record<string, any>` | The context object being added |
+| `loglayer` | `ILogLayer` | The LogLayer instance |
 
 **Example:**
 ```typescript
