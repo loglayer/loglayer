@@ -1,5 +1,23 @@
 # `loglayer` Changelog
 
+## 6.7.0
+
+### Minor Changes
+
+- [#239](https://github.com/loglayer/loglayer/pull/239) [`12ca18a`](https://github.com/loglayer/loglayer/commit/12ca18ad65181fcbfc4c34d804ed875b691b895d) Thanks [@theogravity](https://github.com/theogravity)! - - Transports now additionally receive the `error`, `metadata`, and `context` data in the `shipToLogger()` callback. \* It is still recommended to use `data` for most use-cases as it is a merged object of all data with the user's configured fields.
+
+  - Plugin callbacks `onBeforeDataOut()` and `shouldSendToLogger()` now additionally receive the `error`, `metadata`, and `context` data.
+
+  This change should allow a plugin or transport developer to inspect data without needing to know how the user has configured their `data` object.
+
+### Patch Changes
+
+- Updated dependencies [[`12ca18a`](https://github.com/loglayer/loglayer/commit/12ca18ad65181fcbfc4c34d804ed875b691b895d)]:
+  - @loglayer/shared@2.4.0
+  - @loglayer/context-manager@1.1.2
+  - @loglayer/plugin@2.1.2
+  - @loglayer/transport@2.2.2
+
 ## 6.6.0
 
 ### Minor Changes
