@@ -3,7 +3,7 @@ title: AWS Lambda Powertools Transport for LogLayer
 description: Logging for AWS Lambdas with the LogLayer logging library
 ---
 
-# AWS Lambda Powertools Transport
+# AWS Lambda Powertools Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-aws-lambda-powertools)](https://www.npmjs.com/package/@loglayer/transport-aws-lambda-powertools)
 

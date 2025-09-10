@@ -8,7 +8,7 @@ import { NuAsciinemaPlayer } from '@nolebase/ui-asciinema'
 import 'asciinema-player/dist/bundle/asciinema-player.css'
 </script>
 
-# Pretty Terminal Transport
+# Pretty Terminal Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-pretty-terminal)](https://www.npmjs.com/package/@loglayer/transport-pretty-terminal)
 

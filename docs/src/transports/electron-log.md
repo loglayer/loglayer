@@ -3,7 +3,7 @@ title: Electron-log Transport for LogLayer
 description: Send logs to electron-log with the LogLayer logging library
 ---
 
-# Electron-log Transport
+# Electron-log Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-electron-log)](https://www.npmjs.com/package/@loglayer/transport-electron-log)
 

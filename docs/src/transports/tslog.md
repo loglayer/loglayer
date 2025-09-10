@@ -3,7 +3,7 @@ title: TsLog Transport for LogLayer
 description: Send logs to TsLog with the LogLayer logging library
 ---
 
-# tslog Transport
+# tslog Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-tslog)](https://www.npmjs.com/package/@loglayer/transport-tslog)
 

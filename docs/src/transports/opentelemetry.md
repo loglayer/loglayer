@@ -3,7 +3,7 @@ title: OpenTelemetry Transport
 description: Send logs to OpenTelemetry with the LogLayer logging library
 ---
 
-# OpenTelemetry Transport
+# OpenTelemetry Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-opentelemetry)](https://www.npmjs.com/package/@loglayer/transport-opentelemetry)
 

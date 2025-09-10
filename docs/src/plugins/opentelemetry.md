@@ -3,7 +3,7 @@ title: OpenTelemetry Plugin
 description: Add OpenTelemetry trace context to logs using LogLayer
 ---
 
-# OpenTelemetry Plugin
+# OpenTelemetry Plugin <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fplugin-opentelemetry)](https://www.npmjs.com/package/@loglayer/plugin-opentelemetry)
 

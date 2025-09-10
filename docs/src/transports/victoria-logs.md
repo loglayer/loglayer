@@ -3,7 +3,7 @@ title: VictoriaLogs Transport for LogLayer
 description: Send logs to Victoria Metrics' VictoriaLogs with the LogLayer logging library
 ---
 
-# VictoriaLogs Transport
+# VictoriaLogs Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-victoria-logs)](https://www.npmjs.com/package/@loglayer/transport-victoria-logs)
 

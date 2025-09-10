@@ -3,7 +3,7 @@ title: Dynatrace Transport for LogLayer
 description: Send logs to Dynatrace with the LogLayer logging library
 ---
 
-# Dynatrace Transport
+# Dynatrace Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-dynatrace)](https://www.npmjs.com/package/@loglayer/transport-dynatrace)
 

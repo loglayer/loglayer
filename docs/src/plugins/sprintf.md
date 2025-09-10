@@ -3,7 +3,7 @@ title: Sprintf Plugin
 description: Printf-style string formatting support for LogLayer
 ---
 
-# Sprintf Plugin
+# Sprintf Plugin <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fplugin-sprintf)](https://www.npmjs.com/package/@loglayer/plugin-sprintf)
 

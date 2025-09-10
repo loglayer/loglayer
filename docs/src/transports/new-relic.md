@@ -3,7 +3,7 @@ title: New Relic Transport for LogLayer
 description: Send logs to New Relic with the LogLayer logging library
 ---
 
-# New Relic Transport
+# New Relic Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-new-relic)](https://www.npmjs.com/package/@loglayer/transport-new-relic)
 

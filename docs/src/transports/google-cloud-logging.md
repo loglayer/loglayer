@@ -3,7 +3,7 @@ title: Google Cloud Logging Transport for LogLayer
 description: Send logs to Google Cloud Logging with the LogLayer logging library
 ---
 
-# Google Cloud Logging Transport
+# Google Cloud Logging Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-google-cloud-logging)](https://www.npmjs.com/package/@loglayer/transport-google-cloud-logging)
 

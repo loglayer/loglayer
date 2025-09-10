@@ -3,7 +3,7 @@ title: Winston Transport for LogLayer
 description: Send logs to Winston with the LogLayer logging library
 ---
 
-# Winston Transport
+# Winston Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-winston)](https://www.npmjs.com/package/@loglayer/transport-winston)
 

@@ -30,7 +30,7 @@ features:
   - title: Extensible Plugin System
     details: Transform, enrich, and filter logs with plugins that lets you customize every aspect of your logging pipeline.
   - title: Multi-logger Support
-    details: Fan out logs to multiple logging libraries and cloud providers such as DataDog and New Relic at the same time.
+    details: Fan out logs to multiple logging libraries like Pino and cloud providers like DataDog at the same time.
   - title: OpenTelemetry Support
     details: A transport and plugin is available for connecting logs to OpenTelemetry.
   - title: Log File Rotation Support

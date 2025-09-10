@@ -3,7 +3,7 @@ title: Filter Plugin
 description: Filter logs using string patterns, regular expressions, or JSON Queries
 ---
 
-# Filter Plugin
+# Filter Plugin <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fplugin-filter)](https://www.npmjs.com/package/@loglayer/plugin-filter)
 

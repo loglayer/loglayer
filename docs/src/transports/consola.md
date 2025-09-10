@@ -3,7 +3,7 @@ title: Consola Transport for LogLayer
 description: Send logs to Consola with the LogLayer logging library
 ---
 
-# Consola Transport
+# Consola Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-consola)](https://www.npmjs.com/package/@loglayer/transport-consola)
 

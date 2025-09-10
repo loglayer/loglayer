@@ -3,7 +3,7 @@ title: Blank Transport for LogLayer
 description: Create custom transports quickly with LogLayer's BlankTransport
 ---
 
-# Blank Transport
+# Blank Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
 
 The built-in `BlankTransport` allows you to quickly create custom transports by providing your own `shipToLogger` function. This is perfect for simple custom logging logic, prototyping new transport ideas, or quick integrations with custom services.
 

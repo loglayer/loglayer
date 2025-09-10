@@ -3,7 +3,7 @@ title: DataDog Transport for LogLayer
 description: Send logs to DataDog with the LogLayer logging library
 ---
 
-# DataDog Transport
+# DataDog Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-datadog)](https://www.npmjs.com/package/@loglayer/transport-datadog)
 
