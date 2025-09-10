@@ -3,7 +3,7 @@ title: Redaction Plugin for LogLayer
 description: Learn how to use the redaction plugin to protect sensitive data in your logs
 ---
 
-# Redaction Plugin
+# Redaction Plugin <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fplugin-redaction)](https://www.npmjs.com/package/@loglayer/plugin-redaction)
 

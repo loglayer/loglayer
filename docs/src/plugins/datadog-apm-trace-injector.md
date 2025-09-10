@@ -1,4 +1,4 @@
-# Datadog APM Trace Injector Plugin
+# Datadog APM Trace Injector Plugin <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fplugin-datadog-apm-trace-injector)](https://www.npmjs.com/package/@loglayer/plugin-datadog-apm-trace-injector)
 

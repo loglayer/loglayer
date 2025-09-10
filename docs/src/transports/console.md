@@ -3,7 +3,7 @@ title: Console Transport for LogLayer
 description: Send logs to the console with the LogLayer logging library
 ---
 
-# Console Transport
+# Console Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
 
 The simplest integration is with the built-in `console` object, which is available in both Node.js and browser environments.
 

@@ -3,7 +3,7 @@ title: DataDog Browser Logs Transport for LogLayer
 description: Send logs using the DataDog Browser Logs library with LogLayer
 ---
 
-# DataDog Browser Logs Transport
+# DataDog Browser Logs Transport <Badge type="warning" text="Browser" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-datadog-browser-logs)](https://www.npmjs.com/package/@loglayer/transport-datadog-browser-logs)
 

@@ -3,7 +3,7 @@ title: Axiom Transport for LogLayer
 description: Send logs to Axiom cloud logging platform with the LogLayer logging library
 ---
 
-# Axiom Transport
+# Axiom Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-axiom)](https://www.npmjs.com/package/@loglayer/transport-axiom)
 

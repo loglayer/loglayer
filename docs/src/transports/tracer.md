@@ -3,7 +3,7 @@ title: Tracer Transport for LogLayer
 description: Send logs to Tracer with the LogLayer logging library
 ---
 
-# Tracer Transport
+# Tracer Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-tracer)](https://www.npmjs.com/package/@loglayer/transport-tracer)
 

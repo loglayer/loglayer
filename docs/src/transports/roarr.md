@@ -3,7 +3,7 @@ title: Roarr Transport for LogLayer
 description: Send logs to Roarr with the LogLayer logging library
 ---
 
-# Roarr Transport
+# Roarr Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-roarr)](https://www.npmjs.com/package/@loglayer/transport-roarr)
 

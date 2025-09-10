@@ -5,9 +5,19 @@ description: Learn more about LogLayer and how it unifies your logging experienc
 
 # Introduction
 
-`loglayer` is a unified logger that routes logs to various logging libraries, cloud providers, and OpenTelemetry while providing a 
-fluent API for specifying log messages, metadata and errors, enhancing and standardizing the developer experience 
+`loglayer` is a unified logger that can route logs to various logging libraries, cloud providers, files, 
+and OpenTelemetry while providing a fluent API for specifying log messages, metadata and errors, enhancing and standardizing the developer experience 
 around writing logs.
+
+```typescript
+log
+  .withMetadata({ userId: '1234' }) // Add structured metadata
+  .withError(new Error('Something went wrong')) // Attach an Error object
+  .error('User action completed') // Log the message with an error level
+```
+
+_The library itself works on both server-side and browser environments, but the transports and plugins used may 
+support only one or the other. Support is noted on their respective page._
 
 ## Why LogLayer?
 
@@ -27,13 +37,13 @@ This design offers several key advantages:
 [New Relic](/transports/new-relic)) simultaneously. This feature can be used to ship logs directly to DataDog without 
 relying on their APM package or sidecars.
 
-- **Easy Logger Swapping**: If Pino has been used with Next.js, issues might arise where it doesn’t work out of the box 
+- **Easy Logger Swapping**: You're using `pino` with Next.js, you might find issues where it doesn’t work out of the box 
 after a production build without webpack hacks. With LogLayer, a better-suited library can be swapped in without 
 touching the logging code.
 
 ## Battle Tested
 
-LogLayer has been in production use for at least three years at [Airtop.ai](https://airtop.ai) (formerly Switchboard) in
+LogLayer has been in production use for at least four years at [Airtop.ai](https://airtop.ai) (formerly Switchboard) in
 multiple backend and frontend systems.
 
 *LogLayer is not affiliated with Airtop.*

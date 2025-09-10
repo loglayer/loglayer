@@ -3,7 +3,7 @@ title: Log4js Transport for LogLayer
 description: Send logs to Log4js with the LogLayer logging library
 ---
 
-# Log4js Transport
+# Log4js Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-log4js)](https://www.npmjs.com/package/@loglayer/transport-log4js)
 

@@ -3,7 +3,7 @@ title: Signale Transport for LogLayer
 description: Send logs to Signale with the LogLayer logging library
 ---
 
-# Signale Transport
+# Signale Transport <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-signale)](https://www.npmjs.com/package/@loglayer/transport-signale)
 
