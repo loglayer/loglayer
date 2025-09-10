@@ -27,14 +27,14 @@ describe("structured transport with consola", () => {
 
   it("should log a message", () => {
     log.info("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const consolaMessages = consola.info.mock.calls.map((c) => c[0]);
     expect(consolaMessages).toContain("this is a test message");
   });
 
   it("should log a message with a prefix", () => {
     log.withPrefix("[testing]").info("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const consolaMessages = consola.info.mock.calls.map((c) => c[0]);
     expect(consolaMessages).toContain("[testing] this is a test message");
   });
@@ -45,10 +45,10 @@ describe("structured transport with consola", () => {
     });
 
     log.info("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const msg = consola.info.mock.calls[0][0];
     expect(msg).toContain("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const data = consola.info.mock.calls[0][1];
     expect(data).toMatchObject({
       sample: "data",
@@ -66,10 +66,10 @@ describe("structured transport with consola", () => {
       })
       .info("this is a test message");
 
-    // @ts-ignore
+    // @ts-expect-error
     const msg = consola.info.mock.calls[0][0];
     expect(msg).toContain("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const data = consola.info.mock.calls[0][1];
     expect(data).toMatchObject({
       sample: "data",
@@ -83,10 +83,10 @@ describe("structured transport with consola", () => {
     });
 
     log.withError(new Error("err")).info("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const msg = consola.info.mock.calls[0][0];
     expect(msg).toContain("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const data = consola.info.mock.calls[0][1];
     expect(data).toMatchObject({
       test: "context",

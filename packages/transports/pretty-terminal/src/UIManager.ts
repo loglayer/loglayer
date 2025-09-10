@@ -23,7 +23,7 @@
  */
 
 import chalk from "chalk";
-// @ts-ignore
+// @ts-expect-error
 import keypress from "keypress";
 import type { LogRenderer } from "./LogRenderer.js";
 import type { LogStorage } from "./LogStorage.js";

@@ -693,7 +693,7 @@ export class LogLayer implements ILogLayer {
           logLevel,
           error: err,
           metadata,
-          context
+          context,
         },
         this,
       );

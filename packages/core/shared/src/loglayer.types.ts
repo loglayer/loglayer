@@ -1,4 +1,4 @@
-import {ErrorOnlyOpts, LogLayerCommonDataParams, LogLevelType, MessageDataType} from "./common.types.js";
+import type { ErrorOnlyOpts, LogLayerCommonDataParams, LogLevelType, MessageDataType } from "./common.types.js";
 import type { LogLayerPlugin } from "./plugin.types.js";
 
 /**

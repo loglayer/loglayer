@@ -7,7 +7,7 @@ import { ConsoleTransport } from "../transports/ConsoleTransport.js";
 function createTestTransport(id: string) {
   return new ConsoleTransport({
     id,
-    // @ts-ignore
+    // @ts-expect-error
     logger: new TestLoggingLibrary(),
   });
 }

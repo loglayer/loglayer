@@ -14,27 +14,27 @@ export class PinoTransport extends BaseTransport<Logger> {
 
     switch (logLevel) {
       case LogLevel.info:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.info(...toPublish);
         break;
       case LogLevel.warn:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.warn(...toPublish);
         break;
       case LogLevel.error:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.error(...toPublish);
         break;
       case LogLevel.trace:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.trace(...toPublish);
         break;
       case LogLevel.debug:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.debug(...toPublish);
         break;
       case LogLevel.fatal:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.fatal(...toPublish);
         break;
     }

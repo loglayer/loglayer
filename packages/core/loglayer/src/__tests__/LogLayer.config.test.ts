@@ -11,7 +11,7 @@ function getLogger(config?: Partial<LogLayerConfig>) {
   return new LogLayer({
     transport: new ConsoleTransport({
       id: "console",
-      // @ts-ignore
+      // @ts-expect-error
       logger: genericLogger,
     }),
     ...(config || {}),
@@ -216,7 +216,7 @@ describe("LogLayer configuration", () => {
   it("should not send logs to disabled transports", () => {
     const transport = new ConsoleTransport({
       id: "console",
-      // @ts-ignore
+      // @ts-expect-error
       logger: new TestLoggingLibrary(),
       enabled: false,
     });
@@ -231,7 +231,7 @@ describe("LogLayer configuration", () => {
     // Create a new enabled transport
     const enabledTransport = new ConsoleTransport({
       id: "console",
-      // @ts-ignore
+      // @ts-expect-error
       logger: new TestLoggingLibrary(),
       enabled: true,
     });

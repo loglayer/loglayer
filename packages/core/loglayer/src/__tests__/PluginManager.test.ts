@@ -113,7 +113,7 @@ describe("PluginManager", () => {
     const result = pluginManager.runOnBeforeDataOut(initialParams, mockLogLayer);
 
     expect(result).toEqual({ initial: "data", added: "test", modified: "yes" });
-    
+
     // Verify that plugins received the correct metadata, error, and context parameters
     // Note: The data parameter gets mutated as plugins run, so we focus on the other parameters
     expect(plugins[0].onBeforeDataOut).toHaveBeenCalledWith(
@@ -123,9 +123,9 @@ describe("PluginManager", () => {
         metadata: testMetadata,
         context: testContext,
       }),
-      mockLogLayer
+      mockLogLayer,
     );
-    
+
     expect(plugins[1].onBeforeDataOut).toHaveBeenCalledWith(
       expect.objectContaining({
         logLevel: LogLevel.error,
@@ -133,7 +133,7 @@ describe("PluginManager", () => {
         metadata: testMetadata,
         context: testContext,
       }),
-      mockLogLayer
+      mockLogLayer,
     );
   });
 
@@ -197,7 +197,7 @@ describe("PluginManager", () => {
 
     const shouldSend = pluginManager.runShouldSendToLogger(params, mockLogLayer);
     expect(shouldSend).toBe(false);
-    
+
     // Verify that plugins received the correct parameters
     expect(plugins[0].shouldSendToLogger).toHaveBeenCalledWith(
       {
@@ -209,7 +209,7 @@ describe("PluginManager", () => {
         context: testContext,
         transportId: "test-transport",
       },
-      mockLogLayer
+      mockLogLayer,
     );
   });
 

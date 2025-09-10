@@ -7,7 +7,7 @@ import { ConsoleTransport } from "../transports/ConsoleTransport.js";
 function createTestTransport(id: string) {
   return new ConsoleTransport({
     id,
-    // @ts-ignore
+    // @ts-expect-error
     logger: new TestLoggingLibrary(),
   });
 }
@@ -73,7 +73,7 @@ describe("LogLayer multi-transport functionality", () => {
     const transport1 = createTestTransport("transport1");
     const transport2 = new ConsoleTransport({
       id: "transport2",
-      // @ts-ignore
+      // @ts-expect-error
       logger: new TestLoggingLibrary(),
       enabled: false,
     });

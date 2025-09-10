@@ -31,14 +31,14 @@ describe("structured transport with datadog-browser-logs", () => {
 
   it("should log a message", () => {
     log.info("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const datadogMessages = ddLogger.info.mock.calls.map((c) => c[0]);
     expect(datadogMessages).toContain("this is a test message");
   });
 
   it("should log a message with a prefix", () => {
     log.withPrefix("[testing]").info("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const datadogMessages = ddLogger.info.mock.calls.map((c) => c[0]);
     expect(datadogMessages).toContain("[testing] this is a test message");
   });
@@ -49,10 +49,10 @@ describe("structured transport with datadog-browser-logs", () => {
     });
 
     log.info("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const msg = ddLogger.info.mock.calls[0][0];
     expect(msg).toContain("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const data = ddLogger.info.mock.calls[0][1];
     expect(data).toMatchObject({
       sample: "data",
@@ -70,10 +70,10 @@ describe("structured transport with datadog-browser-logs", () => {
       })
       .info("this is a test message");
 
-    // @ts-ignore
+    // @ts-expect-error
     const msg = ddLogger.info.mock.calls[0][0];
     expect(msg).toContain("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const data = ddLogger.info.mock.calls[0][1];
     expect(data).toMatchObject({
       sample: "data",
@@ -87,10 +87,10 @@ describe("structured transport with datadog-browser-logs", () => {
     });
 
     log.withError(new Error("err")).info("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const msg = ddLogger.info.mock.calls[0][0];
     expect(msg).toContain("this is a test message");
-    // @ts-ignore
+    // @ts-expect-error
     const data = ddLogger.info.mock.calls[0][1];
     expect(data).toMatchObject({
       test: "context",

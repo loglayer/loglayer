@@ -204,7 +204,7 @@ async function sendWithRetry(
       // Handle rate limiting
       if (response.status === 429 && respectRateLimit) {
         const retryAfter = response.headers.get("retry-after");
-        const waitTime = retryAfter ? Number.parseInt(retryAfter) * 1000 : retryDelay;
+        const waitTime = retryAfter ? Number.parseInt(retryAfter, 10) * 1000 : retryDelay;
 
         throw new RateLimitError(`Rate limit exceeded. Retry after ${waitTime}ms`, waitTime);
       }

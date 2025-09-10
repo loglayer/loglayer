@@ -19,27 +19,27 @@ export class RoarrTransport extends BaseTransport<Logger> {
 
     switch (logLevel) {
       case LogLevel.info:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.info(...finalMessage);
         break;
       case LogLevel.warn:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.warn(...finalMessage);
         break;
       case LogLevel.error:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.error(...finalMessage);
         break;
       case LogLevel.trace:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.trace(...finalMessage);
         break;
       case LogLevel.debug:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.debug(...finalMessage);
         break;
       case LogLevel.fatal:
-        // @ts-ignore
+        // @ts-expect-error
         this.logger.fatal(...finalMessage);
         break;
     }

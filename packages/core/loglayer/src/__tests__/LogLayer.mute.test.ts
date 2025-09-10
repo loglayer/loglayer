@@ -11,7 +11,7 @@ function getLogger(config?: Partial<LogLayerConfig>) {
   return new LogLayer({
     transport: new ConsoleTransport({
       id: "console",
-      // @ts-ignore
+      // @ts-expect-error
       logger: genericLogger,
     }),
     ...(config || {}),

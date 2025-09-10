@@ -8,7 +8,7 @@ function getLoggerInstance() {
   const mockedStream = new PassThrough();
 
   const logInstance = new Signale({
-    // @ts-ignore
+    // @ts-expect-error
     stream: mockedStream,
     config: {
       displayBadge: false,

@@ -11,7 +11,7 @@ function getLogger(config?: Partial<LogLayerConfig>) {
   return new LogLayer({
     transport: new ConsoleTransport({
       id: "console",
-      // @ts-ignore
+      // @ts-expect-error
       logger: genericLogger,
     }),
     ...(config || {}),
@@ -410,7 +410,7 @@ describe("LogLayer basic functionality", () => {
     };
 
     const mockTransport2 = {
-      id: "transport2", 
+      id: "transport2",
       enabled: true,
       _sendToLogger: vi.fn(),
       getLoggerInstance: () => new TestLoggingLibrary(),
@@ -458,7 +458,7 @@ describe("LogLayer basic functionality", () => {
           expect(params.error).toBeInstanceOf(Error);
           expect(params.error.message).toBe("integration test error");
           expect(params.context).toEqual({ originalContext: "data" });
-          
+
           // Modify the data
           return { pluginAdded: "data" };
         }),
@@ -469,7 +469,7 @@ describe("LogLayer basic functionality", () => {
           expect(params.error.message).toBe("integration test error");
           expect(params.context).toEqual({ originalContext: "data" });
           expect(params.transportId).toBe("integration-transport");
-          
+
           return true;
         }),
       };
@@ -502,7 +502,7 @@ describe("LogLayer basic functionality", () => {
           error: testError,
           context: testContext,
         }),
-        expect.any(Object) // LogLayer instance
+        expect.any(Object), // LogLayer instance
       );
 
       expect(dataModificationPlugin.shouldSendToLogger).toHaveBeenCalledWith(
@@ -512,7 +512,7 @@ describe("LogLayer basic functionality", () => {
           context: testContext,
           transportId: "integration-transport",
         }),
-        expect.any(Object) // LogLayer instance
+        expect.any(Object), // LogLayer instance
       );
 
       // Verify the transport received the modified data plus original parameters
@@ -545,7 +545,7 @@ describe("LogLayer basic functionality", () => {
       };
 
       const plugin2 = {
-        id: "plugin2", 
+        id: "plugin2",
         onBeforeDataOut: vi.fn((params) => {
           expect(params.metadata).toEqual({ meta: "test" });
           expect(params.error).toBeInstanceOf(Error);
@@ -597,7 +597,7 @@ describe("LogLayer basic functionality", () => {
           error: testError,
           metadata: testMetadata,
           context: testContext,
-        })
+        }),
       );
     });
 
@@ -645,7 +645,7 @@ describe("LogLayer basic functionality", () => {
           error: testError,
           metadata: testMetadata,
           context: testContext,
-        })
+        }),
       );
     });
   });

@@ -1,11 +1,11 @@
-import {LogLayerCommonDataParams, LogLevelType} from "./common.types.js";
+import type { LogLayerCommonDataParams, LogLevelType } from "./common.types.js";
 import type { ILogLayer } from "./loglayer.types.js";
 
 /**
  * Input for the `onBeforeDataOut` plugin lifecycle method.
  * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforedataout | Creating Plugins}
  */
-export interface PluginBeforeDataOutParams extends LogLayerCommonDataParams{
+export interface PluginBeforeDataOutParams extends LogLayerCommonDataParams {
   /**
    * Log level of the data
    */

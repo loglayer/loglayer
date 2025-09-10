@@ -35,7 +35,6 @@ describe("structured transport with datadog", () => {
 
   it("should log a message", () => {
     log.info("this is a test message");
-    // @ts-ignore
     expect(ddTransport.processLog).toBeCalledWith({
       message: "this is a test message",
       level: "info",
@@ -45,7 +44,6 @@ describe("structured transport with datadog", () => {
 
   it("should log a message with a prefix", () => {
     log.withPrefix("[testing]").info("this is a test message");
-    // @ts-ignore
     expect(ddTransport.processLog).toBeCalledWith({
       message: "[testing] this is a test message",
       level: "info",
@@ -59,7 +57,6 @@ describe("structured transport with datadog", () => {
     });
 
     log.info("this is a test message");
-    // @ts-ignore
     expect(ddTransport.processLog).toBeCalledWith({
       message: "this is a test message",
       level: "info",
@@ -79,7 +76,6 @@ describe("structured transport with datadog", () => {
       })
       .info("this is a test message");
 
-    // @ts-ignore
     expect(ddTransport.processLog).toBeCalledWith({
       message: "this is a test message",
       level: "info",
@@ -96,7 +92,6 @@ describe("structured transport with datadog", () => {
 
     log.withError(new Error("err")).info("this is a test message");
 
-    // @ts-ignore
     expect(ddTransport.processLog).toBeCalledWith({
       message: "this is a test message",
       level: "info",
@@ -130,7 +125,6 @@ describe("structured transport with datadog", () => {
 
     log.info("this is a test message");
 
-    // @ts-ignore
     expect(ddTransport.processLog).toBeCalledWith({
       msg: "this is a test message",
       severity: "info",
@@ -163,7 +157,6 @@ describe("structured transport with datadog", () => {
 
     log.info("this is a test message");
 
-    // @ts-ignore
     expect(ddTransport.processLog).toBeCalledWith({
       message: "this is a test message",
       level: "info",

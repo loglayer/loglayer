@@ -35,12 +35,12 @@ const log = new LogLayer({
         ...data,
       }),
     compression: process.env.VICTORIA_LOGS_COMPRESSION === "true",
-    maxRetries: Number.parseInt(process.env.VICTORIA_LOGS_MAX_RETRIES || "3"),
-    retryDelay: Number.parseInt(process.env.VICTORIA_LOGS_RETRY_DELAY || "1000"),
+    maxRetries: Number.parseInt(process.env.VICTORIA_LOGS_MAX_RETRIES || "3", 10),
+    retryDelay: Number.parseInt(process.env.VICTORIA_LOGS_RETRY_DELAY || "1000", 10),
     respectRateLimit: process.env.VICTORIA_LOGS_RESPECT_RATE_LIMIT !== "false",
     enableBatchSend: process.env.VICTORIA_LOGS_ENABLE_BATCH !== "false",
-    batchSize: Number.parseInt(process.env.VICTORIA_LOGS_BATCH_SIZE || "100"),
-    batchSendTimeout: Number.parseInt(process.env.VICTORIA_LOGS_BATCH_TIMEOUT || "5000"),
+    batchSize: Number.parseInt(process.env.VICTORIA_LOGS_BATCH_SIZE || "100", 10),
+    batchSendTimeout: Number.parseInt(process.env.VICTORIA_LOGS_BATCH_TIMEOUT || "5000", 10),
     batchContentType: "application/stream+json", // VictoriaLogs expects stream+json for batch
     onError: (err) => {
       console.error("Failed to send logs to VictoriaLogs:", err);

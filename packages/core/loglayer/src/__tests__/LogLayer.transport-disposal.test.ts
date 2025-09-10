@@ -7,7 +7,7 @@ function createDisposableTransport(id: string) {
   const disposeSpy = vi.fn();
   const transport = new ConsoleTransport({
     id,
-    // @ts-ignore
+    // @ts-expect-error
     logger: new TestLoggingLibrary(),
   });
 
@@ -60,7 +60,7 @@ describe("LogLayer transport disposal", () => {
   it("should not fail when transport has no dispose method", () => {
     const transport1 = new ConsoleTransport({
       id: "transport1",
-      // @ts-ignore
+      // @ts-expect-error
       logger: new TestLoggingLibrary(),
     });
     const { transport: transport2, disposeSpy: disposeSpy2 } = createDisposableTransport("transport2");

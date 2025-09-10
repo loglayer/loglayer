@@ -41,9 +41,7 @@ describe("NewRelicTransport", () => {
       readable: { getReader: () => mockReader },
     };
 
-    // @ts-ignore - mocking global
     global.CompressionStream = vi.fn().mockImplementation(() => mockStream);
-    // @ts-ignore - mocking global
     global.TextEncoder = vi.fn().mockImplementation(() => ({
       encode: (str: string) => new Uint8Array(str.length),
     }));
