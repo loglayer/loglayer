@@ -16,8 +16,7 @@ log
   .error('User action completed') // Log the message with an error level
 ```
 
-_The library itself works on both server-side and browser environments, but the transports and plugins used may 
-support only one or the other. Support is noted on their respective page._
+_LogLayer is designed to work seamlessly across both server-side and browser environments. However, individual transports and plugins may have specific environment requirements, which is indicated on their respective page._
 
 ## Why LogLayer?
 

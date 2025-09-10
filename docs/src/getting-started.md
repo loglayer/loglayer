@@ -5,6 +5,8 @@ description: Learn how to install and use LogLayer in your project
 
 # Getting Started
 
+_LogLayer is designed to work seamlessly across both server-side and browser environments. However, individual transports and plugins may have specific environment requirements, which is indicated on their respective page._
+
 ## Installation
 
 ::: code-group
@@ -23,7 +25,7 @@ yarn add loglayer
 
 :::
 
-## Basic Usage with Console Transport
+## Basic Usage with Console Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
 
 The simplest way to get started is to use the built-in console transport, which uses the standard `console` object for logging:
 
