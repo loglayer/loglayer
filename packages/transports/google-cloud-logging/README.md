@@ -18,8 +18,8 @@ npm install @loglayer/transport-google-cloud-logging @google-cloud/logging seria
 
 This transport uses `log.entry(metadata, data)` as described in the library documentation.
 
-- The `metadata` portion is not the data from `withMetadata()` or `withContext()`. See the `rootLevelData` option
-  for this transport on how to modify this value.
+- The `metadata` portion is the data from `withMetadata()` or `withContext()`. Custom fields not known by Google Cloud Logging will end up in the `data` portion. 
+- See the `rootLevelData` option for this transport to specify default metadata.
 - The `data` portion is actually the `jsonPayload` is what the transport uses for all LogLayer data.
 - The message data is stored in `jsonPayload.message`
 
@@ -54,8 +54,8 @@ logger.info("Hello from Cloud Run!");
 
 ### `rootLevelData`
 
-The root level data to include for all log entries. 
-This is not the same as using `withContext()`, which would be included as part of the `jsonPayload`.
+The root level metadata to include for all log entries. 
+This value is merged with metadata provided using `withContext()`.
 
 The `rootLevelData` option accepts any valid [Google Cloud LogEntry](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) 
 fields except for `severity`, `timestamp`, and `jsonPayload` which are managed by the transport.

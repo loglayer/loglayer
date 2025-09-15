@@ -52,8 +52,8 @@ pnpm add @loglayer/transport-google-cloud-logging @google-cloud/logging serializ
 ::: info
 This transport uses `log.entry(metadata, data)` as described in the library documentation.
 
-- The `metadata` portion is not the data from `withMetadata()` or `withContext()`. See the `rootLevelData` option
-  for this transport on how to modify this value.
+- The `metadata` portion is the data from `withMetadata()` or `withContext()`. Custom fields not known by Google Cloud Logging will end up in the `data` portion. 
+- See the `rootLevelData` option for this transport to specify default metadata.
 - The `data` portion is actually the `jsonPayload` is what the transport uses for all LogLayer data.
 - The message data is stored in `jsonPayload.message`
 

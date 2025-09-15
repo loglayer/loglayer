@@ -66,10 +66,56 @@ describe("GoogleCloudLoggingTransport", () => {
   });
 
   describe("metadata handling", () => {
-    it("should include metadata in log entries", () => {
-      const metadata = {
+    it("should include custom metadata under data", () => {
+      const customMetadata = {
         service: "test-service",
         environment: "test",
+      };
+
+      logger.withMetadata(customMetadata).info("test message");
+
+      expect(mockWrite).toHaveBeenCalledWith(
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            severity: "INFO",
+            timestamp: expect.any(Date),
+          }),
+          data: {
+            ...customMetadata,
+            message: "test message",
+          },
+        }),
+      );
+    });
+
+    it("should include known metadata under metadata", () => {
+      const metadata = {
+        logName: "test-log",
+        resource: {
+          type: "global",
+          labels: {
+            project_id: "test-project",
+          },
+        },
+        insertId: "insert-123",
+        httpRequest: {
+          requestMethod: "GET",
+        },
+        labels: {
+          environment: "test",
+        },
+        operation: {
+          id: "operation-123",
+        },
+        trace: "trace-123",
+        spanId: "span-123",
+        traceSampled: true,
+        sourceLocation: {
+          file: "GoogleCloudLoggingTransport.test.ts",
+        },
+        split: {
+          totalSplits: 3,
+        },
       };
 
       logger.withMetadata(metadata).info("test message");
@@ -79,9 +125,9 @@ describe("GoogleCloudLoggingTransport", () => {
           metadata: expect.objectContaining({
             severity: "INFO",
             timestamp: expect.any(Date),
+            ...metadata,
           }),
           data: {
-            ...metadata,
             message: "test message",
           },
         }),
