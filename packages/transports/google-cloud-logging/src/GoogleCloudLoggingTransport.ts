@@ -1,9 +1,9 @@
-import type { Log } from "@google-cloud/logging";
+import type { Log, LogSync } from "@google-cloud/logging";
 import type { LogEntry } from "@google-cloud/logging/build/src/entry.js";
 import type { LogLayerTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
 import { BaseTransport, LogLevel, LogLevelPriority, type LogLevelType } from "@loglayer/transport";
 
-export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConfig<Log> {
+export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConfig<Log | LogSync> {
   /**
    * The root level data to include for all log entries.
    * "severity", "timestamp" and "jsonPayload" are already populated by the transport.
@@ -22,7 +22,7 @@ export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConf
 
 type LogEntryField = keyof GoogleCloudLoggingTransport["rootLevelData"];
 
-export class GoogleCloudLoggingTransport extends BaseTransport<Log> {
+export class GoogleCloudLoggingTransport extends BaseTransport<Log | LogSync> {
   private rootLevelData: GoogleCloudLoggingTransportConfig["rootLevelData"];
   private level: LogLevelType;
 
