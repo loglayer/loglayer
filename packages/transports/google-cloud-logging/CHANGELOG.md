@@ -1,5 +1,11 @@
 # `@loglayer/transport-google-cloud-logging` Changelog
 
+## 2.1.4
+
+### Patch Changes
+
+- [#245](https://github.com/loglayer/loglayer/pull/245) [`6314562`](https://github.com/loglayer/loglayer/commit/6314562a58c2c6c5fcc3d99c0c008d91307076df) Thanks [@osamaqarem](https://github.com/osamaqarem)! - Fix type error when passing a `LogSync` instance
+
 ## 2.1.2
 
 ### Patch Changes
