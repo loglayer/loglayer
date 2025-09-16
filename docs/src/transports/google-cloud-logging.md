@@ -27,6 +27,7 @@ This transport sends logs to [Google Cloud Logging](https://cloud.google.com/log
 |------|------|---------|-------------|
 | `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | The minimum log level to process. Logs below this level will be filtered out |
 | `rootLevelData` | `Record<string, any>` | - | Data to be included in the metadata portion of the log entry |
+| `metadataBehavior` | `"jsonPayload" \| "promote" ` | `"jsonPayload"` | Determines whether LogLayer metadata is included in the metadata portion of the log entry or the root level data. |
 | `onError` | `(error: Error) => void` | - | Error handling callback |
 
 ## Installation
@@ -52,8 +53,8 @@ pnpm add @loglayer/transport-google-cloud-logging @google-cloud/logging serializ
 ::: info
 This transport uses `log.entry(metadata, data)` as described in the library documentation.
 
-- The `metadata` portion is the data from `withMetadata()` or `withContext()`. Custom fields not known by Google Cloud Logging will end up in the `data` portion. 
-- See the `rootLevelData` option for this transport to specify default metadata.
+- The `metadata` portion is not the data from `withMetadata()` or `withContext()`. See the `rootLevelData` and `metadataBehavior` options
+  for this transport on how to modify this value.
 - The `data` portion is actually the `jsonPayload` is what the transport uses for all LogLayer data.
 - The message data is stored in `jsonPayload.message`
 
@@ -113,6 +114,33 @@ const logger = new LogLayer({
     },
   }),
 });
+```
+
+### `metadataBehavior`
+
+By default, `withMetadata()` fields are forwarded as part of `jsonPayload` of the [LogEntry](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry). 
+
+When set to `"promote"`, metadata will be merged with at the top level with `rootLevelData`. Metadata fields that aren't valid log entry fields are still included in `jsonPayload`.
+
+```typescript
+const logger = new LogLayer({
+  transport: new GoogleCloudLoggingTransport({
+    logger: log,
+    metadataBehavior: "promote",
+    rootLevelData: {
+      labels: {
+        environment: "production",
+        location: "west",
+      },
+    },
+  }),
+});
+
+// This will overwrite `labels` in root level data.
+// `customField` is still sent as part of `jsonPayload`.
+logger
+  .withMetadata({ labels: { location: "east" }, customField: "example" })
+  .info("example")
 ```
 
 ## Log Level Mapping

@@ -15,6 +15,16 @@ export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConf
   >;
 
   /**
+   * Handling of metadata fields. Defaults to "jsonPayload".
+   *
+   * "jsonPayload" submits all metadata to `LogEntry.jsonPayload`.
+   *
+   * "promote" merges metadata with valid `LogEntry` field names into the root level of the `LogEntry`, overwriting fields specified in `rootLevelData`.
+   * Metadata that isn't a valid `LogEntry` field is still sent in `LogEntry.jsonPayload`.
+   */
+  metadataBehavior?: "jsonPayload" | "promote";
+
+  /**
    * Minimum log level to process. Defaults to "trace"
    */
   level?: LogLevelType;
@@ -24,6 +34,7 @@ type LogEntryField = keyof GoogleCloudLoggingTransport["rootLevelData"];
 
 export class GoogleCloudLoggingTransport extends BaseTransport<Log | LogSync> {
   private rootLevelData: GoogleCloudLoggingTransportConfig["rootLevelData"];
+  private metadataBehavior: GoogleCloudLoggingTransportConfig["metadataBehavior"];
   private level: LogLevelType;
 
   private logEntryKeys: Set<LogEntryField> = new Set([
@@ -43,6 +54,7 @@ export class GoogleCloudLoggingTransport extends BaseTransport<Log | LogSync> {
   constructor(config: GoogleCloudLoggingTransportConfig) {
     super(config);
     this.rootLevelData = config.rootLevelData || {};
+    this.metadataBehavior = config.metadataBehavior ?? "jsonPayload";
     this.level = config.level ?? LogLevel.trace; // Default to trace to allow all logs
   }
 
@@ -86,7 +98,7 @@ export class GoogleCloudLoggingTransport extends BaseTransport<Log | LogSync> {
     }
 
     const safeData = data && hasData ? data : {};
-    const metadata = this.extractLogEntryFields(safeData);
+    const metadata = this.metadataBehavior === "promote" ? this.extractLogEntryFields(safeData) : {};
 
     const entry = this.logger.entry(
       {
