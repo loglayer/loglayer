@@ -193,14 +193,14 @@ describe("GoogleCloudLoggingTransport", () => {
         },
       };
 
-      const loggerWithMetadataBehavior = new LogLayer({
+      const loggerWithRootLevelMetadataFields = new LogLayer({
         transport: new GoogleCloudLoggingTransport({
           logger: mockLog,
           rootLevelMetadataFields: [],
         }),
       });
 
-      loggerWithMetadataBehavior.withMetadata(metadata).info("test message");
+      loggerWithRootLevelMetadataFields.withMetadata(metadata).info("test message");
 
       expect(mockWrite).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -247,7 +247,7 @@ describe("GoogleCloudLoggingTransport", () => {
         },
       };
 
-      const loggerWithMetadataBehavior = new LogLayer({
+      const loggerWithRootLevelMetadataFields = new LogLayer({
         transport: new GoogleCloudLoggingTransport({
           logger: mockLog,
           rootLevelMetadataFields: [
@@ -266,7 +266,7 @@ describe("GoogleCloudLoggingTransport", () => {
         }),
       });
 
-      loggerWithMetadataBehavior.withMetadata(metadata).info("test message");
+      loggerWithRootLevelMetadataFields.withMetadata(metadata).info("test message");
 
       const { customField, ...restMetadata } = metadata;
 
