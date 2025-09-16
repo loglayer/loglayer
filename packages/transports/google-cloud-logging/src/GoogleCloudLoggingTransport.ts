@@ -15,14 +15,9 @@ export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConf
   >;
 
   /**
-   * Handling of metadata fields. Defaults to "jsonPayload".
-   *
-   * "jsonPayload" submits all metadata to `LogEntry.jsonPayload`.
-   *
-   * "promote" merges metadata with valid `LogEntry` field names into the root level of the `LogEntry`, overwriting fields specified in `rootLevelData`.
-   * Metadata that isn't a valid `LogEntry` field is still sent in `LogEntry.jsonPayload`.
+   * List of LogLayer metadata fields to merge into `rootLevelData` when creating the log entry.
    */
-  metadataBehavior?: "jsonPayload" | "promote";
+  rootLevelMetadataFields?: Array<string>;
 
   /**
    * Minimum log level to process. Defaults to "trace"
@@ -30,31 +25,15 @@ export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConf
   level?: LogLevelType;
 }
 
-type LogEntryField = keyof GoogleCloudLoggingTransport["rootLevelData"];
-
 export class GoogleCloudLoggingTransport extends BaseTransport<Log | LogSync> {
   private rootLevelData: GoogleCloudLoggingTransportConfig["rootLevelData"];
-  private metadataBehavior: GoogleCloudLoggingTransportConfig["metadataBehavior"];
+  private rootLevelMetadataFields: Array<string>;
   private level: LogLevelType;
-
-  private logEntryKeys: Set<LogEntryField> = new Set([
-    "logName",
-    "resource",
-    "insertId",
-    "httpRequest",
-    "labels",
-    "operation",
-    "trace",
-    "spanId",
-    "traceSampled",
-    "sourceLocation",
-    "split",
-  ]);
 
   constructor(config: GoogleCloudLoggingTransportConfig) {
     super(config);
     this.rootLevelData = config.rootLevelData || {};
-    this.metadataBehavior = config.metadataBehavior ?? "jsonPayload";
+    this.rootLevelMetadataFields = config.rootLevelMetadataFields ?? [];
     this.level = config.level ?? LogLevel.trace; // Default to trace to allow all logs
   }
 
@@ -82,7 +61,7 @@ export class GoogleCloudLoggingTransport extends BaseTransport<Log | LogSync> {
     const metadata: Record<string, unknown> = {};
 
     for (const key of keys) {
-      if (this.logEntryKeys.has(key as LogEntryField)) {
+      if (this.rootLevelMetadataFields.includes(key)) {
         metadata[key] = data[key];
         delete data[key];
       }
@@ -98,7 +77,7 @@ export class GoogleCloudLoggingTransport extends BaseTransport<Log | LogSync> {
     }
 
     const safeData = data && hasData ? data : {};
-    const metadata = this.metadataBehavior === "promote" ? this.extractLogEntryFields(safeData) : {};
+    const metadata = this.extractLogEntryFields(safeData);
 
     const entry = this.logger.entry(
       {

@@ -161,8 +161,8 @@ describe("GoogleCloudLoggingTransport", () => {
     });
   });
 
-  describe("metadataBehavior", () => {
-    it("should include known LogEntry fields under data when set to 'jsonPayload'", () => {
+  describe("rootLevelMetadataFields", () => {
+    it("should include all log entry fields under data when 'rootLevelMetadataFields' is empty", () => {
       const metadata = {
         customField: "customValue",
         logName: "test-log",
@@ -196,7 +196,7 @@ describe("GoogleCloudLoggingTransport", () => {
       const loggerWithMetadataBehavior = new LogLayer({
         transport: new GoogleCloudLoggingTransport({
           logger: mockLog,
-          metadataBehavior: "jsonPayload",
+          rootLevelMetadataFields: [],
         }),
       });
 
@@ -216,7 +216,7 @@ describe("GoogleCloudLoggingTransport", () => {
       );
     });
 
-    it("should include known LogEntry fields under metadata when set to 'promote'", () => {
+    it("should include all log entry fields under metadata when specified by 'rootLevelMetadataFields'", () => {
       const metadata = {
         customField: "customValue",
         logName: "test-log",
@@ -250,7 +250,19 @@ describe("GoogleCloudLoggingTransport", () => {
       const loggerWithMetadataBehavior = new LogLayer({
         transport: new GoogleCloudLoggingTransport({
           logger: mockLog,
-          metadataBehavior: "promote",
+          rootLevelMetadataFields: [
+            "logName",
+            "resource",
+            "insertId",
+            "httpRequest",
+            "labels",
+            "operation",
+            "trace",
+            "spanId",
+            "traceSampled",
+            "sourceLocation",
+            "split",
+          ],
         }),
       });
 
