@@ -18,7 +18,7 @@ npm install @loglayer/transport-google-cloud-logging @google-cloud/logging seria
 
 This transport uses `log.entry(metadata, data)` as described in the library documentation.
 
-- The `metadata` portion is not the data from `withMetadata()` or `withContext()`. See the `rootLevelData` option
+- The `metadata` portion is not the data from `withMetadata()` or `withContext()`. See the `rootLevelData` and `rootLevelMetadataFields` options
   for this transport on how to modify this value.
 - The `data` portion is actually the `jsonPayload` is what the transport uses for all LogLayer data.
 - The message data is stored in `jsonPayload.message`
@@ -54,8 +54,8 @@ logger.info("Hello from Cloud Run!");
 
 ### `rootLevelData`
 
-The root level data to include for all log entries. 
-This is not the same as using `withContext()`, which would be included as part of the `jsonPayload`.
+The root level metadata to include for all log entries. 
+This value is merged with metadata provided using `withContext()`.
 
 The `rootLevelData` option accepts any valid [Google Cloud LogEntry](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) 
 fields except for `severity`, `timestamp`, and `jsonPayload` which are managed by the transport.
@@ -78,6 +78,56 @@ const logger = new LogLayer({
         version: "1.0.0",
       },
     },
+  }),
+});
+```
+
+### `rootLevelMetadataFields`
+
+By default, `withMetadata()` fields are forwarded as part of `jsonPayload` of the [LogEntry](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry).
+
+The `rootLevelMetadataFields` option accepts an array of field names to pluck from metadata and shallow merge with `rootLevelData`. This allows you to dynamically specify the metadata portion of a log entry.
+
+```typescript
+const logger = new LogLayer({
+  transport: new GoogleCloudLoggingTransport({
+    logger: log,
+    rootLevelMetadataFields: ["labels"],
+    rootLevelData: {
+      labels: {
+        environment: "production",
+        location: "west",
+      },
+    },
+  }),
+});
+
+// This will overwrite `labels` in root level data.
+// `customField` is still sent as part of `jsonPayload`.
+logger
+  .withMetadata({ labels: { location: "east" }, customField: "example" })
+  .info("example")
+```
+
+To allow mapping to every supported `LogEntry` metadata field, the following list is recommended:
+
+```typescript
+const logger = new LogLayer({
+  transport: new GoogleCloudLoggingTransport({
+    logger: log,
+    rootLevelMetadataFields: [
+      "logName",
+      "resource",
+      "insertId",
+      "httpRequest",
+      "labels",
+      "operation",
+      "trace",
+      "spanId",
+      "traceSampled",
+      "sourceLocation",
+      "split",
+    ],
   }),
 });
 ```

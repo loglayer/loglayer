@@ -161,6 +161,131 @@ describe("GoogleCloudLoggingTransport", () => {
     });
   });
 
+  describe("rootLevelMetadataFields", () => {
+    it("should include all log entry fields under data when 'rootLevelMetadataFields' is empty", () => {
+      const metadata = {
+        customField: "customValue",
+        logName: "test-log",
+        resource: {
+          type: "global",
+          labels: {
+            project_id: "test-project",
+          },
+        },
+        insertId: "insert-123",
+        httpRequest: {
+          requestMethod: "GET",
+        },
+        labels: {
+          environment: "test",
+        },
+        operation: {
+          id: "operation-123",
+        },
+        trace: "trace-123",
+        spanId: "span-123",
+        traceSampled: true,
+        sourceLocation: {
+          file: "GoogleCloudLoggingTransport.test.ts",
+        },
+        split: {
+          totalSplits: 3,
+        },
+      };
+
+      const loggerWithRootLevelMetadataFields = new LogLayer({
+        transport: new GoogleCloudLoggingTransport({
+          logger: mockLog,
+          rootLevelMetadataFields: [],
+        }),
+      });
+
+      loggerWithRootLevelMetadataFields.withMetadata(metadata).info("test message");
+
+      expect(mockWrite).toHaveBeenCalledWith(
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            severity: "INFO",
+            timestamp: expect.any(Date),
+          }),
+          data: {
+            message: "test message",
+            ...metadata,
+          },
+        }),
+      );
+    });
+
+    it("should include all log entry fields under metadata when specified by 'rootLevelMetadataFields'", () => {
+      const metadata = {
+        customField: "customValue",
+        logName: "test-log",
+        resource: {
+          type: "global",
+          labels: {
+            project_id: "test-project",
+          },
+        },
+        insertId: "insert-123",
+        httpRequest: {
+          requestMethod: "GET",
+        },
+        labels: {
+          environment: "test",
+        },
+        operation: {
+          id: "operation-123",
+        },
+        trace: "trace-123",
+        spanId: "span-123",
+        traceSampled: true,
+        sourceLocation: {
+          file: "GoogleCloudLoggingTransport.test.ts",
+        },
+        split: {
+          totalSplits: 3,
+        },
+      };
+
+      const loggerWithRootLevelMetadataFields = new LogLayer({
+        transport: new GoogleCloudLoggingTransport({
+          logger: mockLog,
+          rootLevelMetadataFields: [
+            "logName",
+            "resource",
+            "insertId",
+            "httpRequest",
+            "labels",
+            "operation",
+            "trace",
+            "spanId",
+            "traceSampled",
+            "sourceLocation",
+            "split",
+          ],
+        }),
+      });
+
+      loggerWithRootLevelMetadataFields.withMetadata(metadata).info("test message");
+
+      const { customField, ...restMetadata } = metadata;
+
+      expect(mockWrite).toHaveBeenCalledWith(
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            severity: "INFO",
+            timestamp: expect.any(Date),
+            ...restMetadata,
+          }),
+          data: {
+            message: "test message",
+            customField,
+          },
+        }),
+      );
+    });
+  });
+
   describe("level filtering", () => {
     it("should only log messages at or above the specified level", () => {
       const loggerWithLevel = new LogLayer({

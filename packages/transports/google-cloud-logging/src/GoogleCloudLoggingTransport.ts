@@ -9,7 +9,15 @@ export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConf
    * "severity", "timestamp" and "jsonPayload" are already populated by the transport.
    * @see https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry
    */
-  rootLevelData?: Omit<LogEntry, "severity" | "timestamp" | "jsonPayload">;
+  rootLevelData?: Omit<
+    LogEntry,
+    "severity" | "timestamp" | "receiveTimestamp" | "jsonPayload" | "textPayload" | "protoPayload"
+  >;
+
+  /**
+   * List of LogLayer metadata fields to merge into `rootLevelData` when creating the log entry.
+   */
+  rootLevelMetadataFields?: Array<string>;
 
   /**
    * Minimum log level to process. Defaults to "trace"
@@ -18,12 +26,14 @@ export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConf
 }
 
 export class GoogleCloudLoggingTransport extends BaseTransport<Log | LogSync> {
-  private rootLevelData: Omit<LogEntry, "severity" | "timestamp" | "jsonPayload">;
+  private rootLevelData: GoogleCloudLoggingTransportConfig["rootLevelData"];
+  private rootLevelMetadataFields: Array<string>;
   private level: LogLevelType;
 
   constructor(config: GoogleCloudLoggingTransportConfig) {
     super(config);
     this.rootLevelData = config.rootLevelData || {};
+    this.rootLevelMetadataFields = config.rootLevelMetadataFields ?? [];
     this.level = config.level ?? LogLevel.trace; // Default to trace to allow all logs
   }
 
@@ -46,20 +56,38 @@ export class GoogleCloudLoggingTransport extends BaseTransport<Log | LogSync> {
     }
   }
 
+  private extractLogEntryFields(data: Record<string, unknown>) {
+    const keys = Object.keys(data);
+    const metadata: Record<string, unknown> = {};
+
+    for (const key of keys) {
+      if (this.rootLevelMetadataFields.includes(key)) {
+        metadata[key] = data[key];
+        delete data[key];
+      }
+    }
+
+    return metadata;
+  }
+
   shipToLogger({ data, hasData, logLevel, messages }: LogLayerTransportParams): any[] {
     // Skip if log level is lower priority than configured minimum
     if (LogLevelPriority[logLevel] < LogLevelPriority[this.level]) {
       return [];
     }
 
+    const safeData = data && hasData ? data : {};
+    const metadata = this.extractLogEntryFields(safeData);
+
     const entry = this.logger.entry(
       {
         ...this.rootLevelData,
+        ...metadata,
         severity: this.mapLogLevel(logLevel),
         timestamp: new Date(),
       },
       {
-        ...(data && hasData ? data : {}),
+        ...safeData,
         message: messages.join(" "),
       },
     );
