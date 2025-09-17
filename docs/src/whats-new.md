@@ -7,6 +7,15 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Sept 16, 2025
+
+`@loglayer/transport-google-cloud-logging`:
+
+Thanks to [@osamaqarem](https://github.com/osamaqarem) for the following:
+
+- Add `rootLevelMetadataFields` config for specifying `LogEntry` metadata using `withMetadata()` / `withContext()`
+- Fix type error when passing a `LogSync` instance
+
 ## Sept 7, 2025
 
 `loglayer` and plugins:
