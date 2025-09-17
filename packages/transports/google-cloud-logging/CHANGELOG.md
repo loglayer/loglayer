@@ -1,5 +1,11 @@
 # `@loglayer/transport-google-cloud-logging` Changelog
 
+## 2.2.0
+
+### Minor Changes
+
+- [#246](https://github.com/loglayer/loglayer/pull/246) [`9626c6f`](https://github.com/loglayer/loglayer/commit/9626c6fe379aefa45ffe6fe356795d82f5826b6b) Thanks [@osamaqarem](https://github.com/osamaqarem)! - Add `rootLevelMetadataFields` config for specifying `LogEntry` metadata using `withMetadata()` / `withContext()`
+
 ## 2.1.4
 
 ### Patch Changes
