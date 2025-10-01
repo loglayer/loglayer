@@ -29,6 +29,9 @@ This transport sends logs to [Google Cloud Logging](https://cloud.google.com/log
 | `rootLevelData` | `Record<string, any>` | - | Data to be included in the metadata portion of the log entry |
 | `rootLevelMetadataFields` | `Array<string>` | `[]` | List of LogLayer metadata fields to merge into `rootLevelData` |
 | `onError` | `(error: Error) => void` | - | Error handling callback |
+| `enabled` | `boolean` | `true` | If false, the transport will not send logs to the logger |
+| `consoleDebug` | `boolean` | `false` | If true, the transport will log to the console for debugging purposes |
+| `id` | `string` | - | A user-defined identifier for the transport |
 
 ## Installation
 

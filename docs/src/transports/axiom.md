@@ -77,6 +77,9 @@ logger.info("Hello from LogLayer!");
 | `onError` | `(error: Error) => void` | - | Callback for error handling |
 | `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process |
 | `levelMap` | `AxiomLevelMap` | - | Custom mapping for log levels |
+| `enabled` | `boolean` | `true` | If false, the transport will not send logs to the logger |
+| `consoleDebug` | `boolean` | `false` | If true, the transport will log to the console for debugging purposes |
+| `id` | `string` | - | A user-defined identifier for the transport |
 
 ### Field Names
 

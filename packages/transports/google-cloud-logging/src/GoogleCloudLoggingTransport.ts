@@ -1,7 +1,7 @@
 import type { Log, LogSync } from "@google-cloud/logging";
 import type { LogEntry } from "@google-cloud/logging/build/src/entry.js";
 import type { LogLayerTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
-import { BaseTransport, LogLevel, LogLevelPriority, type LogLevelType } from "@loglayer/transport";
+import { BaseTransport, LogLevel, type LogLevelType } from "@loglayer/transport";
 
 export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConfig<Log | LogSync> {
   /**
@@ -18,23 +18,16 @@ export interface GoogleCloudLoggingTransportConfig extends LogLayerTransportConf
    * List of LogLayer metadata fields to merge into `rootLevelData` when creating the log entry.
    */
   rootLevelMetadataFields?: Array<string>;
-
-  /**
-   * Minimum log level to process. Defaults to "trace"
-   */
-  level?: LogLevelType;
 }
 
 export class GoogleCloudLoggingTransport extends BaseTransport<Log | LogSync> {
   private rootLevelData: GoogleCloudLoggingTransportConfig["rootLevelData"];
   private rootLevelMetadataFields: Array<string>;
-  private level: LogLevelType;
 
   constructor(config: GoogleCloudLoggingTransportConfig) {
     super(config);
     this.rootLevelData = config.rootLevelData || {};
     this.rootLevelMetadataFields = config.rootLevelMetadataFields ?? [];
-    this.level = config.level ?? LogLevel.trace; // Default to trace to allow all logs
   }
 
   private mapLogLevel(level: LogLevelType): string {
@@ -71,11 +64,6 @@ export class GoogleCloudLoggingTransport extends BaseTransport<Log | LogSync> {
   }
 
   shipToLogger({ data, hasData, logLevel, messages }: LogLayerTransportParams): any[] {
-    // Skip if log level is lower priority than configured minimum
-    if (LogLevelPriority[logLevel] < LogLevelPriority[this.level]) {
-      return [];
-    }
-
     const safeData = data && hasData ? data : {};
     const metadata = this.extractLogEntryFields(safeData);
 

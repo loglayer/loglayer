@@ -35,7 +35,7 @@ export interface LoggerlessTransportConfig {
   level?: LogLevelType;
 }
 
-export interface LogLayerTransportConfig<LogLibrary> extends Omit<LoggerlessTransportConfig, "level"> {
+export interface LogLayerTransportConfig<LogLibrary> extends LoggerlessTransportConfig {
   /**
    * The logging library instance to use for logging
    */

@@ -47,6 +47,21 @@ const log = new LogLayer({
 })
 ```
 
+## Configuration Options
+
+### Required Parameters
+
+None - all parameters are optional.
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Messages with a lower priority level will be ignored |
+| `enabled` | `boolean` | `true` | If false, the transport will not send any logs to the logger |
+| `consoleDebug` | `boolean` | `false` | If true, the transport will also log messages to the console for debugging |
+| `id` | `string` | - | A unique identifier for the transport |
+
 ## Log Level Mapping
 
 | LogLayer | Winston |

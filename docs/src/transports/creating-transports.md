@@ -73,7 +73,7 @@ LogLayer supports three types of transports:
 
 For libraries that follow a common logging interface with methods like `info()`, `warn()`, `error()`, `debug()`, etc., extend the `BaseTransport` class.
 
-The `BaseTransport` class provides a `logger` property where users pass in their logging library instance:
+The `BaseTransport` class provides a `logger` property where users pass in their logging library instance. It also supports level filtering to control which log levels are processed:
 
 ```typescript
 import {
@@ -128,10 +128,15 @@ const loggerInstance = new YourLogger();
 // Create LogLayer instance with the transport
 const log = new LogLayer({
   transport: new CustomLoggerTransport({
-    logger: loggerInstance  // Required: the logger instance is passed here
+    logger: loggerInstance,  // Required: the logger instance is passed here
+    level: 'info'  // Optional: set minimum log level to process
   })
 });
 ```
+
+::: info
+All BaseTransport-based transports support an optional `level` parameter for filtering logs. This is handled automatically by the `BaseTransport` class - you don't need to implement any level filtering logic in your transport.
+:::
 
 ### HTTP / Cloud Service Transports
 

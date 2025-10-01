@@ -1,6 +1,6 @@
 import type { Axiom } from "@axiomhq/js";
-import type { LogLayerTransportConfig, LogLayerTransportParams, LogLevel } from "@loglayer/transport";
-import { BaseTransport, LogLevelPriority } from "@loglayer/transport";
+import type { LogLayerTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
+import { BaseTransport } from "@loglayer/transport";
 
 export interface AxiomFieldNames {
   /**
@@ -83,11 +83,6 @@ export interface AxiomTransportConfig extends LogLayerTransportConfig<Axiom> {
    * Example: { error: "ERROR", warn: "WARN", info: "INFO", debug: "DEBUG", trace: "TRACE", fatal: "FATAL" }
    */
   levelMap?: AxiomLevelMap;
-
-  /**
-   * Minimum log level to process. Defaults to "trace".
-   */
-  level?: LogLevel | "trace" | "debug" | "info" | "warn" | "error" | "fatal";
 }
 
 export class AxiomTransport extends BaseTransport<Axiom> implements Disposable {
@@ -99,7 +94,6 @@ export class AxiomTransport extends BaseTransport<Axiom> implements Disposable {
   private isDisposing: boolean;
   private isFlushing: boolean;
   private levelMap?: AxiomLevelMap;
-  private level?: LogLevel | "trace" | "debug" | "info" | "warn" | "error" | "fatal";
 
   constructor(config: AxiomTransportConfig) {
     super(config);
@@ -114,7 +108,6 @@ export class AxiomTransport extends BaseTransport<Axiom> implements Disposable {
     this.isDisposing = false;
     this.isFlushing = false;
     this.levelMap = config.levelMap;
-    this.level = config.level;
 
     this.setupExitHandlers();
   }
@@ -192,11 +185,6 @@ export class AxiomTransport extends BaseTransport<Axiom> implements Disposable {
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams): any[] {
     // Don't accept new logs if we're disposing
     if (this.isDisposing) {
-      return messages;
-    }
-
-    // Skip if log level is lower priority than configured minimum
-    if (this.level && LogLevelPriority[logLevel] < LogLevelPriority[this.level]) {
       return messages;
     }
 
