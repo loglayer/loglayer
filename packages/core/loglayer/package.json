@@ -1,7 +1,7 @@
 {
   "name": "loglayer",
   "description": "A modern logging library with a fluent API for specifying log messages, metadata and errors",
-  "version": "6.7.0",
+  "version": "6.7.1",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
