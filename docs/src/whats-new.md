@@ -7,6 +7,26 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Oct 1, 2025
+
+`@loglayer/transport`:
+
+- Add `level` parameter to `LogLayerTransportConfig` for `BaseTransport`-based transports
+- `BaseTransport` now supports automatic log level filtering, matching `LoggerlessTransport` behavior
+- All transports extending `BaseTransport` can now filter logs by minimum level without additional implementation
+
+**Updated Transports:**
+- `@loglayer/transport-pino` - Pino transport now supports level filtering
+- `@loglayer/transport-winston` - Winston transport now supports level filtering  
+- `@loglayer/transport-bunyan` - Bunyan transport now supports level filtering
+- `@loglayer/transport-loglevel` - Loglevel transport now supports level filtering
+- `@loglayer/transport-console` - Console transport now supports level filtering
+- `@loglayer/transport-datadog` - DataDog transport now supports level filtering
+- `@loglayer/transport-http` - HTTP transport now supports level filtering
+- `@loglayer/transport-axiom` - Axiom transport now supports level filtering (removed duplicate level filtering)
+- `@loglayer/transport-google-cloud-logging` - Google Cloud Logging transport now supports level filtering (removed duplicate level filtering)
+- All other `BaseTransport`-based transports now support level filtering
+
 ## Sept 16, 2025
 
 `@loglayer/transport-google-cloud-logging`:
