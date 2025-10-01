@@ -1,5 +1,11 @@
 # `@loglayer/transport` Changelog
 
+## 2.3.0
+
+### Minor Changes
+
+- [#251](https://github.com/loglayer/loglayer/pull/251) [`94d0230`](https://github.com/loglayer/loglayer/commit/94d0230a9f18f988257b72b9220432fd8101fa60) Thanks [@theogravity](https://github.com/theogravity)! - Adds the `level` config option to the `BaseTransport`
+
 ## 2.2.2
 
 ### Patch Changes
