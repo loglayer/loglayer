@@ -18,3 +18,5 @@ onlyBuiltDependencies:
   - lefthook
   - protobufjs
   - dtrace-provider
+
+minimumReleaseAge: 1440 # 1 day

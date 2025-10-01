@@ -46,10 +46,10 @@
   },
   "devDependencies": {
     "loglayer": "workspace:*",
-    "@types/node": "24.3.1",
+    "@types/node": "24.6.1",
     "@internal/tsconfig": "workspace:*",
     "tsup": "8.5.0",
-    "typescript": "5.9.2",
+    "typescript": "5.9.3",
     "vitest": "3.2.4"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
@@ -60,5 +60,5 @@
     "dist"
   ],
   "homepage": "https://loglayer.dev",
-  "packageManager": "pnpm@10.13.1"
+  "packageManager": "pnpm@10.17.1"
 }

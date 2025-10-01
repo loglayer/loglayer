@@ -44,20 +44,20 @@
   },
   "dependencies": {
     "@loglayer/transport": "workspace:*",
-    "chalk": "5.6.0",
+    "chalk": "5.6.2",
     "date-fns": "4.1.0"
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
     "@types/chalk": "2.2.4",
     "@types/express": "5.0.3",
-    "@types/node": "24.3.1",
+    "@types/node": "24.6.1",
     "express": "5.1.0",
     "loglayer": "workspace:*",
     "serialize-error": "12.0.0",
     "tsup": "8.5.0",
-    "typescript": "5.9.2",
-    "tsx": "4.20.5",
+    "typescript": "5.9.3",
+    "tsx": "4.20.6",
     "vitest": "3.2.4"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
