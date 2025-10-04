@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Oct 4, 2025
+
+`loglayer`:
+
+- Add `LogLayerPlugin` type export
+
 ## Oct 1, 2025
 
 `@loglayer/transport`:
