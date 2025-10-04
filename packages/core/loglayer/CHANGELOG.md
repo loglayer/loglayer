@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 6.7.2
+
+### Patch Changes
+
+- [#255](https://github.com/loglayer/loglayer/pull/255) [`f5dc038`](https://github.com/loglayer/loglayer/commit/f5dc038f9b5c79c516730750513083e82c0af102) Thanks [@theogravity](https://github.com/theogravity)! - Export LogLayerPlugin type
+
 ## 6.7.1
 
 ### Patch Changes
