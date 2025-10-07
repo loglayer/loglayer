@@ -7,6 +7,16 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Oct 6, 2025
+
+`@loglayer/transport-tslog`:
+
+*breaking change*:
+
+- Added an optional parameter called `stackDepthLevel`, which is defaulted to `9`. 
+
+For more information on this parameter, see the [tslog transport documentation](/transports/tslog.md). 
+
 ## Oct 4, 2025
 
 `loglayer`:
