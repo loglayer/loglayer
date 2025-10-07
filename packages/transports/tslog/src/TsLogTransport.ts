@@ -1,7 +1,28 @@
 import { BaseTransport, type LogLayerTransportParams, LogLevel } from "@loglayer/transport";
 import type { Logger } from "tslog";
+import type {LogLayerTransportConfig} from "@loglayer/transport";
+
+interface TsLogTransportConfig extends LogLayerTransportConfig<Logger<any>> {
+  /**
+   * The stack depth level to use for logging.
+   * This is useful for getting accurate file and line number information in the logs.
+   * If not provided, the default stack depth level "9" will be used.
+   * Note: You may need to adjust this value based on how many layers of abstraction are between your logging calls and the transport.
+   */
+  stackDepthLevel?: number;
+}
 
 export class TsLogTransport extends BaseTransport<Logger<any>> {
+  constructor(config: TsLogTransportConfig) {
+    super(config);
+
+    if (config.stackDepthLevel !== undefined) {
+      this.logger['stackDepthLevel'] = config.stackDepthLevel;
+    } else {
+      this.logger['stackDepthLevel'] = 9;
+    }
+  }
+
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams) {
     if (data && hasData) {
       // library wants the data object to be the last parameter

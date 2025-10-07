@@ -45,7 +45,37 @@ const log = new LogLayer({
     logger: tslog
   })
 })
+
+log.info("Hello from tslog transport!")
 ```
+
+```bash
+2025-10-07 04:01:14.302 INFO    logger.ts:15    Hello from tslog transport!
+```
+
+::: info Callsite information
+Because tslog is being used as part of LogLayer, LogLayer modifies the
+tslog instance's private property `stackDepthLevel` to a value of `9` so
+tslog can output the proper filename in the log output (as in the example above,
+it shows `logger.ts:15` instead of something like `LogLayer.ts:123`).
+
+This is also exposed as an optional configuration parameter in the transport
+if you need to modify it.
+:::
+
+## Configuration Options
+
+### Required Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| `logger` | `Logger<any>` | The tslog Logger instance to use for logging. |
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `stackDepthLevel` | `number` | `9` | The stack depth level to use for logging. This is useful for getting accurate file and line number information in the logs. You may need to adjust this value based on how many layers of abstraction are between your logging calls and the transport. |
 
 ## Log Level Mapping
 
