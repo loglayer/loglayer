@@ -1,5 +1,11 @@
 # `@loglayer/transport-tslog` Changelog
 
+## 3.0.0
+
+### Major Changes
+
+- [#258](https://github.com/loglayer/loglayer/pull/258) [`0b6a740`](https://github.com/loglayer/loglayer/commit/0b6a740b85a30ea8686c9f4dc1a66b549b3faa50) Thanks [@theogravity](https://github.com/theogravity)! - Add `stachDepthLevel` option with default value of `9`. Since this modifies the tslog instance, this is considered a breaking change
+
 ## 2.1.3
 
 ### Patch Changes
