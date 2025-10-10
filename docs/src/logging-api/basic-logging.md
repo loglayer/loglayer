@@ -138,3 +138,96 @@ if (log.isLevelEnabled(LogLevel.debug)) {
 }
 ```
 
+## Raw Logging
+
+The `raw(logEntry: RawLogEntry)` method allows you to bypass the normal LogLayer API and directly specify all aspects of a log entry. This is useful for scenarios where you need to log structured data that doesn't fit the standard LogLayer patterns, or when integrating with external logging systems that provide pre-formatted log entries.
+
+The raw entry will still go through all LogLayer processing like the log level methods.
+
+```typescript
+import { LogLevel } from 'loglayer'
+
+// Basic raw logging with just a message
+log.raw({
+  logLevel: LogLevel.info,
+  messages: ['User action completed', { userId: 123 }]
+})
+```
+
+### Raw Logging Parameters
+
+| Parameter | Type | Required | Description                               |
+|-----------|------|----------|-------------------------------------------|
+| `logLevel` | `LogLevelType` | Yes | The log level for this entry              |
+| `messages` | `MessageDataType[]` | No | Array of message parameters               |
+| `metadata` | `Record<string, any>` | No | Additional metadata to include            |
+| `error` | `any` | No | Error object to include                   |
+| `context` | `Record<string, any>` | No | Context data to include (see notes below) |
+
+### Context Behavior
+
+When using the `context` parameter in raw logging, the behavior depends on whether you provide the `context` parameter or not. 
+
+- If you provide a `context` in the raw entry, that context data will be used instead of the context manager for that specific log entry. 
+- If you do not provide a `context`, the context manager data will be used (like normal logging).
+- Passing an empty object `{}` as `context` will result in no context data being included for that log entry.
+
+### Examples
+
+```typescript
+import { LogLayer, ConsoleTransport, LogLevel } from 'loglayer'
+
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+    messageField: 'msg'
+  }),
+  // Configure custom field names for better organization
+  contextFieldName: 'ctx',
+  metadataFieldName: 'meta',
+  errorFieldName: 'err'
+})
+
+// Set some stored context
+log.withContext({ userId: 123, sessionId: 'abc' })
+
+// This will use the stored context
+log.raw({
+  logLevel: LogLevel.info,
+  messages: ['User action']
+})
+// Output: { "level": "info", "msg": "User action", "ctx": { "userId": 123, "sessionId": "abc" } }
+
+// This will override the stored context for this entry only
+log.raw({
+  logLevel: LogLevel.info,
+  messages: ['Admin action'],
+  context: { adminId: 456, action: 'override' }
+})
+// Output: { "level": "info", "msg": "Admin action", "ctx": { "adminId": 456, "action": "override" } }
+
+// This will use the stored context again (userId: 123, sessionId: 'abc')
+log.raw({
+  logLevel: LogLevel.info,
+  messages: ['Another user action']
+})
+// Output: { "level": "info", "msg": "Another user action", "ctx": { "userId": 123, "sessionId": "abc" } }
+
+// This will override with empty context, resulting in no context data
+log.raw({
+  logLevel: LogLevel.info,
+  messages: ['System action'],
+  context: {} // Empty context overrides stored context
+})
+// Output: { "level": "info", "msg": "System action" }
+
+// Example with metadata and error
+log.raw({
+  logLevel: LogLevel.error,
+  messages: ['Database operation failed'],
+  metadata: { operation: 'insert', table: 'users' },
+  error: new Error('Connection timeout'),
+  context: { requestId: 'req-789' }
+})
+// Output: { "level": "error", "msg": "Database operation failed", "ctx": { "requestId": "req-789" }, "meta": { "operation": "insert", "table": "users" }, "err": { "type": "Error", "message": "Connection timeout", "stack": "Error: Connection timeout\n    at ..." } }
+```

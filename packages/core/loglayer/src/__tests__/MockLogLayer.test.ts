@@ -102,4 +102,32 @@ describe("MockLogLayer tests", () => {
     logger.errorOnly(error);
     expect(logger.errorOnly).toBeCalledWith(error);
   });
+
+  it("should be able to mock the raw method", () => {
+    const logger = new MockLogLayer();
+    logger.raw = vi.fn();
+
+    const rawEntry = {
+      logLevel: "info" as const,
+      messages: ["raw test message"],
+      metadata: { test: "data" },
+    };
+
+    logger.raw(rawEntry);
+    expect(logger.raw).toBeCalledWith(rawEntry);
+  });
+
+  it("should be able to spy on the raw method", () => {
+    const logger = new MockLogLayer();
+    const rawSpy = vi.spyOn(logger, "raw");
+
+    const rawEntry = {
+      logLevel: "error" as const,
+      messages: ["spy test message"],
+      error: new Error("test error"),
+    };
+
+    logger.raw(rawEntry);
+    expect(rawSpy).toBeCalledWith(rawEntry);
+  });
 });

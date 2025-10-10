@@ -2,6 +2,46 @@ import type { ErrorOnlyOpts, LogLayerCommonDataParams, LogLevelType, MessageData
 import type { LogLayerPlugin } from "./plugin.types.js";
 
 /**
+ * Interface for raw log entries that allows complete control over all aspects of a log entry.
+ *
+ * @see {@link https://loglayer.dev/logging-api/basic-logging.html#raw-logging | Raw Logging Documentation}
+ */
+export interface RawLogEntry {
+  /**
+   * Context data to include with the log entry.
+   *
+   * - When provided, this context data will be used instead of the context manager.
+   * - If not provided, the context manager data will be used instead
+   * - An empty object will result in no context data being used at all
+   */
+  context?: Record<string, any>;
+
+  /**
+   * Metadata to include with the log entry.
+   */
+  metadata?: Record<string, any>;
+
+  /**
+   * Error object to include with the log entry.
+   */
+  error?: any;
+
+  /**
+   * The log level for this entry.
+   */
+  logLevel: LogLevelType;
+
+  /**
+   * Array of message parameters to log.
+   *
+   * These are the actual log messages and can include strings, numbers,
+   * booleans, null, or undefined values. The first string message will
+   * have any configured prefix applied to it.
+   */
+  messages?: MessageDataType[];
+}
+
+/**
  * Context Manager callback function for when a child logger is created.
  * @see {@link https://loglayer.dev/context-managers/creating-context-managers.html | Creating Context Managers Docs}
  */
@@ -337,4 +377,19 @@ export interface ILogLayer extends ILogBuilder {
    * Gets the context manager used by the logger.
    */
   getContextManager<M extends IContextManager = IContextManager>(): M;
+
+  /**
+   * Logs a raw log entry with complete control over all log parameters.
+   *
+   * This method allows you to bypass the normal LogLayer API and directly specify
+   * all aspects of a log entry including log level, messages, metadata, and error.
+   * It's useful for scenarios where you need to log structured data that doesn't
+   * fit the standard LogLayer patterns, or when integrating with external logging
+   * systems that provide pre-formatted log entries.
+   *
+   * The raw entry will still go through all LogLayer processing.
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
+   */
+  raw(rawEntry: RawLogEntry): void;
 }

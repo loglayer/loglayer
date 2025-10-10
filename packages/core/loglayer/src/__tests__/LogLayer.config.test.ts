@@ -117,6 +117,64 @@ describe("LogLayer configuration", () => {
         }),
       );
     });
+
+    it("should add the error to the metadata field when using withError", () => {
+      const log = getLogger({
+        errorFieldName: "customError",
+        errorFieldInMetadata: true,
+        metadataFieldName: "customMetadata",
+      });
+
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      const e = new Error("error in metadata test");
+      const testMetadata = { metaKey: "metaValue" };
+
+      log.withError(e).withMetadata(testMetadata).info("test message");
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              customMetadata: {
+                metaKey: "metaValue",
+                customError: e,
+              },
+            },
+            "test message",
+          ],
+        }),
+      );
+    });
+
+    it("should add the error to the metadata field when using withError without existing metadata", () => {
+      const log = getLogger({
+        errorFieldName: "customError",
+        errorFieldInMetadata: true,
+        metadataFieldName: "customMetadata",
+      });
+
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      const e = new Error("error in metadata test");
+
+      log.withError(e).info("test message");
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              customMetadata: {
+                customError: e,
+              },
+            },
+            "test message",
+          ],
+        }),
+      );
+    });
   });
 
   describe("metadata config", () => {

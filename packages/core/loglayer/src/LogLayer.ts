@@ -8,6 +8,7 @@ import {
   LogLevelPriority,
   type LogLevelType,
   type MessageDataType,
+  type RawLogEntry,
 } from "@loglayer/shared";
 import type { LogLayerTransport } from "@loglayer/transport";
 import { LogBuilder } from "./LogBuilder.js";
@@ -19,6 +20,7 @@ interface FormatLogParams {
   params?: any[];
   metadata?: Record<string, any> | null;
   err?: any;
+  context?: Record<string, any> | null;
 }
 
 interface LogLevelEnabledStatus {
@@ -439,6 +441,35 @@ export class LogLayer implements ILogLayer {
   }
 
   /**
+   * Logs a raw log entry with complete control over all log parameters.
+   *
+   * This method allows you to bypass the normal LogLayer API and directly specify
+   * all aspects of a log entry including log level, messages, metadata, and error.
+   * It's useful for scenarios where you need to log structured data that doesn't
+   * fit the standard LogLayer patterns, or when integrating with external logging
+   * systems that provide pre-formatted log entries.
+   *
+   * The raw entry will still go through all LogLayer processing.
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
+   */
+  raw(logEntry: RawLogEntry) {
+    if (!this.isLevelEnabled(logEntry.logLevel)) return;
+
+    const formatLogConf: FormatLogParams = {
+      logLevel: logEntry.logLevel,
+      params: logEntry.messages,
+      metadata: logEntry.metadata,
+      err: logEntry.error,
+      context: logEntry.context,
+    };
+
+    this._formatMessage(logEntry.messages);
+
+    this._formatLog(formatLogConf);
+  }
+
+  /**
    * All logging inputs are dropped and stops sending logs to the logging library.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
@@ -571,7 +602,7 @@ export class LogLayer implements ILogLayer {
   private formatContext(context: Record<string, any> | null) {
     const { contextFieldName, muteContext } = this._config;
 
-    if (this.contextManager.hasContextData() && !muteContext) {
+    if (context && Object.keys(context).length > 0 && !muteContext) {
       if (contextFieldName) {
         return {
           [contextFieldName]: {
@@ -631,31 +662,34 @@ export class LogLayer implements ILogLayer {
     }
   }
 
-  _formatLog({ logLevel, params = [], metadata = null, err }: FormatLogParams) {
+  _formatLog({ logLevel, params = [], metadata = null, err, context = null }: FormatLogParams) {
     const { errorSerializer, errorFieldInMetadata, muteContext, contextFieldName, metadataFieldName, errorFieldName } =
       this._config;
 
-    const context = this.contextManager.getContext();
+    // Use provided context or fall back to context manager
+    const contextData = context !== null ? context : this.contextManager.getContext();
 
-    let hasObjData = !!metadata || (muteContext ? false : this.contextManager.hasContextData());
+    let hasObjData =
+      !!metadata ||
+      (muteContext ? false : context !== null ? Object.keys(context).length > 0 : this.contextManager.hasContextData());
 
     let d: Record<string, any> | undefined | null = {};
 
     if (hasObjData) {
       // Field names for context and metadata is the same, merge the metadata into the same field name
       if (contextFieldName && contextFieldName === metadataFieldName) {
-        const contextData = this.formatContext(context)[contextFieldName];
+        const formattedContextData = this.formatContext(contextData)[contextFieldName];
         const updatedMetadata = this.formatMetadata(metadata)[metadataFieldName];
 
         d = {
           [contextFieldName]: {
-            ...contextData,
+            ...formattedContextData,
             ...updatedMetadata,
           },
         };
       } else {
         d = {
-          ...this.formatContext(context),
+          ...this.formatContext(contextData),
           ...this.formatMetadata(metadata),
         };
       }
@@ -665,8 +699,18 @@ export class LogLayer implements ILogLayer {
       const serializedError = errorSerializer ? errorSerializer(err) : err;
 
       // The error should be placed into a metadata field
-      if (errorFieldInMetadata && metadata) {
-        metadata[errorFieldName] = serializedError;
+      if (errorFieldInMetadata && metadata && metadataFieldName) {
+        // Add error to the existing metadata field in the formatted data
+        if (d?.[metadataFieldName]) {
+          d[metadataFieldName][errorFieldName] = serializedError;
+        } else {
+          d = {
+            ...d,
+            [metadataFieldName]: {
+              [errorFieldName]: serializedError,
+            },
+          };
+        }
       } else if (errorFieldInMetadata && !metadata && metadataFieldName) {
         d = {
           ...d,
@@ -693,7 +737,7 @@ export class LogLayer implements ILogLayer {
           logLevel,
           error: err,
           metadata,
-          context,
+          context: contextData,
         },
         this,
       );
@@ -726,7 +770,7 @@ export class LogLayer implements ILogLayer {
                 transportId: transport.id,
                 error: err,
                 metadata,
-                context,
+                context: contextData,
               },
               this,
             );
@@ -743,7 +787,7 @@ export class LogLayer implements ILogLayer {
             hasData: hasObjData,
             error: err,
             metadata,
-            context,
+            context: contextData,
           });
         });
 
@@ -768,7 +812,7 @@ export class LogLayer implements ILogLayer {
             transportId: this.singleTransport.id,
             error: err,
             metadata,
-            context,
+            context: contextData,
           },
           this,
         );
@@ -786,7 +830,7 @@ export class LogLayer implements ILogLayer {
         hasData: hasObjData,
         error: err,
         metadata,
-        context,
+        context: contextData,
       });
     }
   }
