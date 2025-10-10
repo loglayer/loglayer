@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-consola",
   "description": "consola transport for the LogLayer logging library.",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

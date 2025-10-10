@@ -1,5 +1,20 @@
 # `@loglayer/shared` Changelog
 
+## 2.5.0
+
+### Minor Changes
+
+- [#261](https://github.com/loglayer/loglayer/pull/261) [`9b32187`](https://github.com/loglayer/loglayer/commit/9b32187b1040f6331d0c21f666768da41d6c91a1) Thanks [@theogravity](https://github.com/theogravity)! - - Added new `raw()` method for advanced logging scenarios
+
+  - Allows bypassing the normal LogLayer API to directly specify all aspects of a log entry
+  - Supports complete control over log level, messages, metadata, error, and context
+  - Still processes through all LogLayer features including plugins, context merging, and transport routing
+  - See [Basic Logging documentation](https://loglayer.dev/logging-api/basic-logging.html#raw-logging) for usage examples
+
+  - Fixed bug where `errorFieldInMetadata` option was not working correctly
+    - Error objects were not being placed in metadata fields when `errorFieldInMetadata` was set to true
+    - Now properly places errors in metadata fields as specified by the configuration
+
 ## 2.4.0
 
 ### Minor Changes
