@@ -6,7 +6,7 @@ import type {
 } from "@loglayer/plugin";
 
 import { PluginCallbackType } from "@loglayer/plugin";
-import type { ILogLayer, MessageDataType } from "@loglayer/shared";
+import type { ILogLayer, LogLayerData, LogLayerMetadata, MessageDataType } from "@loglayer/shared";
 
 const CALLBACK_LIST = [
   PluginCallbackType.onBeforeDataOut,
@@ -122,7 +122,7 @@ export class PluginManager {
   /**
    * Runs plugins that defines onBeforeDataOut.
    */
-  runOnBeforeDataOut(params: PluginBeforeDataOutParams, loglayer: ILogLayer): Record<string, any> | undefined {
+  runOnBeforeDataOut(params: PluginBeforeDataOutParams, loglayer: ILogLayer): LogLayerData | undefined {
     const initialData = { ...params }; // Make a shallow copy of params to avoid direct modification
 
     for (const pluginId of this.onBeforeDataOut) {
@@ -170,9 +170,9 @@ export class PluginManager {
   /**
    * Runs plugins that define onMetadataCalled.
    */
-  runOnMetadataCalled(metadata: Record<string, any>, loglayer: ILogLayer): Record<string, any> | null {
+  runOnMetadataCalled(metadata: LogLayerMetadata, loglayer: ILogLayer): LogLayerMetadata | null {
     // Create a shallow copy of metadata to avoid direct modification
-    let data: Record<string, any> = {
+    let data: LogLayerMetadata = {
       ...metadata,
     };
 

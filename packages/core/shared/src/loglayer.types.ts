@@ -1,4 +1,11 @@
-import type { ErrorOnlyOpts, LogLayerCommonDataParams, LogLevelType, MessageDataType } from "./common.types.js";
+import type {
+  ErrorOnlyOpts,
+  LogLayerCommonDataParams,
+  LogLayerContext,
+  LogLayerMetadata,
+  LogLevelType,
+  MessageDataType,
+} from "./common.types.js";
 import type { LogLayerPlugin } from "./plugin.types.js";
 
 /**
@@ -14,12 +21,12 @@ export interface RawLogEntry {
    * - If not provided, the context manager data will be used instead
    * - An empty object will result in no context data being used at all
    */
-  context?: Record<string, any>;
+  context?: LogLayerContext;
 
   /**
    * Metadata to include with the log entry.
    */
-  metadata?: Record<string, any>;
+  metadata?: LogLayerMetadata;
 
   /**
    * Error object to include with the log entry.
@@ -72,15 +79,15 @@ export interface IContextManager {
   /**
    * Sets the context data to be included with every log entry. Set to `undefined` to clear the context data.
    */
-  setContext(context?: Record<string, any>): void;
+  setContext(context?: LogLayerContext): void;
   /**
    * Appends context data to the existing context data.
    */
-  appendContext(context: Record<string, any>): void;
+  appendContext(context: Partial<LogLayerContext>): void;
   /**
    * Returns the context data to be included with every log entry.
    */
-  getContext(): Record<string, any>;
+  getContext(): LogLayerContext;
   /**
    * Returns true if context data is present.
    */
@@ -179,7 +186,7 @@ export interface ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata?: Record<string, any>): ILogBuilder;
+  withMetadata(metadata?: LogLayerMetadata): ILogBuilder;
   /**
    * Specifies an Error to include with the log message
    *
@@ -221,7 +228,7 @@ export interface ILogLayer extends ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  withContext(context?: Record<string, any>): ILogLayer;
+  withContext(context?: LogLayerContext): ILogLayer;
   /**
    * Clears the context data.
    *
@@ -233,7 +240,7 @@ export interface ILogLayer extends ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata?: Record<string, any>): ILogBuilder;
+  withMetadata(metadata?: LogLayerMetadata): ILogBuilder;
   /**
    * Specifies an Error to include with the log message
    *
@@ -251,14 +258,14 @@ export interface ILogLayer extends ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  metadataOnly(metadata?: Record<string, any>, logLevel?: LogLevelType): void;
+  metadataOnly(metadata?: LogLayerMetadata, logLevel?: LogLevelType): void;
 
   /**
    * Returns the context used
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  getContext(): Record<string, any>;
+  getContext(): LogLayerContext;
 
   /**
    * Creates a new instance of LogLayer but with the initialization

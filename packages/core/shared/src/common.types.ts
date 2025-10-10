@@ -57,16 +57,25 @@ export interface ErrorOnlyOpts {
   copyMsg?: boolean;
 }
 
+export interface LogLayerContext extends Record<string, any> {}
+export interface LogLayerMetadata extends LogLayerContext {}
+export interface LogLayerData extends LogLayerContext, LogLayerMetadata {
+  /**
+   * Error passed to the log message method.
+   */
+  err?: any;
+}
+
 export interface LogLayerCommonDataParams {
   /**
    * Combined object data containing the metadata, context, and / or error data in a
    * structured format configured by the user.
    */
-  data?: Record<string, any>;
+  data?: LogLayerData;
   /**
    * Individual metadata object passed to the log message method.
    */
-  metadata?: Record<string, any>;
+  metadata?: LogLayerMetadata;
   /**
    * Error passed to the log message method.
    */
@@ -74,5 +83,5 @@ export interface LogLayerCommonDataParams {
   /**
    * Context data that is included with each log entry.
    */
-  context?: Record<string, any>;
+  context?: LogLayerContext;
 }
