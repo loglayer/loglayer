@@ -1,5 +1,12 @@
 # `@loglayer/transport-winston` Changelog
 
+## 2.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.1
+
 ## 2.1.3
 
 ### Patch Changes
