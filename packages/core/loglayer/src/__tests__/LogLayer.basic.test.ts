@@ -650,6 +650,553 @@ describe("LogLayer basic functionality", () => {
     });
   });
 
+  describe("raw method", () => {
+    it("should log raw entry with all fields", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+      const testError = new Error("raw test error");
+      const testMetadata = { rawMeta: "value" };
+      const testContext = { rawContext: "data" };
+
+      log.withContext(testContext);
+
+      const rawEntry = {
+        logLevel: LogLevel.info,
+        messages: ["raw message", "additional param"],
+        metadata: testMetadata,
+        error: testError,
+      };
+
+      log.raw(rawEntry);
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              err: testError,
+              rawContext: "data",
+              rawMeta: "value",
+            },
+            "raw message",
+            "additional param",
+          ],
+        }),
+      );
+    });
+
+    it("should log raw entry with only required fields", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      const rawEntry = {
+        logLevel: LogLevel.warn,
+        messages: ["minimal raw message"],
+      };
+
+      log.raw(rawEntry);
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.warn,
+          data: ["minimal raw message"],
+        }),
+      );
+    });
+
+    it("should log raw entry with different log levels", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+      const levels = [LogLevel.info, LogLevel.warn, LogLevel.error, LogLevel.debug, LogLevel.trace];
+
+      levels.forEach((level, idx) => {
+        const rawEntry = {
+          logLevel: level,
+          messages: [`${level} raw message`, idx],
+        };
+
+        log.raw(rawEntry);
+
+        expect(genericLogger.popLine()).toStrictEqual(
+          expect.objectContaining({
+            level,
+            data: [`${level} raw message`, idx],
+          }),
+        );
+      });
+    });
+
+    it("should respect log level filtering for raw entries", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      // Set minimum level to warn
+      log.setLevel(LogLevel.warn);
+
+      // Info should be filtered out
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["info raw message"],
+      });
+      expect(genericLogger.popLine()).not.toBeDefined();
+
+      // Warn should pass through
+      log.raw({
+        logLevel: LogLevel.warn,
+        messages: ["warn raw message"],
+      });
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.warn,
+          data: ["warn raw message"],
+        }),
+      );
+
+      // Error should pass through
+      log.raw({
+        logLevel: LogLevel.error,
+        messages: ["error raw message"],
+      });
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.error,
+          data: ["error raw message"],
+        }),
+      );
+    });
+
+    it("should handle raw entry with empty messages array", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      const rawEntry = {
+        logLevel: LogLevel.info,
+        messages: [],
+        metadata: { empty: "messages" },
+      };
+
+      log.raw(rawEntry);
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [{ empty: "messages" }],
+        }),
+      );
+    });
+
+    it("should handle raw entry with undefined messages", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      const rawEntry = {
+        logLevel: LogLevel.info,
+        metadata: { noMessages: "test" },
+      };
+
+      log.raw(rawEntry);
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [{ noMessages: "test" }],
+        }),
+      );
+    });
+
+    it("should apply prefix to raw entry messages", () => {
+      const log = getLogger().withPrefix("[RAW]");
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      const rawEntry = {
+        logLevel: LogLevel.info,
+        messages: ["raw message"],
+      };
+
+      log.raw(rawEntry);
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: ["[RAW] raw message"],
+        }),
+      );
+    });
+
+    it("should pass raw entry data through plugins", () => {
+      // Create a plugin that captures raw entry data
+      const rawDataPlugin = {
+        id: "raw-data-plugin",
+        onBeforeDataOut: vi.fn((params) => {
+          expect(params.metadata).toEqual({ rawMeta: "plugin test" });
+          expect(params.error).toBeInstanceOf(Error);
+          expect(params.error.message).toBe("raw plugin error");
+          return { pluginProcessed: "raw data" };
+        }),
+        shouldSendToLogger: vi.fn((params) => {
+          expect(params.metadata).toEqual({ rawMeta: "plugin test" });
+          expect(params.error).toBeInstanceOf(Error);
+          expect(params.error.message).toBe("raw plugin error");
+          return true;
+        }),
+      };
+
+      const mockTransport = {
+        id: "raw-test-transport",
+        enabled: true,
+        _sendToLogger: vi.fn(),
+        getLoggerInstance: () => new TestLoggingLibrary(),
+      };
+
+      const log = new LogLayer({
+        transport: mockTransport as any,
+        plugins: [rawDataPlugin],
+      });
+
+      const testError = new Error("raw plugin error");
+      const testMetadata = { rawMeta: "plugin test" };
+
+      const rawEntry = {
+        logLevel: LogLevel.debug,
+        messages: ["raw plugin message"],
+        metadata: testMetadata,
+        error: testError,
+      };
+
+      log.raw(rawEntry);
+
+      // Verify plugin was called with correct parameters
+      expect(rawDataPlugin.onBeforeDataOut).toHaveBeenCalledWith(
+        expect.objectContaining({
+          metadata: testMetadata,
+          error: testError,
+        }),
+        expect.any(Object), // LogLayer instance
+      );
+
+      expect(rawDataPlugin.shouldSendToLogger).toHaveBeenCalledWith(
+        expect.objectContaining({
+          metadata: testMetadata,
+          error: testError,
+        }),
+        expect.any(Object), // LogLayer instance
+      );
+
+      // Verify transport received the processed data
+      expect(mockTransport._sendToLogger).toHaveBeenCalledWith({
+        logLevel: LogLevel.debug,
+        messages: ["raw plugin message"],
+        data: {
+          err: testError,
+          rawMeta: "plugin test",
+          pluginProcessed: "raw data",
+        },
+        hasData: true,
+        error: testError,
+        metadata: testMetadata,
+        context: {},
+      });
+    });
+
+    it("should work with multiple transports for raw entries", () => {
+      const mockTransport1 = {
+        id: "raw-transport1",
+        enabled: true,
+        _sendToLogger: vi.fn(),
+        getLoggerInstance: () => new TestLoggingLibrary(),
+      };
+
+      const mockTransport2 = {
+        id: "raw-transport2",
+        enabled: true,
+        _sendToLogger: vi.fn(),
+        getLoggerInstance: () => new TestLoggingLibrary(),
+      };
+
+      const log = new LogLayer({
+        transport: [mockTransport1, mockTransport2] as any,
+      });
+
+      const rawEntry = {
+        logLevel: LogLevel.error,
+        messages: ["multi transport raw message"],
+        metadata: { multiTransport: "test" },
+      };
+
+      log.raw(rawEntry);
+
+      const expectedParams = {
+        logLevel: LogLevel.error,
+        messages: ["multi transport raw message"],
+        data: { multiTransport: "test" },
+        hasData: true,
+        error: undefined,
+        metadata: { multiTransport: "test" },
+        context: {},
+      };
+
+      expect(mockTransport1._sendToLogger).toHaveBeenCalledWith(expectedParams);
+      expect(mockTransport2._sendToLogger).toHaveBeenCalledWith(expectedParams);
+    });
+
+    it("should not log when disabled for raw entries", () => {
+      const log = getLogger({ enabled: false });
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      const rawEntry = {
+        logLevel: LogLevel.info,
+        messages: ["disabled raw message"],
+      };
+
+      log.raw(rawEntry);
+      expect(genericLogger.popLine()).not.toBeDefined();
+    });
+
+    it("should respect custom field names for error, context, and metadata", () => {
+      const log = getLogger({
+        errorFieldName: "customError",
+        contextFieldName: "customContext",
+        metadataFieldName: "customMetadata",
+      });
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+      const testError = new Error("custom field test error");
+      const testMetadata = { customMeta: "value" };
+      const testContext = { customCtx: "data" };
+
+      log.withContext(testContext);
+
+      const rawEntry = {
+        logLevel: LogLevel.warn,
+        messages: ["custom field test message"],
+        metadata: testMetadata,
+        error: testError,
+      };
+
+      log.raw(rawEntry);
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.warn,
+          data: [
+            {
+              customError: testError,
+              customContext: testContext,
+              customMetadata: testMetadata,
+            },
+            "custom field test message",
+          ],
+        }),
+      );
+    });
+
+    it("should handle custom field names with same context and metadata field names", () => {
+      const log = getLogger({
+        errorFieldName: "customError",
+        contextFieldName: "sharedField",
+        metadataFieldName: "sharedField", // Same as context field name
+      });
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+      const testError = new Error("shared field test error");
+      const testMetadata = { metaKey: "metaValue" };
+      const testContext = { ctxKey: "ctxValue" };
+
+      log.withContext(testContext);
+
+      const rawEntry = {
+        logLevel: LogLevel.error,
+        messages: ["shared field test message"],
+        metadata: testMetadata,
+        error: testError,
+      };
+
+      log.raw(rawEntry);
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.error,
+          data: [
+            {
+              customError: testError,
+              sharedField: {
+                ctxKey: "ctxValue",
+                metaKey: "metaValue",
+              },
+            },
+            "shared field test message",
+          ],
+        }),
+      );
+    });
+
+    it("should handle custom error field in metadata when errorFieldInMetadata is true", () => {
+      const log = getLogger({
+        errorFieldName: "customError",
+        errorFieldInMetadata: true,
+        metadataFieldName: "customMetadata",
+      });
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+      const testError = new Error("error in metadata test");
+      const testMetadata = { metaKey: "metaValue" };
+
+      const rawEntry = {
+        logLevel: LogLevel.info,
+        messages: ["error in metadata test message"],
+        metadata: testMetadata,
+        error: testError,
+      };
+
+      log.raw(rawEntry);
+
+      // When errorFieldInMetadata is true and metadata exists, the error should be placed
+      // in the metadata field as specified
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              customMetadata: {
+                metaKey: "metaValue",
+                customError: testError,
+              },
+            },
+            "error in metadata test message",
+          ],
+        }),
+      );
+    });
+
+    it("should handle custom error field in metadata when errorFieldInMetadata is true and no existing metadata", () => {
+      const log = getLogger({
+        errorFieldName: "customError",
+        errorFieldInMetadata: true,
+        metadataFieldName: "customMetadata",
+      });
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+      const testError = new Error("error in metadata test");
+
+      const rawEntry = {
+        logLevel: LogLevel.info,
+        messages: ["error in metadata test message"],
+        error: testError,
+      };
+
+      log.raw(rawEntry);
+
+      // When errorFieldInMetadata is true and no existing metadata, the error should be
+      // placed in a new metadata field
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              customMetadata: {
+                customError: testError,
+              },
+            },
+            "error in metadata test message",
+          ],
+        }),
+      );
+    });
+
+    it("should override stored context with context from raw entry", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      // Set some stored context
+      log.withContext({ storedContext: "storedValue", sharedKey: "storedValue" });
+
+      const rawEntry = {
+        logLevel: LogLevel.info,
+        messages: ["context override test"],
+        context: { rawContext: "rawValue", sharedKey: "rawValue" },
+      };
+
+      log.raw(rawEntry);
+
+      // The raw entry context should override the stored context
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              rawContext: "rawValue",
+              sharedKey: "rawValue", // Should be from raw entry, not stored
+            },
+            "context override test",
+          ],
+        }),
+      );
+
+      // Verify that the stored context is restored after the raw call
+      log.info("verify stored context restored");
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              storedContext: "storedValue",
+              sharedKey: "storedValue", // Should be from stored context again
+            },
+            "verify stored context restored",
+          ],
+        }),
+      );
+    });
+
+    it("should not affect stored context when no context is provided in raw entry", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      // Set some stored context
+      log.withContext({ storedContext: "storedValue" });
+
+      const rawEntry = {
+        logLevel: LogLevel.info,
+        messages: ["no context override test"],
+      };
+
+      log.raw(rawEntry);
+
+      // The stored context should be used since no context was provided in raw entry
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: [
+            {
+              storedContext: "storedValue",
+            },
+            "no context override test",
+          ],
+        }),
+      );
+    });
+
+    it("should override stored context with empty context object", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      // Set some stored context
+      log.withContext({ storedContext: "storedValue" });
+
+      const rawEntry = {
+        logLevel: LogLevel.info,
+        messages: ["empty context override test"],
+        context: {}, // Empty context object
+      };
+
+      log.raw(rawEntry);
+
+      // The empty context should override the stored context, resulting in no context data
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.info,
+          data: ["empty context override test"], // No context data should be present
+        }),
+      );
+    });
+  });
+
   describe("log level management", () => {
     it("should enable individual log levels", () => {
       const log = getLogger();

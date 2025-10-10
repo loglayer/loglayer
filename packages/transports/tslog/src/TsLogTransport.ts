@@ -1,6 +1,6 @@
+import type { LogLayerTransportConfig } from "@loglayer/transport";
 import { BaseTransport, type LogLayerTransportParams, LogLevel } from "@loglayer/transport";
 import type { Logger } from "tslog";
-import type {LogLayerTransportConfig} from "@loglayer/transport";
 
 interface TsLogTransportConfig extends LogLayerTransportConfig<Logger<any>> {
   /**
@@ -17,9 +17,9 @@ export class TsLogTransport extends BaseTransport<Logger<any>> {
     super(config);
 
     if (config.stackDepthLevel !== undefined) {
-      this.logger['stackDepthLevel'] = config.stackDepthLevel;
+      this.logger["stackDepthLevel"] = config.stackDepthLevel;
     } else {
-      this.logger['stackDepthLevel'] = 9;
+      this.logger["stackDepthLevel"] = 9;
     }
   }
 

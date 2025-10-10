@@ -9,6 +9,7 @@ import type {
   LogLayerTransport,
   LogLevel,
   MessageDataType,
+  RawLogEntry,
 } from "@loglayer/shared";
 import { MockLogBuilder } from "./MockLogBuilder.js";
 
@@ -25,6 +26,7 @@ export class MockLogLayer implements ILogLayer {
   debug(..._messages: MessageDataType[]): void {}
   trace(..._messages: MessageDataType[]): void {}
   fatal(..._messages: MessageDataType[]): void {}
+  raw(_rawEntry: RawLogEntry): void {}
 
   getLoggerInstance<_T extends LogLayerTransport>(_id: string) {
     return undefined;
