@@ -16,6 +16,9 @@ export type {
   PluginBeforeDataOutParams,
   PluginBeforeMessageOutParams,
   PluginShouldSendToLoggerParams,
+  LogLayerContext,
+  LogLayerMetadata,
+  LogLayerData
 } from "@loglayer/shared";
 export { LogLevel } from "@loglayer/shared";
 export { LogLayer } from "./LogLayer.js";
