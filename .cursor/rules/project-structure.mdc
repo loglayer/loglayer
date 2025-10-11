@@ -27,3 +27,16 @@ loglayer/
 │   ├── transports/               # Official transport implementations
 │   └── plugins/                  # Official plugins
 ```
+
+## Common Project Files
+
+For packages in the `packages/` directory, we generally have the following files:
+
+- `biome.json`: Biome configuration file for linting and formatting.
+- `CHANGELOG.md`: Changelog file (auto-generated) - top header should be the package name.
+- `LICENSE`: License file (usually MIT).
+- `package.json`: NPM package configuration file.
+- `README.md`: Readme file (top header should be the package name).
+- `tsconfig.json`: TypeScript configuration file
+- `tsup.config.json`: `tsup` build configuration file.
+- `turbo.json`: Turborepo configuration file, which has an extends of `["//"]`

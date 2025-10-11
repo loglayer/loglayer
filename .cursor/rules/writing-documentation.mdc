@@ -91,6 +91,8 @@ The package usually needs to be added to a list of sorts:
 
 And added to the documentation site sidebar config (`docs/.vitepress/config.mts`).
 
+Do not modify or create changelog files as they are auto-generated.
+
 ### Configuration parameters
 
 A table should be generated for configuration parameters and a separate table should be created for required and optional parameters.

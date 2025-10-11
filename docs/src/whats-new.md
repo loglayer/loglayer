@@ -9,6 +9,13 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Oct 11, 2025
 
+`@loglayer/transport-logtape`:
+
+- Added new LogTape transport for the [LogTape](https://logtape.org) logging library
+  - Modern, structured logging library for TypeScript and JavaScript
+  - Full support for all LogLayer features including context, metadata, and error handling
+  - See [LogTape transport documentation](/transports/logtape) for usage examples
+
 `loglayer`:
 
 Thanks to [@Eptagone](https://github.com/Eptagone) for the following:
