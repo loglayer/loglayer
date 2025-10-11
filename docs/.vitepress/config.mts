@@ -142,6 +142,7 @@ export default defineConfig({
               { text: 'Electron Log', link: '/transports/electron-log' },
               { text: 'Log4js', link: '/transports/log4js' },
               { text: 'loglevel', link: '/transports/loglevel' },
+              { text: 'LogTape', link: '/transports/logtape' },
               { text: 'Pino', link: '/transports/pino' },
               { text: 'Roarr', link: '/transports/roarr' },
               { text: 'Signale', link: '/transports/signale' },
