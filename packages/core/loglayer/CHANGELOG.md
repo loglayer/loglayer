@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 6.8.3
+
+### Patch Changes
+
+- [`1472439`](https://github.com/loglayer/loglayer/commit/14724396d721fa1e16085b137d1ddb2ab26a7764) Thanks [@theogravity](https://github.com/theogravity)! - Export the `LogLayerContext`, `LogLayerMetadata`, `LogLayerData` types
+
 ## 6.8.2
 
 ### Patch Changes
