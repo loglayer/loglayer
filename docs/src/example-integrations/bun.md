@@ -8,11 +8,10 @@ description: Using LogLayer with Bun runtime
 LogLayer has support for the [Bun](https://bun.sh/) runtime.
 
 ::: warning Bun Compatibility
-Not all transports and plugins are compatible with Bun. Some transports that rely on Node.js-specific APIs (like file system operations or native modules) may not work in Bun. Transports that have been tested with Bun are marked with a <Badge type="info" text="Bun" /> badge.
+Not all transports and plugins are compatible with Bun. Some items that rely on Node.js-specific APIs (like file system operations or native modules) may not work in Bun. Items that have been tested with Bun are marked with a <Badge type="info" text="Bun" /> badge.
 
-Not all transports / plugins have been tested with Bun; a lack of a badge
-does not imply a lack of support. Please let us know if you do find a
-transport / plugin is supported.
+Not all items have been tested with Bun; a lack of a badge
+does not imply a lack of support. Please let us know if you do find a transport / plugin is supported.
 :::
 
 ## Installation

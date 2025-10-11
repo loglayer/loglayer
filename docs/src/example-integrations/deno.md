@@ -8,11 +8,10 @@ description: Using LogLayer with Deno runtime
 LogLayer has support for the [Deno](https://deno.land/) runtime.
 
 ::: warning Deno Compatibility
-Not all transports and plugins are compatible with Deno. Some transports that rely on Node.js-specific APIs (like file system operations or native modules) may not work in Deno. Transports that have been tested with Deno are marked with a <Badge type="info" text="Deno" /> badge.
+Not all transports and plugins are compatible with Deno. Some items that rely on Node.js-specific APIs (like file system operations or native modules) may not work in Deno. Items that have been tested with Deno are marked with a <Badge type="info" text="Deno" /> badge.
 
-Not all transports / plugins have been tested with Deno; a lack of a badge
-does not imply a lack of support. Please let us know if you do find a
-transport / plugin is supported.
+Not all items have been tested with Deno; a lack of a badge
+does not imply a lack of support. Please let us know if you do find a transport / plugin is supported.
 :::
 
 ## Installation

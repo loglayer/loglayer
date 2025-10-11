@@ -51,13 +51,7 @@ import { LogLayer } from "npm:loglayer@latest";
 import { LogLayer } from "loglayer";
 ```
 
-::: warning Deno Compatibility
-Not all transports and plugins are compatible with Deno. Some transports that rely on Node.js-specific APIs (like file system operations or native modules) may not work in Deno. Transports that have been tested with Deno are marked with a <Badge type="info" text="Deno" /> badge.
-
-Not all transports / plugins have been tested with Deno; a lack of a badge
-does not imply a lack of support. Please let us know if you do find a
-transport / plugin is supported.
-:::
+For detailed Deno setup and examples, see the [Deno integration guide](/example-integrations/deno).
 
 ### Bun
 
@@ -67,17 +61,7 @@ For Bun, you can install LogLayer using bun's package manager:
 bun add loglayer
 ```
 
-```typescript
-import { LogLayer } from "loglayer";
-```
-
-::: warning Bun Compatibility
-Not all transports and plugins are compatible with Bun. Some transports that rely on Node.js-specific APIs (like file system operations or native modules) may not work in Bun. Transports that have been tested with Bun are marked with a <Badge type="info" text="Bun" /> badge.
-
-Not all transports / plugins have been tested with Bun; a lack of a badge
-does not imply a lack of support. Please let us know if you do find a
-transport / plugin is supported.
-:::
+For detailed Bun setup and examples, see the [Bun integration guide](/example-integrations/bun).
 
 ## Basic Usage with Console Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
 
@@ -112,3 +96,4 @@ log.withError(new Error('Something went wrong')).error('Failed to process reques
 - See the [Console Transport](/transports/console) documentation for more configuration options.
 - Start exploring the [Logging API](/logging-api/basic-logging) section for more advanced logging features.
 - See the [Transports](/transports/) section for more ways to ship logs to different destinations.
+- Check out the [Bun integration guide](/example-integrations/bun) for detailed Bun-specific setup and examples.
