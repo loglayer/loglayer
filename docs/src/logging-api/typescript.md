@@ -56,6 +56,10 @@ Create a `loglayer.d.ts` (or any `d.ts`) file in your project source:
 ```typescript
 // loglayer.d.ts
 declare module "loglayer" {
+  /**
+   * Defines the structure for context data that persists across multiple log entries 
+   * within the same context scope. This is set using log.withContext().
+   */
   interface LogLayerContext {
     userId?: string;
     sessionId?: string;
@@ -64,6 +68,10 @@ declare module "loglayer" {
     [key: string]: any; // Allow any other properties
   }
 
+  /**
+   * Defines the structure for metadata that can be attached to individual log entries. 
+   * This is set using log.withMetadata() / log.metadataOnly().
+   */
   interface LogLayerMetadata {
     operation?: string;
     duration?: number;
@@ -72,11 +80,28 @@ declare module "loglayer" {
     [key: string]: any; 
   }
 
-  interface LogLayerData {
-    errorCode?: string;
-    stackTrace?: string;
-    [key: string]: any;
-  }
 }
+```
+
+With the type overrides in place, you'll get full IntelliSense support:
+
+```typescript
+import { LogLayer } from 'loglayer';
+import { ConsoleTransport } from '@loglayer/transport-console';
+// Optional import if you need to define constants or types
+import type { LogLayerContext, LogLayerMetadata } from 'loglayer';
+
+const log = new LogLayer({
+  transport: new ConsoleTransport()
+});
+
+
+// Set persistent context - IntelliSense will suggest userId, sessionId, requestId, siteName
+log.withContext({
+  userId: "user123",
+  sessionId: "sess456", 
+  requestId: "req789",
+  siteName: "myapp.com"
+});
 ```
 

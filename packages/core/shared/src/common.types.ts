@@ -57,9 +57,22 @@ export interface ErrorOnlyOpts {
   copyMsg?: boolean;
 }
 
+/**
+ * Defines the structure for context data that persists across multiple log entries 
+ * within the same context scope. This is set using log.withContext().
+ */
 export interface LogLayerContext extends Record<string, any> {}
-export interface LogLayerMetadata extends LogLayerContext {}
-export interface LogLayerData extends LogLayerContext, LogLayerMetadata {}
+
+/**
+ * Defines the structure for metadata that can be attached to individual log entries. 
+ * This is set using log.withMetadata() or log.metadataOnly().
+ */
+export interface LogLayerMetadata extends Record<string, any> {}
+
+/**
+ * Used internally by LogLayer when assembling the final data object (metadata / context / error) sent to transports.
+ */
+export interface LogLayerData extends Record<string, any> {}
 
 export interface LogLayerCommonDataParams {
   /**
