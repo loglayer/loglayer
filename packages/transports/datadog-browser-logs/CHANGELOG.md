@@ -1,5 +1,12 @@
 # `@loglayer/transport-datadog-browser-logs` Changelog
 
+## 2.2.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.3
+
 ## 2.2.7
 
 ### Patch Changes

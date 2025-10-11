@@ -1,5 +1,11 @@
 # `@loglayer/shared` Changelog
 
+## 2.5.2
+
+### Patch Changes
+
+- [`aa0d9e1`](https://github.com/loglayer/loglayer/commit/aa0d9e11afcbbc8ba4989459976da07557292ef3) Thanks [@theogravity](https://github.com/theogravity)! - Remove the `LogLayerContext` and `LogLayerMetadata` extension from the `LogLayerData` interface as context and metadata fields are user-configured, which the extension wouldn't capture. It now extends the Record instead.
+
 ## 2.5.1
 
 ### Patch Changes

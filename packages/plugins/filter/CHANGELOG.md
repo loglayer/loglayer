@@ -1,5 +1,13 @@
 # `@loglayer/plugin-filter` Changelog
 
+## 3.0.4
+
+### Patch Changes
+
+- Updated dependencies [[`aa0d9e1`](https://github.com/loglayer/loglayer/commit/aa0d9e11afcbbc8ba4989459976da07557292ef3)]:
+  - @loglayer/shared@2.5.2
+  - @loglayer/plugin@2.1.5
+
 ## 3.0.3
 
 ### Patch Changes

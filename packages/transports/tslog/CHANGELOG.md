@@ -1,5 +1,12 @@
 # `@loglayer/transport-tslog` Changelog
 
+## 3.0.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.3
+
 ## 3.0.2
 
 ### Patch Changes

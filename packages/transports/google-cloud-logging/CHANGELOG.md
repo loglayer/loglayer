@@ -1,5 +1,12 @@
 # `@loglayer/transport-google-cloud-logging` Changelog
 
+## 2.2.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.3
+
 ## 2.2.3
 
 ### Patch Changes

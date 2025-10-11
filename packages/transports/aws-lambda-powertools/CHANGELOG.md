@@ -1,5 +1,12 @@
 # `@loglayer/transport-aws-lambda-powertools` Changelog
 
+## 3.1.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.3
+
 ## 3.1.5
 
 ### Patch Changes
