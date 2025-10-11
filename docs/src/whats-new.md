@@ -11,13 +11,7 @@ description: Learn about the latest features and improvements in LogLayer
 
 Documentation:
 
-- Added comprehensive Deno integration documentation
-  - LogLayer works seamlessly with Deno through its ESM-first architecture
-  - Includes installation guides using npm: specifiers and import maps
-  - Examples for console, HTTP, and pretty terminal transports
-  - See [Deno Integration documentation](/example-integrations/deno) for complete usage examples
-
-## Oct 11, 2025
+- Added guides for Deno and Bun.
 
 `@loglayer/transport-logtape`:
 
