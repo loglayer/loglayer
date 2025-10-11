@@ -3,7 +3,7 @@ title: HTTP Transport for LogLayer
 description: Send logs to any HTTP endpoint with the LogLayer logging library
 ---
 
-# HTTP Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" />
+# HTTP Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-http)](https://www.npmjs.com/package/@loglayer/transport-http)
 

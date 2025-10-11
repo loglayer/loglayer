@@ -51,10 +51,30 @@ import { LogLayer } from "npm:loglayer@latest";
 import { LogLayer } from "loglayer";
 ```
 
-::: tip Deno Compatibility
+::: warning Deno Compatibility
 Not all transports and plugins are compatible with Deno. Some transports that rely on Node.js-specific APIs (like file system operations or native modules) may not work in Deno. Transports that have been tested with Deno are marked with a <Badge type="info" text="Deno" /> badge.
 
 Not all transports / plugins have been tested with Deno; a lack of a badge
+does not imply a lack of support. Please let us know if you do find a
+transport / plugin is supported.
+:::
+
+### Bun
+
+For Bun, you can install LogLayer using bun's package manager:
+
+```sh
+bun add loglayer
+```
+
+```typescript
+import { LogLayer } from "loglayer";
+```
+
+::: warning Bun Compatibility
+Not all transports and plugins are compatible with Bun. Some transports that rely on Node.js-specific APIs (like file system operations or native modules) may not work in Bun. Transports that have been tested with Bun are marked with a <Badge type="info" text="Bun" /> badge.
+
+Not all transports / plugins have been tested with Bun; a lack of a badge
 does not imply a lack of support. Please let us know if you do find a
 transport / plugin is supported.
 :::
