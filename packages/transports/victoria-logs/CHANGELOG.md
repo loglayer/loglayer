@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport-http@1.0.6
+
 ## 1.0.6
 
 ### Patch Changes

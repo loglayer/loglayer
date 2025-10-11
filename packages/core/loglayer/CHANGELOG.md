@@ -1,5 +1,17 @@
 # `loglayer` Changelog
 
+## 6.8.1
+
+### Patch Changes
+
+- [#264](https://github.com/loglayer/loglayer/pull/264) [`1038d13`](https://github.com/loglayer/loglayer/commit/1038d132169add199b1dbd6c7ada6d6fa7a86218) Thanks [@Eptagone](https://github.com/Eptagone)! - Improve typing for log context, metadata, and data objects
+
+- Updated dependencies [[`1038d13`](https://github.com/loglayer/loglayer/commit/1038d132169add199b1dbd6c7ada6d6fa7a86218)]:
+  - @loglayer/shared@2.5.1
+  - @loglayer/context-manager@1.1.4
+  - @loglayer/plugin@2.1.4
+  - @loglayer/transport@2.3.2
+
 ## 6.8.0
 
 ### Minor Changes
