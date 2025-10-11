@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/docs",
   "description": "Documentation for LogLayer.",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "private": true,
   "scripts": {
     "copy-changelogs": "node scripts/copy-changelogs.js",

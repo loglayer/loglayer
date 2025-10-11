@@ -1,5 +1,12 @@
 # `@loglayer/transport-bunyan` Changelog
 
+## 2.2.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.3
+
 ## 2.2.5
 
 ### Patch Changes
