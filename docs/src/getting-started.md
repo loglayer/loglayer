@@ -9,6 +9,8 @@ _LogLayer is designed to work seamlessly across both server-side and browser env
 
 ## Installation
 
+### Node.js / npm
+
 ::: code-group
 
 ```sh [npm]
@@ -23,6 +25,38 @@ pnpm add loglayer
 yarn add loglayer
 ```
 
+:::
+
+### Deno
+
+For Deno, you can use npm: specifiers or import maps:
+
+**Using npm: specifiers:**
+```typescript
+import { LogLayer } from "npm:loglayer@latest";
+```
+
+**Using import maps (recommended):**
+```json
+// deno.json
+{
+  "imports": {
+    "loglayer": "npm:loglayer@latest"
+  }
+}
+```
+
+```typescript
+// main.ts
+import { LogLayer } from "loglayer";
+```
+
+::: tip Deno Compatibility
+Not all transports and plugins are compatible with Deno. Some transports that rely on Node.js-specific APIs (like file system operations or native modules) may not work in Deno. Transports that have been tested with Deno are marked with a <Badge type="info" text="Deno" /> badge.
+
+Not all transports / plugins have been tested with Deno; a lack of a badge
+does not imply a lack of support. Please let us know if you do find a
+transport / plugin is supported.
 :::
 
 ## Basic Usage with Console Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />

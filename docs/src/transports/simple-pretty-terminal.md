@@ -3,7 +3,7 @@ title: Simple Pretty Terminal Transport
 description: Simple, pretty log output for LogLayer in the terminal (no interactive features)
 ---
 
-# Simple Pretty Terminal Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
+# Simple Pretty Terminal Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" />
 
 [![NPM Version](https://img.shields.io/npm/v/@loglayer/transport-simple-pretty-terminal)](https://www.npmjs.com/package/@loglayer/transport-simple-pretty-terminal)
 

@@ -73,6 +73,12 @@ In writing code samples, importing LogLayer looks like this:
 
 We do not have a `@loglayer/core`. Do not import LogLayer with that.
 
+### Importing ConsoleTransport
+
+The `ConsoleTransport` is built-in to loglayer.
+
+`import { ConsoleTransport } from `loglayer`;
+
 ## Writing for the documentation site
 
 When writing new documentation, refer to existing site documentation as past examples. For example, if I'm asking to write site documentation for a transport, then look at prior documentation for transports for a foundation.

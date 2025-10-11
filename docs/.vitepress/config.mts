@@ -203,6 +203,7 @@ export default defineConfig({
         text: 'Example Integrations',
         items: [
           { text: 'Async context tracking', link: '/example-integrations/async-context' },
+          { text: 'Deno', link: '/example-integrations/deno' },
           { text: 'Express', link: '/example-integrations/express' },
           { text: 'Fastify', link: '/example-integrations/fastify' },
           { text: 'Hono', link: '/example-integrations/hono' },
