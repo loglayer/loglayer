@@ -26,7 +26,7 @@
     },
     "build": {
       "dependsOn": [
-        "@loglayer/transport#build"
+        "@loglayer/transport-http#build"
       ],
       "inputs": [
         "src/**",

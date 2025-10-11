@@ -1,14 +1,12 @@
 import { testTransportOutput } from "@loglayer/transport";
-import { LogLayer } from "loglayer";
 import { configure, getConsoleSink, getLogger } from "@logtape/logtape";
+import { LogLayer } from "loglayer";
 import { LogTapeTransport } from "../index.js";
 
 // Configure LogTape
 await configure({
   sinks: { console: getConsoleSink() },
-  loggers: [
-    { category: "test-app", lowestLevel: "trace", sinks: ["console"] }
-  ]
+  loggers: [{ category: "test-app", lowestLevel: "trace", sinks: ["console"] }],
 });
 
 // Get a LogTape logger instance

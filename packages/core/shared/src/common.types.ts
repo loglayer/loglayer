@@ -58,13 +58,13 @@ export interface ErrorOnlyOpts {
 }
 
 /**
- * Defines the structure for context data that persists across multiple log entries 
+ * Defines the structure for context data that persists across multiple log entries
  * within the same context scope. This is set using log.withContext().
  */
 export interface LogLayerContext extends Record<string, any> {}
 
 /**
- * Defines the structure for metadata that can be attached to individual log entries. 
+ * Defines the structure for metadata that can be attached to individual log entries.
  * This is set using log.withMetadata() or log.metadataOnly().
  */
 export interface LogLayerMetadata extends Record<string, any> {}

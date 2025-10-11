@@ -13,6 +13,21 @@ Documentation:
 
 - Added guides for Deno and Bun.
 
+`@loglayer/transport-http`:
+
+- New `onDebugReqRes` callback: Debug HTTP requests and responses with complete request/response details including headers and body content
+- Improved batch handling with new `batchMode` option supporting three modes:
+  - `"delimiter"` (default) - Join entries with a delimiter
+  - `"field"` - Wrap entries in an object with a field name (e.g., `{"batch": [...]}`)
+  - `"array"` - Send entries as a plain JSON array
+
+`@loglayer/transport-logflare`:
+
+- Added new Logflare transport for the [Logflare](https://logflare.app) logging service
+  - Cloud-native logging platform with powerful querying and alerting capabilities
+  - Full support for all LogLayer features including context, metadata, and error handling
+  - See [Logflare transport documentation](/transports/logflare) for usage examples
+
 `@loglayer/transport-logtape`:
 
 - Added new LogTape transport for the [LogTape](https://logtape.org) logging library

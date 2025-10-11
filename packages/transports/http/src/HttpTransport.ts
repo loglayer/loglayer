@@ -79,6 +79,10 @@ export interface HttpTransportConfig extends LoggerlessTransportConfig {
    */
   onDebug?: (entry: Record<string, any>) => void;
   /**
+   * Optional callback for debugging HTTP requests and responses
+   */
+  onDebugReqRes?: (reqRes: { req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array }; res: { status: number; statusText: string; headers: Record<string, string>; body: string } }) => void;
+  /**
    * Function to transform log data into the payload format
    */
   payloadTemplate: (data: { logLevel: string; message: string; data?: Record<string, any> }) => string;
@@ -122,6 +126,19 @@ export interface HttpTransportConfig extends LoggerlessTransportConfig {
    * @default "\n"
    */
   batchSendDelimiter?: string;
+  /**
+   * Batch mode for sending multiple log entries
+   * - "delimiter": Join entries with a delimiter (default)
+   * - "field": Wrap entries in an object with a field name
+   * - "array": Send entries as a plain JSON array
+   * @default "delimiter"
+   */
+  batchMode?: "delimiter" | "field" | "array";
+  /**
+   * Field name to wrap batch entries in when batchMode is "field" (e.g., "batch" for Logflare)
+   * @default undefined
+   */
+  batchFieldName?: string;
   /**
    * Maximum size of a single log entry in bytes
    * @default 1048576 (1MB)
@@ -190,6 +207,8 @@ async function sendWithRetry(
   maxRetries: number,
   retryDelay: number,
   respectRateLimit = true,
+  onDebugReqRes?: (reqRes: { req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array }; res: { status: number; statusText: string; headers: Record<string, string>; body: string } }) => void,
+  onError?: (err: Error) => void,
 ): Promise<Response> {
   let lastError: Error;
 
@@ -201,12 +220,48 @@ async function sendWithRetry(
         body: payload,
       });
 
+      // Call debug callback if provided
+      if (onDebugReqRes) {
+        try {
+          const responseBody = await response.clone().text();
+          const responseHeaders: Record<string, string> = {};
+          response.headers.forEach((value, key) => {
+            responseHeaders[key] = value;
+          });
+
+          onDebugReqRes({
+            req: {
+              url,
+              method,
+              headers,
+              body: payload,
+            },
+            res: {
+              status: response.status,
+              statusText: response.statusText,
+              headers: responseHeaders,
+              body: responseBody,
+            },
+          });
+        } catch (debugError) {
+          // Don't let debug callback errors break the main flow
+          if (onError) {
+            onError(new Error(`Debug callback error: ${debugError}`));
+          }
+        }
+      }
+
       // Handle rate limiting
       if (response.status === 429 && respectRateLimit) {
         const retryAfter = response.headers.get("retry-after");
         const waitTime = retryAfter ? Number.parseInt(retryAfter, 10) * 1000 : retryDelay;
 
         throw new RateLimitError(`Rate limit exceeded. Retry after ${waitTime}ms`, waitTime);
+      }
+
+      // Check for non-200 status codes and log if onError is enabled
+      if (response.status !== 200 && onError) {
+        onError(new Error(`HTTP request failed with status ${response.status}: ${response.statusText}`));
       }
 
       // Handle other errors
@@ -261,6 +316,7 @@ export class HttpTransport extends LoggerlessTransport {
   private batchContentType: string;
   private onError?: (err: Error) => void;
   private onDebug?: (entry: Record<string, any>) => void;
+  private onDebugReqRes?: (reqRes: { req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array }; res: { status: number; statusText: string; headers: Record<string, string>; body: string } }) => void;
   private payloadTemplate: (data: { logLevel: string; message: string; data?: Record<string, any> }) => string;
   private compression: boolean;
   private maxRetries: number;
@@ -270,6 +326,8 @@ export class HttpTransport extends LoggerlessTransport {
   private batchSize: number;
   private batchSendTimeout: number;
   private batchSendDelimiter: string;
+  private batchMode: "delimiter" | "field" | "array";
+  private batchFieldName?: string;
   private maxLogSize: number;
   private maxPayloadSize: number;
   private enableNextJsEdgeCompat: boolean;
@@ -295,6 +353,7 @@ export class HttpTransport extends LoggerlessTransport {
     this.batchContentType = config.batchContentType ?? "application/json";
     this.onError = config.onError;
     this.onDebug = config.onDebug;
+    this.onDebugReqRes = config.onDebugReqRes;
     this.payloadTemplate = config.payloadTemplate;
     this.compression = config.compression ?? false;
     this.maxRetries = config.maxRetries ?? 3;
@@ -304,6 +363,13 @@ export class HttpTransport extends LoggerlessTransport {
     this.batchSize = config.batchSize ?? 100;
     this.batchSendTimeout = config.batchSendTimeout ?? 5000;
     this.batchSendDelimiter = config.batchSendDelimiter ?? "\n";
+    this.batchMode = config.batchMode ?? "delimiter";
+    this.batchFieldName = config.batchFieldName;
+
+    // Validate that batchFieldName is provided when batchMode is "field"
+    if (this.batchMode === "field" && !this.batchFieldName) {
+      throw new Error("batchFieldName is required when batchMode is 'field'");
+    }
     this.maxLogSize = config.maxLogSize ?? 1048576; // 1MB
     this.maxPayloadSize = config.maxPayloadSize ?? 5242880; // 5MB
     this.enableNextJsEdgeCompat = config.enableNextJsEdgeCompat ?? false;
@@ -448,7 +514,27 @@ export class HttpTransport extends LoggerlessTransport {
    * Sends a batch of payloads to the HTTP endpoint
    */
   private async sendBatch(batch: string[]): Promise<void> {
-    const batchPayload = batch.join(this.batchSendDelimiter);
+    let batchPayload: string;
+    
+    switch (this.batchMode) {
+      case "array":
+        // Send batch entries as a plain JSON array
+        const batchEntries = batch.map(payload => JSON.parse(payload));
+        batchPayload = JSON.stringify(batchEntries);
+        break;
+      case "field":
+        // Parse each payload as JSON and create a batch object
+        const fieldEntries = batch.map(payload => JSON.parse(payload));
+        const batchObject = { [this.batchFieldName!]: fieldEntries };
+        batchPayload = JSON.stringify(batchObject);
+        break;
+      case "delimiter":
+      default:
+        // Use delimiter-based batching (default behavior)
+        batchPayload = batch.join(this.batchSendDelimiter);
+        break;
+    }
+    
     await this.sendPayload(batchPayload, this.batchContentType);
   }
 
@@ -487,6 +573,8 @@ export class HttpTransport extends LoggerlessTransport {
       this.maxRetries,
       this.retryDelay,
       this.respectRateLimit,
+      this.onDebugReqRes,
+      this.onError,
     );
   }
 }
