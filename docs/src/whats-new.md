@@ -7,6 +7,19 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Oct 11, 2025
+
+`loglayer`:
+
+Thanks to [@Eptagone](https://github.com/Eptagone) for the following:
+
+- Improved TypeScript typing for log context, metadata, and data objects
+  - Replaced generic `Record<string, any>` types with specific interfaces: `LogLayerContext`, `LogLayerMetadata`, and `LogLayerData`
+  - Better IntelliSense support and type safety when working with logging data
+  - Allows developers to extend these types for custom IntelliSense in their applications
+  - See [TypeScript documentation](https://loglayer.dev/logging-api/typescript.html) for usage examples
+
+
 ## Oct 9, 2025
 
 `loglayer`:
