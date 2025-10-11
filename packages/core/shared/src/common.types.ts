@@ -59,12 +59,7 @@ export interface ErrorOnlyOpts {
 
 export interface LogLayerContext extends Record<string, any> {}
 export interface LogLayerMetadata extends LogLayerContext {}
-export interface LogLayerData extends LogLayerContext, LogLayerMetadata {
-  /**
-   * Error passed to the log message method.
-   */
-  err?: any;
-}
+export interface LogLayerData extends LogLayerContext, LogLayerMetadata {}
 
 export interface LogLayerCommonDataParams {
   /**
