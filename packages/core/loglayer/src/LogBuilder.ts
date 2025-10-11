@@ -1,5 +1,5 @@
 import { PluginCallbackType } from "@loglayer/plugin";
-import type { ILogBuilder, MessageDataType } from "@loglayer/shared";
+import type { ILogBuilder, LogLayerMetadata, MessageDataType } from "@loglayer/shared";
 import { LogLevel, type LogLevelType } from "@loglayer/shared";
 import type { LogLayer } from "./LogLayer.js";
 import type { PluginManager } from "./PluginManager.js";
@@ -10,7 +10,7 @@ import type { PluginManager } from "./PluginManager.js";
  */
 export class LogBuilder implements ILogBuilder {
   private err: any;
-  private metadata: Record<string, any>;
+  private metadata: LogLayerMetadata;
   private structuredLogger: LogLayer;
   private hasMetadata: boolean;
   private pluginManager: PluginManager;
@@ -28,7 +28,7 @@ export class LogBuilder implements ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata?: Record<string, any>) {
+  withMetadata(metadata?: LogLayerMetadata) {
     const {
       pluginManager,
       structuredLogger: {
@@ -44,7 +44,7 @@ export class LogBuilder implements ILogBuilder {
       return this;
     }
 
-    let data: Record<string, any> | null = metadata;
+    let data: LogLayerMetadata | null = metadata;
 
     if (pluginManager.hasPlugins(PluginCallbackType.onMetadataCalled)) {
       data = pluginManager.runOnMetadataCalled(metadata, this.structuredLogger);

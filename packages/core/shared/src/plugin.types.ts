@@ -1,4 +1,10 @@
-import type { LogLayerCommonDataParams, LogLevelType } from "./common.types.js";
+import type {
+  LogLayerCommonDataParams,
+  LogLayerContext,
+  LogLayerData,
+  LogLayerMetadata,
+  LogLevelType,
+} from "./common.types.js";
 import type { ILogLayer } from "./loglayer.types.js";
 
 /**
@@ -82,7 +88,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforedataout | Creating Plugins}
    */
-  onBeforeDataOut?(params: PluginBeforeDataOutParams, loglayer: ILogLayer): Record<string, any> | null | undefined;
+  onBeforeDataOut?(params: PluginBeforeDataOutParams, loglayer: ILogLayer): LogLayerData | null | undefined;
 
   /**
    * Called after `onBeforeDataOut` and before `shouldSendToLogger`.
@@ -122,7 +128,7 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onmetadatacalled | Creating Plugins}
    */
-  onMetadataCalled?: (metadata: Record<string, any>, loglayer: ILogLayer) => Record<string, any> | null | undefined;
+  onMetadataCalled?: (metadata: LogLayerMetadata, loglayer: ILogLayer) => LogLayerMetadata | null | undefined;
 
   /**
    * Called when withContext() is called. This allows you to modify the context before it is used.
@@ -137,5 +143,5 @@ export interface LogLayerPlugin extends LogLayerPluginParams {
    *
    * @see {@link https://loglayer.dev/plugins/creating-plugins.html#oncontextcalled | Creating Plugins}
    */
-  onContextCalled?: (context: Record<string, any>, loglayer: ILogLayer) => Record<string, any> | null | undefined;
+  onContextCalled?: (context: LogLayerContext, loglayer: ILogLayer) => LogLayerContext | null | undefined;
 }

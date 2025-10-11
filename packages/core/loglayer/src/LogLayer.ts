@@ -4,6 +4,9 @@ import {
   type ErrorOnlyOpts,
   type IContextManager,
   type ILogLayer,
+  type LogLayerContext,
+  type LogLayerData,
+  type LogLayerMetadata,
   LogLevel,
   LogLevelPriority,
   type LogLevelType,
@@ -18,9 +21,9 @@ import type { LogLayerConfig } from "./types/index.js";
 interface FormatLogParams {
   logLevel: LogLevelType;
   params?: any[];
-  metadata?: Record<string, any> | null;
+  metadata?: LogLayerMetadata | null;
   err?: any;
-  context?: Record<string, any> | null;
+  context?: LogLayerContext | null;
 }
 
 interface LogLevelEnabledStatus {
@@ -149,7 +152,7 @@ export class LogLayer implements ILogLayer {
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  withContext(context?: Record<string, any>): LogLayer {
+  withContext(context?: LogLayerContext): LogLayer {
     let updatedContext = context;
 
     if (!context) {
@@ -185,7 +188,7 @@ export class LogLayer implements ILogLayer {
     return this;
   }
 
-  getContext(): Record<string, any> {
+  getContext(): LogLayerContext {
     return this.contextManager.getContext();
   }
 
@@ -230,7 +233,7 @@ export class LogLayer implements ILogLayer {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata?: Record<string, any>) {
+  withMetadata(metadata?: LogLayerMetadata) {
     return new LogBuilder(this).withMetadata(metadata);
   }
 
@@ -332,7 +335,7 @@ export class LogLayer implements ILogLayer {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  metadataOnly(metadata?: Record<string, any>, logLevel: LogLevelType = LogLevel.info) {
+  metadataOnly(metadata?: LogLayerMetadata, logLevel: LogLevelType = LogLevel.info) {
     if (!this.isLevelEnabled(logLevel)) return;
 
     const { muteMetadata, consoleDebug } = this._config;
@@ -349,7 +352,7 @@ export class LogLayer implements ILogLayer {
       return;
     }
 
-    let data: Record<string, any> | null = metadata;
+    let data: LogLayerMetadata | null = metadata;
 
     if (this.pluginManager.hasPlugins(PluginCallbackType.onMetadataCalled)) {
       data = this.pluginManager.runOnMetadataCalled(metadata, this);
@@ -599,7 +602,7 @@ export class LogLayer implements ILogLayer {
     return this.logLevelEnabledStatus[level];
   }
 
-  private formatContext(context: Record<string, any> | null) {
+  private formatContext(context: LogLayerContext | null) {
     const { contextFieldName, muteContext } = this._config;
 
     if (context && Object.keys(context).length > 0 && !muteContext) {
@@ -619,7 +622,7 @@ export class LogLayer implements ILogLayer {
     return {};
   }
 
-  private formatMetadata(data: Record<string, any> | null = null) {
+  private formatMetadata(data: LogLayerMetadata | null = null) {
     const { metadataFieldName, muteMetadata } = this._config;
 
     if (data && !muteMetadata) {
@@ -673,7 +676,7 @@ export class LogLayer implements ILogLayer {
       !!metadata ||
       (muteContext ? false : context !== null ? Object.keys(context).length > 0 : this.contextManager.hasContextData());
 
-    let d: Record<string, any> | undefined | null = {};
+    let d: LogLayerData | undefined | null = {};
 
     if (hasObjData) {
       // Field names for context and metadata is the same, merge the metadata into the same field name
