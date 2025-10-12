@@ -1,0 +1,16 @@
+---
+alwaysApply: true
+---
+# Creating transports using the HTTP Transport
+
+When creating a transport that calls an HTTP API, we should be using the HTTP Transport.
+
+- Add the `@loglayer/transport-http` package
+- The trans port config should extend `HttpTransportConfig`
+- The transport should extend `HttpTransport`
+
+## Documenting the transport
+
+When creating the full documentation for the transport in `docs/`, it should include the HTTP Transport optional
+configuration options using the partial `transports/_partials/http-transport-options.md` after the transport specific
+options.

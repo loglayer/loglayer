@@ -157,6 +157,7 @@ export default defineConfig({
             { text: 'DataDog Browser Logs', link: '/transports/datadog-browser-logs' },
             { text: 'Dynatrace', link: '/transports/dynatrace' },
             { text: 'Google Cloud Logging', link: '/transports/google-cloud-logging' },
+            { text: 'Logflare', link: '/transports/logflare' },
             { text: 'New Relic', link: '/transports/new-relic' },
             { text: "Sumo Logic", link: '/transports/sumo-logic'},
             { text: 'VictoriaLogs', link: '/transports/victoria-logs' },

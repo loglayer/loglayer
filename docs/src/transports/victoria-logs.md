@@ -3,7 +3,7 @@ title: VictoriaLogs Transport for LogLayer
 description: Send logs to Victoria Metrics' VictoriaLogs with the LogLayer logging library
 ---
 
-# VictoriaLogs Transport <Badge type="tip" text="Server" />
+# VictoriaLogs Transport <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-victoria-logs)](https://www.npmjs.com/package/@loglayer/transport-victoria-logs)
 
@@ -93,7 +93,7 @@ The VictoriaLogs transport extends the [HTTP transport configuration](/transport
 | `httpParameters` | `Record<string, string>` | `{}` | Custom HTTP query parameters for VictoriaLogs ingestion. See [HTTP parameters documentation](https://docs.victoriametrics.com/victorialogs/data-ingestion/#http-parameters) |
 | `payloadTemplate` | `(data: { logLevel: string; message: string; data?: Record<string, any> }) => string` | VictoriaLogs format | Pre-configured payload template for VictoriaLogs |
 
-For all other configuration options, see the [HTTP transport documentation](/transports/http#configuration).
+<!--@include: ./_partials/http-transport-options.md-->
 
 ## VictoriaLogs Specific Features
 

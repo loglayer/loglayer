@@ -21,7 +21,7 @@ Ships logs to any HTTP endpoint with support for batching, compression, retries,
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/http)
 
-This transport was 99% vibe-coded, with manual testing against [VictoriaLogs](https://docs.victoriametrics.com/victorialogs/data-ingestion/#json-stream-api).
+This transport was 99% vibe-coded, with manual testing against [VictoriaLogs](victoria-logs.md) and [Logflare])(logflare.md).
 
 [Vibe Code Prompts](https://github.com/loglayer/loglayer/tree/master/packages/transports/http/PROMPTS.md)
 
@@ -81,6 +81,20 @@ const log = new LogLayer({
       onDebug: (entry) => {
          console.log('Log entry being sent:', entry);
       },
+      onDebugReqRes: ({ req, res }) => {
+         console.log('HTTP Request:', {
+            url: req.url,
+            method: req.method,
+            headers: req.headers,
+            body: req.body
+         });
+         console.log('HTTP Response:', {
+            status: res.status,
+            statusText: res.statusText,
+            headers: res.headers,
+            body: res.body
+         });
+      },
    })
 })
 
@@ -98,29 +112,7 @@ log.withMetadata({ userId: "123" }).error("User not found");
 | `url` | `string` | The URL to send logs to |
 | `payloadTemplate` | `(data: { logLevel: string; message: string; data?: Record<string, any> }) => string` | Function to transform log data into the payload format |
 
-### Optional Parameters
-
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `method` | `string` | `"POST"` | HTTP method to use for requests |
-| `headers` | `Record<string, string> \| (() => Record<string, string>)` | `{}` | Headers to include in the request. Can be an object or a function that returns headers |
-| `contentType` | `string` | `"application/json"` | Content type for single log requests. User-specified headers take precedence |
-| `batchContentType` | `string` | `"application/json"` | Content type for batch log requests. User-specified headers take precedence |
-| `compression` | `boolean` | `false` | Whether to use gzip compression |
-| `maxRetries` | `number` | `3` | Number of retry attempts before giving up |
-| `retryDelay` | `number` | `1000` | Base delay between retries in milliseconds |
-| `respectRateLimit` | `boolean` | `true` | Whether to respect rate limiting by waiting when a 429 response is received |
-| `enableBatchSend` | `boolean` | `true` | Whether to enable batch sending |
-| `batchSize` | `number` | `100` | Number of log entries to batch before sending |
-| `batchSendTimeout` | `number` | `5000` | Timeout in milliseconds for sending batches regardless of size |
-| `batchSendDelimiter` | `string` | `"\n"` | Delimiter to use between log entries in batch mode |
-| `maxLogSize` | `number` | `1048576` | Maximum size of a single log entry in bytes (1MB) |
-| `maxPayloadSize` | `number` | `5242880` | Maximum size of the payload (uncompressed) in bytes (5MB) |
-| `enableNextJsEdgeCompat` | `boolean` | `false` | Whether to enable Next.js Edge compatibility |
-| `onError` | `(err: Error) => void` | - | Error handling callback |
-| `onDebug` | `(entry: Record<string, any>) => void` | - | Debug callback for inspecting log entries before they are sent |
-| `enabled` | `boolean` | `true` | Whether the transport is enabled |
-| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
+<!--@include: ./_partials/http-transport-options.md-->
 
 ## Features
 
@@ -366,10 +358,96 @@ new HttpTransport({
 
 When batching is enabled:
 - Logs are queued until `batchSize` is reached OR `batchSendTimeout` expires
-- Multiple log entries are joined with the `batchSendDelimiter`
+- Multiple log entries are joined according to the `batchMode` setting
 - Each entry is already a string from the payloadTemplate
 - **Payload size tracking**: The transport keeps a running tally of uncompressed payload size
 - **Automatic sending**: If adding a new log entry would exceed 90% of `maxPayloadSize`, the batch is sent immediately
+
+### Batch Modes
+
+The HTTP transport supports three different batch modes to format multiple log entries:
+
+#### Delimiter Mode (Default)
+
+The default mode joins log entries with a delimiter:
+
+```typescript
+new HttpTransport({
+  url: "https://api.example.com/logs",
+  payloadTemplate: ({ logLevel, message, data }) => 
+    JSON.stringify({
+      level: logLevel,
+      message,
+      metadata: data,
+    }),
+  batchMode: "delimiter", // Default
+  batchSendDelimiter: "\n", // Default delimiter
+})
+```
+
+**Output format:**
+```
+{"level":"info","message":"First log","metadata":{}}
+{"level":"error","message":"Second log","metadata":{"userId":"123"}}
+{"level":"warn","message":"Third log","metadata":{}}
+```
+
+#### Array Mode
+
+Sends log entries as a plain JSON array:
+
+```typescript
+new HttpTransport({
+  url: "https://api.example.com/logs",
+  payloadTemplate: ({ logLevel, message, data }) => 
+    JSON.stringify({
+      level: logLevel,
+      message,
+      metadata: data,
+    }),
+  batchMode: "array",
+})
+```
+
+**Output format:**
+```json
+[
+  {"level":"info","message":"First log","metadata":{}},
+  {"level":"error","message":"Second log","metadata":{"userId":"123"}},
+  {"level":"warn","message":"Third log","metadata":{}}
+]
+```
+
+#### Field Mode
+
+Wraps log entries in an object with a specified field name (useful for APIs like Logflare):
+
+```typescript
+new HttpTransport({
+  url: "https://api.example.com/logs",
+  payloadTemplate: ({ logLevel, message, data }) => 
+    JSON.stringify({
+      level: logLevel,
+      message,
+      metadata: data,
+    }),
+  batchMode: "field",
+  batchFieldName: "logs", // Required when using field mode
+})
+```
+
+**Output format:**
+```json
+{
+  "logs": [
+    {"level":"info","message":"First log","metadata":{}},
+    {"level":"error","message":"Second log","metadata":{"userId":"123"}},
+    {"level":"warn","message":"Third log","metadata":{}}
+  ]
+}
+```
+
+**Important**: When using `batchMode: "field"`, you must provide the `batchFieldName` parameter. The transport will throw an error if this is missing.
 
 ### Log Size Validation
 
@@ -470,10 +548,101 @@ When `respectRateLimit` is enabled:
 - Uses the `retryDelay` value if no header is present
 - Rate limit retries don't count against `maxRetries`
 
-### Error Handling
+### Debugging
 
-The transport provides detailed error information through the `onError`
+The HTTP transport provides several debugging callbacks to help you monitor and troubleshoot log transmission:
 
-### Implementation Example
+#### onError Callback
 
-- [VictoriaLogs Transport](victoria-logs.md) wraps around this transport to add support for [VictoriaLogs](https://victoriametrics.com/products/victorialogs/) using their [JSON Stream API](https://docs.victoriametrics.com/victorialogs/data-ingestion/#json-stream-api).
+The `onError` callback is triggered when any error occurs during log transmission:
+
+```typescript
+new HttpTransport({
+  url: "https://api.example.com/logs",
+  payloadTemplate: ({ logLevel, message, data }) => 
+    JSON.stringify({
+      level: logLevel,
+      message,
+      metadata: data,
+    }),
+  onError: (err) => {
+    console.error('HTTP transport error:', err);
+  }
+})
+```
+
+#### onDebug Callback
+
+The `onDebug` callback provides visibility into individual log entries being processed:
+
+```typescript
+new HttpTransport({
+  url: "https://api.example.com/logs",
+  payloadTemplate: ({ logLevel, message, data }) => 
+    JSON.stringify({
+      level: logLevel,
+      message,
+      metadata: data,
+    }),
+  onDebug: (entry) => {
+    console.log('Processing log entry:', {
+      logLevel: entry.logLevel,
+      message: entry.message,
+      data: entry.data
+    });
+  }
+})
+```
+
+The `entry` object contains:
+- `logLevel`: The log level (info, error, etc.)
+- `message`: The log message
+- `data`: The metadata/context data
+
+#### onDebugReqRes Callback
+
+The `onDebugReqRes` callback provides detailed information about HTTP requests and responses for deeper troubleshooting:
+
+```typescript
+new HttpTransport({
+  url: "https://api.example.com/logs",
+  payloadTemplate: ({ logLevel, message, data }) => 
+    JSON.stringify({
+      level: logLevel,
+      message,
+      metadata: data,
+    }),
+  onDebugReqRes: ({ req, res }) => {
+    console.log('HTTP Request:', {
+      url: req.url,
+      method: req.method,
+      headers: req.headers,
+      body: req.body
+    });
+    
+    console.log('HTTP Response:', {
+      status: res.status,
+      statusText: res.statusText,
+      headers: res.headers,
+      body: res.body
+    });
+  }
+})
+```
+
+The request object (`req`) contains:
+- `url`: The request URL
+- `method`: HTTP method (POST, PUT, etc.)
+- `headers`: Request headers
+- `body`: Request body content (string or Uint8Array)
+
+The response object (`res`) contains:
+- `status`: HTTP status code
+- `statusText`: HTTP status text
+- `headers`: Response headers
+- `body`: Response body content (string)
+
+### Implementation Examples
+
+- [Logflare Transport](logflare.md) - Built on top of the HTTP transport for Logflare integration
+- [VictoriaLogs Transport](victoria-logs.md) - Wraps around this transport to add support for [VictoriaLogs](https://victoriametrics.com/products/victorialogs/) using their [JSON Stream API](https://docs.victoriametrics.com/victorialogs/data-ingestion/#json-stream-api)
