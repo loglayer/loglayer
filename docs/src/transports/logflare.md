@@ -3,7 +3,7 @@ title: Logflare Transport for LogLayer
 description: Send logs to Logflare with the LogLayer logging library
 ---
 
-# Logflare Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
+# Logflare Transport <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-logflare)](https://www.npmjs.com/package/@loglayer/transport-logflare)
 
