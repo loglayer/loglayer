@@ -7,10 +7,7 @@ description: Learn how to log structured metadata with your log messages in LogL
 
 Metadata allows you to add structured data to your log messages. LogLayer provides several ways to include metadata in your logs.
 
-::: info
-The output examples use `msg` as the message field. The name of this field may vary depending on the logging library you are using.
-In the `console` logger, this field does not exist, and the message is printed directly.
-:::
+<!--@include: ../_partials/message-field-info.md-->
 
 ## Adding Metadata to Messages
 
