@@ -153,6 +153,7 @@ export default defineConfig({
           },
           { text: 'Cloud Providers', items: [
             { text: 'Axiom', link: '/transports/axiom' },
+            { text: 'Better Stack', link: '/transports/betterstack' },
             { text: 'DataDog (server-side)', link: '/transports/datadog' },
             { text: 'DataDog Browser Logs', link: '/transports/datadog-browser-logs' },
             { text: 'Dynatrace', link: '/transports/dynatrace' },

@@ -8,9 +8,15 @@ When creating a transport that calls an HTTP API, we should be using the HTTP Tr
 - Add the `@loglayer/transport-http` package
 - The trans port config should extend `HttpTransportConfig`
 - The transport should extend `HttpTransport`
+- The `turbo.json` file should be copied from the logflare transport
 
 ## Documenting the transport
 
 When creating the full documentation for the transport in `docs/`, it should include the HTTP Transport optional
-configuration options using the partial `transports/_partials/http-transport-options.md` after the transport specific
-options.
+configuration options using the partial `<!--@include: ./_partials/http-transport-options.md-->` after the transport
+specific options.
+
+Because the HTTP transport supports browser, server, deno, and bun, the corresponding transport should also have
+those badges as well.
+
+Add the `onDebug` and `onError` examples to the documentation as well.
