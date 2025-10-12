@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.10
+
+### Patch Changes
+
+- Updated dependencies [[`2a24d9a`](https://github.com/loglayer/loglayer/commit/2a24d9abf07087c7121d4eedd98d03cf8c0fbc6c)]:
+  - @loglayer/transport-http@1.1.1
+
 ## 1.0.9
 
 ### Patch Changes
