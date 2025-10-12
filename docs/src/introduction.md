@@ -18,6 +18,8 @@ log
 
 _LogLayer is designed to work seamlessly across both server-side and browser environments. However, individual transports and plugins may have specific environment requirements, which is indicated on their respective page._
 
+LogLayer supports multiple JavaScript runtimes including Node.js, [Deno](/getting-started#deno), and [Bun](/getting-started#bun). See the [getting started guide](/getting-started) for detailed setup instructions for each runtime.
+
 ## Why LogLayer?
 
 Challenges with logging—choosing, using, and maintaining the right logger for various projects—are a common experience. 
@@ -26,14 +28,14 @@ structured metadata or `Error` objects. This can lead to ad-hoc solutions, like 
 pipelines, just to get logs formatted correctly.
 
 LogLayer was built to address these pain points by introducing a fluid, expressive API. With methods like 
-`withMetadata` and `withError`, **LogLayer separates object injection from the log message itself, making logging code 
+`withMetadata()` and `withError()`, **LogLayer separates object injection from the log message itself, making logging code 
 both cleaner and more maintainable.**
 
 Logs are processed through a LogLayer Transport, which acts as an adapter for the preferred logging library. 
 This design offers several key advantages:
 
 - **Multi-Transport Support**: Send logs to multiple destinations (e.g., [DataDog](/transports/datadog) and 
-[New Relic](/transports/new-relic)) simultaneously. This feature can be used to ship logs directly to DataDog without 
+[New Relic](/transports/new-relic)) simultaneously. This feature can be also used to ship logs directly to DataDog without 
 relying on their APM package or sidecars.
 
 - **Easy Logger Swapping**: You're using `pino` with Next.js, you might find issues where it doesn’t work out of the box 
