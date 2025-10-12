@@ -96,4 +96,3 @@ log.withError(new Error('Something went wrong')).error('Failed to process reques
 - See the [Console Transport](/transports/console) documentation for more configuration options.
 - Start exploring the [Logging API](/logging-api/basic-logging) section for more advanced logging features.
 - See the [Transports](/transports/) section for more ways to ship logs to different destinations.
-- Check out the [Bun integration guide](/example-integrations/bun) for detailed Bun-specific setup and examples.
