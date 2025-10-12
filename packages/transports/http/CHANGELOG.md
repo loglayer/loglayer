@@ -1,5 +1,11 @@
 # `@loglayer/transport-http` Changelog
 
+## 1.1.1
+
+### Patch Changes
+
+- [#272](https://github.com/loglayer/loglayer/pull/272) [`2a24d9a`](https://github.com/loglayer/loglayer/commit/2a24d9abf07087c7121d4eedd98d03cf8c0fbc6c) Thanks [@theogravity](https://github.com/theogravity)! - Fix issue where `onError()` gets called for 2xx messages outside of 200
+
 ## 1.1.0
 
 ### Minor Changes
