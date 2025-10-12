@@ -6,8 +6,7 @@
 
 `loglayer` is a unified logger that routes logs to various logging libraries, cloud providers, files, and OpenTelemetry while providing a fluent API for specifying log messages, metadata and errors.
 
-- For full documentation, read the [docs](https://loglayer.dev).
-- [Older 4.x documentation](https://github.com/loglayer/loglayer/tree/4.x)
+For full documentation, read the [docs](https://loglayer.dev).
 
 ```javascript
 // Example using the Pino logging library with LogLayer
@@ -86,7 +85,11 @@ If you're looking to contribute or work with the source code, follow these steps
    ```bash
    pnpm install
    ```
-3. Build all packages:
+3. Install git hooks:
+    ```bash
+    pnpx lefthook install
+    ```
+4. Build all packages:
    ```bash
    turbo build
    ```

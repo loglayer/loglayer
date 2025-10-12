@@ -7,6 +7,16 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Oct 12, 2025
+
+`@loglayer/transport-betterstack`:
+
+- Added new [Better Stack transport](/transports/betterstack) for sending logs to [Better Stack](https://betterstack.com/log-management) using their HTTP API.
+
+`@loglayer/transport-http`:
+
+- Fixed issue where 2xx HTTP codes would call `onError()`
+
 ## Oct 11, 2025
 
 Documentation:

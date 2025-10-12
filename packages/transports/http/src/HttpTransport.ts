@@ -1,47 +1,7 @@
 import type { LoggerlessTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
 import { LoggerlessTransport } from "@loglayer/transport";
-
-/**
- * Error thrown when HTTP request fails
- */
-class HttpTransportError extends Error {
-  constructor(
-    message: string,
-    public status?: number,
-    public response?: Response,
-  ) {
-    super(message);
-    this.name = "HttpTransportError";
-  }
-}
-
-/**
- * Error thrown when rate limit is exceeded
- */
-class RateLimitError extends Error {
-  constructor(
-    message: string,
-    public retryAfter: number,
-  ) {
-    super(message);
-    this.name = "RateLimitError";
-  }
-}
-
-/**
- * Error thrown when log entry exceeds size limits
- */
-class LogSizeError extends Error {
-  constructor(
-    message: string,
-    public logEntry: Record<string, any>,
-    public size: number,
-    public limit: number,
-  ) {
-    super(message);
-    this.name = "LogSizeError";
-  }
-}
+import { LogSizeError } from "./errors.js";
+import { compressData, sendWithRetry } from "./utils.js";
 
 /**
  * Configuration options for the HTTP transport.
@@ -81,7 +41,10 @@ export interface HttpTransportConfig extends LoggerlessTransportConfig {
   /**
    * Optional callback for debugging HTTP requests and responses
    */
-  onDebugReqRes?: (reqRes: { req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array }; res: { status: number; statusText: string; headers: Record<string, string>; body: string } }) => void;
+  onDebugReqRes?: (reqRes: {
+    req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array };
+    res: { status: number; statusText: string; headers: Record<string, string>; body: string };
+  }) => void;
   /**
    * Function to transform log data into the payload format
    */
@@ -158,142 +121,6 @@ export interface HttpTransportConfig extends LoggerlessTransportConfig {
 }
 
 /**
- * Compresses data using gzip compression
- */
-async function compressData(data: string): Promise<Uint8Array> {
-  const encoder = new TextEncoder();
-  const dataBytes = encoder.encode(data);
-
-  // Use the CompressionStream API if available (modern browsers)
-  if (typeof CompressionStream !== "undefined") {
-    const stream = new CompressionStream("gzip");
-    const writer = stream.writable.getWriter();
-    const reader = stream.readable.getReader();
-
-    await writer.write(dataBytes);
-    await writer.close();
-
-    const chunks: Uint8Array[] = [];
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      chunks.push(value);
-    }
-
-    const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
-    const result = new Uint8Array(totalLength);
-    let offset = 0;
-    for (const chunk of chunks) {
-      result.set(chunk, offset);
-      offset += chunk.length;
-    }
-
-    return result;
-  }
-
-  // Fallback for Node.js or environments without CompressionStream
-  // In a real implementation, you might want to use a library like 'zlib' for Node.js
-  throw new Error("Gzip compression not supported in this environment");
-}
-
-/**
- * Sends HTTP request with retry logic and rate limiting
- */
-async function sendWithRetry(
-  url: string,
-  method: string,
-  headers: Record<string, string>,
-  payload: string | Uint8Array,
-  maxRetries: number,
-  retryDelay: number,
-  respectRateLimit = true,
-  onDebugReqRes?: (reqRes: { req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array }; res: { status: number; statusText: string; headers: Record<string, string>; body: string } }) => void,
-  onError?: (err: Error) => void,
-): Promise<Response> {
-  let lastError: Error;
-
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      const response = await fetch(url, {
-        method,
-        headers,
-        body: payload,
-      });
-
-      // Call debug callback if provided
-      if (onDebugReqRes) {
-        try {
-          const responseBody = await response.clone().text();
-          const responseHeaders: Record<string, string> = {};
-          response.headers.forEach((value, key) => {
-            responseHeaders[key] = value;
-          });
-
-          onDebugReqRes({
-            req: {
-              url,
-              method,
-              headers,
-              body: payload,
-            },
-            res: {
-              status: response.status,
-              statusText: response.statusText,
-              headers: responseHeaders,
-              body: responseBody,
-            },
-          });
-        } catch (debugError) {
-          // Don't let debug callback errors break the main flow
-          if (onError) {
-            onError(new Error(`Debug callback error: ${debugError}`));
-          }
-        }
-      }
-
-      // Handle rate limiting
-      if (response.status === 429 && respectRateLimit) {
-        const retryAfter = response.headers.get("retry-after");
-        const waitTime = retryAfter ? Number.parseInt(retryAfter, 10) * 1000 : retryDelay;
-
-        throw new RateLimitError(`Rate limit exceeded. Retry after ${waitTime}ms`, waitTime);
-      }
-
-      // Check for non-200 status codes and log if onError is enabled
-      if (response.status !== 200 && onError) {
-        onError(new Error(`HTTP request failed with status ${response.status}: ${response.statusText}`));
-      }
-
-      // Handle other errors
-      if (!response.ok) {
-        throw new HttpTransportError(`HTTP ${response.status}: ${response.statusText}`, response.status, response);
-      }
-
-      return response;
-    } catch (error) {
-      lastError = error as Error;
-
-      // If it's a rate limit error and we should respect it, wait and retry
-      if (error instanceof RateLimitError && respectRateLimit) {
-        await new Promise((resolve) => setTimeout(resolve, error.retryAfter));
-        continue;
-      }
-
-      // If it's the last attempt, throw the error
-      if (attempt === maxRetries) {
-        throw error;
-      }
-
-      // Wait before retrying with exponential backoff
-      const waitTime = retryDelay * 2 ** attempt;
-      await new Promise((resolve) => setTimeout(resolve, waitTime));
-    }
-  }
-
-  throw lastError!;
-}
-
-/**
  * HttpTransport is responsible for sending logs to any HTTP endpoint.
  * It supports batching, compression, retries, and rate limiting.
  *
@@ -316,7 +143,10 @@ export class HttpTransport extends LoggerlessTransport {
   private batchContentType: string;
   private onError?: (err: Error) => void;
   private onDebug?: (entry: Record<string, any>) => void;
-  private onDebugReqRes?: (reqRes: { req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array }; res: { status: number; statusText: string; headers: Record<string, string>; body: string } }) => void;
+  private onDebugReqRes?: (reqRes: {
+    req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array };
+    res: { status: number; statusText: string; headers: Record<string, string>; body: string };
+  }) => void;
   private payloadTemplate: (data: { logLevel: string; message: string; data?: Record<string, any> }) => string;
   private compression: boolean;
   private maxRetries: number;
@@ -515,26 +345,27 @@ export class HttpTransport extends LoggerlessTransport {
    */
   private async sendBatch(batch: string[]): Promise<void> {
     let batchPayload: string;
-    
+
     switch (this.batchMode) {
-      case "array":
+      case "array": {
         // Send batch entries as a plain JSON array
-        const batchEntries = batch.map(payload => JSON.parse(payload));
+        const batchEntries = batch.map((payload) => JSON.parse(payload));
         batchPayload = JSON.stringify(batchEntries);
         break;
-      case "field":
+      }
+      case "field": {
         // Parse each payload as JSON and create a batch object
-        const fieldEntries = batch.map(payload => JSON.parse(payload));
+        const fieldEntries = batch.map((payload) => JSON.parse(payload));
         const batchObject = { [this.batchFieldName!]: fieldEntries };
         batchPayload = JSON.stringify(batchObject);
         break;
-      case "delimiter":
+      }
       default:
         // Use delimiter-based batching (default behavior)
         batchPayload = batch.join(this.batchSendDelimiter);
         break;
     }
-    
+
     await this.sendPayload(batchPayload, this.batchContentType);
   }
 
