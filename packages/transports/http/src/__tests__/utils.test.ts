@@ -12,8 +12,11 @@ describe("utils", () => {
     mockFetch.mockClear();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    // Wait for any pending promises to settle before cleaning up
+    await vi.runAllTimersAsync();
     vi.useRealTimers();
+    vi.clearAllTimers();
   });
 
   describe("HttpTransportError", () => {
@@ -133,10 +136,10 @@ describe("utils", () => {
         100
       );
 
-      // Fast-forward through all timers
+      // Use runAllTimersAsync to handle all timers and wait for completion
       await vi.runAllTimersAsync();
-
       const result = await promise;
+      
       expect(result).toBe(mockResponse);
       expect(mockFetch).toHaveBeenCalledTimes(3);
     });
@@ -153,10 +156,10 @@ describe("utils", () => {
         2,
         100
       );
+      // attach handler immediately to avoid unhandled rejection warnings
+      void promise.catch(() => {});
 
-      // Fast-forward through all timers
       await vi.runAllTimersAsync();
-
       await expect(promise).rejects.toThrow("Network error");
       expect(mockFetch).toHaveBeenCalledTimes(3); // Initial + 2 retries
     });
@@ -178,9 +181,10 @@ describe("utils", () => {
         true
       );
 
-      // Fast-forward time to simulate the retry delay
-      await vi.runAllTimersAsync();
+      // attach handler immediately to avoid unhandled rejection warnings
+      void promise.catch(() => {});
 
+      await vi.runAllTimersAsync();
       await expect(promise).rejects.toThrow(RateLimitError);
     });
 
@@ -198,9 +202,10 @@ describe("utils", () => {
         true
       );
 
-      // Fast-forward time to simulate the retry delay
-      await vi.runAllTimersAsync();
+      // attach handler immediately to avoid unhandled rejection warnings
+      void promise.catch(() => {});
 
+      await vi.runAllTimersAsync();
       await expect(promise).rejects.toThrow(RateLimitError);
     });
 
@@ -221,9 +226,10 @@ describe("utils", () => {
         onError
       );
 
-      // Fast-forward through all timers
-      await vi.runAllTimersAsync();
+      // attach handler immediately to avoid unhandled rejection warnings
+      void promise.catch(() => {});
 
+      // No timers to advance for this test since maxRetries is 0
       await expect(promise).rejects.toThrow(HttpTransportError);
 
       expect(onError).toHaveBeenCalledWith(
@@ -336,9 +342,10 @@ describe("utils", () => {
         100
       );
 
-      // Fast-forward through all timers
-      await vi.runAllTimersAsync();
+      // attach handler immediately to avoid unhandled rejection warnings
+      void promise.catch(() => {});
 
+      await vi.runAllTimersAsync();
       await expect(promise).rejects.toThrow("Network error");
       expect(mockFetch).toHaveBeenCalledTimes(3);
     });
@@ -360,9 +367,7 @@ describe("utils", () => {
         onError
       );
 
-      // Fast-forward through all timers
-      await vi.runAllTimersAsync();
-
+      // No timers to advance for this test since maxRetries is 0
       await expect(promise).rejects.toThrow(HttpTransportError);
 
       expect(onError).toHaveBeenCalledWith(

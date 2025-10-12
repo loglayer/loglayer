@@ -1,8 +1,5 @@
 import { HttpTransportError, RateLimitError } from "./errors.js";
 
-// Re-export error classes for backward compatibility
-export { HttpTransportError, RateLimitError };
-
 /**
  * Compresses data using gzip compression
  */
