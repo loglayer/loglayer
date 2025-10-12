@@ -9,7 +9,7 @@ _LogLayer is designed to work seamlessly across both server-side and browser env
 
 ## Installation
 
-### Node.js / npm
+### Node.js
 
 ::: code-group
 
