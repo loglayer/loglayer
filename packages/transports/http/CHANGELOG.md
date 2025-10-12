@@ -1,5 +1,17 @@
 # `@loglayer/transport-http` Changelog
 
+## 1.1.0
+
+### Minor Changes
+
+- [#270](https://github.com/loglayer/loglayer/pull/270) [`e1cf20a`](https://github.com/loglayer/loglayer/commit/e1cf20a1bb2535127d1f05d14c337f060c8b399b) Thanks [@theogravity](https://github.com/theogravity)! - Batching and debugging enhancements:
+
+  - New `onDebugReqRes` callback: Debug HTTP requests and responses with complete request/response details including headers and body content
+  - Improved batch handling with new `batchMode` option supporting three modes:
+    - `"delimiter"` (default) - Join entries with a delimiter
+    - `"field"` - Wrap entries in an object with a field name (e.g., `{"batch": [...]}`)
+    - `"array"` - Send entries as a plain JSON array
+
 ## 1.0.7
 
 ### Patch Changes
