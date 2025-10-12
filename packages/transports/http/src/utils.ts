@@ -50,7 +50,10 @@ export async function sendWithRetry(
   maxRetries: number,
   retryDelay: number,
   respectRateLimit = true,
-  onDebugReqRes?: (reqRes: { req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array }; res: { status: number; statusText: string; headers: Record<string, string>; body: string } }) => void,
+  onDebugReqRes?: (reqRes: {
+    req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array };
+    res: { status: number; statusText: string; headers: Record<string, string>; body: string };
+  }) => void,
   onError?: (err: Error) => void,
 ): Promise<Response> {
   let lastError: Error;

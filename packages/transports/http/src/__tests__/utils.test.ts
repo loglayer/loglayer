@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { compressData, sendWithRetry } from "../utils.js";
 import { HttpTransportError, RateLimitError } from "../errors.js";
+import { compressData, sendWithRetry } from "../utils.js";
 
 // Mock fetch globally
 const mockFetch = vi.fn();
@@ -53,9 +53,7 @@ describe("utils", () => {
       const originalCompressionStream = global.CompressionStream;
       delete (global as any).CompressionStream;
 
-      await expect(compressData("test data")).rejects.toThrow(
-        "Gzip compression not supported in this environment"
-      );
+      await expect(compressData("test data")).rejects.toThrow("Gzip compression not supported in this environment");
 
       // Restore CompressionStream
       global.CompressionStream = originalCompressionStream;
@@ -69,7 +67,8 @@ describe("utils", () => {
       };
 
       const mockReader = {
-        read: vi.fn()
+        read: vi
+          .fn()
           .mockResolvedValueOnce({ done: false, value: new Uint8Array([1, 2, 3]) })
           .mockResolvedValueOnce({ done: true }),
       };
@@ -111,7 +110,7 @@ describe("utils", () => {
         { "Content-Type": "application/json" },
         '{"test": "data"}',
         3,
-        1000
+        1000,
       );
 
       expect(result).toBe(mockResponse);
@@ -122,10 +121,7 @@ describe("utils", () => {
       const mockError = new Error("Network error");
       const mockResponse = new Response("Success", { status: 200 });
 
-      mockFetch
-        .mockRejectedValueOnce(mockError)
-        .mockRejectedValueOnce(mockError)
-        .mockResolvedValueOnce(mockResponse);
+      mockFetch.mockRejectedValueOnce(mockError).mockRejectedValueOnce(mockError).mockResolvedValueOnce(mockResponse);
 
       const promise = sendWithRetry(
         "https://api.example.com/logs",
@@ -133,13 +129,13 @@ describe("utils", () => {
         { "Content-Type": "application/json" },
         '{"test": "data"}',
         2,
-        100
+        100,
       );
 
       // Use runAllTimersAsync to handle all timers and wait for completion
       await vi.runAllTimersAsync();
       const result = await promise;
-      
+
       expect(result).toBe(mockResponse);
       expect(mockFetch).toHaveBeenCalledTimes(3);
     });
@@ -154,7 +150,7 @@ describe("utils", () => {
         { "Content-Type": "application/json" },
         '{"test": "data"}',
         2,
-        100
+        100,
       );
       // attach handler immediately to avoid unhandled rejection warnings
       void promise.catch(() => {});
@@ -165,9 +161,9 @@ describe("utils", () => {
     });
 
     it("should handle rate limiting with retry-after header", async () => {
-      const mockResponse = new Response("Rate Limited", { 
+      const mockResponse = new Response("Rate Limited", {
         status: 429,
-        headers: new Headers({ "retry-after": "2" })
+        headers: new Headers({ "retry-after": "2" }),
       });
       mockFetch.mockResolvedValueOnce(mockResponse);
 
@@ -178,7 +174,7 @@ describe("utils", () => {
         '{"test": "data"}',
         0,
         1000,
-        true
+        true,
       );
 
       // attach handler immediately to avoid unhandled rejection warnings
@@ -199,7 +195,7 @@ describe("utils", () => {
         '{"test": "data"}',
         0,
         1000,
-        true
+        true,
       );
 
       // attach handler immediately to avoid unhandled rejection warnings
@@ -223,7 +219,7 @@ describe("utils", () => {
         1000,
         true,
         undefined,
-        onError
+        onError,
       );
 
       // attach handler immediately to avoid unhandled rejection warnings
@@ -235,7 +231,7 @@ describe("utils", () => {
       expect(onError).toHaveBeenCalledWith(
         expect.objectContaining({
           message: "HTTP request failed with status 404: ",
-        })
+        }),
       );
     });
 
@@ -253,7 +249,7 @@ describe("utils", () => {
         1000,
         true,
         undefined,
-        onError
+        onError,
       );
 
       // Fast-forward through all timers
@@ -276,7 +272,7 @@ describe("utils", () => {
         0,
         1000,
         true,
-        onDebugReqRes
+        onDebugReqRes,
       );
 
       // Fast-forward through all timers
@@ -319,13 +315,13 @@ describe("utils", () => {
         1000,
         true,
         onDebugReqRes,
-        onError
+        onError,
       );
 
       expect(onError).toHaveBeenCalledWith(
         expect.objectContaining({
           message: "Debug callback error: Error: Debug callback error",
-        })
+        }),
       );
     });
 
@@ -339,7 +335,7 @@ describe("utils", () => {
         { "Content-Type": "application/json" },
         '{"test": "data"}',
         2,
-        100
+        100,
       );
 
       // attach handler immediately to avoid unhandled rejection warnings
@@ -364,7 +360,7 @@ describe("utils", () => {
         1000,
         false,
         undefined,
-        onError
+        onError,
       );
 
       // No timers to advance for this test since maxRetries is 0
@@ -373,7 +369,7 @@ describe("utils", () => {
       expect(onError).toHaveBeenCalledWith(
         expect.objectContaining({
           message: "HTTP request failed with status 429: ",
-        })
+        }),
       );
     });
   });

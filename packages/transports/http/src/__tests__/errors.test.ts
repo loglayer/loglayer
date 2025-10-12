@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { HttpTransportError, RateLimitError, LogSizeError } from "../errors.js";
+import { HttpTransportError, LogSizeError, RateLimitError } from "../errors.js";
 
 describe("errors", () => {
   describe("HttpTransportError", () => {
@@ -55,13 +55,8 @@ describe("errors", () => {
   describe("LogSizeError", () => {
     it("should create error with all properties", () => {
       const logEntry = { level: "info", message: "test", data: { key: "value" } };
-      const error = new LogSizeError(
-        "Log entry too large",
-        logEntry,
-        2048,
-        1024
-      );
-      
+      const error = new LogSizeError("Log entry too large", logEntry, 2048, 1024);
+
       expect(error.message).toBe("Log entry too large");
       expect(error.name).toBe("LogSizeError");
       expect(error.logEntry).toBe(logEntry);
@@ -71,13 +66,8 @@ describe("errors", () => {
 
     it("should create error with empty log entry", () => {
       const logEntry = {};
-      const error = new LogSizeError(
-        "Empty log entry",
-        logEntry,
-        0,
-        1024
-      );
-      
+      const error = new LogSizeError("Empty log entry", logEntry, 0, 1024);
+
       expect(error.message).toBe("Empty log entry");
       expect(error.name).toBe("LogSizeError");
       expect(error.logEntry).toBe(logEntry);
@@ -92,18 +82,13 @@ describe("errors", () => {
         data: {
           nested: {
             array: [1, 2, 3],
-            object: { key: "value" }
+            object: { key: "value" },
           },
-          timestamp: new Date().toISOString()
-        }
+          timestamp: new Date().toISOString(),
+        },
       };
-      const error = new LogSizeError(
-        "Complex log entry too large",
-        logEntry,
-        5000,
-        1000
-      );
-      
+      const error = new LogSizeError("Complex log entry too large", logEntry, 5000, 1000);
+
       expect(error.message).toBe("Complex log entry too large");
       expect(error.name).toBe("LogSizeError");
       expect(error.logEntry).toBe(logEntry);

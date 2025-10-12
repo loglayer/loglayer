@@ -11,8 +11,6 @@ vi.mock("../utils.js", () => ({
   sendWithRetry: vi.fn(),
 }));
 
-// Import error classes for testing
-import { HttpTransportError, RateLimitError, LogSizeError } from "../errors.js";
 import { compressData, sendWithRetry } from "../utils.js";
 
 // Get mocked functions
@@ -25,7 +23,7 @@ describe("HttpTransport", () => {
     mockFetch.mockClear();
     mockCompressData.mockClear();
     mockSendWithRetry.mockClear();
-    
+
     // Set up default mock implementations
     mockSendWithRetry.mockResolvedValue(new Response("Success", { status: 200 }));
     mockCompressData.mockResolvedValue(new Uint8Array([1, 2, 3]));
@@ -344,7 +342,7 @@ describe("HttpTransport", () => {
 
   it("should use onDebugReqRes callback when specified", () => {
     const onDebugReqRes = vi.fn();
-    
+
     const transport = new HttpTransport({
       url: "https://api.example.com/logs",
       onDebugReqRes,
@@ -524,14 +522,26 @@ describe("HttpTransport", () => {
   describe("HTTP status code checking", () => {
     it("should call onError when HTTP status is not 2xx and onError is enabled", async () => {
       const onError = vi.fn();
-      
+
       // Mock sendWithRetry to call onError with a 404 error
-      mockSendWithRetry.mockImplementationOnce(async (url, method, headers, payload, maxRetries, retryDelay, respectRateLimit, onDebugReqRes, onErrorCallback) => {
-        if (onErrorCallback) {
-          onErrorCallback(new Error("HTTP request failed with status 404: Not Found"));
-        }
-        throw new Error("HTTP 404: Not Found");
-      });
+      mockSendWithRetry.mockImplementationOnce(
+        async (
+          _url,
+          _method,
+          _headers,
+          _payload,
+          _maxRetries,
+          _retryDelay,
+          _respectRateLimit,
+          _onDebugReqRes,
+          onErrorCallback,
+        ) => {
+          if (onErrorCallback) {
+            onErrorCallback(new Error("HTTP request failed with status 404: Not Found"));
+          }
+          throw new Error("HTTP 404: Not Found");
+        },
+      );
 
       const transport = new HttpTransport({
         url: "https://api.example.com/logs",
@@ -566,7 +576,7 @@ describe("HttpTransport", () => {
 
     it("should not call onError when HTTP status is 200", async () => {
       const onError = vi.fn();
-      
+
       // Mock sendWithRetry to return successful response without calling onError
       mockSendWithRetry.mockResolvedValueOnce(new Response("Success", { status: 200 }));
 
@@ -599,7 +609,7 @@ describe("HttpTransport", () => {
 
     it("should not call onError when HTTP status is 201 (Created)", async () => {
       const onError = vi.fn();
-      
+
       // Mock sendWithRetry to return successful 201 response
       mockSendWithRetry.mockResolvedValueOnce(new Response("Created", { status: 201 }));
 
@@ -632,7 +642,7 @@ describe("HttpTransport", () => {
 
     it("should not call onError when HTTP status is 202 (Accepted)", async () => {
       const onError = vi.fn();
-      
+
       // Mock sendWithRetry to return successful 202 response
       mockSendWithRetry.mockResolvedValueOnce(new Response("Accepted", { status: 202 }));
 
@@ -665,7 +675,7 @@ describe("HttpTransport", () => {
 
     it("should not call onError when HTTP status is 204 (No Content)", async () => {
       const onError = vi.fn();
-      
+
       // Mock sendWithRetry to return successful 204 response
       mockSendWithRetry.mockResolvedValueOnce(new Response("", { status: 200 }));
 
@@ -728,7 +738,7 @@ describe("HttpTransport", () => {
 
     it("should call onError for various non-2xx status codes", async () => {
       const onError = vi.fn();
-      
+
       const testCases = [
         { status: 400, statusText: "Bad Request" },
         { status: 401, statusText: "Unauthorized" },
@@ -741,14 +751,26 @@ describe("HttpTransport", () => {
       for (const testCase of testCases) {
         onError.mockClear();
         mockSendWithRetry.mockClear();
-        
+
         // Mock sendWithRetry to call onError with the specific status code
-        mockSendWithRetry.mockImplementationOnce(async (url, method, headers, payload, maxRetries, retryDelay, respectRateLimit, onDebugReqRes, onErrorCallback) => {
-          if (onErrorCallback) {
-            onErrorCallback(new Error(`HTTP request failed with status ${testCase.status}: ${testCase.statusText}`));
-          }
-          throw new Error(`HTTP ${testCase.status}: ${testCase.statusText}`);
-        });
+        mockSendWithRetry.mockImplementationOnce(
+          async (
+            _url,
+            _method,
+            _headers,
+            _payload,
+            _maxRetries,
+            _retryDelay,
+            _respectRateLimit,
+            _onDebugReqRes,
+            onErrorCallback,
+          ) => {
+            if (onErrorCallback) {
+              onErrorCallback(new Error(`HTTP request failed with status ${testCase.status}: ${testCase.statusText}`));
+            }
+            throw new Error(`HTTP ${testCase.status}: ${testCase.statusText}`);
+          },
+        );
 
         const transport = new HttpTransport({
           url: "https://api.example.com/logs",
@@ -784,7 +806,7 @@ describe("HttpTransport", () => {
 
     it("should not call onError for all 2xx status codes", async () => {
       const onError = vi.fn();
-      
+
       const testCases = [
         { status: 200, statusText: "OK" },
         { status: 201, statusText: "Created" },
@@ -801,7 +823,7 @@ describe("HttpTransport", () => {
       for (const testCase of testCases) {
         onError.mockClear();
         mockSendWithRetry.mockClear();
-        
+
         // Mock sendWithRetry to return successful response for each 2xx status code
         // Use status 200 for all tests since some status codes like 204 are not valid in Response constructor
         mockSendWithRetry.mockResolvedValueOnce(new Response(testCase.statusText, { status: 200 }));

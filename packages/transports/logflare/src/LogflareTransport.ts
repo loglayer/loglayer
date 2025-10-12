@@ -42,18 +42,20 @@ export class LogflareTransport extends HttpTransport {
     const apiEndpoint = config.url ?? "https://api.logflare.app";
     const fullUrl = `${apiEndpoint}/logs/json?source=${config.sourceId}`;
 
-    const payloadTemplate = config.payloadTemplate ?? (({ logLevel, message, data }) => {
-      const logEntry: Record<string, any> = {
-        message,
-      };
+    const payloadTemplate =
+      config.payloadTemplate ??
+      (({ logLevel, message, data }) => {
+        const logEntry: Record<string, any> = {
+          message,
+        };
 
-      // Only add metadata if data is provided
-      if (data) {
-        logEntry.metadata = data;
-      }
+        // Only add metadata if data is provided
+        if (data) {
+          logEntry.metadata = data;
+        }
 
-      return JSON.stringify(logEntry);
-    });
+        return JSON.stringify(logEntry);
+      });
 
     // Create HTTP transport config, excluding Logflare-specific properties
     const httpConfig = { ...config };

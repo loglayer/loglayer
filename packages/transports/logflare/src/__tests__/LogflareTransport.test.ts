@@ -31,8 +31,8 @@ describe("LogflareTransport", () => {
             "X-API-KEY": "test-api-key",
           },
           payloadTemplate: expect.any(Function),
-                batchMode: "field",
-                batchFieldName: "batch",
+          batchMode: "field",
+          batchFieldName: "batch",
         }),
       );
     });
@@ -79,8 +79,8 @@ describe("LogflareTransport", () => {
           enableBatchSend: false,
           batchSize: 50,
           batchSendTimeout: 3000,
-                batchMode: "field",
-                batchFieldName: "batch",
+          batchMode: "field",
+          batchFieldName: "batch",
         }),
       );
     });
@@ -203,8 +203,8 @@ describe("LogflareTransport", () => {
             "X-API-KEY": "test-api-key",
           },
           payloadTemplate: expect.any(Function),
-                batchMode: "field",
-                batchFieldName: "batch",
+          batchMode: "field",
+          batchFieldName: "batch",
         }),
       );
     });
@@ -265,7 +265,7 @@ describe("LogflareTransport", () => {
         message: "Message with special chars: éñ中文🚀",
         data: {
           "field-with-dash": "value",
-          "field_with_underscore": "value",
+          field_with_underscore: "value",
           "field.with.dots": "value",
         },
       });
@@ -276,6 +276,5 @@ describe("LogflareTransport", () => {
       expect(parsed.metadata["field_with_underscore"]).toBe("value");
       expect(parsed.metadata["field.with.dots"]).toBe("value");
     });
-
   });
 });

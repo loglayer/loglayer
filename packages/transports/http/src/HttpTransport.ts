@@ -1,9 +1,7 @@
 import type { LoggerlessTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
 import { LoggerlessTransport } from "@loglayer/transport";
+import { LogSizeError } from "./errors.js";
 import { compressData, sendWithRetry } from "./utils.js";
-import { HttpTransportError, RateLimitError, LogSizeError } from "./errors.js";
-
-
 
 /**
  * Configuration options for the HTTP transport.
@@ -43,7 +41,10 @@ export interface HttpTransportConfig extends LoggerlessTransportConfig {
   /**
    * Optional callback for debugging HTTP requests and responses
    */
-  onDebugReqRes?: (reqRes: { req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array }; res: { status: number; statusText: string; headers: Record<string, string>; body: string } }) => void;
+  onDebugReqRes?: (reqRes: {
+    req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array };
+    res: { status: number; statusText: string; headers: Record<string, string>; body: string };
+  }) => void;
   /**
    * Function to transform log data into the payload format
    */
@@ -119,7 +120,6 @@ export interface HttpTransportConfig extends LoggerlessTransportConfig {
   enableNextJsEdgeCompat?: boolean;
 }
 
-
 /**
  * HttpTransport is responsible for sending logs to any HTTP endpoint.
  * It supports batching, compression, retries, and rate limiting.
@@ -143,7 +143,10 @@ export class HttpTransport extends LoggerlessTransport {
   private batchContentType: string;
   private onError?: (err: Error) => void;
   private onDebug?: (entry: Record<string, any>) => void;
-  private onDebugReqRes?: (reqRes: { req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array }; res: { status: number; statusText: string; headers: Record<string, string>; body: string } }) => void;
+  private onDebugReqRes?: (reqRes: {
+    req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array };
+    res: { status: number; statusText: string; headers: Record<string, string>; body: string };
+  }) => void;
   private payloadTemplate: (data: { logLevel: string; message: string; data?: Record<string, any> }) => string;
   private compression: boolean;
   private maxRetries: number;
@@ -342,26 +345,27 @@ export class HttpTransport extends LoggerlessTransport {
    */
   private async sendBatch(batch: string[]): Promise<void> {
     let batchPayload: string;
-    
+
     switch (this.batchMode) {
-      case "array":
+      case "array": {
         // Send batch entries as a plain JSON array
-        const batchEntries = batch.map(payload => JSON.parse(payload));
+        const batchEntries = batch.map((payload) => JSON.parse(payload));
         batchPayload = JSON.stringify(batchEntries);
         break;
-      case "field":
+      }
+      case "field": {
         // Parse each payload as JSON and create a batch object
-        const fieldEntries = batch.map(payload => JSON.parse(payload));
+        const fieldEntries = batch.map((payload) => JSON.parse(payload));
         const batchObject = { [this.batchFieldName!]: fieldEntries };
         batchPayload = JSON.stringify(batchObject);
         break;
-      case "delimiter":
+      }
       default:
         // Use delimiter-based batching (default behavior)
         batchPayload = batch.join(this.batchSendDelimiter);
         break;
     }
-    
+
     await this.sendPayload(batchPayload, this.batchContentType);
   }
 
