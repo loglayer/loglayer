@@ -33,7 +33,7 @@
     "plugin"
   ],
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsdown src/index.ts",
     "test": "vitest --run",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "biome check --no-errors-on-unmatched --write --unsafe src",
@@ -45,12 +45,12 @@
     "fast-redact": "3.5.0"
   },
   "devDependencies": {
-    "@types/fast-redact": "3.0.4",
-    "loglayer": "workspace:*",
-    "@types/bunyan": "1.8.11",
-    "@types/node": "24.6.1",
     "@internal/tsconfig": "workspace:*",
-    "tsup": "8.5.0",
+    "@types/bunyan": "1.8.11",
+    "@types/fast-redact": "3.0.4",
+    "@types/node": "24.6.1",
+    "loglayer": "workspace:*",
+    "tsdown": "0.15.6",
     "typescript": "5.9.3",
     "vitest": "3.2.4"
   },

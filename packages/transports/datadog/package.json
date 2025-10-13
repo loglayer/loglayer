@@ -33,7 +33,7 @@
     "transport"
   ],
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsdown src/index.ts",
     "test": "vitest --run",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "biome check --no-errors-on-unmatched --write --unsafe src",
@@ -41,15 +41,15 @@
     "verify-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@loglayer/transport": "workspace:*",
     "@datadog/datadog-api-client": "1.41.0",
+    "@loglayer/transport": "workspace:*",
     "datadog-transport-common": "3.0.2"
   },
   "devDependencies": {
-    "loglayer": "workspace:*",
-    "@types/node": "24.6.1",
     "@internal/tsconfig": "workspace:*",
-    "tsup": "8.5.0",
+    "@types/node": "24.6.1",
+    "loglayer": "workspace:*",
+    "tsdown": "0.15.6",
     "typescript": "5.9.3",
     "vitest": "3.2.4"
   },
