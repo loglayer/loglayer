@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 6.9.0
+
+### Minor Changes
+
+- [#275](https://github.com/loglayer/loglayer/pull/275) [`d79c827`](https://github.com/loglayer/loglayer/commit/d79c8274c50c3e8d34d7f996d100c16ff90833ca) Thanks [@theogravity](https://github.com/theogravity)! - Add `stringify` option to `ConsoleTransport`
+
 ## 6.8.3
 
 ### Patch Changes
