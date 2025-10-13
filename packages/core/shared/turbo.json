@@ -1,6 +1,8 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "extends": ["//"],
+  "extends": [
+    "//"
+  ],
   "tasks": {
     "clean": {},
     "lint": {
@@ -8,6 +10,9 @@
         "*.ts",
         "src/**",
         "*.json"
+      ],
+      "dependsOn": [
+        "@internal/tsconfig#build"
       ]
     },
     "verify-types": {
@@ -15,6 +20,9 @@
         "*.ts",
         "src/**",
         "*.json"
+      ],
+      "dependsOn": [
+        "@internal/tsconfig#build"
       ]
     },
     "build": {
@@ -22,7 +30,17 @@
         "src/**",
         "*.json"
       ],
-      "outputs": ["dist/**"]
+      "outputs": [
+        "dist/**"
+      ],
+      "dependsOn": [
+        "@internal/tsconfig#build"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "@internal/tsconfig#build"
+      ]
     }
   }
 }

@@ -6,5 +6,6 @@ export default defineConfig({
   "format": ["cjs", "esm"],
 
   "sourcemap": true,
-  "treeshake": true
+  "treeshake": true,
+  "nodeProtocol": true
 });

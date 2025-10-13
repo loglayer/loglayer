@@ -5,5 +5,6 @@ export default defineConfig({
   "entry": ["src/index.ts"],
   "format": ["cjs", "esm"],
   "sourcemap": true,
-  "target": "es2022"
+  "target": "es2022",
+  "nodeProtocol": true
 });

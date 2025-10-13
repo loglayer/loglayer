@@ -41,15 +41,15 @@
     "verify-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@datadog/datadog-api-client": "1.41.0",
+    "@datadog/datadog-api-client": "1.45.0",
     "@loglayer/transport": "workspace:*",
     "datadog-transport-common": "3.0.2"
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "24.6.1",
+    "@types/node": "24.7.2",
     "loglayer": "workspace:*",
-    "tsdown": "0.15.6",
+    "tsdown": "0.15.7",
     "typescript": "5.9.3",
     "vitest": "3.2.4"
   },

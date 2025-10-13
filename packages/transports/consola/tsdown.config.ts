@@ -5,5 +5,6 @@ export default defineConfig({
   "outDir": "dist",
   "format": ["esm", "cjs"],
   "sourcemap": true,
-  "target": ["es2022"]
+  "target": ["es2022"],
+  "nodeProtocol": true
 });

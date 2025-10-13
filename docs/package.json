@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "@nolebase/ui-asciinema": "2.18.2",
-    "asciinema-player": "3.10.0"
+    "asciinema-player": "3.12.1"
   },
   "devDependencies": {
     "glob": "11.0.3",
     "vitepress": "1.6.4",
-    "vitepress-plugin-llms": "1.7.5"
+    "vitepress-plugin-llms": "1.8.0"
   },
   "engineStrict": true,
   "engines": {

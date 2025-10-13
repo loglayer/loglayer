@@ -1,6 +1,8 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "extends": ["//"],
+  "extends": [
+    "//"
+  ],
   "tasks": {
     "clean": {},
     "test": {
@@ -8,6 +10,12 @@
         "*.ts",
         "src/**",
         "*.json"
+      ],
+      "dependsOn": [
+        "@internal/tsconfig#build",
+        "@loglayer/transport#build",
+        "@loglayer/transport-http#build",
+        "loglayer#build"
       ]
     },
     "lint": {
@@ -15,6 +23,12 @@
         "*.ts",
         "src/**",
         "*.json"
+      ],
+      "dependsOn": [
+        "@internal/tsconfig#build",
+        "@loglayer/transport#build",
+        "@loglayer/transport-http#build",
+        "loglayer#build"
       ]
     },
     "verify-types": {
@@ -22,17 +36,28 @@
         "*.ts",
         "src/**",
         "*.json"
+      ],
+      "dependsOn": [
+        "@internal/tsconfig#build",
+        "@loglayer/transport#build",
+        "@loglayer/transport-http#build",
+        "loglayer#build"
       ]
     },
     "build": {
       "dependsOn": [
-        "@loglayer/transport-http#build"
+        "@internal/tsconfig#build",
+        "@loglayer/transport#build",
+        "@loglayer/transport-http#build",
+        "loglayer#build"
       ],
       "inputs": [
         "src/**",
         "*.json"
       ],
-      "outputs": ["dist/**"]
+      "outputs": [
+        "dist/**"
+      ]
     }
   }
 }

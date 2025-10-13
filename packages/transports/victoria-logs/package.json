@@ -43,11 +43,11 @@
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
     "@loglayer/transport": "workspace:*",
-    "@types/node": "24.6.1",
+    "@types/node": "24.7.2",
     "dotenv": "17.2.3",
     "loglayer": "workspace:*",
     "serialize-error": "12.0.0",
-    "tsdown": "0.15.6",
+    "tsdown": "0.15.7",
     "tsx": "4.20.6",
     "typescript": "5.9.3",
     "vitest": "3.2.4"

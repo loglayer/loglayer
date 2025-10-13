@@ -25,13 +25,13 @@
     "version-packages": "changeset version"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.4",
+    "@biomejs/biome": "2.2.6",
     "@changesets/changelog-github": "0.5.1",
     "@changesets/cli": "2.29.7",
     "@commitlint/cli": "20.1.0",
     "@commitlint/config-conventional": "20.0.0",
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "24.6.1",
+    "@types/node": "24.7.2",
     "lefthook": "1.13.6",
     "syncpack": "13.0.4",
     "turbo": "2.5.8",

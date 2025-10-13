@@ -46,10 +46,10 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "24.6.1",
+    "@types/node": "24.7.2",
     "global-jsdom": "27.0.0",
     "loglayer": "workspace:*",
-    "tsdown": "0.15.6",
+    "tsdown": "0.15.7",
     "typescript": "5.9.3",
     "vitest": "3.2.4"
   },

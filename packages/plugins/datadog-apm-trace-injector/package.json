@@ -50,11 +50,11 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "24.6.1",
-    "dd-trace": "5.65.0",
+    "@types/node": "24.7.2",
+    "dd-trace": "5.71.0",
     "express": "5.1.0",
     "loglayer": "workspace:*",
-    "tsdown": "0.15.6",
+    "tsdown": "0.15.7",
     "tsx": "4.20.6",
     "typescript": "5.9.3",
     "vitest": "3.2.4"

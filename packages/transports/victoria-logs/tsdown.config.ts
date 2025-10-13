@@ -6,5 +6,6 @@ export default defineConfig({
   "format": ["cjs", "esm"],
 
   "sourcemap": true,
-  "clean": true
+  "clean": true,
+  "nodeProtocol": true
 });

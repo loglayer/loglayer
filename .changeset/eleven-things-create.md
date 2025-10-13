@@ -41,4 +41,4 @@
 "@loglayer/shared": patch
 ---
 
-Migration from tsup to tsdown
+Migration from tsup to tsdown and small dependency updates.
