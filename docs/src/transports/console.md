@@ -60,6 +60,7 @@ None - all parameters are optional.
 | `levelField` | `string` | - | If defined, populates the field with the log level. If `levelFn` is defined, will call `levelFn` to derive the level |
 | `dateFn` | `() => string \| number` | - | If defined, a function that returns a string or number for the value to be used for the `dateField` |
 | `levelFn` | `(logLevel: LogLevelType) => string \| number` | - | If defined, a function that returns a string or number for a given log level. The input should be the logLevel |
+| `stringify` | `boolean` | `false` | If true, applies JSON.stringify to the structured log output when messageField, dateField, or levelField is defined |
 
 ### Examples
 
@@ -169,6 +170,22 @@ const log = new LogLayer({
 
 log.error('Database connection failed');
 // console.error({ level: 50 })
+```
+
+#### Stringify Output
+```typescript
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+    messageField: 'msg',
+    dateField: 'timestamp',
+    levelField: 'level',
+    stringify: true
+  })
+});
+
+log.withMetadata({ user: 'john' }).info('User logged in');
+// console.info('{"user":"john","msg":"User logged in","timestamp":"2023-12-01T10:30:00.000Z","level":"info"}')
 ```
 
 ## Combining Fields

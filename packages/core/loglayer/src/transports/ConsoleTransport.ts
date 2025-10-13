@@ -44,6 +44,11 @@ interface ConsoleTransportConfig extends LogLayerTransportConfig<ConsoleType> {
    * The input should be the logLevel.
    */
   levelFn?: (logLevel: LogLevelType) => string | number;
+  /**
+   * If true, applies JSON.stringify to the structured log output when messageField, dateField, or levelField is defined.
+   * Defaults to false.
+   */
+  stringify?: boolean;
 }
 
 /**
@@ -57,6 +62,7 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
   private levelField?: string;
   private dateFn?: () => string | number;
   private levelFn?: (logLevel: LogLevelType) => string | number;
+  private stringify: boolean;
 
   constructor(params: ConsoleTransportConfig) {
     super(params);
@@ -67,6 +73,7 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
     this.levelField = params.levelField;
     this.dateFn = params.dateFn;
     this.levelFn = params.levelFn;
+    this.stringify = params.stringify || false;
   }
 
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams) {
@@ -84,7 +91,7 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
         ...(this.dateField && { [this.dateField]: this.dateFn ? this.dateFn() : new Date().toISOString() }),
         ...(this.levelField && { [this.levelField]: this.levelFn ? this.levelFn(logLevel) : logLevel }),
       };
-      messages = [logObject];
+      messages = [this.stringify ? JSON.stringify(logObject) : logObject];
     } else if (data && hasData) {
       if (this.appendObjectData) {
         messages.push(data);

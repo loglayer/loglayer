@@ -389,4 +389,177 @@ describe("ConsoleTransport", () => {
       expect(call).toHaveProperty("level", "error");
     });
   });
+
+  describe("stringify", () => {
+    it("should default to false", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageField: "msg",
+      });
+
+      transport.shipToLogger({
+        logLevel: LogLevel.info,
+        messages: ["test message"],
+      });
+
+      expect(mockConsole.info).toHaveBeenCalledWith({
+        msg: "test message",
+      });
+    });
+
+    it("should stringify output when stringify is true with messageField", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageField: "msg",
+        stringify: true,
+      });
+
+      transport.shipToLogger({
+        logLevel: LogLevel.info,
+        messages: ["test message"],
+      });
+
+      expect(mockConsole.info).toHaveBeenCalledWith('{"msg":"test message"}');
+    });
+
+    it("should stringify output when stringify is true with dateField", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        dateField: "timestamp",
+        stringify: true,
+      });
+
+      transport.shipToLogger({
+        logLevel: LogLevel.info,
+        messages: ["test message"],
+      });
+
+      const call = (mockConsole.info as any).mock.calls[0][0];
+      expect(typeof call).toBe("string");
+      const parsed = JSON.parse(call);
+      expect(parsed).toHaveProperty("timestamp");
+      expect(typeof parsed.timestamp).toBe("string");
+    });
+
+    it("should stringify output when stringify is true with levelField", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        levelField: "level",
+        stringify: true,
+      });
+
+      transport.shipToLogger({
+        logLevel: LogLevel.warn,
+        messages: ["test message"],
+      });
+
+      expect(mockConsole.warn).toHaveBeenCalledWith('{"level":"warn"}');
+    });
+
+    it("should stringify output when stringify is true with combined fields", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageField: "msg",
+        dateField: "timestamp",
+        levelField: "level",
+        stringify: true,
+      });
+
+      transport.shipToLogger({
+        logLevel: LogLevel.error,
+        messages: ["error occurred"],
+      });
+
+      const call = (mockConsole.error as any).mock.calls[0][0];
+      expect(typeof call).toBe("string");
+      const parsed = JSON.parse(call);
+      expect(parsed).toHaveProperty("msg", "error occurred");
+      expect(parsed).toHaveProperty("timestamp");
+      expect(parsed).toHaveProperty("level", "error");
+    });
+
+    it("should stringify output with existing data when stringify is true", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageField: "msg",
+        stringify: true,
+      });
+      const data = { user: "john", session: "abc123" };
+
+      transport.shipToLogger({
+        logLevel: LogLevel.info,
+        messages: ["user action"],
+        data,
+        hasData: true,
+      });
+
+      const call = (mockConsole.info as any).mock.calls[0][0];
+      expect(typeof call).toBe("string");
+      const parsed = JSON.parse(call);
+      expect(parsed).toHaveProperty("user", "john");
+      expect(parsed).toHaveProperty("session", "abc123");
+      expect(parsed).toHaveProperty("msg", "user action");
+    });
+
+    it("should not stringify when stringify is false", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageField: "msg",
+        stringify: false,
+      });
+
+      transport.shipToLogger({
+        logLevel: LogLevel.info,
+        messages: ["test message"],
+      });
+
+      expect(mockConsole.info).toHaveBeenCalledWith({
+        msg: "test message",
+      });
+    });
+
+    it("should not stringify when no fields are defined", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        stringify: true,
+      });
+      const data = { user: "john" };
+
+      transport.shipToLogger({
+        logLevel: LogLevel.info,
+        messages: ["test message"],
+        data,
+        hasData: true,
+      });
+
+      expect(mockConsole.info).toHaveBeenCalledWith(data, "test message");
+    });
+
+    it("should stringify with custom dateFn and levelFn", () => {
+      const customDate = "2023-01-01T00:00:00.000Z";
+      const dateFn = vi.fn(() => customDate);
+      const levelFn = vi.fn((level) => level.toUpperCase());
+
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageField: "msg",
+        dateField: "timestamp",
+        levelField: "level",
+        dateFn,
+        levelFn,
+        stringify: true,
+      });
+
+      transport.shipToLogger({
+        logLevel: LogLevel.debug,
+        messages: ["test message"],
+      });
+
+      expect(dateFn).toHaveBeenCalledOnce();
+      expect(levelFn).toHaveBeenCalledWith("debug");
+      expect(mockConsole.debug).toHaveBeenCalledWith(
+        '{"msg":"test message","timestamp":"2023-01-01T00:00:00.000Z","level":"DEBUG"}',
+      );
+    });
+  });
 });

@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Oct 13, 2025
+
+`loglayer`:
+
+- Add the `stringify` optional config option to the `ConsoleTransport`, which will apply `JSON.stringify()` to log output in structured log mode.
+
 ## Oct 12, 2025
 
 `@loglayer/transport-betterstack`:
