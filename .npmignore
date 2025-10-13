@@ -26,7 +26,7 @@ livetests/
 biome.json
 build/
 commitlint.config.js
-tsup.config.json
+tsdown.config.json
 .turbo/
 .hashes.json
 .hash-runnerrc.json

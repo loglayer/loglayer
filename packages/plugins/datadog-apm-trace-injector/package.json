@@ -36,7 +36,7 @@
     "dd-trace"
   ],
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsdown src/index.ts",
     "test": "vitest --run",
     "livetest": "tsx src/__tests__/livetest.ts",
     "clean": "rm -rf .turbo node_modules dist",
@@ -49,12 +49,12 @@
     "@loglayer/shared": "workspace:*"
   },
   "devDependencies": {
-    "loglayer": "workspace:*",
-    "@types/node": "24.6.1",
     "@internal/tsconfig": "workspace:*",
-    "express": "5.1.0",
+    "@types/node": "24.6.1",
     "dd-trace": "5.65.0",
-    "tsup": "8.5.0",
+    "express": "5.1.0",
+    "loglayer": "workspace:*",
+    "tsdown": "0.15.6",
     "tsx": "4.20.6",
     "typescript": "5.9.3",
     "vitest": "3.2.4"

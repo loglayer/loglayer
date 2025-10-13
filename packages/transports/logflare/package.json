@@ -31,7 +31,7 @@
     "transport"
   ],
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsdown src/index.ts",
     "test": "vitest --run",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "biome check --no-errors-on-unmatched --write --unsafe src",
@@ -43,14 +43,14 @@
     "@loglayer/transport-http": "workspace:*"
   },
   "devDependencies": {
+    "@internal/tsconfig": "workspace:*",
     "@loglayer/transport": "workspace:*",
+    "@types/node": "24.6.1",
     "dotenv": "17.2.3",
     "loglayer": "workspace:*",
-    "@types/node": "24.6.1",
-    "@internal/tsconfig": "workspace:*",
     "serialize-error": "12.0.0",
+    "tsdown": "0.15.6",
     "tsx": "4.20.6",
-    "tsup": "8.5.0",
     "typescript": "5.9.3",
     "vitest": "3.2.4"
   },

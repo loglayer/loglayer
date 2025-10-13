@@ -38,5 +38,5 @@ For packages in the `packages/` directory, we generally have the following files
 - `package.json`: NPM package configuration file.
 - `README.md`: Readme file (top header should be the package name).
 - `tsconfig.json`: TypeScript configuration file
-- `tsup.config.json`: `tsup` build configuration file.
+- `tsdown.config.json`: `tsdown` build configuration file.
 - `turbo.json`: Turborepo configuration file, see other packages for examples. 
