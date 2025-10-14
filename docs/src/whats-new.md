@@ -13,6 +13,18 @@ description: Learn about the latest features and improvements in LogLayer
 
 - Add the `stringify` optional config option to the `ConsoleTransport`, which will apply `JSON.stringify()` to log output in structured log mode.
 
+`@loglayer/transport-logflare`:
+
+- Fixed a bug where the log level was not being passed through.
+
+`@loglayer/transport-pretty-terminal`:
+
+- Update `better-sqlite3` dependency to `12.4.1`
+
+All packages:
+
+- Thanks to [@Eptagone](https://github.com/Eptagone) for updating our builds to use `tsdown` instead of `tsup` as `tsup` is now deprecated.
+
 ## Oct 12, 2025
 
 `@loglayer/transport-betterstack`:
@@ -60,7 +72,6 @@ Thanks to [@Eptagone](https://github.com/Eptagone) for the following:
   - Better IntelliSense support and type safety when working with logging data
   - Allows developers to extend these types for custom IntelliSense in their applications
   - See [TypeScript documentation](https://loglayer.dev/logging-api/typescript.html) for usage examples
-
 
 ## Oct 9, 2025
 
