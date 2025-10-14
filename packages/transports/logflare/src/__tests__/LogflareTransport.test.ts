@@ -124,6 +124,7 @@ describe("LogflareTransport", () => {
       expect(parsed).toEqual({
         message: "test message",
         metadata: {
+          level: "info",
           userId: "123",
           action: "login",
         },
@@ -147,6 +148,9 @@ describe("LogflareTransport", () => {
       const parsed = JSON.parse(result);
       expect(parsed).toEqual({
         message: "debug message",
+        metadata: {
+          level: "debug",
+        },
       });
     });
 
@@ -168,7 +172,9 @@ describe("LogflareTransport", () => {
       const parsed = JSON.parse(result);
       expect(parsed).toEqual({
         message: "warning message",
-        metadata: {},
+        metadata: {
+          level: "warn",
+        },
       });
     });
 
@@ -238,6 +244,7 @@ describe("LogflareTransport", () => {
       expect(parsed).toEqual({
         message: "error message",
         metadata: {
+          level: "error",
           userId: "123",
           requestId: "req-456",
           error: {
@@ -272,6 +279,7 @@ describe("LogflareTransport", () => {
 
       const parsed = JSON.parse(result);
       expect(parsed.message).toBe("Message with special chars: éñ中文🚀");
+      expect(parsed.metadata.level).toBe("info");
       expect(parsed.metadata["field-with-dash"]).toBe("value");
       expect(parsed.metadata["field_with_underscore"]).toBe("value");
       expect(parsed.metadata["field.with.dots"]).toBe("value");

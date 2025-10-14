@@ -49,10 +49,17 @@ export class LogflareTransport extends HttpTransport {
           message,
         };
 
-        // Only add metadata if data is provided
+        // Always include level in metadata
+        const metadata: Record<string, any> = {
+          level: logLevel,
+        };
+
+        // Add additional metadata if data is provided
         if (data) {
-          logEntry.metadata = data;
+          Object.assign(metadata, data);
         }
+
+        logEntry.metadata = metadata;
 
         return JSON.stringify(logEntry);
       });
