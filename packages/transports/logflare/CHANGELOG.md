@@ -1,5 +1,16 @@
 # @loglayer/transport-logflare
 
+## 1.0.2
+
+### Patch Changes
+
+- [#277](https://github.com/loglayer/loglayer/pull/277) [`1e01627`](https://github.com/loglayer/loglayer/commit/1e01627eeafb5e094da958532ad385cc59d70857) Thanks [@Eptagone](https://github.com/Eptagone)! - Migration from tsup to tsdown and small dependency updates.
+
+- [`5f8f172`](https://github.com/loglayer/loglayer/commit/5f8f1722c0bd87a55c8d854127ddfe7f09ecce90) Thanks [@theogravity](https://github.com/theogravity)! - Fixes an issue where the log level was not passed through. It is now passed as `level` under the metadata.
+
+- Updated dependencies [[`1e01627`](https://github.com/loglayer/loglayer/commit/1e01627eeafb5e094da958532ad385cc59d70857)]:
+  - @loglayer/transport-http@1.1.2
+
 ## 1.0.1
 
 ### Patch Changes

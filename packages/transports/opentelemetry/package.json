@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-opentelemetry",
   "description": "OpenTelemetry transport for LogLayer for use with log processors.",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

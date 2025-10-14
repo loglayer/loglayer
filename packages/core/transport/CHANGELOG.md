@@ -1,5 +1,14 @@
 # `@loglayer/transport` Changelog
 
+## 2.3.4
+
+### Patch Changes
+
+- [#277](https://github.com/loglayer/loglayer/pull/277) [`1e01627`](https://github.com/loglayer/loglayer/commit/1e01627eeafb5e094da958532ad385cc59d70857) Thanks [@Eptagone](https://github.com/Eptagone)! - Migration from tsup to tsdown and small dependency updates.
+
+- Updated dependencies [[`1e01627`](https://github.com/loglayer/loglayer/commit/1e01627eeafb5e094da958532ad385cc59d70857)]:
+  - @loglayer/shared@2.5.3
+
 ## 2.3.3
 
 ### Patch Changes
