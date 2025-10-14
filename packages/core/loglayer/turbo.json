@@ -10,13 +10,6 @@
         "*.ts",
         "src/**",
         "*.json"
-      ],
-      "dependsOn": [
-        "@internal/tsconfig#build",
-        "@loglayer/context-manager#build",
-        "@loglayer/plugin#build",
-        "@loglayer/shared#build",
-        "@loglayer/transport#build"
       ]
     },
     "lint": {
@@ -24,13 +17,6 @@
         "*.ts",
         "src/**",
         "*.json"
-      ],
-      "dependsOn": [
-        "@internal/tsconfig#build",
-        "@loglayer/context-manager#build",
-        "@loglayer/plugin#build",
-        "@loglayer/shared#build",
-        "@loglayer/transport#build"
       ]
     },
     "verify-types": {
@@ -38,13 +24,6 @@
         "*.ts",
         "src/**",
         "*.json"
-      ],
-      "dependsOn": [
-        "@internal/tsconfig#build",
-        "@loglayer/context-manager#build",
-        "@loglayer/plugin#build",
-        "@loglayer/shared#build",
-        "@loglayer/transport#build"
       ]
     },
     "build": {

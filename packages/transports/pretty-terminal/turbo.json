@@ -10,12 +10,6 @@
         "*.ts",
         "src/**",
         "*.json"
-      ],
-      "dependsOn": [
-        "@internal/tsconfig#build",
-        "@loglayer/shared#build",
-        "@loglayer/transport#build",
-        "loglayer#build"
       ]
     },
     "verify-types": {
@@ -23,12 +17,6 @@
         "*.ts",
         "src/**",
         "*.json"
-      ],
-      "dependsOn": [
-        "@internal/tsconfig#build",
-        "@loglayer/shared#build",
-        "@loglayer/transport#build",
-        "loglayer#build"
       ]
     },
     "build": {
@@ -46,13 +34,6 @@
         "dist/**"
       ]
     },
-    "test": {
-      "dependsOn": [
-        "@internal/tsconfig#build",
-        "@loglayer/shared#build",
-        "@loglayer/transport#build",
-        "loglayer#build"
-      ]
-    }
+    "test": {}
   }
 }

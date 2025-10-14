@@ -10,11 +10,6 @@
         "*.ts",
         "src/**",
         "*.json"
-      ],
-      "dependsOn": [
-        "@internal/tsconfig#build",
-        "@loglayer/plugin#build",
-        "loglayer#build"
       ]
     },
     "lint": {
@@ -22,11 +17,6 @@
         "*.ts",
         "src/**",
         "*.json"
-      ],
-      "dependsOn": [
-        "@internal/tsconfig#build",
-        "@loglayer/plugin#build",
-        "loglayer#build"
       ]
     },
     "verify-types": {
@@ -34,11 +24,6 @@
         "*.ts",
         "src/**",
         "*.json"
-      ],
-      "dependsOn": [
-        "@internal/tsconfig#build",
-        "@loglayer/plugin#build",
-        "loglayer#build"
       ]
     },
     "build": {
