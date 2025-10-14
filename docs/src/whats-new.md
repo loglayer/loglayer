@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Oct 14, 2025
+
+`@loglayer/transport-sentry`:
+
+- Added [Sentry transport](/transports/sentry) for sending logs to Sentry using the Sentry SDK logger API.
+
 ## Oct 13, 2025
 
 `loglayer`:
