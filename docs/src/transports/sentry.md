@@ -1,4 +1,4 @@
-# Sentry Transport <Badge type="tip" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="tip" text="Deno" /> <Badge type="tip" text="Bun" />
+# Sentry Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
 [![npm version](https://img.shields.io/npm/v/@loglayer/transport-sentry.svg)](https://www.npmjs.com/package/@loglayer/transport-sentry)
 [![Source](https://img.shields.io/badge/source-GitHub-blue.svg)](https://github.com/loglayer/loglayer/tree/main/packages/transports/sentry)
