@@ -57,5 +57,5 @@
     "dist"
   ],
   "homepage": "https://loglayer.dev/transports/victoria-logs",
-  "packageManager": "pnpm@10.17.1"
+  "packageManager": "pnpm@10.18.2"
 }
