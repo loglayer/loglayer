@@ -1,7 +1,7 @@
 # Sentry Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
 [![npm version](https://img.shields.io/npm/v/@loglayer/transport-sentry.svg)](https://www.npmjs.com/package/@loglayer/transport-sentry)
-[![Source](https://img.shields.io/badge/source-GitHub-blue.svg)](https://github.com/loglayer/loglayer/tree/main/packages/transports/sentry)
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/sentry)
 
 The Sentry transport for LogLayer sends structured logs to Sentry using the Sentry SDK's logger API. This transport integrates seamlessly with Sentry's structured logging features and supports all Sentry log levels.
 
