@@ -1,5 +1,19 @@
 # `@loglayer/transport-pretty-terminal` Changelog
 
+## 4.1.0
+
+### Minor Changes
+
+- [`e2efadd`](https://github.com/loglayer/loglayer/commit/e2efaddcd16eb97c9b40ce5b4e0940a118ff2bdb) Thanks [@theogravity](https://github.com/theogravity)! - Update `better-sqlite3` dependency to `12.4.1`
+
+### Patch Changes
+
+- [#277](https://github.com/loglayer/loglayer/pull/277) [`1e01627`](https://github.com/loglayer/loglayer/commit/1e01627eeafb5e094da958532ad385cc59d70857) Thanks [@Eptagone](https://github.com/Eptagone)! - Migration from tsup to tsdown and small dependency updates.
+
+- Updated dependencies [[`1e01627`](https://github.com/loglayer/loglayer/commit/1e01627eeafb5e094da958532ad385cc59d70857)]:
+  - @loglayer/transport@2.3.4
+  - @loglayer/shared@2.5.3
+
 ## 4.0.5
 
 ### Patch Changes
