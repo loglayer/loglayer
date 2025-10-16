@@ -6,7 +6,7 @@ import type {
   DescribeLogStreamsCommand,
   PutLogEventsCommand,
 } from "@aws-sdk/client-cloudwatch-logs";
-import { LogLayer, type LogLayerPlugin } from "loglayer";
+import { LogLayer } from "loglayer";
 import { describe, expect, it, vi } from "vitest";
 import type { CloudWatchLogsTransportConfig } from "../CloudWatchLogsTransport.js";
 import type { ICloudWatchLogsHandler } from "../handlers/common.js";
@@ -31,24 +31,6 @@ vi.mock(import("@aws-sdk/client-cloudwatch-logs"), async (importOriginal) => {
   };
 });
 
-function formatterPlugin(): LogLayerPlugin {
-  let tag: undefined | string;
-  return {
-    onContextCalled(params) {
-      tag ??= params.tag;
-      return params;
-    },
-    onMetadataCalled(params) {
-      tag ??= params.tag;
-      return params;
-    },
-    onBeforeMessageOut(params) {
-      const messages = [`[${tag ?? params.logLevel}]`, ...params.messages];
-      return messages;
-    },
-  };
-}
-
 describe("CloudWatchLogsTransport with LogLayer", () => {
   async function getLoggerInstance(options?: CloudWatchLogsTransportConfig) {
     const { CloudWatchLogsTransport, createDefaultHandler } = await import("../index.js");
@@ -64,7 +46,6 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
           return handler;
         },
       }),
-      plugins: [formatterPlugin()],
     });
 
     return { log, handler };
@@ -72,6 +53,18 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
 
   it("should log a message", async () => {
     const { log } = await getLoggerInstance();
+    const message = "test message";
+    log.info(message);
+    expect(mockSend).toHaveBeenCalledOnce();
+    const [command] = mockSend.mock.calls.at(0);
+    expect(command).toSatisfy((command: PutLogEventsCommand) => command.input.logEvents[0]?.message === message);
+    mockSend.mockReset();
+  });
+
+  it("should log and format a message", async () => {
+    const { log } = await getLoggerInstance({
+      messageFn: (params) => `[${params.logLevel}] ${params.messages.map((msg) => String(msg)).join(" ")}`,
+    });
     log.info("test message");
     expect(mockSend).toHaveBeenCalledOnce();
     const [command] = mockSend.mock.calls.at(0);
@@ -82,7 +75,9 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
   });
 
   it("should log a message with context", async () => {
-    const { log, handler } = await getLoggerInstance();
+    const { log, handler } = await getLoggerInstance({
+      messageFn: (params) => `[${params.context.tag}] ${params.messages.map((msg) => String(msg)).join(" ")}`,
+    });
 
     log.withContext({ tag: "context" }).info("test message");
 
@@ -98,7 +93,9 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
   });
 
   it("should log a message with metadata", async () => {
-    const { log, handler } = await getLoggerInstance();
+    const { log, handler } = await getLoggerInstance({
+      messageFn: (params) => `[${params.metadata.tag}] ${params.messages.map((msg) => String(msg)).join(" ")}`,
+    });
     log.withMetadata({ tag: "meta" }).info("test message");
 
     expect(handler.handleEvent).toHaveBeenCalledOnce();

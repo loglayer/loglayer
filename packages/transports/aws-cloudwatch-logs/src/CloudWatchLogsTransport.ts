@@ -6,6 +6,7 @@ import {
   type ICloudWatchLogsHandler,
 } from "./handlers/index.js";
 
+type MessageFn = (params: LogLayerTransportParams, timestamp: number) => string;
 type NameSelectorCallback = (params: LogLayerTransportParams) => string | undefined;
 
 export interface CloudWatchLogsTransportConfig extends CloudWatchLogsHandlerOptions, LoggerlessTransportConfig {
@@ -25,6 +26,13 @@ export interface CloudWatchLogsTransportConfig extends CloudWatchLogsHandlerOpti
    * A custom handler for sending logs to CloudWatch Logs.
    */
   handler?: CloudWatchLogsHandler;
+
+  /**
+   * A custom function to generate the final message to be sent to CloudWatch Logs.
+   * If not provided, all messages are joined into a single string.
+   * @see https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html
+   */
+  messageFn?: MessageFn;
 }
 
 type SimplifiedConfig = Omit<
@@ -58,8 +66,8 @@ export class CloudWatchLogsTransport extends LoggerlessTransport {
       typeof this.#config.streamName === "function" ? this.#config.streamName(params) : this.#config.streamName;
 
     const timestamp = Date.now();
-    const message = params.messages.map((msg) => String(msg)).join(" ");
+    const message = this.#config.messageFn?.(params, timestamp) ?? params.messages.map((msg) => String(msg)).join(" ");
     this.#handler.handleEvent({ timestamp, message }, groupName, streamName);
-    return params.messages;
+    return this.#config.messageFn ? [message] : params.messages;
   }
 }
