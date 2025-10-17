@@ -1,3 +1,5 @@
+// This custom rolldown plugin is used to compile the worker thread used by CloudWatchLogsWorkerHandler
+
 import path from "node:path";
 import { BindingMagicString, type Plugin } from "rolldown";
 

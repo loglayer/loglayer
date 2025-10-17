@@ -9,7 +9,7 @@ import {
   type InputLogEvent,
   PutLogEventsCommand,
 } from "@aws-sdk/client-cloudwatch-logs";
-import type { CloudWatchLogsHandlerOptions, ICloudWatchLogsHandler } from "./common.js";
+import type { CloudWatchLogsHandler, CloudWatchLogsHandlerOptions, ICloudWatchLogsHandler } from "./common.js";
 
 interface EventChannel {
   groupId?: number;
@@ -17,7 +17,8 @@ interface EventChannel {
   events: InputLogEvent[];
 }
 
-class CloudWatchLogsDefaultHandler implements ICloudWatchLogsHandler {
+// The default handler is responsible for handling log events and sending them to CloudWatch Logs.
+class DefaultHandler implements ICloudWatchLogsHandler {
   private readonly groups: string[] = [];
   private readonly streams: string[] = [];
   private readonly channels: EventChannel[] = [];
@@ -41,23 +42,21 @@ class CloudWatchLogsDefaultHandler implements ICloudWatchLogsHandler {
         const result: DescribeLogGroupsCommandOutput | undefined = await this.client
           .send(new DescribeLogGroupsCommand({ logGroupIdentifiers: [logGroupName] }))
           .catch((error) => {
-            console.error(
-              "An error occurred while getting the specified CloudWatch log group: '%s'",
-              logGroupName,
-              error,
+            this.options.onError?.(
+              new Error(`An error occurred while getting the specified CloudWatch log group: '${logGroupName}'`, {
+                cause: error,
+              }),
             );
             return undefined;
           });
         if (result && !result.logGroups?.find((g) => g.logGroupName === logGroupName)) {
-          await this.client
-            .send(new CreateLogGroupCommand({ logGroupName }))
-            .catch((error) =>
-              console.error(
-                "An error occurred while creating the specified CloudWatch log group: '%s'",
-                logGroupName,
-                error,
-              ),
-            );
+          await this.client.send(new CreateLogGroupCommand({ logGroupName })).catch((error) =>
+            this.options.onError?.(
+              new Error(`An error occurred while creating the specified CloudWatch log group: '${logGroupName}'`, {
+                cause: error,
+              }),
+            ),
+          );
         }
       }
     }
@@ -71,23 +70,21 @@ class CloudWatchLogsDefaultHandler implements ICloudWatchLogsHandler {
         const result: DescribeLogStreamsCommandOutput | undefined = await this.client
           .send(new DescribeLogStreamsCommand({ logGroupName, logStreamNamePrefix: logStreamName }))
           .catch((error) => {
-            console.error(
-              "An error occurred while getting the specified CloudWatch log stream: '%s'",
-              logStreamName,
-              error,
+            this.options.onError?.(
+              new Error(`An error occurred while getting the specified CloudWatch log stream: '${logStreamName}'`, {
+                cause: error,
+              }),
             );
             return undefined;
           });
         if (result && !result.logStreams?.find((s) => s.logStreamName === logStreamName)) {
-          await this.client
-            .send(new CreateLogStreamCommand({ logGroupName, logStreamName }))
-            .catch((error) =>
-              console.error(
-                "An error occurred while creating the specified CloudWatch log stream: '%s'",
-                logStreamName,
-                error,
-              ),
-            );
+          await this.client.send(new CreateLogStreamCommand({ logGroupName, logStreamName })).catch((error) =>
+            this.options.onError?.(
+              new Error(`An error occurred while creating the specified CloudWatch log stream: '${logStreamName}'`, {
+                cause: error,
+              }),
+            ),
+          );
         }
       }
     }
@@ -121,16 +118,28 @@ class CloudWatchLogsDefaultHandler implements ICloudWatchLogsHandler {
     try {
       await this.client.send(command);
     } catch (error) {
-      console.error(
-        "An error occurred while sending log events to the CloudWatch service. LogGroupName: %s, LogStreamName: %s",
-        logGroupName,
-        logStreamName,
-        error,
+      this.options.onError?.(
+        new Error(
+          `An error occurred while sending log events to the CloudWatch service. LogGroupName: ${logGroupName}, LogStreamName: ${logStreamName}`,
+          { cause: error },
+        ),
       );
     }
   }
 }
 
+/**
+ * Creates a default handler instance.
+ * @param options - Handler options
+ * @returns
+ */
 export function createDefaultHandler(options: CloudWatchLogsHandlerOptions = {}): ICloudWatchLogsHandler {
-  return new CloudWatchLogsDefaultHandler(options);
+  return new DefaultHandler(options);
 }
+
+/**
+ * Default handler for sending log events to CloudWatch Logs.
+ * @param options - Handler options
+ * @returns
+ */
+export const CloudWatchLogsDefaultHandler: CloudWatchLogsHandler = (options = {}) => createDefaultHandler(options);

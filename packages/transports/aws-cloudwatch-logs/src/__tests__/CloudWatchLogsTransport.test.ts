@@ -14,6 +14,9 @@ import type { ICloudWatchLogsHandler } from "../handlers/common.js";
 const mockSend = vi.fn((..._: Parameters<CloudWatchLogsClient["send"]>) => {
   return Promise.resolve({});
 });
+const onError = vi.fn((error) => {
+  console.error(error);
+});
 
 vi.mock(import("@aws-sdk/client-cloudwatch-logs"), async (importOriginal) => {
   const original = await importOriginal();
@@ -41,6 +44,7 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     const log = new LogLayer({
       transport: new CloudWatchLogsTransport({
         ...options,
+        onError,
         handler: (options) => {
           realHandler = createDefaultHandler(options);
           return handler;
@@ -108,6 +112,20 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     );
 
     mockSend.mockReset();
+  });
+
+  it("should call error callback", async () => {
+    const { log, handler } = await getLoggerInstance();
+    mockSend.mockImplementation(() => Promise.reject(new Error("Test error")));
+
+    log.info("test message");
+    expect(handler.handleEvent).toHaveBeenCalledOnce();
+    await handler.handleEvent.mock.results[0].value;
+
+    expect(onError).toHaveBeenCalledOnce();
+
+    mockSend.mockReset();
+    onError.mockReset();
   });
 
   it("should try to create log group and stream", async () => {

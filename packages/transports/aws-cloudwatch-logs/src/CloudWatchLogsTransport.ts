@@ -37,7 +37,7 @@ export interface CloudWatchLogsTransportConfig extends CloudWatchLogsHandlerOpti
 
 type SimplifiedConfig = Omit<
   CloudWatchLogsTransportConfig,
-  keyof LoggerlessTransportConfig | keyof CloudWatchLogsHandlerOptions | "handler"
+  keyof LoggerlessTransportConfig | keyof CloudWatchLogsHandlerOptions | "handler" | "onError"
 >;
 
 /**
@@ -48,13 +48,24 @@ export class CloudWatchLogsTransport extends LoggerlessTransport {
   #handler: ICloudWatchLogsHandler;
 
   constructor(config: CloudWatchLogsTransportConfig = {}) {
-    const { id, enabled, consoleDebug, level, handler, batchSize, delay, createIfNotExists, clientConfig, ...rest } =
-      config;
+    const {
+      id,
+      enabled,
+      consoleDebug,
+      level,
+      handler,
+      batchSize,
+      delay,
+      createIfNotExists,
+      clientConfig,
+      onError,
+      ...rest
+    } = config;
     super({ id, enabled, consoleDebug, level });
 
     this.#config = rest;
 
-    const handlerConfig: CloudWatchLogsHandlerOptions = { batchSize, delay, createIfNotExists, clientConfig };
+    const handlerConfig: CloudWatchLogsHandlerOptions = { batchSize, delay, createIfNotExists, clientConfig, onError };
     this.#handler =
       typeof handler === "function" ? handler(handlerConfig) : (handler ?? createDefaultHandler(handlerConfig));
   }

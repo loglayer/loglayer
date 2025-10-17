@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-aws-cloudwatch-logs",
   "description": "AWS CloudWatch Logs logger transport for the LogLayer logging library",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "type": "module",
   "exports": {
     ".": {
@@ -31,7 +31,7 @@
     "url": "https://github.com/loglayer/loglayer.git",
     "directory": "packages/transports/aws-cloudwatch-logs"
   },
-  "author": "Theo Gravity <theo@suteki.nu>",
+  "author": "Quetzal Rivera",
   "keywords": [
     "logging",
     "log",

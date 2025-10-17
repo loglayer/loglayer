@@ -25,6 +25,13 @@ export interface CloudWatchLogsHandlerOptions {
    * @defaultValue 10000
    */
   batchSize?: number;
+
+  /**
+   * Callback to be called if an error occurs while sending logs to CloudWatch Logs.
+   * @param error - The error that occurred
+   * @returns
+   */
+  onError?: (error: any) => void;
 }
 
 /**
