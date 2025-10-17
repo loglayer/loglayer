@@ -16,5 +16,5 @@ options.onError = (error) => {
 parentPort?.on("message", async (msg: WorkerEventMessage) => {
   // Ensure the wrapped handler is initialized
   sender ??= createDefaultHandler(options);
-  sender.handleEvent(msg.event, msg.logGroupName, msg.logStreamName);
+  await sender.handleEvent(msg.event, msg.logGroupName, msg.logStreamName);
 });

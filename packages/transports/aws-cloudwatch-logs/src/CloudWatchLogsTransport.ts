@@ -14,13 +14,13 @@ export interface CloudWatchLogsTransportConfig extends CloudWatchLogsHandlerOpti
    * AWS CloudWatch Logs group name to send logs to.
    * Pass a callback to select the group name dynamically based on transport params
    */
-  groupName?: string | undefined | NameSelectorCallback;
+  groupName: string | undefined | NameSelectorCallback;
 
   /**
    * AWS CloudWatch Logs stream name to send logs to.
    * Pass a callback to select the stream name dynamically based on transport params
    */
-  streamName?: string | undefined | NameSelectorCallback;
+  streamName: string | undefined | NameSelectorCallback;
 
   /**
    * A custom handler for sending logs to CloudWatch Logs.
@@ -29,7 +29,7 @@ export interface CloudWatchLogsTransportConfig extends CloudWatchLogsHandlerOpti
 
   /**
    * A custom function to generate the final message to be sent to CloudWatch Logs.
-   * If not provided, all messages are joined into a single string.
+   * The default template is `[level] message`.
    * @see https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html
    */
   messageFn?: MessageFn;
@@ -47,7 +47,7 @@ export class CloudWatchLogsTransport extends LoggerlessTransport {
   readonly #config: SimplifiedConfig;
   #handler: ICloudWatchLogsHandler;
 
-  constructor(config: CloudWatchLogsTransportConfig = {}) {
+  constructor(config: CloudWatchLogsTransportConfig) {
     const {
       id,
       enabled,
@@ -77,7 +77,9 @@ export class CloudWatchLogsTransport extends LoggerlessTransport {
       typeof this.#config.streamName === "function" ? this.#config.streamName(params) : this.#config.streamName;
 
     const timestamp = Date.now();
-    const message = this.#config.messageFn?.(params, timestamp) ?? params.messages.map((msg) => String(msg)).join(" ");
+    const message =
+      this.#config.messageFn?.(params, timestamp) ??
+      `[${params.logLevel}] ${params.messages.map((msg) => String(msg)).join(" ")}`;
     this.#handler.handleEvent({ timestamp, message }, groupName, streamName);
     return this.#config.messageFn ? [message] : params.messages;
   }

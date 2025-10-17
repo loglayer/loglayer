@@ -35,46 +35,49 @@ vi.mock(import("@aws-sdk/client-cloudwatch-logs"), async (importOriginal) => {
 });
 
 describe("CloudWatchLogsTransport with LogLayer", () => {
-  async function getLoggerInstance(options?: CloudWatchLogsTransportConfig) {
+  async function getLoggerInstance(options?: Partial<CloudWatchLogsTransportConfig>) {
     const { CloudWatchLogsTransport, createDefaultHandler } = await import("../index.js");
     let realHandler: ICloudWatchLogsHandler;
     const handler = vi.mockObject<ICloudWatchLogsHandler>({
       handleEvent: vi.fn((event, groupName, streamName) => realHandler.handleEvent(event, groupName, streamName)),
     });
+    const groupName = "/loglayer/test";
+    const streamName = "loglayer-stream-test";
     const log = new LogLayer({
       transport: new CloudWatchLogsTransport({
-        ...options,
+        groupName,
+        streamName,
         onError,
         handler: (options) => {
           realHandler = createDefaultHandler(options);
           return handler;
         },
+        ...options,
       }),
     });
 
-    return { log, handler };
+    return { log, handler, groupName, streamName };
   }
 
   it("should log a message", async () => {
     const { log } = await getLoggerInstance();
-    const message = "test message";
-    log.info(message);
-    expect(mockSend).toHaveBeenCalledOnce();
-    const [command] = mockSend.mock.calls.at(0);
-    expect(command).toSatisfy((command: PutLogEventsCommand) => command.input.logEvents[0]?.message === message);
-    mockSend.mockReset();
-  });
-
-  it("should log and format a message", async () => {
-    const { log } = await getLoggerInstance({
-      messageFn: (params) => `[${params.logLevel}] ${params.messages.map((msg) => String(msg)).join(" ")}`,
-    });
     log.info("test message");
     expect(mockSend).toHaveBeenCalledOnce();
     const [command] = mockSend.mock.calls.at(0);
     expect(command).toSatisfy(
       (command: PutLogEventsCommand) => command.input.logEvents[0]?.message === "[info] test message",
     );
+    mockSend.mockReset();
+  });
+
+  it("should log and format a message", async () => {
+    const { log } = await getLoggerInstance({
+      messageFn: (params) => params.messages.map((msg) => String(msg)).join(" "),
+    });
+    log.info("test message");
+    expect(mockSend).toHaveBeenCalledOnce();
+    const [command] = mockSend.mock.calls.at(0);
+    expect(command).toSatisfy((command: PutLogEventsCommand) => command.input.logEvents[0]?.message === "test message");
     mockSend.mockReset();
   });
 
@@ -129,11 +132,7 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
   });
 
   it("should try to create log group and stream", async () => {
-    const groupName = "/loglayer/test";
-    const streamName = "loglayer-stream-test";
-    const { log, handler } = await getLoggerInstance({
-      groupName,
-      streamName,
+    const { log, handler, groupName, streamName } = await getLoggerInstance({
       createIfNotExists: true,
     });
 
