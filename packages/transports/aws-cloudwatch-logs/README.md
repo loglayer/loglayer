@@ -40,6 +40,9 @@ const log = new LogLayer({
 
     // Use a custom handler
     // handler: MyHandler,
+
+    // Use a custom message function
+    // messageFn: (params, timestamp) => `${timestamp} ${params.messages.map((msg) => String(msg)).join(" ")}`
   }),
 });
 
