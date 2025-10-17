@@ -81,6 +81,6 @@ export class CloudWatchLogsTransport extends LoggerlessTransport {
       this.#config.messageFn?.(params, timestamp) ??
       `[${params.logLevel}] ${params.messages.map((msg) => String(msg)).join(" ")}`;
     this.#handler.handleEvent({ timestamp, message }, groupName, streamName);
-    return this.#config.messageFn ? [message] : params.messages;
+    return [message];
   }
 }

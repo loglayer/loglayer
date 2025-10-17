@@ -14,9 +14,7 @@ import type { ICloudWatchLogsHandler } from "../handlers/common.js";
 const mockSend = vi.fn((..._: Parameters<CloudWatchLogsClient["send"]>) => {
   return Promise.resolve({});
 });
-const onError = vi.fn((error) => {
-  console.error(error);
-});
+const onError = vi.fn();
 
 vi.mock(import("@aws-sdk/client-cloudwatch-logs"), async (importOriginal) => {
   const original = await importOriginal();
