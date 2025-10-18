@@ -1,0 +1,9 @@
+{
+  "extends": "@internal/tsconfig/tsconfig.json",
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "dist"
+  ]
+}

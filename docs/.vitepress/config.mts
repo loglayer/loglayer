@@ -132,7 +132,7 @@ export default defineConfig({
           { text: 'Built-in Transports', items: [
               { text: 'Console', link: '/transports/console' },
               { text: 'Blank', link: '/transports/blank-transport' },
-            ] 
+            ]
           },
           { text: 'Supported Loggers', items:
             [
@@ -152,6 +152,7 @@ export default defineConfig({
             ]
           },
           { text: 'Cloud Providers', items: [
+            { text: 'Amazon CloudWatch', link: '/transports/aws-cloudwatch-logs' },
             { text: 'Axiom', link: '/transports/axiom' },
             { text: 'Better Stack', link: '/transports/betterstack' },
             { text: 'DataDog (server-side)', link: '/transports/datadog' },
