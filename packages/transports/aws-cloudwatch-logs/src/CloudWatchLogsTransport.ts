@@ -1,26 +1,26 @@
 import { LoggerlessTransport, type LoggerlessTransportConfig, type LogLayerTransportParams } from "@loglayer/transport";
 import {
+  CloudWatchLogsDefaultHandler,
   type CloudWatchLogsHandler,
   type CloudWatchLogsHandlerOptions,
-  createDefaultHandler,
   type ICloudWatchLogsHandler,
 } from "./handlers/index.js";
 
 type MessageFn = (params: LogLayerTransportParams, timestamp: number) => string;
-type NameSelectorCallback = (params: LogLayerTransportParams) => string | undefined;
+type NameSelectorCallback = (params: LogLayerTransportParams) => string;
 
 export interface CloudWatchLogsTransportConfig extends CloudWatchLogsHandlerOptions, LoggerlessTransportConfig {
   /**
    * AWS CloudWatch Logs group name to send logs to.
    * Pass a callback to select the group name dynamically based on transport params
    */
-  groupName: string | undefined | NameSelectorCallback;
+  groupName: string | NameSelectorCallback;
 
   /**
    * AWS CloudWatch Logs stream name to send logs to.
    * Pass a callback to select the stream name dynamically based on transport params
    */
-  streamName: string | undefined | NameSelectorCallback;
+  streamName: string | NameSelectorCallback;
 
   /**
    * A custom handler for sending logs to CloudWatch Logs.
@@ -48,26 +48,13 @@ export class CloudWatchLogsTransport extends LoggerlessTransport {
   #handler: ICloudWatchLogsHandler;
 
   constructor(config: CloudWatchLogsTransportConfig) {
-    const {
-      id,
-      enabled,
-      consoleDebug,
-      level,
-      handler,
-      batchSize,
-      delay,
-      createIfNotExists,
-      clientConfig,
-      onError,
-      ...rest
-    } = config;
+    const { id, enabled, consoleDebug, level, handler, createIfNotExists, clientConfig, onError, ...rest } = config;
     super({ id, enabled, consoleDebug, level });
 
     this.#config = rest;
 
-    const handlerConfig: CloudWatchLogsHandlerOptions = { batchSize, delay, createIfNotExists, clientConfig, onError };
-    this.#handler =
-      typeof handler === "function" ? handler(handlerConfig) : (handler ?? createDefaultHandler(handlerConfig));
+    const handlerConfig: CloudWatchLogsHandlerOptions = { createIfNotExists, clientConfig, onError };
+    this.#handler = handler?.(handlerConfig) ?? CloudWatchLogsDefaultHandler(handlerConfig);
   }
 
   shipToLogger(params: LogLayerTransportParams): any[] {
@@ -80,7 +67,7 @@ export class CloudWatchLogsTransport extends LoggerlessTransport {
     const message =
       this.#config.messageFn?.(params, timestamp) ??
       `[${params.logLevel}] ${params.messages.map((msg) => String(msg)).join(" ")}`;
-    this.#handler.handleEvent({ timestamp, message }, groupName, streamName);
+    this.#handler.sendEvent({ timestamp, message }, groupName, streamName);
     return [message];
   }
 }

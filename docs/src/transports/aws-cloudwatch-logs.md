@@ -39,22 +39,8 @@ import { CloudWatchLogsTransport } from "@loglayer/transport-aws-cloudwatch-logs
 // Create LogLayer instance with CloudWatch Logs transport
 const log = new LogLayer({
   transport: new CloudWatchLogsTransport({
-    // Set the log group and stream name to use.
     groupName: "/loglayer/group",
     streamName: "loglayer-stream-name",
-    // The AWS SDK will already use the shared config file (~/.aws/config) or environment variables.
-    // However, you can also specify the configuration explicitly.
-    // clientConfig: {},
-    // Tell the transport to create the log group and log stream if they don't exist
-    // createIfNotExists: false,
-    // Use a custom message function
-    // messageFn: (params, timestamp) => `${timestamp} ${params.messages.map((msg) => String(msg)).join(" ")}`
-    // The maximum number of messages to send in one request
-    // batchSize: 10000,
-    // Set the delay between log entries.
-    // delay: 0,
-    // Use a custom handler
-    // handler: MyHandler,
   }),
 });
 
@@ -62,21 +48,36 @@ const log = new LogLayer({
 log.withMetadata({ customField: 'value' }).info('Hello from Lambda!');
 ```
 
-If you're using NodeJS, you may want to use worker threads via `CloudWatchLogsWorkerHandler` to improve performance:
+### Server-Side Usage
+
+If you're using NodeJS, you may want to use worker threads via `CloudWatchLogsWorkerQueueHandler` to improve performance:
 
 ```typescript
 import { LogLayer } from 'loglayer';
 import { CloudWatchLogsTransport } from "@loglayer/transport-aws-cloudwatch-logs";
-import { CloudWatchLogsWorkerHandler } from "@loglayer/transport-aws-cloudwatch-logs/server";
+import { CloudWatchLogsWorkerQueueHandler } from "@loglayer/transport-aws-cloudwatch-logs/server";
 
 // Create LogLayer instance with CloudWatch Logs transport
 const log = new LogLayer({
   transport: new CloudWatchLogsTransport({
     // ...
-    handler: CloudWatchLogsWorkerHandler,
+    handler: CloudWatchLogsWorkerQueueHandler,
   }),
 });
 ```
+
+By default, the worker handler will send the logs in batches every 6 seconds. You can change this behavior by creating a handler via the `createWorkerQueueHandler` method:
+
+```typescript
+import { createWorkerQueueHandler } from "@loglayer/transport-aws-cloudwatch-logs/server";
+
+// Create a worker handler with custom options
+const CloudWatchLogsWorkerQueueHandler = createWorkerQueueHandler({
+  delay: 10000 // ms
+})
+```
+
+See the [available options for CloudWatchLogsWorkerQueueHandler](#Node Worker Thread Handler Options)
 
 ## Configuration Options
 
@@ -89,18 +90,23 @@ const log = new LogLayer({
 
 ### Optional Parameters
 
-| Name                | Type                                                               | Default | Description                                                           |
-| ------------------- | ------------------------------------------------------------------ | ------- | --------------------------------------------------------------------- |
-| `clientConfig`      | `CloudWatchLogsClientConfig`                                       | -       | AWS SDK client configuration.                                         |
-| `createIfNotExists` | `boolean`                                                          | `false` | Create the log group and/or log stream if they don't exist.           |
-| `messageFn`         | `(params: LogLayerTransportParams, timestamp: number) => string`   | -       | Build the log message to be sent to cloudwatch.                       |
-| `batchSize`         | `number`                                                           | 10000   | The maximum number of messages to send in one request.                |
-| `delay`             | `number`                                                           | 0       | The delay between log entries.                                        |
-| `handler`           | `(options: CloudWatchLogsHandlerOptions) => CloudWatchLogsHandler` | -       | A handler object to handle the log events.                            |
-| `onError`           | `(error: Error) => void`                                           | -       | Callback for error handling                                           |
-| `enabled`           | `boolean`                                                          | `true`  | If false, the transport will not send logs to the logger              |
-| `consoleDebug`      | `boolean`                                                          | `false` | If true, the transport will log to the console for debugging purposes |
-| `id`                | `string`                                                           | -       | A user-defined identifier for the transport                           |
+| Name                | Type                                                                | Default | Description                                                           |
+| ------------------- | ------------------------------------------------------------------- | ------- | --------------------------------------------------------------------- |
+| `clientConfig`      | `CloudWatchLogsClientConfig`                                        | -       | AWS SDK client configuration.                                         |
+| `createIfNotExists` | `boolean`                                                           | `false` | Create log groups and streams if they don't exist.                    |
+| `messageFn`         | `(params: LogLayerTransportParams, timestamp: number) => string`    | -       | Build the log message to be sent to cloudwatch.                       |
+| `handler`           | `(options: CloudWatchLogsHandlerOptions) => ICloudWatchLogsHandler` | -       | A handler object to handle the log events.                            |
+| `onError`           | `(error: Error) => void`                                            | -       | Callback for error handling                                           |
+| `enabled`           | `boolean`                                                           | `true`  | If false, the transport will not send logs to the logger              |
+| `consoleDebug`      | `boolean`                                                           | `false` | If true, the transport will log to the console for debugging purposes |
+| `id`                | `string`                                                            | -       | A user-defined identifier for the transport                           |
+
+### Node Worker Thread Handler Options
+
+| Name        | Type     | Default | Description                                            |
+| ----------- | -------- | ------- | ------------------------------------------------------ |
+| `batchSize` | `number` | 10000   | The maximum number of messages to send in one request. |
+| `delay`     | `number` | 6000    | The amount of time to wait before sending logs in ms.  |
 
 ## Log Format
 
