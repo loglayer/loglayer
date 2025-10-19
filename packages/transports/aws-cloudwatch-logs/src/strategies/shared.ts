@@ -55,9 +55,9 @@ export async function ensureGroupExists(
     }
   } catch (error) {
     onError?.(error);
+  } finally {
+    release();
   }
-
-  release();
 }
 
 export async function ensureStreamExists(
@@ -102,9 +102,9 @@ export async function ensureStreamExists(
     }
   } catch (error) {
     onError?.(error);
+  } finally {
+    release();
   }
-
-  release();
 }
 
 export async function sendEvents(
