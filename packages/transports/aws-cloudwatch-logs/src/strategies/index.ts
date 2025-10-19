@@ -1,2 +1,2 @@
 export type * from "./common.js";
-export * from "./handler.js";
+export * from "./strategy.js";

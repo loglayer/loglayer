@@ -9,7 +9,7 @@ import type {
 import { LogLayer } from "loglayer";
 import { describe, expect, it, vi } from "vitest";
 import type { CloudWatchLogsTransportConfig } from "../CloudWatchLogsTransport.js";
-import type { ICloudWatchLogsHandler } from "../handlers/common.js";
+import type { ICloudWatchLogsStrategy } from "../strategies/common.js";
 
 const mockSend = vi.fn((..._: Parameters<CloudWatchLogsClient["send"]>) => {
   return Promise.resolve({});
@@ -34,10 +34,10 @@ vi.mock(import("@aws-sdk/client-cloudwatch-logs"), async (importOriginal) => {
 
 describe("CloudWatchLogsTransport with LogLayer", () => {
   async function getLoggerInstance(options?: Partial<CloudWatchLogsTransportConfig>) {
-    const { CloudWatchLogsTransport, CloudWatchLogsDefaultHandler } = await import("../index.js");
-    let realHandler: ICloudWatchLogsHandler;
-    const handler = vi.mockObject<ICloudWatchLogsHandler>({
-      sendEvent: vi.fn((event, groupName, streamName) => realHandler.sendEvent(event, groupName, streamName)),
+    const { CloudWatchLogsTransport, CloudWatchLogsDefaultStrategy } = await import("../index.js");
+    let realStrategy: ICloudWatchLogsStrategy;
+    const strategy = vi.mockObject<ICloudWatchLogsStrategy>({
+      sendEvent: vi.fn((event, groupName, streamName) => realStrategy.sendEvent(event, groupName, streamName)),
     });
     const groupName = "/loglayer/test";
     const streamName = "loglayer-stream-test";
@@ -46,15 +46,15 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
         groupName,
         streamName,
         onError,
-        handler: (options) => {
-          realHandler = CloudWatchLogsDefaultHandler(options);
-          return handler;
+        strategy: (options) => {
+          realStrategy = CloudWatchLogsDefaultStrategy(options);
+          return strategy;
         },
         ...options,
       }),
     });
 
-    return { log, handler, groupName, streamName };
+    return { log, strategy, groupName, streamName };
   }
 
   it("should log a message", async () => {
@@ -80,14 +80,14 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
   });
 
   it("should log a message with context", async () => {
-    const { log, handler } = await getLoggerInstance({
+    const { log, strategy } = await getLoggerInstance({
       messageFn: (params) => `[${params.context.tag}] ${params.messages.map((msg) => String(msg)).join(" ")}`,
     });
 
     log.withContext({ tag: "context" }).info("test message");
 
-    expect(handler.sendEvent).toHaveBeenCalledOnce();
-    await handler.sendEvent.mock.results[0].value;
+    expect(strategy.sendEvent).toHaveBeenCalledOnce();
+    await strategy.sendEvent.mock.results[0].value;
 
     expect(mockSend).toHaveBeenCalledOnce();
     const [command] = mockSend.mock.calls.at(0);
@@ -98,13 +98,13 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
   });
 
   it("should log a message with metadata", async () => {
-    const { log, handler } = await getLoggerInstance({
+    const { log, strategy } = await getLoggerInstance({
       messageFn: (params) => `[${params.metadata.tag}] ${params.messages.map((msg) => String(msg)).join(" ")}`,
     });
     log.withMetadata({ tag: "meta" }).info("test message");
 
-    expect(handler.sendEvent).toHaveBeenCalledOnce();
-    await handler.sendEvent.mock.results[0].value;
+    expect(strategy.sendEvent).toHaveBeenCalledOnce();
+    await strategy.sendEvent.mock.results[0].value;
 
     expect(mockSend).toHaveBeenCalledOnce();
     const [command] = mockSend.mock.calls.at(0);
@@ -116,12 +116,12 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
   });
 
   it("should call error callback", async () => {
-    const { log, handler } = await getLoggerInstance();
+    const { log, strategy } = await getLoggerInstance();
     mockSend.mockImplementation(() => Promise.reject(new Error("Test error")));
 
     log.info("test message");
-    expect(handler.sendEvent).toHaveBeenCalledOnce();
-    await handler.sendEvent.mock.results[0].value;
+    expect(strategy.sendEvent).toHaveBeenCalledOnce();
+    await strategy.sendEvent.mock.results[0].value;
 
     expect(onError).toHaveBeenCalledOnce();
 
@@ -130,14 +130,14 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
   });
 
   it("should try to create log group and stream", async () => {
-    const { log, handler, groupName, streamName } = await getLoggerInstance({
+    const { log, strategy, groupName, streamName } = await getLoggerInstance({
       createIfNotExists: true,
     });
 
     log.info("test message");
 
-    expect(handler.sendEvent).toHaveBeenCalledOnce();
-    await handler.sendEvent.mock.results[0].value;
+    expect(strategy.sendEvent).toHaveBeenCalledOnce();
+    await strategy.sendEvent.mock.results[0].value;
 
     expect(mockSend).toHaveBeenCalledTimes(5);
     const [[checkGroupCommand], [createGroupCommand], [checkStreamCommand], [createStreamCommand]] =

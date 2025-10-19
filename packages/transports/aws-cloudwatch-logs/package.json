@@ -16,12 +16,12 @@
     },
     "./server": {
       "import": {
-        "types": "./dist/handlers/server/index.d.ts",
-        "import": "./dist/handlers/server/index.js"
+        "types": "./dist/strategies/server/index.d.ts",
+        "import": "./dist/strategies/server/index.js"
       },
       "require": {
-        "types": "./dist/handlers/server/index.d.cts",
-        "require": "./dist/handlers/server/index.cjs"
+        "types": "./dist/strategies/server/index.d.cts",
+        "require": "./dist/strategies/server/index.cjs"
       }
     }
   },

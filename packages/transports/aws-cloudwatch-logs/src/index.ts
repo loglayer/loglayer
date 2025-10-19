@@ -1,2 +1,2 @@
 export * from "./CloudWatchLogsTransport.js";
-export * from "./handlers/index.js";
+export * from "./strategies/index.js";

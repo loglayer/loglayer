@@ -2,7 +2,7 @@ import type { CloudWatchLogsClientConfig, InputLogEvent } from "@aws-sdk/client-
 
 export type ErrorCallback = (error: any) => Promise<void> | void;
 
-export interface CloudWatchLogsHandlerOptions {
+export interface CloudWatchLogsStrategyOptions {
   /**
    * AWS CloudWatch Logs client configuration to use when creating a new client.
    */
@@ -25,7 +25,7 @@ export interface CloudWatchLogsHandlerOptions {
 /**
  * Handles log events and sends them to CloudWatch Logs.
  */
-export interface ICloudWatchLogsHandler {
+export interface ICloudWatchLogsStrategy {
   /**
    * Sends the given log event to CloudWatch Logs.
    * @param event - The log event
@@ -36,6 +36,6 @@ export interface ICloudWatchLogsHandler {
 }
 
 /**
- * Represents a builder function that creates a new handler to send the log events to CloudWatch Logs.
+ * Represents a builder function that creates a new strategy to send the log events to CloudWatch Logs.
  */
-export type CloudWatchLogsHandler = (options: CloudWatchLogsHandlerOptions) => ICloudWatchLogsHandler;
+export type CloudWatchLogsStrategy = (options: CloudWatchLogsStrategyOptions) => ICloudWatchLogsStrategy;

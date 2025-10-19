@@ -1,8 +1,6 @@
-// This worker wraps the default handler to send the logs to CloudWatch
-
 import { parentPort, workerData } from "node:worker_threads";
 import { CloudWatchLogsClient, type InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
-import type { CloudWatchLogsHandlerOptions } from "../common.js";
+import type { CloudWatchLogsStrategyOptions } from "../common.js";
 import { ensureGroupExists, ensureStreamExists, sendEvents } from "../shared.js";
 import type { CloudWatchLogsWorkerQueueOptions, WorkerError, WorkerEventMessage } from "./common.js";
 
@@ -15,7 +13,7 @@ interface EventChannel {
 // TSX can't handle this worker without a default export
 export default null;
 
-const options: CloudWatchLogsHandlerOptions & CloudWatchLogsWorkerQueueOptions = workerData;
+const options: CloudWatchLogsStrategyOptions & CloudWatchLogsWorkerQueueOptions = workerData;
 options.delay ??= 6000;
 options.batchSize ??= 10000;
 options.onError = (error) => {

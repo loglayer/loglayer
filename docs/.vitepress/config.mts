@@ -152,7 +152,7 @@ export default defineConfig({
             ]
           },
           { text: 'Cloud Providers', items: [
-            { text: 'Amazon CloudWatch', link: '/transports/aws-cloudwatch-logs' },
+            { text: 'Amazon CloudWatch Logs', link: '/transports/aws-cloudwatch-logs' },
             { text: 'Axiom', link: '/transports/axiom' },
             { text: 'Better Stack', link: '/transports/betterstack' },
             { text: 'DataDog (server-side)', link: '/transports/datadog' },

@@ -1,15 +1,15 @@
 import { LoggerlessTransport, type LoggerlessTransportConfig, type LogLayerTransportParams } from "@loglayer/transport";
 import {
-  CloudWatchLogsDefaultHandler,
-  type CloudWatchLogsHandler,
-  type CloudWatchLogsHandlerOptions,
-  type ICloudWatchLogsHandler,
-} from "./handlers/index.js";
+  CloudWatchLogsDefaultStrategy,
+  type CloudWatchLogsStrategy,
+  type CloudWatchLogsStrategyOptions,
+  type ICloudWatchLogsStrategy,
+} from "./strategies/index.js";
 
 type MessageFn = (params: LogLayerTransportParams, timestamp: number) => string;
 type NameSelectorCallback = (params: LogLayerTransportParams) => string;
 
-export interface CloudWatchLogsTransportConfig extends CloudWatchLogsHandlerOptions, LoggerlessTransportConfig {
+export interface CloudWatchLogsTransportConfig extends CloudWatchLogsStrategyOptions, LoggerlessTransportConfig {
   /**
    * AWS CloudWatch Logs group name to send logs to.
    * Pass a callback to select the group name dynamically based on transport params
@@ -23,9 +23,9 @@ export interface CloudWatchLogsTransportConfig extends CloudWatchLogsHandlerOpti
   streamName: string | NameSelectorCallback;
 
   /**
-   * A custom handler for sending logs to CloudWatch Logs.
+   * A custom strategy for sending logs to CloudWatch Logs.
    */
-  handler?: CloudWatchLogsHandler;
+  strategy?: CloudWatchLogsStrategy;
 
   /**
    * A custom function to generate the final message to be sent to CloudWatch Logs.
@@ -37,7 +37,7 @@ export interface CloudWatchLogsTransportConfig extends CloudWatchLogsHandlerOpti
 
 type SimplifiedConfig = Omit<
   CloudWatchLogsTransportConfig,
-  keyof LoggerlessTransportConfig | keyof CloudWatchLogsHandlerOptions | "handler" | "onError"
+  keyof LoggerlessTransportConfig | keyof CloudWatchLogsStrategyOptions | "strategy" | "onError"
 >;
 
 /**
@@ -45,16 +45,16 @@ type SimplifiedConfig = Omit<
  */
 export class CloudWatchLogsTransport extends LoggerlessTransport {
   readonly #config: SimplifiedConfig;
-  #handler: ICloudWatchLogsHandler;
+  #strategy: ICloudWatchLogsStrategy;
 
   constructor(config: CloudWatchLogsTransportConfig) {
-    const { id, enabled, consoleDebug, level, handler, createIfNotExists, clientConfig, onError, ...rest } = config;
+    const { id, enabled, consoleDebug, level, strategy, createIfNotExists, clientConfig, onError, ...rest } = config;
     super({ id, enabled, consoleDebug, level });
 
     this.#config = rest;
 
-    const handlerConfig: CloudWatchLogsHandlerOptions = { createIfNotExists, clientConfig, onError };
-    this.#handler = handler?.(handlerConfig) ?? CloudWatchLogsDefaultHandler(handlerConfig);
+    const strategyConfig: CloudWatchLogsStrategyOptions = { createIfNotExists, clientConfig, onError };
+    this.#strategy = strategy?.(strategyConfig) ?? CloudWatchLogsDefaultStrategy(strategyConfig);
   }
 
   shipToLogger(params: LogLayerTransportParams): any[] {
@@ -67,7 +67,7 @@ export class CloudWatchLogsTransport extends LoggerlessTransport {
     const message =
       this.#config.messageFn?.(params, timestamp) ??
       `[${params.logLevel}] ${params.messages.map((msg) => String(msg)).join(" ")}`;
-    this.#handler.sendEvent({ timestamp, message }, groupName, streamName);
+    this.#strategy.sendEvent({ timestamp, message }, groupName, streamName);
     return [message];
   }
 }

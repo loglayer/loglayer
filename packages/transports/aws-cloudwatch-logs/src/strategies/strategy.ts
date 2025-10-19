@@ -1,12 +1,12 @@
 import { CloudWatchLogsClient, type InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
-import type { CloudWatchLogsHandler, CloudWatchLogsHandlerOptions, ICloudWatchLogsHandler } from "./common.js";
+import type { CloudWatchLogsStrategy, CloudWatchLogsStrategyOptions, ICloudWatchLogsStrategy } from "./common.js";
 import { ensureGroupExists, ensureStreamExists, sendEvents } from "./shared.js";
 
-// The default handler is responsible for handling log events and sending them to CloudWatch Logs.
-class DefaultHandler implements ICloudWatchLogsHandler {
+// The default strategy is responsible for handling log events and sending them to CloudWatch Logs.
+class DefaultStrategy implements ICloudWatchLogsStrategy {
   #clientInstance?: CloudWatchLogsClient;
 
-  constructor(protected readonly options: CloudWatchLogsHandlerOptions) {}
+  constructor(protected readonly options: CloudWatchLogsStrategyOptions) {}
 
   get client() {
     this.#clientInstance ??= new CloudWatchLogsClient(this.options.clientConfig);
@@ -24,8 +24,8 @@ class DefaultHandler implements ICloudWatchLogsHandler {
 }
 
 /**
- * Default handler for sending log events to CloudWatch Logs.
- * @param options - Handler options
+ * Default strategy for sending log events to CloudWatch Logs.
+ * @param options - Strategy options
  * @returns
  */
-export const CloudWatchLogsDefaultHandler: CloudWatchLogsHandler = (options = {}) => new DefaultHandler(options);
+export const CloudWatchLogsDefaultStrategy: CloudWatchLogsStrategy = (options = {}) => new DefaultStrategy(options);

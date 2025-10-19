@@ -1,17 +1,17 @@
 import type { Worker } from "node:worker_threads";
 import type { InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
-import type { CloudWatchLogsHandler, CloudWatchLogsHandlerOptions, ICloudWatchLogsHandler } from "../common.js";
+import type { CloudWatchLogsStrategy, CloudWatchLogsStrategyOptions, ICloudWatchLogsStrategy } from "../common.js";
 import type { CloudWatchLogsWorkerQueueOptions, WorkerError, WorkerEventMessage } from "./common.js";
 import LogWorker from "./worker.js?thread";
 
 // Uses a worker thread to send logs
-class WorkerQueueHandler implements ICloudWatchLogsHandler {
-  #options: CloudWatchLogsHandlerOptions;
+class WorkerQueueStrategy implements ICloudWatchLogsStrategy {
+  #options: CloudWatchLogsStrategyOptions;
   #queueOptions?: CloudWatchLogsWorkerQueueOptions;
-  #errorHandler?: CloudWatchLogsHandlerOptions["onError"];
+  #errorHandler?: CloudWatchLogsStrategyOptions["onError"];
   #worker?: Worker;
 
-  constructor(options: CloudWatchLogsHandlerOptions, queueOptions?: CloudWatchLogsWorkerQueueOptions) {
+  constructor(options: CloudWatchLogsStrategyOptions, queueOptions?: CloudWatchLogsWorkerQueueOptions) {
     const { onError, ...rest } = options;
     this.#options = rest;
     this.#queueOptions = queueOptions;
@@ -34,12 +34,23 @@ class WorkerQueueHandler implements ICloudWatchLogsHandler {
 }
 
 /**
- * Creates a CloudWatchLogsWorkerQueueHandler with custom options.
+ * Creates a CloudWatchLogsWorkerQueueStrategy with custom options.
  * @param queueOptions
  * @returns
  */
-export function createWorkerQueueHandler(queueOptions?: CloudWatchLogsWorkerQueueOptions): CloudWatchLogsHandler {
-  return (options) => new WorkerQueueHandler(options, queueOptions);
+export function createWorkerQueueStrategy(queueOptions?: CloudWatchLogsWorkerQueueOptions): CloudWatchLogsStrategy {
+  if (queueOptions?.batchSize) {
+    if (queueOptions.batchSize < 0 || queueOptions.batchSize > 10000) {
+      throw new Error("Batch size must be between 0 and 10000");
+    }
+  }
+  if (queueOptions?.delay && queueOptions.delay < 1) {
+    throw new Error("The specified delay is must be bigger than 0");
+  }
+  return (options) => new WorkerQueueStrategy(options, queueOptions);
 }
 
-export const CloudWatchLogsWorkerQueueHandler: CloudWatchLogsHandler = createWorkerQueueHandler();
+/**
+ * A CloudWatchLogsStrategy that uses a worker thread to send logs
+ */
+export const CloudWatchLogsWorkerQueueStrategy: CloudWatchLogsStrategy = createWorkerQueueStrategy();

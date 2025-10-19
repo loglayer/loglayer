@@ -9,7 +9,7 @@ export default defineConfig((cmdConfig) => ({
   ...cmdConfig,
   entry: [
     "src/index.ts",
-    "src/handlers/server/index.ts",
+    "src/strategies/server/index.ts",
   ],
   plugins: [workerThreadsPlugin()],
 }));
