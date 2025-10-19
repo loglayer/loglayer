@@ -33,24 +33,28 @@ export async function ensureGroupExists(
     }),
   );
 
-  const result: DescribeLogGroupsCommandOutput | undefined = await client
-    .send(new DescribeLogGroupsCommand({ logGroupIdentifiers: [logGroupName] }))
-    .catch((error) => {
-      onError?.(
-        new Error(`An error occurred while getting the specified CloudWatch log group: '${logGroupName}'`, {
-          cause: error,
-        }),
+  try {
+    const result: DescribeLogGroupsCommandOutput | undefined = await client
+      .send(new DescribeLogGroupsCommand({ logGroupIdentifiers: [logGroupName] }))
+      .catch((error) => {
+        onError?.(
+          new Error(`An error occurred while getting the specified CloudWatch log group: '${logGroupName}'`, {
+            cause: error,
+          }),
+        );
+        return undefined;
+      });
+    if (result && !result.logGroups?.find((g) => g.logGroupName === logGroupName)) {
+      await client.send(new CreateLogGroupCommand({ logGroupName })).catch((error) =>
+        onError?.(
+          new Error(`An error occurred while creating the specified CloudWatch log group: '${logGroupName}'`, {
+            cause: error,
+          }),
+        ),
       );
-      return undefined;
-    });
-  if (result && !result.logGroups?.find((g) => g.logGroupName === logGroupName)) {
-    await client.send(new CreateLogGroupCommand({ logGroupName })).catch((error) =>
-      onError?.(
-        new Error(`An error occurred while creating the specified CloudWatch log group: '${logGroupName}'`, {
-          cause: error,
-        }),
-      ),
-    );
+    }
+  } catch (error) {
+    onError?.(error);
   }
 
   release();
@@ -76,24 +80,28 @@ export async function ensureStreamExists(
     }),
   );
 
-  const result: DescribeLogStreamsCommandOutput | undefined = await client
-    .send(new DescribeLogStreamsCommand({ logGroupName, logStreamNamePrefix: logStreamName }))
-    .catch((error) => {
-      onError?.(
-        new Error(`An error occurred while getting the specified CloudWatch log stream: '${logStreamName}'`, {
-          cause: error,
-        }),
+  try {
+    const result: DescribeLogStreamsCommandOutput | undefined = await client
+      .send(new DescribeLogStreamsCommand({ logGroupName, logStreamNamePrefix: logStreamName }))
+      .catch((error) => {
+        onError?.(
+          new Error(`An error occurred while getting the specified CloudWatch log stream: '${logStreamName}'`, {
+            cause: error,
+          }),
+        );
+        return undefined;
+      });
+    if (result && !result.logStreams?.find((s) => s.logStreamName === logStreamName)) {
+      await client.send(new CreateLogStreamCommand({ logGroupName, logStreamName })).catch((error) =>
+        onError?.(
+          new Error(`An error occurred while creating the specified CloudWatch log stream: '${logStreamName}'`, {
+            cause: error,
+          }),
+        ),
       );
-      return undefined;
-    });
-  if (result && !result.logStreams?.find((s) => s.logStreamName === logStreamName)) {
-    await client.send(new CreateLogStreamCommand({ logGroupName, logStreamName })).catch((error) =>
-      onError?.(
-        new Error(`An error occurred while creating the specified CloudWatch log stream: '${logStreamName}'`, {
-          cause: error,
-        }),
-      ),
-    );
+    }
+  } catch (error) {
+    onError?.(error);
   }
 
   release();

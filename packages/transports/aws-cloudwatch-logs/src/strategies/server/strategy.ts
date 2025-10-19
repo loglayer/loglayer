@@ -40,8 +40,8 @@ class WorkerQueueStrategy implements ICloudWatchLogsStrategy {
  */
 export function createWorkerQueueStrategy(queueOptions?: CloudWatchLogsWorkerQueueOptions): CloudWatchLogsStrategy {
   if (queueOptions?.batchSize) {
-    if (queueOptions.batchSize < 0 || queueOptions.batchSize > 10000) {
-      throw new Error("Batch size must be between 0 and 10000");
+    if (queueOptions.batchSize < 1 || queueOptions.batchSize > 10000) {
+      throw new Error("Batch size must be between 1 and 10000");
     }
   }
   if (queueOptions?.delay && queueOptions.delay < 1) {
