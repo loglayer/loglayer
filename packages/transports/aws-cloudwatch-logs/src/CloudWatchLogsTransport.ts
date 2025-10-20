@@ -3,6 +3,7 @@ import {
   CloudWatchLogsDefaultStrategy,
   type CloudWatchLogsStrategy,
   type CloudWatchLogsStrategyOptions,
+  type ErrorHandler,
   type ICloudWatchLogsStrategy,
 } from "./strategies/index.js";
 
@@ -46,6 +47,7 @@ type SimplifiedConfig = Omit<
 export class CloudWatchLogsTransport extends LoggerlessTransport implements Disposable {
   readonly #config: SimplifiedConfig;
   #strategy: ICloudWatchLogsStrategy;
+  #onError: ErrorHandler | undefined;
 
   constructor(config: CloudWatchLogsTransportConfig) {
     const { id, enabled, consoleDebug, level, strategy, createIfNotExists, clientConfig, onError, ...rest } = config;
@@ -54,6 +56,7 @@ export class CloudWatchLogsTransport extends LoggerlessTransport implements Disp
     this.#config = rest;
 
     const strategyConfig: CloudWatchLogsStrategyOptions = { createIfNotExists, clientConfig, onError };
+    this.#onError = onError;
     this.#strategy = strategy?.(strategyConfig) ?? CloudWatchLogsDefaultStrategy(strategyConfig);
   }
 
@@ -67,7 +70,10 @@ export class CloudWatchLogsTransport extends LoggerlessTransport implements Disp
     const message =
       this.#config.messageFn?.(params, timestamp) ??
       `[${params.logLevel}] ${params.messages.map((msg) => String(msg)).join(" ")}`;
-    this.#strategy.sendEvent({ timestamp, message }, groupName, streamName);
+    const action = this.#strategy.sendEvent({ timestamp, message }, groupName, streamName);
+    if (action instanceof Promise && this.#onError) {
+      action.catch((error) => this.#onError?.(error));
+    }
     return [message];
   }
 
