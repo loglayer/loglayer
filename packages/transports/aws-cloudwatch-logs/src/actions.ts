@@ -12,8 +12,8 @@ import {
 import type { ErrorHandler } from "./strategies/common.js";
 
 // Tracks the groups and streams that have been created
-const groupLocks = new Map<string, Promise<void>>();
-const streamLocks = new Map<string, Promise<void>>();
+const groupLocks = new Map<string, Promise<void> | true>();
+const streamLocks = new Map<string, Promise<void> | true>();
 
 export async function ensureGroupExists(
   client: CloudWatchLogsClient,
@@ -21,8 +21,11 @@ export async function ensureGroupExists(
   onError: ErrorHandler,
 ): Promise<void> {
   const lock = groupLocks.get(logGroupName);
-  if (lock) {
+  if (lock instanceof Promise) {
     return lock;
+  }
+  if (lock) {
+    return;
   }
 
   let release: () => void;
@@ -57,6 +60,7 @@ export async function ensureGroupExists(
     onError?.(error);
   } finally {
     release();
+    groupLocks.set(logGroupName, true);
   }
 }
 
@@ -68,8 +72,11 @@ export async function ensureStreamExists(
 ): Promise<void> {
   const key = `lock:${logGroupName}-${logStreamName}`;
   const lock = streamLocks.get(key);
-  if (lock) {
+  if (lock instanceof Promise) {
     return lock;
+  }
+  if (lock) {
+    return;
   }
 
   let release: () => void;
@@ -104,6 +111,7 @@ export async function ensureStreamExists(
     onError?.(error);
   } finally {
     release();
+    streamLocks.set(key, true);
   }
 }
 

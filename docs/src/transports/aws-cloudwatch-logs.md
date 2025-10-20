@@ -72,8 +72,6 @@ const log = new LogLayer({
 });
 ```
 
-See the [available options for CloudWatchLogsTransport](#configuration-options).
-
 ## Configuration Options
 
 ### Required Parameters

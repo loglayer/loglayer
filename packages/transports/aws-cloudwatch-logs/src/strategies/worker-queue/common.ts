@@ -24,11 +24,21 @@ export interface WorkerDataOptions
 }
 
 export interface WorkerEventMessage {
+  type: "event";
   event: InputLogEvent;
   logGroupName: string;
   logStreamName: string;
 }
 
+export interface WorkerStopMessage {
+  type: "stop";
+}
+
+export type WorkerMessage = WorkerEventMessage | WorkerStopMessage;
+
 export interface WorkerError {
+  type: "error";
   error: any;
 }
+
+export type WorkerResponse = WorkerError | WorkerStopMessage;

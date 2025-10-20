@@ -1,8 +1,18 @@
 import type { Worker } from "node:worker_threads";
 import type { InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
+import { addExitHook } from "../../vendor/exit-hook.js";
 import type { CloudWatchLogsStrategy, CloudWatchLogsStrategyOptions, ICloudWatchLogsStrategy } from "../common.js";
-import type { CloudWatchLogsWorkerQueueOptions, WorkerDataOptions, WorkerError, WorkerEventMessage } from "./common.js";
+import type {
+  CloudWatchLogsWorkerQueueOptions,
+  WorkerDataOptions,
+  WorkerError,
+  WorkerEventMessage,
+  WorkerResponse,
+  WorkerStopMessage,
+} from "./common.js";
 import LogWorker from "./worker.js?thread";
+
+const MAX_WAIT_TIME = 30000;
 
 // Uses a worker thread to send logs
 class WorkerQueueStrategy implements ICloudWatchLogsStrategy {
@@ -17,22 +27,48 @@ class WorkerQueueStrategy implements ICloudWatchLogsStrategy {
     this.#options = rest;
     this.#queueOptions = queueOptions;
     this.#errorHandler = onError;
-    this.#msgErrorHandler = (msg) => onError?.(msg.error);
+    this.#msgErrorHandler = (msg: WorkerResponse) => {
+      if (msg.type === "error") {
+        onError?.(msg.error);
+      }
+    };
+
+    addExitHook(this.cleanup.bind(this), { wait: MAX_WAIT_TIME });
   }
 
   public sendEvent(event: InputLogEvent, logGroupName: string, logStreamName: string): void {
     this.#worker ??= this.#initializeWorker();
-    this.#worker.postMessage({ event, logGroupName, logStreamName } as WorkerEventMessage);
+    this.#worker.postMessage({ type: "event", event, logGroupName, logStreamName } as WorkerEventMessage);
   }
 
-  public async cleanup() {
+  public cleanup() {
     if (this.#errorHandler) {
       this.#worker?.off("error", this.#errorHandler);
       this.#worker?.off("messageerror", this.#errorHandler);
       this.#worker?.off("message", this.#msgErrorHandler);
     }
-    await this.#worker?.terminate();
-    this.#worker = undefined;
+    if (this.#worker) {
+      let release: () => void;
+      const lock = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      const controller = new AbortController();
+      const terminateWorker = () => {
+        this.#worker?.terminate();
+        this.#worker = undefined;
+        release();
+      };
+      this.#worker.on("exit", terminateWorker);
+
+      // If the worker is not closed up after MAX_WAIT_TIME, force terminate
+      const timeout = setTimeout(terminateWorker, MAX_WAIT_TIME);
+      controller.signal.addEventListener("abort", () => clearTimeout(timeout));
+
+      // Send stop message
+      this.#worker.postMessage({ type: "stop" } as WorkerStopMessage);
+
+      return lock;
+    }
   }
 
   #initializeWorker() {
