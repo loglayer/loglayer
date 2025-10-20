@@ -1,15 +1,11 @@
 import { defineConfig } from "tsdown";
-import { workerThreadsPlugin } from "./src/rolldown/index.js";
+import { rolldownWorkerThreadsPlugin } from "./src/build-tools/index.js";
 
 export default defineConfig((cmdConfig) => ({
   outDir: "dist",
   format: ["esm", "cjs"],
   target: ["es2022"],
   dts: true,
+  plugins: [rolldownWorkerThreadsPlugin()],
   ...cmdConfig,
-  entry: [
-    "src/index.ts",
-    "src/strategies/server/index.ts",
-  ],
-  plugins: [workerThreadsPlugin()],
 }));

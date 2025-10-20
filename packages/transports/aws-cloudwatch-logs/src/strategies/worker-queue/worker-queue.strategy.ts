@@ -1,7 +1,7 @@
 import type { Worker } from "node:worker_threads";
 import type { InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
 import type { CloudWatchLogsStrategy, CloudWatchLogsStrategyOptions, ICloudWatchLogsStrategy } from "../common.js";
-import type { CloudWatchLogsWorkerQueueOptions, WorkerError, WorkerEventMessage } from "./common.js";
+import type { CloudWatchLogsWorkerQueueOptions, WorkerDataOptions, WorkerError, WorkerEventMessage } from "./common.js";
 import LogWorker from "./worker.js?thread";
 
 // Uses a worker thread to send logs
@@ -9,6 +9,7 @@ class WorkerQueueStrategy implements ICloudWatchLogsStrategy {
   #options: CloudWatchLogsStrategyOptions;
   #queueOptions?: CloudWatchLogsWorkerQueueOptions;
   #errorHandler?: CloudWatchLogsStrategyOptions["onError"];
+  #msgErrorHandler: (error: WorkerError) => void;
   #worker?: Worker;
 
   constructor(options: CloudWatchLogsStrategyOptions, queueOptions?: CloudWatchLogsWorkerQueueOptions) {
@@ -16,19 +17,35 @@ class WorkerQueueStrategy implements ICloudWatchLogsStrategy {
     this.#options = rest;
     this.#queueOptions = queueOptions;
     this.#errorHandler = onError;
+    this.#msgErrorHandler = (msg) => onError?.(msg.error);
   }
 
-  public sendEvent(event: InputLogEvent, logGroupName: string, logStreamName: string): Promise<void> {
+  public sendEvent(event: InputLogEvent, logGroupName: string, logStreamName: string): void {
     this.#worker ??= this.#initializeWorker();
     this.#worker.postMessage({ event, logGroupName, logStreamName } as WorkerEventMessage);
-    return Promise.resolve();
+  }
+
+  public async cleanup() {
+    if (this.#errorHandler) {
+      this.#worker?.off("error", this.#errorHandler);
+      this.#worker?.off("messageerror", this.#errorHandler);
+      this.#worker?.off("message", this.#msgErrorHandler);
+    }
+    await this.#worker?.terminate();
+    this.#worker = undefined;
   }
 
   #initializeWorker() {
-    const instance = new LogWorker({ workerData: { ...this.#options, ...this.#queueOptions }, env: process.env });
-    instance.on("error", (error) => this.#errorHandler?.(error));
-    instance.on("messageerror", (error) => this.#errorHandler?.(error));
-    instance.on("message", (message: WorkerError) => this.#errorHandler?.(message.error));
+    const hasErrorHandler = !!this.#errorHandler;
+    const instance = new LogWorker({
+      workerData: { ...this.#options, ...this.#queueOptions, hasErrorHandler } satisfies WorkerDataOptions,
+      env: process.env,
+    });
+    if (hasErrorHandler) {
+      instance.on("error", this.#errorHandler);
+      instance.on("messageerror", this.#errorHandler);
+      instance.on("message", this.#msgErrorHandler);
+    }
     return instance;
   }
 }
@@ -53,4 +70,4 @@ export function createWorkerQueueStrategy(queueOptions?: CloudWatchLogsWorkerQue
 /**
  * A CloudWatchLogsStrategy that uses a worker thread to send logs
  */
-export const CloudWatchLogsWorkerQueueStrategy: CloudWatchLogsStrategy = createWorkerQueueStrategy();
+export const CloudWatchLogsWorkerQueueStrategy: CloudWatchLogsStrategy = (options) => new WorkerQueueStrategy(options);

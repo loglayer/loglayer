@@ -1,4 +1,5 @@
 import type { InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
+import type { CloudWatchLogsStrategyOptions } from "../common.js";
 
 export interface CloudWatchLogsWorkerQueueOptions {
   /**
@@ -14,6 +15,12 @@ export interface CloudWatchLogsWorkerQueueOptions {
    * @defaultValue 10000
    */
   batchSize?: number;
+}
+
+export interface WorkerDataOptions
+  extends Omit<CloudWatchLogsStrategyOptions, "onError">,
+    CloudWatchLogsWorkerQueueOptions {
+  hasErrorHandler: boolean;
 }
 
 export interface WorkerEventMessage {

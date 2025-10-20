@@ -43,7 +43,7 @@ type SimplifiedConfig = Omit<
 /**
  * Allows sending logs to AWS CloudWatch Logs.
  */
-export class CloudWatchLogsTransport extends LoggerlessTransport {
+export class CloudWatchLogsTransport extends LoggerlessTransport implements Disposable {
   readonly #config: SimplifiedConfig;
   #strategy: ICloudWatchLogsStrategy;
 
@@ -69,5 +69,9 @@ export class CloudWatchLogsTransport extends LoggerlessTransport {
       `[${params.logLevel}] ${params.messages.map((msg) => String(msg)).join(" ")}`;
     this.#strategy.sendEvent({ timestamp, message }, groupName, streamName);
     return [message];
+  }
+
+  [Symbol.dispose](): void {
+    this.#strategy.cleanup?.();
   }
 }

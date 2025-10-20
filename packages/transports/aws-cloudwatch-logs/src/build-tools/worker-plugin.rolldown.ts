@@ -2,19 +2,10 @@
 
 import path from "node:path";
 import { BindingMagicString, type Plugin } from "rolldown";
+import { getImportQueryParams } from "./shared.js";
 
-type AvailableQueryParams = "thread" | "importer";
-
-interface ImportQueryParams extends URLSearchParams {
-  has(key: AvailableQueryParams): boolean;
-}
-
-function getImportQueryParams(id: string): ImportQueryParams {
-  return new URL(id.replace(/^C:/, "/"), "file:").searchParams;
-}
-
-const WORKER_ASSET_PREFIX = "__LOGLAYER_ROLLDOWN_WORKERS_ASSET__";
-const WORKER_ASSET_PATTERN = /__LOGLAYER_ROLLDOWN_WORKERS_ASSET__([\w\d]+)__/g;
+export const WORKER_ASSET_PREFIX = "__LOGLAYER_WORKERS_PLUGIN_ASSET__";
+export const WORKER_ASSET_PATTERN = /__LOGLAYER_WORKERS_PLUGIN_ASSET__([\w\d]+)__/g;
 
 const plugin = (): Plugin => {
   return {

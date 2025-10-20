@@ -74,37 +74,6 @@ const log = new LogLayer({
 
 See the [available options for CloudWatchLogsTransport](#configuration-options).
 
-### Worker thread strategy
-
-By default, each logs entries is sent in the same thread independently. However, you may want to use worker threads via `CloudWatchLogsWorkerQueueStrategy` to improve performance:
-
-```typescript
-import { LogLayer } from 'loglayer';
-import { CloudWatchLogsTransport } from "@loglayer/transport-aws-cloudwatch-logs";
-import { CloudWatchLogsWorkerQueueStrategy } from "@loglayer/transport-aws-cloudwatch-logs/server";
-
-// Create LogLayer instance with CloudWatch Logs transport
-const log = new LogLayer({
-  transport: new CloudWatchLogsTransport({
-    // ...
-    strategy: CloudWatchLogsWorkerQueueStrategy,
-  }),
-});
-```
-
-This allows sending multiple log entries in a single request every 6 seconds. You can customize it by creating via the `createWorkerQueueStrategy` method:
-
-```typescript
-import { createWorkerQueueStrategy } from "@loglayer/transport-aws-cloudwatch-logs/server";
-
-// Create a worker strategy with custom options
-const CloudWatchLogsWorkerQueueStrategy = createWorkerQueueStrategy({
-  delay: 10000 // 10s
-})
-```
-
-See the [available options for CloudWatchLogsWorkerQueueStrategy](#node-worker-thread-strategy-options).
-
 ## Configuration Options
 
 ### Required Parameters
@@ -116,18 +85,87 @@ See the [available options for CloudWatchLogsWorkerQueueStrategy](#node-worker-t
 
 ### Optional Parameters
 
-| Name                | Type                                                                | Default | Description                                                           |
-| ------------------- | ------------------------------------------------------------------- | ------- | --------------------------------------------------------------------- |
-| `clientConfig`      | `CloudWatchLogsClientConfig`                                        | -       | AWS SDK client configuration.                                         |
-| `createIfNotExists` | `boolean`                                                           | `false` | Create log groups and streams if they don't exist.                    |
-| `messageFn`         | `(params: LogLayerTransportParams, timestamp: number) => string`    | -       | Build the log message to be sent to cloudwatch.                       |
-| `strategy`           | `(options: CloudWatchLogsStrategyOptions) => ICloudWatchLogsStrategy` | -       | A strategy object to handle the log events.                            |
-| `onError`           | `(error: Error) => void`                                            | -       | Callback for error handling                                           |
-| `enabled`           | `boolean`                                                           | `true`  | If false, the transport will not send logs to the logger              |
-| `consoleDebug`      | `boolean`                                                           | `false` | If true, the transport will log to the console for debugging purposes |
-| `id`                | `string`                                                            | -       | A user-defined identifier for the transport                           |
+| Name                | Type                                                                  | Default | Description                                                           |
+| ------------------- | --------------------------------------------------------------------- | ------- | --------------------------------------------------------------------- |
+| `clientConfig`      | `CloudWatchLogsClientConfig`                                          | -       | AWS SDK client configuration.                                         |
+| `createIfNotExists` | `boolean`                                                             | `false` | Create log groups and streams if they don't exist.                    |
+| `messageFn`         | `(params: LogLayerTransportParams, timestamp: number) => string`      | -       | Build the log message to be sent to cloudwatch.                       |
+| `strategy`          | `(options: CloudWatchLogsStrategyOptions) => ICloudWatchLogsStrategy` | -       | Callback to create the strategy object that handles the log events.   |
+| `onError`           | `(error: Error) => void`                                              | -       | Callback for error handling                                           |
+| `enabled`           | `boolean`                                                             | `true`  | If false, the transport will not send logs to the logger              |
+| `consoleDebug`      | `boolean`                                                             | `false` | If true, the transport will log to the console for debugging purposes |
+| `id`                | `string`                                                              | -       | A user-defined identifier for the transport                           |
 
-### Node Worker Thread Strategy Options
+## Processing Strategies
+
+The transport can handle log events in different ways, depending on your needs. It includes two built-in processing strategies: a [default strategy](#default-strategy) and a [worker queue strategy](#worker-queue-strategy).
+
+If needed, you can also create your own strategy by passing a function to the `strategy` option. It will receive the transport basic options and expects to return an object with a method called `sendEvent` and an optional method `cleanup`. The first one will be used to send the log event and the second one is used to clean up any resources in your strategy when the transport is destroyed. See the following example:
+
+```typescript
+import { LogLayer } from 'loglayer';
+import { CloudWatchLogsClient, PutLogEventsCommand } from "@aws-sdk/client-cloudwatch-logs";
+import { CloudWatchLogsTransport } from "@loglayer/transport-aws-cloudwatch-logs";
+
+// Create LogLayer instance with CloudWatch Logs transport
+const log = new LogLayer({
+  transport: new CloudWatchLogsTransport({
+    groupName: "/loglayer/group",
+    streamName: "loglayer-stream-name",
+    strategy: ({ clientConfig, onError }) => {
+      const client = new CloudWatchLogsClient(clientConfig);
+      return {
+        sendEvent: async (event, logGroupName, logStreamName) => {
+          const cmd = new PutLogEventsCommand({
+            logEvents: [event],
+            logGroupName,
+            logStreamName,
+          });
+          try {
+            await client.send(cmd);
+          } catch (error) {
+            onError?.(error);
+          }
+        }
+      }
+    }
+  }),
+})
+```
+
+### Default strategy
+
+Enabled by default, it sends each log event in a single request inmediately. The strategy is exported as `CloudWatchLogsDefaultStrategy` in case you want to wrap it in your own strategy.
+
+### Worker queue strategy
+
+If you're sending a lot of logs, you may prefer to use this strategy to improve performance. It uses a worker thread and allows you to send your logs in batches in a single request every 6 seconds (configurable). See the following example:
+
+```typescript
+import { LogLayer } from 'loglayer';
+import { CloudWatchLogsTransport, CloudWatchLogsWorkerQueueStrategy } from "@loglayer/transport-aws-cloudwatch-logs";
+
+// Create LogLayer instance with CloudWatch Logs transport
+const log = new LogLayer({
+  transport: new CloudWatchLogsTransport({
+    // ...
+    strategy: CloudWatchLogsWorkerQueueStrategy,
+  }),
+});
+```
+
+You can configure it by creating it via the `createWorkerQueueStrategy` method as follows:
+
+```typescript
+import { createWorkerQueueStrategy } from "@loglayer/transport-aws-cloudwatch-logs";
+
+// Create a worker strategy with custom options
+const CloudWatchLogsWorkerQueueStrategy = createWorkerQueueStrategy({
+  delay: 10000 // Send events every 10 seconds
+})
+```
+
+The following options are available:
 
 | Name        | Type     | Default | Description                                            |
 | ----------- | -------- | ------- | ------------------------------------------------------ |

@@ -13,16 +13,6 @@
         "types": "./dist/index.d.cts",
         "require": "./dist/index.cjs"
       }
-    },
-    "./server": {
-      "import": {
-        "types": "./dist/strategies/server/index.d.ts",
-        "import": "./dist/strategies/server/index.js"
-      },
-      "require": {
-        "types": "./dist/strategies/server/index.d.cts",
-        "require": "./dist/strategies/server/index.cjs"
-      }
     }
   },
   "license": "MIT",

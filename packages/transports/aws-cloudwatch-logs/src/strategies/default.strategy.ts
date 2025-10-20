@@ -1,6 +1,6 @@
 import { CloudWatchLogsClient, type InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
+import { ensureGroupExists, ensureStreamExists, sendEvents } from "../actions.js";
 import type { CloudWatchLogsStrategy, CloudWatchLogsStrategyOptions, ICloudWatchLogsStrategy } from "./common.js";
-import { ensureGroupExists, ensureStreamExists, sendEvents } from "./shared.js";
 
 // The default strategy is responsible for handling log events and sending them to CloudWatch Logs.
 class DefaultStrategy implements ICloudWatchLogsStrategy {

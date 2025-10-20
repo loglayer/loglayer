@@ -9,7 +9,7 @@ import {
   type InputLogEvent,
   PutLogEventsCommand,
 } from "@aws-sdk/client-cloudwatch-logs";
-import type { ErrorCallback } from "./common.js";
+import type { ErrorHandler } from "./strategies/common.js";
 
 // Tracks the groups and streams that have been created
 const groupLocks = new Map<string, Promise<void>>();
@@ -18,7 +18,7 @@ const streamLocks = new Map<string, Promise<void>>();
 export async function ensureGroupExists(
   client: CloudWatchLogsClient,
   logGroupName: string,
-  onError: ErrorCallback,
+  onError: ErrorHandler,
 ): Promise<void> {
   const lock = groupLocks.get(logGroupName);
   if (lock) {
@@ -64,7 +64,7 @@ export async function ensureStreamExists(
   client: CloudWatchLogsClient,
   logGroupName: string,
   logStreamName: string,
-  onError: ErrorCallback,
+  onError: ErrorHandler,
 ): Promise<void> {
   const key = `lock:${logGroupName}-${logStreamName}`;
   const lock = streamLocks.get(key);
@@ -112,7 +112,7 @@ export async function sendEvents(
   logEvents: InputLogEvent[],
   logGroupName: string,
   logStreamName: string,
-  onError: ErrorCallback,
+  onError: ErrorHandler,
 ) {
   const command = new PutLogEventsCommand({
     logEvents,

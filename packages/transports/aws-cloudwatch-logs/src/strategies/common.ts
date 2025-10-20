@@ -1,6 +1,6 @@
 import type { CloudWatchLogsClientConfig, InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
 
-export type ErrorCallback = (error: any) => Promise<void> | void;
+export type ErrorHandler = (error: any) => Promise<void> | void;
 
 export interface CloudWatchLogsStrategyOptions {
   /**
@@ -19,7 +19,7 @@ export interface CloudWatchLogsStrategyOptions {
    * @param error - The error that occurred
    * @returns
    */
-  onError?: ErrorCallback;
+  onError?: ErrorHandler;
 }
 
 /**
@@ -32,7 +32,12 @@ export interface ICloudWatchLogsStrategy {
    * @param logGroupName - Group name
    * @param logStreamName - Stream name
    */
-  sendEvent(event: InputLogEvent, logGroupName: string, logStreamName: string): Promise<void>;
+  sendEvent(event: InputLogEvent, logGroupName: string, logStreamName: string): Promise<void> | void;
+
+  /**
+   * Cleans up any resources used by the strategy.
+   */
+  cleanup?: () => Promise<void> | void;
 }
 
 /**
