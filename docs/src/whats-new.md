@@ -7,6 +7,13 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Oct 21, 2025
+
+`loglayer`:
+
+- `ConsoleTransport`: Fixes an issue where `levelField` and `dateField` should not affect the output in the same way that `messageField` would. 
+This change brings the behavior to what is described in the documentation for the `ConsoleTransport`.
+
 ## Oct 14, 2025
 
 `@loglayer/transport-sentry`:

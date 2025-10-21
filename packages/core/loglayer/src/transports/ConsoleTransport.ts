@@ -82,16 +82,28 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
       return;
     }
 
-    if (this.messageField || this.dateField || this.levelField) {
+    if (this.messageField) {
       // Join messages with a space if messageField is defined
-      const messageText = this.messageField ? messages.join(" ") : undefined;
+      const messageText = messages.join(" ");
       const logObject = {
         ...(data || {}),
-        ...(this.messageField && { [this.messageField]: messageText }),
+        [this.messageField]: messageText,
         ...(this.dateField && { [this.dateField]: this.dateFn ? this.dateFn() : new Date().toISOString() }),
         ...(this.levelField && { [this.levelField]: this.levelFn ? this.levelFn(logLevel) : logLevel }),
       };
       messages = [this.stringify ? JSON.stringify(logObject) : logObject];
+    } else if (this.dateField || this.levelField) {
+      // Only dateField or levelField are defined - preserve original messages and add fields as additional parameter
+      const logObject = {
+        ...(data || {}),
+        ...(this.dateField && { [this.dateField]: this.dateFn ? this.dateFn() : new Date().toISOString() }),
+        ...(this.levelField && { [this.levelField]: this.levelFn ? this.levelFn(logLevel) : logLevel }),
+      };
+      if (this.stringify) {
+        messages.push(JSON.stringify(logObject));
+      } else {
+        messages.push(logObject);
+      }
     } else if (data && hasData) {
       if (this.appendObjectData) {
         messages.push(data);

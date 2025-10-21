@@ -170,8 +170,14 @@ describe("ConsoleTransport", () => {
       });
       const afterDate = new Date().toISOString();
 
-      const call = (mockConsole.info as any).mock.calls[0][0];
-      expect(call).toHaveProperty("timestamp");
+      expect(mockConsole.info).toHaveBeenCalledWith(
+        "test message",
+        expect.objectContaining({
+          timestamp: expect.any(String),
+        }),
+      );
+
+      const call = (mockConsole.info as any).mock.calls[0][1];
       expect(call.timestamp >= beforeDate).toBe(true);
       expect(call.timestamp <= afterDate).toBe(true);
     });
@@ -191,7 +197,7 @@ describe("ConsoleTransport", () => {
       });
 
       expect(dateFn).toHaveBeenCalledOnce();
-      expect(mockConsole.info).toHaveBeenCalledWith({
+      expect(mockConsole.info).toHaveBeenCalledWith("test message", {
         timestamp: customDate,
       });
     });
@@ -211,7 +217,7 @@ describe("ConsoleTransport", () => {
       });
 
       expect(dateFn).toHaveBeenCalledOnce();
-      expect(mockConsole.info).toHaveBeenCalledWith({
+      expect(mockConsole.info).toHaveBeenCalledWith("test message", {
         timestamp: customTimestamp,
       });
     });
@@ -230,10 +236,13 @@ describe("ConsoleTransport", () => {
         hasData: true,
       });
 
-      const call = (mockConsole.info as any).mock.calls[0][0];
-      expect(call).toHaveProperty("user", "john");
-      expect(call).toHaveProperty("timestamp");
-      expect(typeof call.timestamp).toBe("string");
+      expect(mockConsole.info).toHaveBeenCalledWith(
+        "test message",
+        expect.objectContaining({
+          user: "john",
+          timestamp: expect.any(String),
+        }),
+      );
     });
   });
 
@@ -249,7 +258,7 @@ describe("ConsoleTransport", () => {
         messages: ["test message"],
       });
 
-      expect(mockConsole.info).toHaveBeenCalledWith({
+      expect(mockConsole.info).toHaveBeenCalledWith("test message", {
         level: "info",
       });
     });
@@ -268,7 +277,7 @@ describe("ConsoleTransport", () => {
       });
 
       expect(levelFn).toHaveBeenCalledWith("warn");
-      expect(mockConsole.warn).toHaveBeenCalledWith({
+      expect(mockConsole.warn).toHaveBeenCalledWith("test message", {
         level: "LEVEL_WARN",
       });
     });
@@ -290,7 +299,7 @@ describe("ConsoleTransport", () => {
       });
 
       expect(levelFn).toHaveBeenCalledWith("error");
-      expect(mockConsole.error).toHaveBeenCalledWith({
+      expect(mockConsole.error).toHaveBeenCalledWith("test message", {
         level: 50,
       });
     });
@@ -309,7 +318,7 @@ describe("ConsoleTransport", () => {
         hasData: true,
       });
 
-      expect(mockConsole.warn).toHaveBeenCalledWith({
+      expect(mockConsole.warn).toHaveBeenCalledWith("test message", {
         user: "john",
         level: "warn",
       });
@@ -434,7 +443,9 @@ describe("ConsoleTransport", () => {
         messages: ["test message"],
       });
 
-      const call = (mockConsole.info as any).mock.calls[0][0];
+      expect(mockConsole.info).toHaveBeenCalledWith("test message", expect.any(String));
+
+      const call = (mockConsole.info as any).mock.calls[0][1];
       expect(typeof call).toBe("string");
       const parsed = JSON.parse(call);
       expect(parsed).toHaveProperty("timestamp");
@@ -453,7 +464,7 @@ describe("ConsoleTransport", () => {
         messages: ["test message"],
       });
 
-      expect(mockConsole.warn).toHaveBeenCalledWith('{"level":"warn"}');
+      expect(mockConsole.warn).toHaveBeenCalledWith("test message", '{"level":"warn"}');
     });
 
     it("should stringify output when stringify is true with combined fields", () => {
