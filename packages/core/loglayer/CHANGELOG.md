@@ -1,5 +1,12 @@
 # `loglayer` Changelog
 
+## 6.10.0
+
+### Minor Changes
+
+- [#283](https://github.com/loglayer/loglayer/pull/283) [`cca0312`](https://github.com/loglayer/loglayer/commit/cca03129aaa20e3b435cdcb4a7a2a7831ef1f134) Thanks [@theogravity](https://github.com/theogravity)! - `ConsoleTransport`: Fixes an issue where `levelField` and `dateField` should not affect the output in the same way that `messageField` would.
+  This change brings the behavior to what is described in the documentation for the `ConsoleTransport`.
+
 ## 6.9.1
 
 ### Patch Changes
