@@ -30,7 +30,7 @@ const plugin = (): Vite.Plugin => {
           }
         }
         const info = await this.load({ id: resolvedId.id });
-        const worker = `import { tsImport } from "tsx/esm/api"; tsImport("${info.id.replace(/^C:/, "")}", import.meta.url);`;
+        const worker = `import { tsImport } from "tsx/esm/api"; tsImport("${info.id.replace(/^\w:/, "")}", import.meta.url);`;
         return `import { Worker } from 'node:worker_threads'; export default function WorkerWrapper(options) { return new Worker(\`${worker}\`, Object.assign({ eval: true }, options)); }`;
       }
     },

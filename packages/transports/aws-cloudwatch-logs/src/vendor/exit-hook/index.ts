@@ -1,4 +1,5 @@
-// Stripped version of: https://github.com/sindresorhus/exit-hook/blob/main/index.js
+// This is a stripped version of: https://github.com/sindresorhus/exit-hook/blob/main/index.js
+// It has been modified to handle asynchronous exitHooks only
 
 import process from "node:process";
 

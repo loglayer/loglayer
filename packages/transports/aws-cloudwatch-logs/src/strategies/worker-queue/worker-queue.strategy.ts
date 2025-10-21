@@ -1,6 +1,6 @@
 import type { Worker } from "node:worker_threads";
 import type { InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
-import { addExitHook } from "../../vendor/exit-hook.js";
+import { addExitHook } from "../../vendor/exit-hook/index.js";
 import type { CloudWatchLogsStrategy, CloudWatchLogsStrategyOptions, ICloudWatchLogsStrategy } from "../common.js";
 import type {
   CloudWatchLogsWorkerQueueOptions,
@@ -97,7 +97,7 @@ export function createWorkerQueueStrategy(queueOptions?: CloudWatchLogsWorkerQue
       throw new Error("Batch size must be between 1 and 10000");
     }
   }
-  if (queueOptions?.delay && queueOptions.delay < 1) {
+  if (typeof queueOptions?.delay === "number" && queueOptions.delay < 1) {
     throw new Error("The specified delay is must be bigger than 0");
   }
   return (options) => new WorkerQueueStrategy(options, queueOptions);
