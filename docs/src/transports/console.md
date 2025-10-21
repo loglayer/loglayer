@@ -56,8 +56,8 @@ None - all parameters are optional.
 | `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Sets the minimum log level to process. Messages with a lower priority level will be ignored |
 | `appendObjectData` | `boolean` | `false` | Controls where object data (metadata, context, errors) appears in the log messages. `false`: Object data appears as the first parameter. `true`: Object data appears as the last parameter. Has no effect if `messageField` is defined |
 | `messageField` | `string` | - | If defined, places the message into the specified field in the log object, joins multi-parameter messages with a space (use the sprintf plugin for formatted messages), and only logs the object to the console |
-| `dateField` | `string` | - | If defined, populates the field with the ISO date. If `dateFn` is defined, will call `dateFn` to derive the date |
-| `levelField` | `string` | - | If defined, populates the field with the log level. If `levelFn` is defined, will call `levelFn` to derive the level |
+| `dateField` | `string` | - | If defined, populates the field with the ISO date and adds it as an additional parameter to the console call. If `dateFn` is defined, will call `dateFn` to derive the date |
+| `levelField` | `string` | - | If defined, populates the field with the log level and adds it as an additional parameter to the console call. If `levelFn` is defined, will call `levelFn` to derive the level |
 | `dateFn` | `() => string \| number` | - | If defined, a function that returns a string or number for the value to be used for the `dateField` |
 | `levelFn` | `(logLevel: LogLevelType) => string \| number` | - | If defined, a function that returns a string or number for a given log level. The input should be the logLevel |
 | `stringify` | `boolean` | `false` | If true, applies JSON.stringify to the structured log output when messageField, dateField, or levelField is defined |
@@ -111,7 +111,7 @@ const log = new LogLayer({
 });
 
 log.info('User logged in');
-// console.info({ timestamp: '2023-12-01T10:30:00.000Z' })
+// console.info('User logged in', { timestamp: '2023-12-01T10:30:00.000Z' })
 ```
 
 #### Level Field
@@ -124,7 +124,7 @@ const log = new LogLayer({
 });
 
 log.warn('User session expired');
-// console.warn({ level: 'warn' })
+// console.warn('User session expired', { level: 'warn' })
 ```
 
 #### Custom Date Function
@@ -138,7 +138,7 @@ const log = new LogLayer({
 });
 
 log.info('User logged in');
-// console.info({ timestamp: 1701437400000 })
+// console.info('User logged in', { timestamp: 1701437400000 })
 ```
 
 #### Custom Level Function
@@ -152,7 +152,7 @@ const log = new LogLayer({
 });
 
 log.warn('User session expired');
-// console.warn({ level: 'WARN' })
+// console.warn('User session expired', { level: 'WARN' })
 ```
 
 #### Numeric Level Mapping
@@ -169,7 +169,7 @@ const log = new LogLayer({
 });
 
 log.error('Database connection failed');
-// console.error({ level: 50 })
+// console.error('Database connection failed', { level: 50 })
 ```
 
 #### Stringify Output
