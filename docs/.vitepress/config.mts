@@ -136,7 +136,6 @@ export default defineConfig({
           },
           { text: 'Supported Loggers', items:
             [
-              { text: 'AWS Lambda Powertools', link: '/transports/aws-lambda-powertools' },
               { text: 'Bunyan', link: '/transports/bunyan' },
               { text: 'Consola', link: '/transports/consola' },
               { text: 'Electron Log', link: '/transports/electron-log' },
@@ -153,6 +152,7 @@ export default defineConfig({
           },
           { text: 'Cloud Providers', items: [
             { text: 'Amazon CloudWatch Logs', link: '/transports/aws-cloudwatch-logs' },
+            { text: 'AWS Lambda Powertools', link: '/transports/aws-lambda-powertools' },
             { text: 'Axiom', link: '/transports/axiom' },
             { text: 'Better Stack', link: '/transports/betterstack' },
             { text: 'DataDog (server-side)', link: '/transports/datadog' },

@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Oct 23, 2025
+
+Add new [AWS Cloudwatch Logs](/transports/aws-cloudwatch-logs) transport for sending logs to AWS CloudWatch Logs using the AWS SDK.
+
+Thanks to [@Eptagone](https://github.com/Eptagone)  for this contribution!
+
 ## Oct 21, 2025
 
 `loglayer`:
