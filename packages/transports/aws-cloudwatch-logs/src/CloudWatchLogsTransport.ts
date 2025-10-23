@@ -1,13 +1,10 @@
 import { LoggerlessTransport, type LoggerlessTransportConfig, type LogLayerTransportParams } from "@loglayer/transport";
-import {
-  CloudWatchLogsDefaultStrategy,
-  type CloudWatchLogsStrategy,
-  type CloudWatchLogsStrategyOptions,
-  type ErrorHandler,
-  type ICloudWatchLogsStrategy,
-} from "./strategies/index.js";
+import type { ErrorHandler } from "./common.types.js";
+import type { BaseStrategy } from "./strategies/base.strategy.js";
+import { DefaultCloudWatchStrategy } from "./strategies/default.strategy.js";
+import type { CloudWatchLogsStrategyOptions } from "./strategies/index.js";
 
-type MessageFn = (params: LogLayerTransportParams, timestamp: number) => string;
+type PayloadTemplateFn = (params: LogLayerTransportParams, timestamp: number) => string;
 type NameSelectorCallback = (params: LogLayerTransportParams) => string;
 
 export interface CloudWatchLogsTransportConfig extends CloudWatchLogsStrategyOptions, LoggerlessTransportConfig {
@@ -24,16 +21,23 @@ export interface CloudWatchLogsTransportConfig extends CloudWatchLogsStrategyOpt
   streamName: string | NameSelectorCallback;
 
   /**
-   * A custom strategy for sending logs to CloudWatch Logs.
+   * A strategy for sending logs to CloudWatch Logs.
+   * If not provided, the DefaultCloudWatchStrategy will be used.
    */
-  strategy?: CloudWatchLogsStrategy;
+  strategy?: BaseStrategy;
 
   /**
-   * A custom function to generate the final message to be sent to CloudWatch Logs.
+   * A custom function to generate the message to be sent to CloudWatch Logs.
    * The default template is `[level] message`.
    * @see https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html
    */
-  messageFn?: MessageFn;
+  payloadTemplate?: PayloadTemplateFn;
+
+  /**
+   * Try to create the log group and log stream if they don't exist yet when sending logs.
+   * @defaultValue false
+   */
+  createIfNotExists?: boolean;
 }
 
 type SimplifiedConfig = Omit<
@@ -46,18 +50,19 @@ type SimplifiedConfig = Omit<
  */
 export class CloudWatchLogsTransport extends LoggerlessTransport implements Disposable {
   readonly #config: SimplifiedConfig;
-  #strategy: ICloudWatchLogsStrategy;
+  #strategy: BaseStrategy;
   #onError: ErrorHandler | undefined;
 
   constructor(config: CloudWatchLogsTransportConfig) {
-    const { id, enabled, consoleDebug, level, strategy, createIfNotExists, clientConfig, onError, ...rest } = config;
+    const { id, enabled, consoleDebug, level, strategy, createIfNotExists, onError, ...rest } = config;
     super({ id, enabled, consoleDebug, level });
 
     this.#config = rest;
-
-    const strategyConfig: CloudWatchLogsStrategyOptions = { createIfNotExists, clientConfig, onError };
     this.#onError = onError;
-    this.#strategy = strategy?.(strategyConfig) ?? CloudWatchLogsDefaultStrategy(strategyConfig);
+
+    // Use DefaultCloudWatchStrategy if no strategy is provided
+    this.#strategy = strategy ?? new DefaultCloudWatchStrategy({ createIfNotExists });
+    this.#strategy._configure({ onError });
   }
 
   shipToLogger(params: LogLayerTransportParams): any[] {
@@ -67,17 +72,25 @@ export class CloudWatchLogsTransport extends LoggerlessTransport implements Disp
       typeof this.#config.streamName === "function" ? this.#config.streamName(params) : this.#config.streamName;
 
     const timestamp = Date.now();
+
     const message =
-      this.#config.messageFn?.(params, timestamp) ??
+      this.#config.payloadTemplate?.(params, timestamp) ??
       `[${params.logLevel}] ${params.messages.map((msg) => String(msg)).join(" ")}`;
-    const action = this.#strategy.sendEvent({ timestamp, message }, groupName, streamName);
+
+    const action = this.#strategy.sendEvent({
+      event: { timestamp, message },
+      logGroupName: groupName,
+      logStreamName: streamName,
+    });
+
     if (action instanceof Promise && this.#onError) {
       action.catch((error) => this.#onError?.(error));
     }
+
     return [message];
   }
 
   [Symbol.dispose](): void {
-    this.#strategy.cleanup?.();
+    this.#strategy.cleanup();
   }
 }

@@ -1,8 +1,7 @@
 import { parentPort, workerData } from "node:worker_threads";
 import { CloudWatchLogsClient, type InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
-import { ensureGroupExists, ensureStreamExists, sendEvents } from "../../actions.js";
-import type { ErrorHandler } from "../common.js";
-import type { WorkerDataOptions, WorkerError, WorkerMessage } from "./common.js";
+import { ensureGroupExists, ensureStreamExists, sendEvents } from "../../utils.js";
+import type { WorkerDataOptions, WorkerError, WorkerMessage } from "./worker-queue.types.js";
 
 interface EventChannel {
   logGroupName: string;
@@ -18,7 +17,7 @@ if (parentPort) {
   options.delay ??= 6000;
   options.batchSize ??= 10000;
 
-  const errorHandler: ErrorHandler = options.hasErrorHandler
+  const errorHandler = options.hasErrorHandler
     ? (error) => parentPort?.postMessage({ error } as WorkerError)
     : console.error;
 
@@ -29,7 +28,13 @@ if (parentPort) {
     for (const channel of channels) {
       if (channel.events.length > 0) {
         const events = channel.events.splice(0, Math.min(channel.events.length, options.batchSize));
-        await sendEvents(client, events, channel.logGroupName, channel.logStreamName, errorHandler);
+        await sendEvents({
+          client,
+          logEvents: events,
+          logGroupName: channel.logGroupName,
+          logStreamName: channel.logStreamName,
+          onError: errorHandler,
+        });
       }
     }
   }
@@ -41,8 +46,17 @@ if (parentPort) {
     if (msg.type === "event") {
       const { event, logGroupName, logStreamName } = msg;
       if (options.createIfNotExists) {
-        await ensureGroupExists(client, logGroupName, errorHandler);
-        await ensureStreamExists(client, logGroupName, logStreamName, errorHandler);
+        await ensureGroupExists({
+          client,
+          logGroupName,
+          onError: errorHandler,
+        });
+        await ensureStreamExists({
+          client,
+          logGroupName,
+          logStreamName,
+          onError: errorHandler,
+        });
       }
 
       let channel = channels.find((c) => c.logGroupName === logGroupName && c.logStreamName === logStreamName);

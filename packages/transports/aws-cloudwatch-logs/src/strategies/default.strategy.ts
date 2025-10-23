@@ -1,31 +1,53 @@
-import { CloudWatchLogsClient, type InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
-import { ensureGroupExists, ensureStreamExists, sendEvents } from "../actions.js";
-import type { CloudWatchLogsStrategy, CloudWatchLogsStrategyOptions, ICloudWatchLogsStrategy } from "./common.js";
+import { CloudWatchLogsClient, type CloudWatchLogsClientConfig } from "@aws-sdk/client-cloudwatch-logs";
+import type { SendEventParams } from "../common.types.js";
+import { ensureGroupExists, ensureStreamExists, sendEvents } from "../utils.js";
+import { BaseStrategy } from "./base.strategy.js";
 
-// The default strategy is responsible for handling log events and sending them to CloudWatch Logs.
-class DefaultStrategy implements ICloudWatchLogsStrategy {
-  #clientInstance?: CloudWatchLogsClient;
+export interface DefaultCloudWatchStrategyStrategyOptions {
+  /**
+   * AWS CloudWatch Logs client configuration to use when creating a new client.
+   */
+  clientConfig?: CloudWatchLogsClientConfig;
 
-  constructor(protected readonly options: CloudWatchLogsStrategyOptions) {}
-
-  get client() {
-    this.#clientInstance ??= new CloudWatchLogsClient(this.options.clientConfig);
-    return this.#clientInstance;
-  }
-
-  public async sendEvent(event: InputLogEvent, logGroupName: string, logStreamName: string): Promise<void> {
-    if (this.options.createIfNotExists) {
-      await ensureGroupExists(this.client, logGroupName, this.options.onError);
-      await ensureStreamExists(this.client, logGroupName, logStreamName, this.options.onError);
-    }
-
-    await sendEvents(this.client, [event], logGroupName, logStreamName, this.options.onError);
-  }
+  /**
+   * Try to create the log group and log stream if they don't exist yet when sending logs.
+   * @defaultValue false
+   */
+  createIfNotExists?: boolean;
 }
 
-/**
- * Default strategy for sending log events to CloudWatch Logs.
- * @param options - Strategy options
- * @returns
- */
-export const CloudWatchLogsDefaultStrategy: CloudWatchLogsStrategy = (options = {}) => new DefaultStrategy(options);
+// The default strategy is responsible for handling log events and sending them to CloudWatch Logs.
+export class DefaultCloudWatchStrategy extends BaseStrategy {
+  #client: CloudWatchLogsClient;
+  #createIfNotExists: boolean;
+
+  constructor(config?: DefaultCloudWatchStrategyStrategyOptions) {
+    super();
+    this.#client = new CloudWatchLogsClient(config?.clientConfig);
+    this.#createIfNotExists = config?.createIfNotExists ?? false;
+  }
+
+  public async sendEvent({ event, logGroupName, logStreamName }: SendEventParams): Promise<void> {
+    if (this.#createIfNotExists) {
+      await ensureGroupExists({
+        client: this.#client,
+        logGroupName,
+        onError: this.onError,
+      });
+      await ensureStreamExists({
+        client: this.#client,
+        logGroupName,
+        logStreamName,
+        onError: this.onError,
+      });
+    }
+
+    await sendEvents({
+      client: this.#client,
+      logEvents: [event],
+      logGroupName,
+      logStreamName,
+      onError: this.onError,
+    });
+  }
+}
