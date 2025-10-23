@@ -32,8 +32,8 @@ const log = new LogLayer({
 // Use LogLayer as normal
 log.withMetadata({ customField: 'value' }).info('Hello from Lambda!');
 
-// The transport formats messages as JSON with level, timestamp, data fields, and msg
-// Example output: {"level":"info","timestamp":1641013456789,"customField":"value","msg":"Hello from Lambda!"}
+// The transport formats messages as JSON with level, timestamp, data fields, and message
+// Example output: {"level":"info","timestamp":1641013456789,"customField":"value","message":"Hello from Lambda!"}
 ```
 
 ## Documentation

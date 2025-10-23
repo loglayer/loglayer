@@ -116,7 +116,7 @@ When no processing strategy is explicitly defined, the transport uses the [defau
 | Name                | Type                                                                  | Default | Description                                                           |
 | ------------------- | --------------------------------------------------------------------- | ------- | --------------------------------------------------------------------- |
 | `strategy`          | `BaseStrategy`                                                        | `DefaultCloudWatchStrategy()` | Strategy object that handles the log events. |
-| `payloadTemplate`   | `(params: LogLayerTransportParams) => string`                        | -       | Build the log message to be sent to cloudwatch.                       |
+| `payloadTemplate`   | `(params: LogLayerTransportParams, timestamp: number) => string`     | -       | Build the log message to be sent to cloudwatch.                       |
 | `onError`           | `(error: Error) => void`                                              | -       | Callback for error handling                                           |
 | `enabled`           | `boolean`                                                             | `true`  | If false, the transport will not send logs to the logger              |
 | `consoleDebug`      | `boolean`                                                             | `false` | If true, the transport will log to the console for debugging purposes |
@@ -128,13 +128,14 @@ Each log entry is written as a [InputLogEvent](https://docs.aws.amazon.com/Amazo
 
 ```json5
 {
-  "message": "{\"level\":\"info\",\"message\":\"Log message\"}",
+  "message": "{\"level\":\"info\",\"timestamp\":1641013456789,\"message\":\"Log message\"}",
   "timestamp": 1641013456789,
 }
 ```
 
 The message field contains a JSON stringified object with:
 - `level`: The log level (e.g., "info", "error", "debug")
+- `timestamp`: The timestamp when the log was created (in milliseconds)
 - `message`: The joined message string
 - Additional data fields (only included when present)
 
@@ -152,8 +153,8 @@ const log = new LogLayer({
   transport: new CloudWatchLogsTransport({
     groupName: "/loglayer/group",
     streamName: "loglayer-stream-name",
-    payloadTemplate: (params) => {
-      const isoDate = new Date().toISOString();
+    payloadTemplate: (params, timestamp) => {
+      const isoDate = new Date(timestamp).toISOString();
       const msg = params.messages.map((msg) => String(msg)).join(" ");
       return `${isoDate} [${params.logLevel}] ${msg}`;
     },
@@ -172,11 +173,12 @@ The previous code will produce a log entry with the following format:
 
 #### PayloadTemplate Parameters
 
-The `payloadTemplate` function receives one parameter:
+The `payloadTemplate` function receives two parameters:
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `params` | `LogLayerTransportParams` | The log entry data containing all the information about the log message |
+| `timestamp` | `number` | The timestamp when the log was created (in milliseconds) |
 
 #### LogLayerTransportParams Properties
 

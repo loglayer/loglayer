@@ -27,6 +27,20 @@ if (parentPort) {
   async function sendCurrentEvents() {
     for (const channel of channels) {
       if (channel.events.length > 0) {
+        if (options.createIfNotExists) {
+          await ensureGroupExists({
+            client,
+            logGroupName: channel.logGroupName,
+            onError: errorHandler,
+          });
+          await ensureStreamExists({
+            client,
+            logGroupName: channel.logGroupName,
+            logStreamName: channel.logStreamName,
+            onError: errorHandler,
+          });
+        }
+
         const events = channel.events.splice(0, Math.min(channel.events.length, options.batchSize));
         await sendEvents({
           client,
@@ -45,19 +59,6 @@ if (parentPort) {
   parentPort.on("message", async (msg: WorkerMessage) => {
     if (msg.type === "event") {
       const { event, logGroupName, logStreamName } = msg;
-      if (options.createIfNotExists) {
-        await ensureGroupExists({
-          client,
-          logGroupName,
-          onError: errorHandler,
-        });
-        await ensureStreamExists({
-          client,
-          logGroupName,
-          logStreamName,
-          onError: errorHandler,
-        });
-      }
 
       let channel = channels.find((c) => c.logGroupName === logGroupName && c.logStreamName === logStreamName);
       if (!channel) {

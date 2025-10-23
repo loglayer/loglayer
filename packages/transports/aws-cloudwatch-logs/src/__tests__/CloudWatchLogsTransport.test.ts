@@ -88,6 +88,7 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     const parsedMessage = JSON.parse(message!);
     expect(parsedMessage).toMatchObject({
       level: "info",
+      timestamp: expect.any(Number),
       message: "test message",
     });
     mockSend.mockReset();
@@ -95,7 +96,7 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
 
   it("should log and format a message", async () => {
     const { log } = await getLoggerInstance({
-      payloadTemplate: (params) => params.messages.map((msg) => String(msg)).join(" "),
+      payloadTemplate: (params, _timestamp) => params.messages.map((msg) => String(msg)).join(" "),
     });
     log.info("test message");
     expect(mockSend).toHaveBeenCalledOnce();
@@ -106,7 +107,8 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
 
   it("should log a message with context", async () => {
     const { log, strategy } = await getLoggerInstance({
-      payloadTemplate: (params) => `[${params.context.tag}] ${params.messages.map((msg) => String(msg)).join(" ")}`,
+      payloadTemplate: (params, _timestamp) =>
+        `[${params.context.tag}] ${params.messages.map((msg) => String(msg)).join(" ")}`,
     });
 
     log.withContext({ tag: "context" }).info("test message");
@@ -140,6 +142,7 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     const parsedMessage = JSON.parse(message!);
     expect(parsedMessage).toMatchObject({
       level: "info",
+      timestamp: expect.any(Number),
       message: "test message",
       tag: "meta",
       userId: 123,
@@ -164,6 +167,7 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     const parsedMessage = JSON.parse(message!);
     expect(parsedMessage).toMatchObject({
       level: "info",
+      timestamp: expect.any(Number),
       message: "test message",
     });
     expect(parsedMessage.tag).toBeUndefined();
@@ -223,6 +227,7 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     const parsedMessage = JSON.parse(message!);
     expect(parsedMessage).toMatchObject({
       level: "info",
+      timestamp: expect.any(Number),
       message: "test message",
     });
     mockSend.mockReset();

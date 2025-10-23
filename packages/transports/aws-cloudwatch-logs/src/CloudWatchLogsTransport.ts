@@ -4,7 +4,21 @@ import type { BaseStrategy } from "./strategies/base.strategy.js";
 import { DefaultCloudWatchStrategy } from "./strategies/default.strategy.js";
 import type { CloudWatchLogsStrategyOptions } from "./strategies/index.js";
 
-type PayloadTemplateFn = (params: LogLayerTransportParams) => string;
+/**
+ * A function that generates a custom log message to be sent to CloudWatch Logs.
+ *
+ * @param params - The log entry data containing all the information about the log message
+ * @param timestamp - The timestamp when the log was created (in milliseconds)
+ * @returns The formatted message string to be sent to CloudWatch Logs
+ */
+type PayloadTemplateFn = (params: LogLayerTransportParams, timestamp: number) => string;
+
+/**
+ * A callback function that dynamically selects a name (group or stream) based on log parameters.
+ *
+ * @param params - The log entry data containing all the information about the log message
+ * @returns The name to use for the log group or stream
+ */
 type NameSelectorCallback = (params: LogLayerTransportParams) => string;
 
 export interface CloudWatchLogsTransportConfig extends CloudWatchLogsStrategyOptions, LoggerlessTransportConfig {
@@ -28,7 +42,6 @@ export interface CloudWatchLogsTransportConfig extends CloudWatchLogsStrategyOpt
 
   /**
    * A custom function to generate the message to be sent to CloudWatch Logs.
-   * The default template is `[level] message`.
    * @see https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html
    */
   payloadTemplate?: PayloadTemplateFn;
@@ -68,9 +81,10 @@ export class CloudWatchLogsTransport extends LoggerlessTransport implements Disp
     const timestamp = Date.now();
 
     const message =
-      this.#config.payloadTemplate?.(params) ??
+      this.#config.payloadTemplate?.(params, timestamp) ??
       JSON.stringify({
         level: params.logLevel,
+        timestamp: timestamp,
         ...(params.hasData && params.data),
         message: params.messages.map((msg) => String(msg)).join(" "),
       });
