@@ -4,7 +4,7 @@ import type { BaseStrategy } from "./strategies/base.strategy.js";
 import { DefaultCloudWatchStrategy } from "./strategies/default.strategy.js";
 import type { CloudWatchLogsStrategyOptions } from "./strategies/index.js";
 
-type PayloadTemplateFn = (params: LogLayerTransportParams, timestamp: number) => string;
+type PayloadTemplateFn = (params: LogLayerTransportParams) => string;
 type NameSelectorCallback = (params: LogLayerTransportParams) => string;
 
 export interface CloudWatchLogsTransportConfig extends CloudWatchLogsStrategyOptions, LoggerlessTransportConfig {
@@ -68,12 +68,11 @@ export class CloudWatchLogsTransport extends LoggerlessTransport implements Disp
     const timestamp = Date.now();
 
     const message =
-      this.#config.payloadTemplate?.(params, timestamp) ??
+      this.#config.payloadTemplate?.(params) ??
       JSON.stringify({
         level: params.logLevel,
-        timestamp,
         ...(params.hasData && params.data),
-        msg: params.messages.map((msg) => String(msg)).join(" "),
+        message: params.messages.map((msg) => String(msg)).join(" "),
       });
 
     const action = this.#strategy.sendEvent({

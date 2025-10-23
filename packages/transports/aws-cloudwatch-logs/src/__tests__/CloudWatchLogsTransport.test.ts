@@ -88,9 +88,8 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     const parsedMessage = JSON.parse(message!);
     expect(parsedMessage).toMatchObject({
       level: "info",
-      msg: "test message",
+      message: "test message",
     });
-    expect(parsedMessage.timestamp).toBeTypeOf("number");
     mockSend.mockReset();
   });
 
@@ -141,11 +140,10 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     const parsedMessage = JSON.parse(message!);
     expect(parsedMessage).toMatchObject({
       level: "info",
-      msg: "test message",
+      message: "test message",
       tag: "meta",
       userId: 123,
     });
-    expect(parsedMessage.timestamp).toBeTypeOf("number");
 
     mockSend.mockReset();
   });
@@ -166,11 +164,10 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     const parsedMessage = JSON.parse(message!);
     expect(parsedMessage).toMatchObject({
       level: "info",
-      msg: "test message",
+      message: "test message",
     });
     expect(parsedMessage.tag).toBeUndefined();
     expect(parsedMessage.userId).toBeUndefined();
-    expect(parsedMessage.timestamp).toBeTypeOf("number");
 
     mockSend.mockReset();
   });
@@ -226,9 +223,8 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     const parsedMessage = JSON.parse(message!);
     expect(parsedMessage).toMatchObject({
       level: "info",
-      msg: "test message",
+      message: "test message",
     });
-    expect(parsedMessage.timestamp).toBeTypeOf("number");
     mockSend.mockReset();
   });
 });
