@@ -1,0 +1,1 @@
+# `@loglayer/transport-aws-cloudwatch-logs` Changelog

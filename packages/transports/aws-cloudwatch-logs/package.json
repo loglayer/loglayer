@@ -1,0 +1,68 @@
+{
+  "name": "@loglayer/transport-aws-cloudwatch-logs",
+  "description": "AWS CloudWatch Logs logger transport for the LogLayer logging library",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "require": "./dist/index.cjs"
+      }
+    }
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loglayer/loglayer.git",
+    "directory": "packages/transports/aws-cloudwatch-logs"
+  },
+  "author": "Quetzal Rivera",
+  "keywords": [
+    "logging",
+    "log",
+    "loglayer",
+    "aws",
+    "cloudwatch",
+    "cloudwatch-logs",
+    "transport"
+  ],
+  "scripts": {
+    "build": "tsdown --config-loader unconfig",
+    "test": "vitest --run",
+    "clean": "rm -rf .turbo node_modules dist",
+    "lint": "biome check --no-errors-on-unmatched --write --unsafe src",
+    "lint:staged": "biome check --no-errors-on-unmatched --write --unsafe --staged src",
+    "verify-types": "tsc --noEmit",
+    "livetest": "tsx src/__tests__/livetest.ts"
+  },
+  "dependencies": {
+    "@loglayer/transport": "workspace:*"
+  },
+  "devDependencies": {
+    "@internal/tsconfig": "workspace:*",
+    "@types/node": "24.7.2",
+    "loglayer": "workspace:*",
+    "rolldown": "1.0.0-beta.43",
+    "tsdown": "0.15.7",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "vitest": "3.2.4"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "*"
+  },
+  "bugs": "https://github.com/loglayer/loglayer/issues",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://loglayer.dev",
+  "packageManager": "pnpm@10.17.1"
+}
