@@ -17,15 +17,15 @@ It uses the [AWS SDK for JavaScript CloudWatchLogs](https://www.npmjs.com/packag
 ::: code-group
 
 ```sh [npm]
-npm install loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs
+npm install loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs serialize-error
 ```
 
 ```sh [pnpm]
-pnpm add loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs
+pnpm add loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs serialize-error
 ```
 
 ```sh [yarn]
-yarn add loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs
+yarn add loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs serialize-error
 ```
 
 :::
@@ -84,9 +84,11 @@ For more details, see the [CloudWatch Logs permissions reference](https://docs.a
 ```typescript
 import { LogLayer } from 'loglayer';
 import { CloudWatchLogsTransport } from "@loglayer/transport-aws-cloudwatch-logs";
+import { serializeError } from "serialize-error";
 
 // Create LogLayer instance with CloudWatch Logs transport
 const log = new LogLayer({
+  errorSerializer: serializeError,
   transport: new CloudWatchLogsTransport({
     groupName: "/loglayer/group",
     streamName: "loglayer-stream-name",
@@ -98,6 +100,7 @@ log.withMetadata({ customField: 'value' }).info('Hello from Lambda!');
 ```
 
 When no processing strategy is explicitly defined, the transport uses the [default strategy](#default-strategy) with your default AWS profile or environment variables (such as `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_REGION`).
+
 
 ## Configuration Options
 
@@ -125,10 +128,16 @@ Each log entry is written as a [InputLogEvent](https://docs.aws.amazon.com/Amazo
 
 ```json5
 {
-  "message": "[info] Log message",
+  "message": "{\"level\":\"info\",\"timestamp\":1641013456789,\"msg\":\"Log message\"}",
   "timestamp": 1641013456789,
 }
 ```
+
+The message field contains a JSON stringified object with:
+- `level`: The log level (e.g., "info", "error", "debug")
+- `timestamp`: The timestamp when the log was created
+- `msg`: The joined message string
+- Additional data fields (only included when present)
 
 Then, the message is sent to CloudWatch Logs using the [PutLogEvents](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html) action.
 
@@ -161,6 +170,30 @@ The previous code will produce a log entry with the following format:
   "timestamp": 1641013456789,
 }
 ```
+
+#### PayloadTemplate Parameters
+
+The `payloadTemplate` function receives two parameters:
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `params` | `LogLayerTransportParams` | The log entry data containing all the information about the log message |
+| `timestamp` | `number` | The timestamp when the log was created (in milliseconds) |
+
+#### LogLayerTransportParams Properties
+
+The `params` object contains the following properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `logLevel` | `LogLevelType` | The log level of the message (e.g., "info", "error", "debug") |
+| `messages` | `any[]` | The parameters that were passed to the log message method |
+| `data` | `LogLayerData` | Combined object data containing the metadata, context, and/or error data |
+| `hasData` | `boolean` | If true, the data object is included in the message parameters |
+| `metadata` | `LogLayerMetadata` | Individual metadata object passed to the log message method |
+| `error` | `any` | Error passed to the log message method |
+| `context` | `LogLayerContext` | Context data that is included with each log entry |
+
 
 ## Error Handling
 

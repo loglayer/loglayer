@@ -69,7 +69,12 @@ export class CloudWatchLogsTransport extends LoggerlessTransport implements Disp
 
     const message =
       this.#config.payloadTemplate?.(params, timestamp) ??
-      `[${params.logLevel}] ${params.messages.map((msg) => String(msg)).join(" ")}`;
+      JSON.stringify({
+        level: params.logLevel,
+        timestamp,
+        ...(params.hasData && params.data),
+        msg: params.messages.map((msg) => String(msg)).join(" "),
+      });
 
     const action = this.#strategy.sendEvent({
       event: { timestamp, message },

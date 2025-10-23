@@ -83,9 +83,14 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     log.info("test message");
     expect(mockSend).toHaveBeenCalledOnce();
     const [command] = mockSend.mock.calls.at(0);
-    expect(command).toSatisfy(
-      (command: PutLogEventsCommand) => command.input.logEvents[0]?.message === "[info] test message",
-    );
+    const message = (command.input as any).logEvents[0]?.message;
+    expect(message).toBeDefined();
+    const parsedMessage = JSON.parse(message!);
+    expect(parsedMessage).toMatchObject({
+      level: "info",
+      msg: "test message",
+    });
+    expect(parsedMessage.timestamp).toBeTypeOf("number");
     mockSend.mockReset();
   });
 
@@ -120,11 +125,9 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     mockSend.mockReset();
   });
 
-  it("should log a message with metadata", async () => {
-    const { log, strategy } = await getLoggerInstance({
-      payloadTemplate: (params) => `[${params.metadata.tag}] ${params.messages.map((msg) => String(msg)).join(" ")}`,
-    });
-    log.withMetadata({ tag: "meta" }).info("test message");
+  it("should log a message with data", async () => {
+    const { log, strategy } = await getLoggerInstance();
+    log.withMetadata({ tag: "meta", userId: 123 }).info("test message");
 
     expect(strategy.sendEvent).toHaveBeenCalledOnce();
     if ("mock" in strategy.sendEvent) {
@@ -133,9 +136,41 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
 
     expect(mockSend).toHaveBeenCalledOnce();
     const [command] = mockSend.mock.calls.at(0);
-    expect(command).toSatisfy(
-      (command: PutLogEventsCommand) => command.input.logEvents[0]?.message === "[meta] test message",
-    );
+    const message = (command.input as any).logEvents[0]?.message;
+    expect(message).toBeDefined();
+    const parsedMessage = JSON.parse(message!);
+    expect(parsedMessage).toMatchObject({
+      level: "info",
+      msg: "test message",
+      tag: "meta",
+      userId: 123,
+    });
+    expect(parsedMessage.timestamp).toBeTypeOf("number");
+
+    mockSend.mockReset();
+  });
+
+  it("should not include data field when no data is present", async () => {
+    const { log, strategy } = await getLoggerInstance();
+    log.info("test message");
+
+    expect(strategy.sendEvent).toHaveBeenCalledOnce();
+    if ("mock" in strategy.sendEvent) {
+      await strategy.sendEvent.mock.results[0].value;
+    }
+
+    expect(mockSend).toHaveBeenCalledOnce();
+    const [command] = mockSend.mock.calls.at(0);
+    const message = (command.input as any).logEvents[0]?.message;
+    expect(message).toBeDefined();
+    const parsedMessage = JSON.parse(message!);
+    expect(parsedMessage).toMatchObject({
+      level: "info",
+      msg: "test message",
+    });
+    expect(parsedMessage.tag).toBeUndefined();
+    expect(parsedMessage.userId).toBeUndefined();
+    expect(parsedMessage.timestamp).toBeTypeOf("number");
 
     mockSend.mockReset();
   });
@@ -186,9 +221,14 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
       (call) => call[0] && call[0].constructor.name === "PutLogEventsCommand",
     );
     expect(putLogEventsCall).toBeDefined();
-    expect(putLogEventsCall![0]).toSatisfy(
-      (command: PutLogEventsCommand) => command.input.logEvents[0]?.message === "[info] test message",
-    );
+    const message = (putLogEventsCall![0].input as any).logEvents[0]?.message;
+    expect(message).toBeDefined();
+    const parsedMessage = JSON.parse(message!);
+    expect(parsedMessage).toMatchObject({
+      level: "info",
+      msg: "test message",
+    });
+    expect(parsedMessage.timestamp).toBeTypeOf("number");
     mockSend.mockReset();
   });
 });
