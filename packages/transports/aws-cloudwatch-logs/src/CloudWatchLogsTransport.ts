@@ -32,12 +32,6 @@ export interface CloudWatchLogsTransportConfig extends CloudWatchLogsStrategyOpt
    * @see https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html
    */
   payloadTemplate?: PayloadTemplateFn;
-
-  /**
-   * Try to create the log group and log stream if they don't exist yet when sending logs.
-   * @defaultValue false
-   */
-  createIfNotExists?: boolean;
 }
 
 type SimplifiedConfig = Omit<
@@ -54,14 +48,14 @@ export class CloudWatchLogsTransport extends LoggerlessTransport implements Disp
   #onError: ErrorHandler | undefined;
 
   constructor(config: CloudWatchLogsTransportConfig) {
-    const { id, enabled, consoleDebug, level, strategy, createIfNotExists, onError, ...rest } = config;
+    const { id, enabled, consoleDebug, level, strategy, onError, ...rest } = config;
     super({ id, enabled, consoleDebug, level });
 
     this.#config = rest;
     this.#onError = onError;
 
     // Use DefaultCloudWatchStrategy if no strategy is provided
-    this.#strategy = strategy ?? new DefaultCloudWatchStrategy({ createIfNotExists });
+    this.#strategy = strategy ?? new DefaultCloudWatchStrategy();
     this.#strategy._configure({ onError });
   }
 

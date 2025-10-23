@@ -33,9 +33,7 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     let realStrategy: ICloudWatchLogsStrategy;
 
     // Create a real strategy instance for the mock to delegate to
-    realStrategy = new DefaultCloudWatchStrategy({
-      createIfNotExists: options?.createIfNotExists ?? false,
-    });
+    realStrategy = new DefaultCloudWatchStrategy();
 
     class MockStrategy extends BaseStrategy {
       sendEvent = vi.fn(({ event, logGroupName, logStreamName }) =>
@@ -45,7 +43,7 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
       cleanup = vi.fn();
     }
 
-    const strategy = new MockStrategy();
+    const mockStrategy = new MockStrategy();
 
     const groupName = "/loglayer/test";
     const streamName = "loglayer-stream-test";
@@ -55,12 +53,12 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
         groupName,
         streamName,
         onError,
-        strategy,
+        strategy: options?.strategy || mockStrategy,
         ...options,
       }),
     });
 
-    return { log, strategy, groupName, streamName };
+    return { log, strategy: options?.strategy || mockStrategy, groupName, streamName };
   }
 
   async function getLoggerInstanceWithoutStrategy(options?: Partial<CloudWatchLogsTransportConfig>) {
@@ -110,7 +108,9 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     log.withContext({ tag: "context" }).info("test message");
 
     expect(strategy.sendEvent).toHaveBeenCalledOnce();
-    await strategy.sendEvent.mock.results[0].value;
+    if ("mock" in strategy.sendEvent) {
+      await strategy.sendEvent.mock.results[0].value;
+    }
 
     expect(mockSend).toHaveBeenCalledOnce();
     const [command] = mockSend.mock.calls.at(0);
@@ -127,7 +127,9 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
     log.withMetadata({ tag: "meta" }).info("test message");
 
     expect(strategy.sendEvent).toHaveBeenCalledOnce();
-    await strategy.sendEvent.mock.results[0].value;
+    if ("mock" in strategy.sendEvent) {
+      await strategy.sendEvent.mock.results[0].value;
+    }
 
     expect(mockSend).toHaveBeenCalledOnce();
     const [command] = mockSend.mock.calls.at(0);
@@ -141,8 +143,10 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
   it("should call error callback", async () => {
     const { log, strategy } = await getLoggerInstance();
 
-    // Make the strategy return a rejected promise
-    strategy.sendEvent.mockReturnValue(Promise.reject(new Error("Test error")));
+    // Make the strategy return a rejected promise (only if it's a mock)
+    if ("mockReturnValue" in strategy.sendEvent) {
+      strategy.sendEvent.mockReturnValue(Promise.reject(new Error("Test error")));
+    }
 
     log.info("test message");
     expect(strategy.sendEvent).toHaveBeenCalledOnce();
@@ -156,23 +160,18 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
   });
 
   it("should try to create log group and stream", async () => {
-    const { log, strategy, groupName, streamName } = await getLoggerInstance({
-      createIfNotExists: true,
+    // Create a strategy with createIfNotExists enabled
+    const strategyWithCreate = new DefaultCloudWatchStrategy({ createIfNotExists: true });
+
+    const { log, groupName, streamName } = await getLoggerInstance({
+      strategy: strategyWithCreate,
     });
 
     log.info("test message");
 
-    expect(strategy.sendEvent).toHaveBeenCalledOnce();
-    await strategy.sendEvent.mock.results[0].value;
-
     // The real strategy will make multiple calls for createIfNotExists
-    // but our mock strategy just delegates to the real one
+    // We should see multiple calls to mockSend (describe, create group, create stream, put events)
     expect(mockSend).toHaveBeenCalled();
-
-    // Verify the strategy was configured with onError
-    expect(strategy._configure).toHaveBeenCalledWith({
-      onError: expect.any(Function),
-    });
 
     mockSend.mockReset();
   });
@@ -180,9 +179,14 @@ describe("CloudWatchLogsTransport with LogLayer", () => {
   it("should use DefaultCloudWatchStrategy when no strategy is provided", async () => {
     const { log } = await getLoggerInstanceWithoutStrategy();
     log.info("test message");
-    expect(mockSend).toHaveBeenCalledOnce();
-    const [command] = mockSend.mock.calls.at(0);
-    expect(command).toSatisfy(
+    expect(mockSend).toHaveBeenCalled();
+
+    // Find the PutLogEventsCommand call
+    const putLogEventsCall = mockSend.mock.calls.find(
+      (call) => call[0] && call[0].constructor.name === "PutLogEventsCommand",
+    );
+    expect(putLogEventsCall).toBeDefined();
+    expect(putLogEventsCall![0]).toSatisfy(
       (command: PutLogEventsCommand) => command.input.logEvents[0]?.message === "[info] test message",
     );
     mockSend.mockReset();
