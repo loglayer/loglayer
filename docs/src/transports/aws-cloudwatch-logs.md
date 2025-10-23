@@ -37,6 +37,7 @@ The transport requires specific AWS permissions to send logs to CloudWatch Logs.
 ### Required Permissions
 
 **Always required:**
+
 • `logs:PutLogEvents` - Send log events to CloudWatch Logs
 
 **Required when using `createIfNotExists: true`:**
