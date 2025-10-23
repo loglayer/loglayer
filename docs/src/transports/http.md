@@ -21,7 +21,7 @@ Ships logs to any HTTP endpoint with support for batching, compression, retries,
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/http)
 
-This transport was 99% vibe-coded, with manual testing against [VictoriaLogs](victoria-logs.md) and [Logflare])(logflare.md).
+This transport was 99% vibe-coded, with manual testing against [VictoriaLogs](victoria-logs.md) and [Logflare](logflare.md).
 
 [Vibe Code Prompts](https://github.com/loglayer/loglayer/tree/master/packages/transports/http/PROMPTS.md)
 

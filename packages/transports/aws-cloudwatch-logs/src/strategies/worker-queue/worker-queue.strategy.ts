@@ -1,7 +1,8 @@
 import type { Worker } from "node:worker_threads";
-import type { InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
+import type { SendEventParams } from "../../common.types.js";
 import { addExitHook } from "../../vendor/exit-hook/index.js";
-import type { CloudWatchLogsStrategy, CloudWatchLogsStrategyOptions, ICloudWatchLogsStrategy } from "../common.js";
+import { BaseStrategy } from "../base.strategy.js";
+import LogWorker from "./worker.js?thread";
 import type {
   CloudWatchLogsWorkerQueueOptions,
   WorkerDataOptions,
@@ -9,45 +10,54 @@ import type {
   WorkerEventMessage,
   WorkerResponse,
   WorkerStopMessage,
-} from "./common.js";
-import LogWorker from "./worker.js?thread";
+} from "./worker-queue.types.js";
 
 const MAX_WAIT_TIME = 30000;
 
 // Uses a worker thread to send logs
-class WorkerQueueStrategy implements ICloudWatchLogsStrategy {
-  #options: CloudWatchLogsStrategyOptions;
+export class WorkerQueueStrategy extends BaseStrategy {
   #queueOptions?: CloudWatchLogsWorkerQueueOptions;
-  #errorHandler?: CloudWatchLogsStrategyOptions["onError"];
   #msgErrorHandler: (error: WorkerError) => void;
   #worker?: Worker;
+  #createIfNotExists: boolean;
 
-  constructor(options: CloudWatchLogsStrategyOptions, queueOptions?: CloudWatchLogsWorkerQueueOptions) {
-    const { onError, ...rest } = options;
-    this.#options = rest;
+  constructor(queueOptions?: CloudWatchLogsWorkerQueueOptions) {
+    if (queueOptions?.batchSize !== undefined) {
+      if (queueOptions.batchSize < 1 || queueOptions.batchSize > 10000) {
+        throw new Error("Batch size must be between 1 and 10000");
+      }
+    }
+
+    if (typeof queueOptions?.delay === "number" && queueOptions.delay < 1) {
+      throw new Error("The specified delay is must be bigger than 0");
+    }
+
+    super();
+
     this.#queueOptions = queueOptions;
-    this.#errorHandler = onError;
+    this.#createIfNotExists = queueOptions?.createIfNotExists ?? false;
     this.#msgErrorHandler = (msg: WorkerResponse) => {
       if (msg.type === "error") {
-        onError?.(msg.error);
+        this.onError?.(msg.error);
       }
     };
 
     addExitHook(this.cleanup.bind(this), { wait: MAX_WAIT_TIME });
   }
 
-  public sendEvent(event: InputLogEvent, logGroupName: string, logStreamName: string): void {
+  public sendEvent({ event, logGroupName, logStreamName }: SendEventParams): void {
     this.#worker ??= this.#initializeWorker();
     this.#worker.postMessage({ type: "event", event, logGroupName, logStreamName } as WorkerEventMessage);
   }
 
   public cleanup() {
-    if (this.#errorHandler) {
-      this.#worker?.off("error", this.#errorHandler);
-      this.#worker?.off("messageerror", this.#errorHandler);
-      this.#worker?.off("message", this.#msgErrorHandler);
-    }
     if (this.#worker) {
+      if (this.onError) {
+        this.#worker.off("error", this.onError);
+        this.#worker.off("messageerror", this.onError);
+        this.#worker.off("message", this.#msgErrorHandler);
+      }
+
       let release: () => void;
       const lock = new Promise<void>((resolve) => {
         release = resolve;
@@ -72,38 +82,24 @@ class WorkerQueueStrategy implements ICloudWatchLogsStrategy {
   }
 
   #initializeWorker() {
-    const hasErrorHandler = !!this.#errorHandler;
+    const hasErrorHandler = !!this.onError;
+
     const instance = new LogWorker({
-      workerData: { ...this.#options, ...this.#queueOptions, hasErrorHandler } satisfies WorkerDataOptions,
+      // These values must be serializable to be passed to the worker thread
+      workerData: {
+        ...this.#queueOptions,
+        hasErrorHandler,
+        createIfNotExists: this.#createIfNotExists,
+      } satisfies WorkerDataOptions,
       env: process.env,
     });
+
     if (hasErrorHandler) {
-      instance.on("error", this.#errorHandler);
-      instance.on("messageerror", this.#errorHandler);
+      instance.on("error", this.onError);
+      instance.on("messageerror", this.onError);
       instance.on("message", this.#msgErrorHandler);
     }
+
     return instance;
   }
 }
-
-/**
- * Creates a CloudWatchLogsWorkerQueueStrategy with custom options.
- * @param queueOptions
- * @returns
- */
-export function createWorkerQueueStrategy(queueOptions?: CloudWatchLogsWorkerQueueOptions): CloudWatchLogsStrategy {
-  if (queueOptions?.batchSize) {
-    if (queueOptions.batchSize < 1 || queueOptions.batchSize > 10000) {
-      throw new Error("Batch size must be between 1 and 10000");
-    }
-  }
-  if (typeof queueOptions?.delay === "number" && queueOptions.delay < 1) {
-    throw new Error("The specified delay is must be bigger than 0");
-  }
-  return (options) => new WorkerQueueStrategy(options, queueOptions);
-}
-
-/**
- * A CloudWatchLogsStrategy that uses a worker thread to send logs
- */
-export const CloudWatchLogsWorkerQueueStrategy: CloudWatchLogsStrategy = (options) => new WorkerQueueStrategy(options);

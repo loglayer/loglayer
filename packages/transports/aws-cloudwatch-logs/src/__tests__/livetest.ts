@@ -1,7 +1,7 @@
 import type { CloudWatchLogsClientConfig } from "@aws-sdk/client-cloudwatch-logs";
 import { testTransportOutput } from "@loglayer/transport";
 import { LogLayer } from "loglayer";
-import { CloudWatchLogsTransport } from "../CloudWatchLogsTransport.js";
+import { CloudWatchLogsTransport, DefaultCloudWatchStrategy } from "../index.js";
 
 const groupName = process.env.CLOUDWATCH_GROUP_NAME || "/loglayer/test";
 const streamName = process.env.CLOUDWATCH_STREAM_NAME || "loglayer-stream-test";
@@ -21,13 +21,18 @@ const clientConfig: CloudWatchLogsClientConfig = {
   credentials: process.env.USE_LOCALSTACK === "true" ? { accessKeyId: "local", secretAccessKey: "stack" } : undefined,
 };
 
+// Create the strategy and configure it
+const strategy = new DefaultCloudWatchStrategy({
+  clientConfig,
+  createIfNotExists: true,
+});
+
 const log = new LogLayer({
   transport: new CloudWatchLogsTransport({
     groupName,
     streamName,
-    clientConfig,
+    strategy,
     consoleDebug: true,
-    createIfNotExists: true,
   }),
 });
 

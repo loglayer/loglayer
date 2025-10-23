@@ -1,5 +1,4 @@
-import type { InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
-import type { CloudWatchLogsStrategyOptions } from "../common.js";
+import type { CloudWatchLogsClientConfig, InputLogEvent } from "@aws-sdk/client-cloudwatch-logs";
 
 export interface CloudWatchLogsWorkerQueueOptions {
   /**
@@ -15,11 +14,20 @@ export interface CloudWatchLogsWorkerQueueOptions {
    * @defaultValue 10000
    */
   batchSize?: number;
+
+  /**
+   * AWS CloudWatch Logs client configuration to use when creating a new client.
+   */
+  clientConfig?: CloudWatchLogsClientConfig;
+
+  /**
+   * Try to create the log group and log stream if they don't exist yet when sending logs.
+   * @defaultValue false
+   */
+  createIfNotExists?: boolean;
 }
 
-export interface WorkerDataOptions
-  extends Omit<CloudWatchLogsStrategyOptions, "onError">,
-    CloudWatchLogsWorkerQueueOptions {
+export interface WorkerDataOptions extends CloudWatchLogsWorkerQueueOptions {
   hasErrorHandler: boolean;
 }
 

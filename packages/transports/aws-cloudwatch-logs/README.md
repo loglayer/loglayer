@@ -9,7 +9,7 @@ A transport for the [LogLayer](https://loglayer.dev) logging library using the [
 ## Installation
 
 ```bash
-npm install loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs
+npm install loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs serialize-error
 ```
 
 ## Usage
@@ -17,9 +17,11 @@ npm install loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-clo
 ```typescript
 import { LogLayer } from 'loglayer';
 import { CloudWatchLogsTransport } from "@loglayer/transport-aws-cloudwatch-logs";
+import { serializeError } from "serialize-error";
 
 // Create LogLayer instance with CloudWatch Logs transport
 const log = new LogLayer({
+  errorSerializer: serializeError,
   transport: new CloudWatchLogsTransport({
     // Set the log group and stream name to use.
     groupName: "/loglayer/group",
@@ -29,6 +31,9 @@ const log = new LogLayer({
 
 // Use LogLayer as normal
 log.withMetadata({ customField: 'value' }).info('Hello from Lambda!');
+
+// The transport formats messages as JSON with level, timestamp, data fields, and message
+// Example output: {"level":"info","timestamp":1641013456789,"customField":"value","message":"Hello from Lambda!"}
 ```
 
 ## Documentation

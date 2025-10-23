@@ -17,31 +17,78 @@ It uses the [AWS SDK for JavaScript CloudWatchLogs](https://www.npmjs.com/packag
 ::: code-group
 
 ```sh [npm]
-npm install loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs
+npm install loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs serialize-error
 ```
 
 ```sh [pnpm]
-pnpm add loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs
+pnpm add loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs serialize-error
 ```
 
 ```sh [yarn]
-yarn add loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs
+yarn add loglayer @loglayer/transport-aws-cloudwatch-logs @aws-sdk/client-cloudwatch-logs serialize-error
 ```
 
 :::
 
 ## Permissions
 
-The transport uses the [PutLogEvents](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html) action to send the logs to CloudWatch Logs. If you're using the `createIfNotExists` option, it will also uses the [DescribeLogGroups](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogGroups.html), [DescribeLogStreams](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogStreams.html), [CreateLogGroup](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_CreateLogGroup.html) and [CreateLogStream](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_CreateLogStream.html) actions. Make sure you have the necessary permissions to use them. See more details in the [CloudWatch Logs permissions reference](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/permissions-reference-cwl.html).
+The transport requires specific AWS permissions to send logs to CloudWatch Logs. The required permissions depend on your configuration:
+
+### Required Permissions
+
+**Always required:**
+• `logs:PutLogEvents` - Send log events to CloudWatch Logs
+
+**Required when using `createIfNotExists: true`:**
+
+The included processing strategies have an option to create the groups and streams if they do not exist.
+
+• `logs:DescribeLogGroups` - Check if log group exists
+• `logs:DescribeLogStreams` - Check if log stream exists  
+• `logs:CreateLogGroup` - Create log group if it doesn't exist
+• `logs:CreateLogStream` - Create log stream if it doesn't exist
+
+### IAM Policy Example
+
+Here's a minimal IAM policy that grants the necessary permissions:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:*:*:log-group:your-log-group-name"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+For more details, see the [CloudWatch Logs permissions reference](https://docs.aws.amazon.com/AmazonCloud/latest/logs/permissions-reference-cwl.html).
 
 ## Usage
 
 ```typescript
 import { LogLayer } from 'loglayer';
 import { CloudWatchLogsTransport } from "@loglayer/transport-aws-cloudwatch-logs";
+import { serializeError } from "serialize-error";
 
 // Create LogLayer instance with CloudWatch Logs transport
 const log = new LogLayer({
+  errorSerializer: serializeError,
   transport: new CloudWatchLogsTransport({
     groupName: "/loglayer/group",
     streamName: "loglayer-stream-name",
@@ -52,25 +99,8 @@ const log = new LogLayer({
 log.withMetadata({ customField: 'value' }).info('Hello from Lambda!');
 ```
 
-The AWS SDK will load your default aws profile or environment. However, you can also specify the cloudwatch client config by yourself via the `clientConfig` option as follows:
+When no processing strategy is explicitly defined, the transport uses the [default strategy](#default-strategy) with your default AWS profile or environment variables (such as `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_REGION`).
 
-```typescript
-import { LogLayer } from 'loglayer';
-import { CloudWatchLogsTransport } from "@loglayer/transport-aws-cloudwatch-logs";
-
-// Create LogLayer instance with CloudWatch Logs transport
-const log = new LogLayer({
-  transport: new CloudWatchLogsTransport({
-    clientConfig: {
-      region: "us-east-1",
-      credentials: {
-        accessKeyId: "<your access key>",
-        secretAccessKey: "<your secret key>"
-      },
-    }
-  })
-});
-```
 
 ## Configuration Options
 
@@ -85,90 +115,12 @@ const log = new LogLayer({
 
 | Name                | Type                                                                  | Default | Description                                                           |
 | ------------------- | --------------------------------------------------------------------- | ------- | --------------------------------------------------------------------- |
-| `clientConfig`      | `CloudWatchLogsClientConfig`                                          | -       | AWS SDK client configuration.                                         |
-| `createIfNotExists` | `boolean`                                                             | `false` | Create log groups and streams if they don't exist.                    |
-| `messageFn`         | `(params: LogLayerTransportParams, timestamp: number) => string`      | -       | Build the log message to be sent to cloudwatch.                       |
-| `strategy`          | `(options: CloudWatchLogsStrategyOptions) => ICloudWatchLogsStrategy` | -       | Callback to create the strategy object that handles the log events.   |
+| `strategy`          | `BaseStrategy`                                                        | `DefaultCloudWatchStrategy()` | Strategy object that handles the log events. |
+| `payloadTemplate`   | `(params: LogLayerTransportParams, timestamp: number) => string`     | -       | Build the log message to be sent to cloudwatch.                       |
 | `onError`           | `(error: Error) => void`                                              | -       | Callback for error handling                                           |
 | `enabled`           | `boolean`                                                             | `true`  | If false, the transport will not send logs to the logger              |
 | `consoleDebug`      | `boolean`                                                             | `false` | If true, the transport will log to the console for debugging purposes |
 | `id`                | `string`                                                              | -       | A user-defined identifier for the transport                           |
-
-## Processing Strategies
-
-The transport can handle log events in different ways, depending on your needs. It includes two built-in processing strategies: a [default strategy](#default-strategy) and a [worker queue strategy](#worker-queue-strategy).
-
-If needed, you can also create your own strategy by passing a function to the `strategy` option. It will receive the transport basic options and expects to return an object with a method called `sendEvent` and an optional method `cleanup`. The first one will be used to send the log event and the second one is used to clean up any resources in your strategy when the transport is destroyed. See the following example:
-
-```typescript
-import { LogLayer } from 'loglayer';
-import { CloudWatchLogsClient, PutLogEventsCommand } from "@aws-sdk/client-cloudwatch-logs";
-import { CloudWatchLogsTransport } from "@loglayer/transport-aws-cloudwatch-logs";
-
-// Create LogLayer instance with CloudWatch Logs transport
-const log = new LogLayer({
-  transport: new CloudWatchLogsTransport({
-    groupName: "/loglayer/group",
-    streamName: "loglayer-stream-name",
-    strategy: ({ clientConfig, onError }) => {
-      const client = new CloudWatchLogsClient(clientConfig);
-      return {
-        sendEvent: async (event, logGroupName, logStreamName) => {
-          const cmd = new PutLogEventsCommand({
-            logEvents: [event],
-            logGroupName,
-            logStreamName,
-          });
-          try {
-            await client.send(cmd);
-          } catch (error) {
-            onError?.(error);
-          }
-        }
-      }
-    }
-  }),
-})
-```
-
-### Default strategy
-
-Enabled by default, it sends each log event in a single request inmediately. The strategy is exported as `CloudWatchLogsDefaultStrategy` in case you want to wrap it in your own strategy.
-
-### Worker queue strategy
-
-If you're sending a lot of logs, you may prefer to use this strategy to improve performance. It uses a worker thread and allows you to send your logs in batches in a single request every 6 seconds (configurable). See the following example:
-
-```typescript
-import { LogLayer } from 'loglayer';
-import { CloudWatchLogsTransport, CloudWatchLogsWorkerQueueStrategy } from "@loglayer/transport-aws-cloudwatch-logs";
-
-// Create LogLayer instance with CloudWatch Logs transport
-const log = new LogLayer({
-  transport: new CloudWatchLogsTransport({
-    // ...
-    strategy: CloudWatchLogsWorkerQueueStrategy,
-  }),
-});
-```
-
-You can configure it by creating it via the `createWorkerQueueStrategy` method as follows:
-
-```typescript
-import { createWorkerQueueStrategy } from "@loglayer/transport-aws-cloudwatch-logs";
-
-// Create a worker strategy with custom options
-const CloudWatchLogsWorkerQueueStrategy = createWorkerQueueStrategy({
-  delay: 10000 // Send events every 10 seconds
-})
-```
-
-The following options are available:
-
-| Name        | Type     | Default | Description                                            |
-| ----------- | -------- | ------- | ------------------------------------------------------ |
-| `batchSize` | `number` | 10000   | The maximum number of messages to send in one request. |
-| `delay`     | `number` | 6000    | The amount of time to wait before sending logs in ms.  |
 
 ## Log Format
 
@@ -176,14 +128,22 @@ Each log entry is written as a [InputLogEvent](https://docs.aws.amazon.com/Amazo
 
 ```json5
 {
-  "message": "[info] Log message",
+  "message": "{\"level\":\"info\",\"timestamp\":1641013456789,\"message\":\"Log message\"}",
   "timestamp": 1641013456789,
 }
 ```
 
+The message field contains a JSON stringified object with:
+- `level`: The log level (e.g., "info", "error", "debug")
+- `timestamp`: The timestamp when the log was created (in milliseconds)
+- `message`: The joined message string
+- Additional data fields (only included when present)
+
 Then, the message is sent to CloudWatch Logs using the [PutLogEvents](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html) action.
 
-If you want to customize the log format, use the `messageFn` option as follows:
+### Customizing log entries
+
+If you want to customize the log format, use the `payloadTemplate` option as follows:
 
 ```typescript
 import { LogLayer } from 'loglayer';
@@ -191,7 +151,9 @@ import { CloudWatchLogsTransport } from "@loglayer/transport-aws-cloudwatch-logs
 
 const log = new LogLayer({
   transport: new CloudWatchLogsTransport({
-    messageFn: (params, timestamp) => {
+    groupName: "/loglayer/group",
+    streamName: "loglayer-stream-name",
+    payloadTemplate: (params, timestamp) => {
       const isoDate = new Date(timestamp).toISOString();
       const msg = params.messages.map((msg) => String(msg)).join(" ");
       return `${isoDate} [${params.logLevel}] ${msg}`;
@@ -205,9 +167,33 @@ The previous code will produce a log entry with the following format:
 ```json
 {
   "message": "2022-01-01T05:04:16.789Z [info] Log message",
-  "timestamp": 1641013456789,
+  "timestamp": 1641013456789
 }
 ```
+
+#### PayloadTemplate Parameters
+
+The `payloadTemplate` function receives two parameters:
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `params` | `LogLayerTransportParams` | The log entry data containing all the information about the log message |
+| `timestamp` | `number` | The timestamp when the log was created (in milliseconds) |
+
+#### LogLayerTransportParams Properties
+
+The `params` object contains the following properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `logLevel` | `LogLevelType` | The log level of the message (e.g., "info", "error", "debug") |
+| `messages` | `any[]` | The parameters that were passed to the log message method |
+| `data` | `LogLayerData` | Combined object data containing the metadata, context, and/or error data |
+| `hasData` | `boolean` | If true, the data object is included in the message parameters |
+| `metadata` | `LogLayerMetadata` | Individual metadata object passed to the log message method |
+| `error` | `any` | Error passed to the log message method |
+| `context` | `LogLayerContext` | Context data that is included with each log entry |
+
 
 ## Error Handling
 
@@ -216,6 +202,9 @@ The transport provides error handling through the `onError` callback:
 ```typescript
 const logger = new LogLayer({
   transport: new CloudWatchLogsTransport({
+    groupName: "/loglayer/group",
+    streamName: "loglayer-stream-name",
+    strategy: new DefaultCloudWatchStrategy(),
     onError: (error) => {
       // Custom error handling
       console.error("Failed to send log to CloudWatch:", error);
@@ -223,6 +212,236 @@ const logger = new LogLayer({
   }),
 });
 ```
+
+## Processing Strategies
+
+The transport uses a strategy-based architecture to handle log events. It includes two built-in processing strategies: a [default strategy](#default-strategy) and a [worker queue strategy](#worker-queue-strategy).
+
+### Default Strategy
+
+The default strategy is used when a strategy is not specified in the transport and sends each log event immediately in a single request. It's the most straightforward approach and is suitable for most use cases.
+
+```typescript
+import { LogLayer } from 'loglayer';
+import { CloudWatchLogsTransport, DefaultCloudWatchStrategy } from "@loglayer/transport-aws-cloudwatch-logs";
+
+// Simple usage with default AWS configuration
+const log = new LogLayer({
+  transport: new CloudWatchLogsTransport({
+    groupName: "/loglayer/group",
+    streamName: "loglayer-stream-name",
+  }),
+});
+```
+
+Or with custom AWS client configuration:
+
+```typescript
+import { LogLayer } from 'loglayer';
+import { CloudWatchLogsTransport, DefaultCloudWatchStrategy } from "@loglayer/transport-aws-cloudwatch-logs";
+
+const log = new LogLayer({
+  transport: new CloudWatchLogsTransport({
+    groupName: "/loglayer/group",
+    streamName: "loglayer-stream-name",
+    strategy: new DefaultCloudWatchStrategy({
+      clientConfig: {
+        region: "us-east-1",
+      },
+    }),
+  }),
+});
+```
+
+Or with automatic log group and stream creation:
+
+```typescript
+import { LogLayer } from 'loglayer';
+import { CloudWatchLogsTransport, DefaultCloudWatchStrategy } from "@loglayer/transport-aws-cloudwatch-logs";
+
+const log = new LogLayer({
+  transport: new CloudWatchLogsTransport({
+    groupName: "/loglayer/group",
+    streamName: "loglayer-stream-name",
+    strategy: new DefaultCloudWatchStrategy({
+      createIfNotExists: true,
+    }),
+  }),
+});
+```
+
+#### Default Strategy Options
+
+| Name                | Type                        | Default | Description                                                           |
+| ------------------- | --------------------------- | ------- | --------------------------------------------------------------------- |
+| `clientConfig`      | `CloudWatchLogsClientConfig` | -       | AWS SDK client configuration.                                         |
+| `createIfNotExists` | `boolean`                   | `false` | Try to create the log group and log stream if they don't exist yet.  |
+
+### Worker Queue Strategy
+
+If you're sending a lot of logs, you may prefer to use the worker queue strategy to improve performance. It uses a worker thread and allows you to send your logs in batches.
+
+```typescript
+import { LogLayer } from 'loglayer';
+import { CloudWatchLogsTransport, WorkerQueueStrategy } from "@loglayer/transport-aws-cloudwatch-logs";
+
+const log = new LogLayer({
+  transport: new CloudWatchLogsTransport({
+    groupName: "/loglayer/group",
+    streamName: "loglayer-stream-name",
+    strategy: new WorkerQueueStrategy({
+      batchSize: 1000,
+      delay: 5000,
+    }),
+  }),
+});
+```
+
+Or with automatic log group and stream creation:
+
+```typescript
+import { LogLayer } from 'loglayer';
+import { CloudWatchLogsTransport, WorkerQueueStrategy } from "@loglayer/transport-aws-cloudwatch-logs";
+
+const log = new LogLayer({
+  transport: new CloudWatchLogsTransport({
+    groupName: "/loglayer/group",
+    streamName: "loglayer-stream-name",
+    strategy: new WorkerQueueStrategy({
+      batchSize: 1000,
+      delay: 5000,
+      createIfNotExists: true,
+    }),
+  }),
+});
+```
+
+#### Worker Queue Strategy Options
+
+| Name                | Type     | Default | Description                                                           |
+| ------------------- | -------- | ------- | --------------------------------------------------------------------- |
+| `batchSize`         | `number` | 10000   | The maximum number of messages to send in one request.                |
+| `delay`             | `number` | 6000    | The amount of time to wait before sending logs in ms.                 |
+| `clientConfig`      | `CloudWatchLogsClientConfig` | - | AWS SDK client configuration.                                         |
+| `createIfNotExists` | `boolean` | `false` | Try to create the log group and log stream if they don't exist yet.  |
+
+## Creating Custom Strategies
+
+The strategy-based architecture allows you to create custom strategies that implement your own logging behavior. This is useful when you need specialized functionality like custom batching, retry logic, or integration with other services.
+
+### Strategy Interface
+
+All strategies must extend the `BaseStrategy` class and implement the required methods. The `BaseStrategy` class provides the foundation for all custom strategies and includes several protected properties and methods that you can use in your implementations.
+
+#### BaseStrategy Properties
+
+The `BaseStrategy` class provides these protected properties that are automatically configured by the transport:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `onError` | `ErrorHandler \| undefined` | Error handler callback function. Set by the transport's `onError` option. |
+
+#### BaseStrategy Methods
+
+| Method | Type | Description |
+|--------|------|-------------|
+| `sendEvent(params)` | `(params: SendEventParams) => Promise<void> \| void` | **Abstract method** - Must be implemented. Handles sending log events to CloudWatch Logs. |
+| `cleanup()` | `() => Promise<void> \| void` | **Optional override** - Called when the transport is disposed. Use this to clean up resources. |
+
+#### Basic Strategy Template
+
+```typescript
+import { BaseStrategy } from "@loglayer/transport-aws-cloudwatch-logs";
+import type { SendEventParams, CloudWatchLogsStrategyOptions } from "@loglayer/transport-aws-cloudwatch-logs";
+
+class MyCustomStrategy extends BaseStrategy {
+  // Optional: Add your own properties
+  private myProperty: string;
+
+  constructor(myProperty: string) {
+    super();
+    this.myProperty = myProperty;
+  }
+
+  // Required: Implement the sendEvent method
+  async sendEvent({ event, logGroupName, logStreamName }: SendEventParams): Promise<void> {
+    // Your custom implementation here
+    // You can access this.onError
+  }
+
+  // Optional: Override cleanup for resource management
+  cleanup(): void {
+    // Clean up any resources (timers, connections, etc.)
+  }
+}
+```
+
+#### SendEventParams Interface
+
+The `sendEvent` method receives a `SendEventParams` object with these properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `event` | `InputLogEvent` | The log event to send, containing `timestamp` and `message` |
+| `logGroupName` | `string` | The CloudWatch Logs group name |
+| `logStreamName` | `string` | The CloudWatch Logs stream name |
+
+### Basic Custom Strategy
+
+Here's a simple example that adds custom retry logic:
+
+```typescript
+import { LogLayer } from 'loglayer';
+import { CloudWatchLogsTransport, BaseStrategy } from "@loglayer/transport-aws-cloudwatch-logs";
+import { CloudWatchLogsClient, PutLogEventsCommand } from "@aws-sdk/client-cloudwatch-logs";
+
+class RetryStrategy extends BaseStrategy {
+  private client: CloudWatchLogsClient;
+  private maxRetries: number;
+
+  constructor(maxRetries = 3) {
+    super();
+    this.client = new CloudWatchLogsClient({});
+    this.maxRetries = maxRetries;
+  }
+
+  async sendEvent({ event, logGroupName, logStreamName }: SendEventParams): Promise<void> {
+    let lastError: Error | undefined;
+    
+    for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
+      try {
+        const command = new PutLogEventsCommand({
+          logEvents: [event],
+          logGroupName,
+          logStreamName,
+        });
+        
+        await this.client.send(command);
+        return; // Success, exit retry loop
+      } catch (error) {
+        lastError = error as Error;
+        
+        if (attempt === this.maxRetries) {
+          this.onError?.(lastError);
+          throw lastError;
+        }
+        
+        // Wait before retry (exponential backoff)
+        await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+      }
+    }
+  }
+}
+
+const log = new LogLayer({
+  transport: new CloudWatchLogsTransport({
+    groupName: "/loglayer/group",
+    streamName: "loglayer-stream-name",
+    strategy: new RetryStrategy(5), // 5 retry attempts
+  }),
+});
+```
+
 
 ## Changelog
 
