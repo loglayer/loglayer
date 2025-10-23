@@ -55,11 +55,10 @@ describe("WorkerQueueStrategy", () => {
   });
 
   it("should validate batch size", () => {
-    // The current implementation only validates if batchSize is truthy
-    // So 0 is not validated (which might be a bug, but we test the current behavior)
     expect(() => new WorkerQueueStrategy({ batchSize: 1 })).not.toThrow();
     expect(() => new WorkerQueueStrategy({ batchSize: 10001 })).toThrow("Batch size must be between 1 and 10000");
     expect(() => new WorkerQueueStrategy({ batchSize: 1000 })).not.toThrow();
+    expect(() => new WorkerQueueStrategy({ batchSize: 0 })).toThrow("Batch size must be between 1 and 10000");
     expect(() => new WorkerQueueStrategy()).not.toThrow();
   });
 

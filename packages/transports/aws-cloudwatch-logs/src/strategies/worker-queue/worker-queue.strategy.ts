@@ -22,16 +22,18 @@ export class WorkerQueueStrategy extends BaseStrategy {
   #createIfNotExists: boolean;
 
   constructor(queueOptions?: CloudWatchLogsWorkerQueueOptions) {
-    if (queueOptions?.batchSize) {
+    if (queueOptions?.batchSize !== undefined) {
       if (queueOptions.batchSize < 1 || queueOptions.batchSize > 10000) {
         throw new Error("Batch size must be between 1 and 10000");
       }
     }
+
     if (typeof queueOptions?.delay === "number" && queueOptions.delay < 1) {
       throw new Error("The specified delay is must be bigger than 0");
     }
 
     super();
+
     this.#queueOptions = queueOptions;
     this.#createIfNotExists = queueOptions?.createIfNotExists ?? false;
     this.#msgErrorHandler = (msg: WorkerResponse) => {
