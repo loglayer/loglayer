@@ -38,16 +38,16 @@ The transport requires specific AWS permissions to send logs to CloudWatch Logs.
 
 **Always required:**
 
-• `logs:PutLogEvents` - Send log events to CloudWatch Logs
+- `logs:PutLogEvents` - Send log events to CloudWatch Logs
 
 **Required when using `createIfNotExists: true`:**
 
 The included processing strategies have an option to create the groups and streams if they do not exist.
 
-• `logs:DescribeLogGroups` - Check if log group exists
-• `logs:DescribeLogStreams` - Check if log stream exists  
-• `logs:CreateLogGroup` - Create log group if it doesn't exist
-• `logs:CreateLogStream` - Create log stream if it doesn't exist
+- `logs:DescribeLogGroups` - Check if log group exists
+- `logs:DescribeLogStreams` - Check if log stream exists  
+- `logs:CreateLogGroup` - Create log group if it doesn't exist
+- `logs:CreateLogStream` - Create log stream if it doesn't exist
 
 ### IAM Policy Example
 
