@@ -39,6 +39,8 @@ yarn add loglayer @loglayer/transport-datadog serialize-error
 
 ## Usage Example
 
+<!--@include: ./_partials/datadog-error-tracking-tip.md-->
+
 ```typescript
 import { LogLayer } from 'loglayer'
 import { DataDogTransport } from "@loglayer/transport-datadog"
@@ -46,6 +48,7 @@ import { serializeError } from "serialize-error";
 
 const log = new LogLayer({
   errorSerializer: serializeError,
+  errorFieldName: "error",
   transport: new DataDogTransport({
     options: {
       ddClientConf: {

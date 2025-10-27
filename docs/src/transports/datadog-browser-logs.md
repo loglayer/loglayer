@@ -39,6 +39,8 @@ yarn add loglayer @loglayer/transport-datadog-browser-logs @datadog/browser-logs
 
 ## Setup
 
+<!--@include: ./_partials/datadog-error-tracking-tip.md-->
+
 ```typescript
 import { datadogLogs } from '@datadog/browser-logs'
 import { LogLayer } from 'loglayer'
@@ -54,6 +56,7 @@ datadogLogs.init({
 
 // Basic setup
 const log = new LogLayer({
+  errorFieldName: "error",
   transport: new DataDogBrowserLogsTransport({
     logger: datadogLogs.logger
   })
@@ -64,6 +67,7 @@ const logger = datadogLogs.createLogger('my-logger')
 
 const log = new LogLayer({
   transport: new DataDogBrowserLogsTransport({
+    errorFieldName: "error",
     logger
   })
 })
