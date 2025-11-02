@@ -1,5 +1,13 @@
 # `loglayer` Changelog
 
+## 7.0.0
+
+### Major Changes
+
+- [#288](https://github.com/loglayer/loglayer/pull/288) [`017be50`](https://github.com/loglayer/loglayer/commit/017be50980f7d78c5d370f1a7ffea1a5cbb4c97b) Thanks [@theogravity](https://github.com/theogravity)! - New version 7 introduces [Mixins](/mixins), a system for extending LogLayer and LogBuilder prototypes with custom methods and functionality. Unlike plugins (which intercept and modify log processing) or transports (which send logs to destinations), mixins add new methods directly to the LogLayer API, enabling you to integrate third-party libraries and add domain-specific capabilities beyond logging.
+
+  _v7 does not have any breaking changes; no migration steps are necessary to upgrade from v6 -> v7 of `loglayer`._
+
 ## 6.10.0
 
 ### Minor Changes
