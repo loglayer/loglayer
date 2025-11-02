@@ -112,6 +112,7 @@ export default defineConfig({
         text: 'Logging API',
         items: [
           { text: 'Basic Logging', link: '/logging-api/basic-logging' },
+          { text: 'Adjusting Log Levels', link: '/logging-api/adjusting-log-levels' },
           { text: 'Context', link: '/logging-api/context' },
           { text: 'Metadata', link: '/logging-api/metadata' },
           { text: 'Error Handling', link: '/logging-api/error-handling' },
