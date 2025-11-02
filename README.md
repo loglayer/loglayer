@@ -154,6 +154,7 @@ loglayer/
 │   │   └── tsconfig/             # Shared TypeScript configurations
 │   ├── context-managers/         # Official context manager implementations
 │   ├── transports/               # Official transport implementations
+│   ├── mixins/                   # Official mixins implementations
 │   └── plugins/                  # Official plugins
 ```
 
