@@ -11,7 +11,9 @@ vi.mock("@aws-sdk/client-cloudwatch-logs", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@aws-sdk/client-cloudwatch-logs")>();
   return {
     ...actual,
-    CloudWatchLogsClient: vi.fn(() => mockClient),
+    CloudWatchLogsClient: vi.fn(function () {
+      return mockClient;
+    }),
   };
 });
 

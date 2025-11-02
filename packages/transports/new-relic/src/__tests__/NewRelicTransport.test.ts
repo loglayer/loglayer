@@ -41,10 +41,14 @@ describe("NewRelicTransport", () => {
       readable: { getReader: () => mockReader },
     };
 
-    global.CompressionStream = vi.fn(() => mockStream) as unknown as typeof CompressionStream;
-    global.TextEncoder = vi.fn(() => ({
-      encode: (str: string) => new Uint8Array(str.length),
-    })) as unknown as typeof TextEncoder;
+    global.CompressionStream = vi.fn(function () {
+      return mockStream;
+    }) as unknown as typeof CompressionStream;
+    global.TextEncoder = vi.fn(function () {
+      return {
+        encode: (str: string) => new Uint8Array(str.length),
+      };
+    }) as unknown as typeof TextEncoder;
   });
 
   afterEach(() => {

@@ -25,7 +25,9 @@ describe("SumoLogicTransport", () => {
     },
   };
 
-  global.CompressionStream = vi.fn(() => mockStream) as unknown as typeof CompressionStream;
+  global.CompressionStream = vi.fn(function () {
+    return mockStream;
+  }) as unknown as typeof CompressionStream;
 
   beforeEach(() => {
     mockFetch.mockReset();
@@ -131,10 +133,11 @@ describe("SumoLogicTransport", () => {
       hasData: false,
     });
 
-    // Wait for the async operation to complete
-    await new Promise(process.nextTick);
+    // Wait for the async operation to complete (compression + fetch)
+    await new Promise((resolve) => setTimeout(resolve, 10));
 
     expect(global.CompressionStream).toHaveBeenCalledWith("gzip");
+    expect(mockFetch).toHaveBeenCalledTimes(1);
     const [, options] = mockFetch.mock.calls[0];
     expect(options.headers["Content-Encoding"]).toBe("gzip");
   });
@@ -273,22 +276,24 @@ describe("SumoLogicTransport", () => {
   it("should call onError when compressed payload size exceeds limit", async () => {
     const onError = vi.fn();
     // Mock compression to always return a large payload
-    global.CompressionStream = vi.fn(() => ({
-      readable: {
-        getReader: () => ({
-          read: vi
-            .fn()
-            .mockResolvedValueOnce({ value: new Uint8Array(1000001), done: false })
-            .mockResolvedValueOnce({ done: true }),
-        }),
-      },
-      writable: {
-        getWriter: () => ({
-          write: vi.fn().mockResolvedValue(undefined),
-          close: vi.fn().mockResolvedValue(undefined),
-        }),
-      },
-    })) as unknown as typeof CompressionStream;
+    global.CompressionStream = vi.fn(function () {
+      return {
+        readable: {
+          getReader: () => ({
+            read: vi
+              .fn()
+              .mockResolvedValueOnce({ value: new Uint8Array(1000001), done: false })
+              .mockResolvedValueOnce({ done: true }),
+          }),
+        },
+        writable: {
+          getWriter: () => ({
+            write: vi.fn().mockResolvedValue(undefined),
+            close: vi.fn().mockResolvedValue(undefined),
+          }),
+        },
+      };
+    }) as unknown as typeof CompressionStream;
 
     const transport = new SumoLogicTransport({
       url: "https://collectors.sumologic.com/receiver/v1/http/123",

@@ -10,7 +10,9 @@ const mockWorker = {
 };
 
 vi.mock("node:worker_threads", () => ({
-  Worker: vi.fn(() => mockWorker),
+  Worker: vi.fn(function () {
+    return mockWorker;
+  }),
 }));
 
 // Mock the exit hook
@@ -20,12 +22,14 @@ vi.mock("../../vendor/exit-hook/index.js", () => ({
 
 // Mock the worker file
 vi.mock("../strategies/worker-queue/worker.js?thread", () => ({
-  default: vi.fn(() => ({
-    postMessage: vi.fn(),
-    on: vi.fn(),
-    off: vi.fn(),
-    terminate: vi.fn(),
-  })),
+  default: vi.fn(function () {
+    return {
+      postMessage: vi.fn(),
+      on: vi.fn(),
+      off: vi.fn(),
+      terminate: vi.fn(),
+    };
+  }),
 }));
 
 describe("WorkerQueueStrategy", () => {
