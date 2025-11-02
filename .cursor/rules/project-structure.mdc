@@ -15,6 +15,7 @@ loglayer/
 |   |   ├── logging-api/          # LogLayer API documentation
 |   |   ├── plugins/              # LogLayer Plugin documentation
 |   |   ├── transports/           # LogLayer Transports documentation
+|   |   ├── mixins/               # LogLayer Mixins documentation
 ├── packages/
 │   ├── core/                     # Core packages
 │   │   ├── context-manager/      # Context manager system core
@@ -25,6 +26,7 @@ loglayer/
 │   │   └── tsconfig/             # Shared TypeScript configurations
 │   ├── context-managers/         # Official context manager implementations
 │   ├── transports/               # Official transport implementations
+│   ├── mixins/                   # Official mixin implementations
 │   └── plugins/                  # Official plugins
 ```
 

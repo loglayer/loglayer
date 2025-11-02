@@ -1,6 +1,8 @@
 import type { LogLayerPlugin } from "@loglayer/plugin";
 import type { LogLayerTransport } from "@loglayer/transport";
 
+export * from "./mixin.types.js";
+
 export type ErrorSerializerType = (err: any) => Record<string, any> | string;
 
 /**

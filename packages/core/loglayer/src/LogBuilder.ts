@@ -2,6 +2,7 @@ import { PluginCallbackType } from "@loglayer/plugin";
 import type { ILogBuilder, LogLayerMetadata, MessageDataType } from "@loglayer/shared";
 import { LogLevel, type LogLevelType } from "@loglayer/shared";
 import type { LogLayer } from "./LogLayer.js";
+import { mixinRegistry } from "./mixins.js";
 import type { PluginManager } from "./PluginManager.js";
 
 /**
@@ -21,6 +22,14 @@ export class LogBuilder implements ILogBuilder {
     this.structuredLogger = structuredLogger;
     this.hasMetadata = false;
     this.pluginManager = structuredLogger["pluginManager"];
+
+    if (mixinRegistry.logBuilderHandlers.length > 0) {
+      mixinRegistry.logBuilderHandlers.forEach((mixin) => {
+        if (mixin.onConstruct) {
+          mixin.onConstruct(this, structuredLogger);
+        }
+      });
+    }
   }
 
   /**

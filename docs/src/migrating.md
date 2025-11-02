@@ -5,6 +5,12 @@ description: Learn how to migrate different versions of LogLayer to the latest v
 
 # Migrating LogLayer to the latest version
 
+## Migrating from 6.x to 7.x
+
+New version 7 introduces [Mixins](/mixins/), a system for extending LogLayer and LogBuilder prototypes with custom methods and functionality. Unlike plugins (which intercept and modify log processing) or transports (which send logs to destinations), mixins add new methods directly to the LogLayer API, enabling you to integrate third-party libraries and add domain-specific capabilities beyond logging.
+
+*v7 does not have any breaking changes; no migration steps are necessary to upgrade from v6 -> v7 of `loglayer`.*
+
 ## Migrating from 5.x to 6.x
 
 6.x introduces a new feature called [Context Managers](/context-managers/). In 99% of use-cases you do not need to do anything
