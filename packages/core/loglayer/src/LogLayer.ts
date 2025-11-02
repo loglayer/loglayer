@@ -15,6 +15,7 @@ import {
 } from "@loglayer/shared";
 import type { LogLayerTransport } from "@loglayer/transport";
 import { LogBuilder } from "./LogBuilder.js";
+import { mixinRegistry } from "./mixins.js";
 import { PluginManager } from "./PluginManager.js";
 import type { LogLayerConfig } from "./types/index.js";
 
@@ -83,6 +84,14 @@ export class LogLayer implements ILogLayer {
     }
 
     this._initializeTransports(this._config.transport);
+
+    if (mixinRegistry.logLayerHandlers.length > 0) {
+      mixinRegistry.logLayerHandlers.forEach((mixin) => {
+        if (mixin.onConstruct) {
+          mixin.onConstruct(this, config);
+        }
+      });
+    }
   }
 
   /**

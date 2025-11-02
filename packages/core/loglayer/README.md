@@ -75,6 +75,35 @@ With the [Pretty Terminal Transport](https://loglayer.dev/transports/pretty-term
 
 ![Pretty Terminal Transport](https://loglayer.dev/images/pretty-terminal/pretty-terminal-short-v2.gif)
 
+The [Hot Shots Mixin](https://loglayer.dev/mixins/hot-shots) adds a metrics API to LogLayer:
+
+```typescript
+import { LogLayer, useLogLayerMixin, ConsoleTransport } from 'loglayer';
+import { StatsD } from 'hot-shots';
+import { hotshotsMixin } from '@loglayer/mixin-hot-shots';
+
+// Create a StatsD client
+const statsd = new StatsD({
+  host: 'localhost',
+  port: 8125
+});
+
+// Register the mixin (must be called before creating LogLayer instances)
+useLogLayerMixin(hotshotsMixin(statsd));
+
+// Create LogLayer instance
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console
+  })
+});
+
+// Use StatsD methods directly on LogLayer
+log.statsIncrement('request.count').info('Request received');
+log.statsTiming('request.duration', 150).info('Request processed');
+log.statsGauge('active.connections', 42).info('Connection established');
+```
+
 ## Installation
 
 Install the core package:

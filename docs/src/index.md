@@ -33,6 +33,10 @@ features:
     details: Fan out logs to multiple logging libraries like Pino and cloud providers like DataDog at the same time.
   - title: OpenTelemetry Support
     details: A transport and plugin is available for connecting logs to OpenTelemetry.
+  - title: StatsD Support
+    details: A mixin is available to add methods to LogLayer to easily send metrics with your logs to StatsD.
+  - title: HTTP Support
+    details: A transport is available to send logs via HTTP.
   - title: Log File Rotation Support
     details: Rotate log files based on time or size with optional batching and compression with the Log File Rotation transport.
 ---
@@ -63,8 +67,41 @@ src="/asciinema/pretty-terminal.cast"
 :idleTimeLimit=3
 />
 
+### Add Metrics Support with Mixins
+
+Extend LogLayer with StatsD metrics support using the [Hot Shots Mixin](/mixins/hot-shots):
+
+```typescript
+import { LogLayer, useLogLayerMixin, ConsoleTransport } from 'loglayer';
+import { StatsD } from 'hot-shots';
+import { hotshotsMixin } from '@loglayer/mixin-hot-shots';
+
+// Create a StatsD client
+const statsd = new StatsD({
+  host: 'localhost',
+  port: 8125
+});
+
+// Register the mixin (must be called before creating LogLayer instances)
+useLogLayerMixin(hotshotsMixin(statsd));
+
+// Create LogLayer instance
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console
+  })
+});
+
+// Use StatsD methods directly on LogLayer
+log.statsIncrement('request.count').info('Request received');
+log.statsTiming('request.duration', 150).info('Request processed');
+log.statsGauge('active.connections', 42).info('Connection established');
+```
+
 <!--@include: ./transports/_partials/transport-list.md-->
 
 <!--@include: ./plugins/_partials/plugin-list.md-->
+
+<!--@include: ./mixins/_partials/mixin-list.md-->
 
 LogLayer is made with ❤️ by [Theo Gravity](https://suteki.nu).

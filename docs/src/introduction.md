@@ -137,6 +137,37 @@ log.info('User logged in successfully')
 
 See more about [multi-transport support](/transports/multiple-transports).
 
+## StatsD Support
+
+Extend LogLayer with mixins to add observability capabilities beyond logging. Use the [hot-shots mixin](/mixins/hot-shots) to send StatsD metrics alongside your logs:
+
+```typescript
+import { LogLayer, useLogLayerMixin, ConsoleTransport } from 'loglayer';
+import { StatsD } from 'hot-shots';
+import { hotshotsMixin } from '@loglayer/mixin-hot-shots';
+
+// Create and configure your StatsD client
+const statsd = new StatsD({
+  host: 'localhost',
+  port: 8125
+});
+
+// Register the mixin (must be called before creating LogLayer instances)
+useLogLayerMixin(hotshotsMixin(statsd));
+
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console
+  })
+});
+
+// Send metrics and logs together
+log.statsIncrement('request.count').withMetadata({ reqId: '1234' }).info('Request received');
+log.statsTiming('request.duration', 150).info('Request processed');
+```
+
+See more about [mixins](/mixins/).
+
 ## Easy Testing
 
 Built-in mocks make testing a breeze:

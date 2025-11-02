@@ -1,7 +1,7 @@
 {
-  "name": "loglayer",
-  "description": "A modern logging library with a fluent API for specifying log messages, metadata and errors",
-  "version": "6.10.0",
+  "name": "@loglayer/mixin-hot-shots",
+  "description": "Adds statsd / hot-shots functionality to LogLayer.",
+  "version": "0.0.1",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -20,58 +20,42 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/loglayer/loglayer.git",
-    "directory": "packages/core/loglayer"
+    "directory": "packages/mixins/hot-shots"
   },
   "author": "Theo Gravity <theo@suteki.nu>",
   "keywords": [
     "logging",
     "log",
-    "opentelemetry",
-    "otel",
-    "winston",
-    "bunyan",
-    "structured logs",
-    "structured logging",
-    "file rotation",
-    "structured",
-    "abstraction",
-    "pino",
-    "electron",
-    "loglevel",
-    "datadog",
-    "log rotation",
-    "rotation",
-    "rotate logs",
-    "typescript",
+    "loglayer",
+    "observability",
     "statsd",
     "metrics",
-    "telemetry"
+    "hot-shots"
   ],
   "scripts": {
     "build": "tsdown src/index.ts",
     "test": "vitest --run",
-    "test:debug": "vitest --debug",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "biome check --no-errors-on-unmatched --write --unsafe src",
     "lint:staged": "biome check --no-errors-on-unmatched --write --unsafe --staged src",
-    "verify-types": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@loglayer/context-manager": "workspace:*",
-    "@loglayer/plugin": "workspace:*",
-    "@loglayer/shared": "workspace:*",
-    "@loglayer/transport": "workspace:*"
+    "verify-types": "tsc --noEmit",
+    "livetest": "tsx src/__tests__/livetest.ts"
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "serialize-error": "12.0.0",
+    "@types/node": "24.7.2",
+    "loglayer": "workspace:*",
     "tsdown": "0.15.7",
+    "tsx": "4.20.6",
     "typescript": "5.9.3",
     "vitest": "3.2.4"
   },
+  "peerDependencies": {
+    "hot-shots": "*"
+  },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "files": [
     "dist"

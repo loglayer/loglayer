@@ -94,6 +94,7 @@ The package usually needs to be added to a list of sorts:
 - `context-manager-list.md`: Context managers
 - `plugin-list.md`: Plugins
 - `transport-list.md`: Transports
+- `mixin-list.md`: Mixins
 
 And added to the documentation site sidebar config (`docs/.vitepress/config.mts`).
 

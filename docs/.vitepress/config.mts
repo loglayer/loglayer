@@ -205,6 +205,17 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Mixins (v7)',
+        items: [
+          { text: 'Overview', link: '/mixins/' },
+          { text: 'Creating Mixins', link: '/mixins/creating-mixins' },
+          { text: 'Testing Mixins', link: '/mixins/testing-mixins' },
+          { text: 'Available Mixins', items: [
+              { text: 'Hot-Shots (StatsD)', link: '/mixins/hot-shots' },
+          ]}
+        ]
+      },
+      {
         text: 'Example Integrations',
         items: [
           { text: 'Async context tracking', link: '/example-integrations/async-context' },
