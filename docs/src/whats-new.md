@@ -15,6 +15,12 @@ New version 7 introduces [Mixins](/mixins/), a system for extending LogLayer and
 
 The first official mixin, [`@loglayer/mixin-hot-shots`](/mixins/hot-shots), adds StatsD metrics functionality to LogLayer, allowing you to send metrics alongside your logs using the hot-shots library.
 
+- Added `getConfig()` method to LogLayer, allowing you to retrieve the configuration object used to initialize the logger. This includes all configuration options and any default values that were applied during initialization. See [Configuration documentation](/configuration#retrieving-configuration) for usage examples.
+
+`@loglayer/plugin`
+
+- Updated `PluginBeforeDataOutFn` type to include `loglayer: ILogLayer` as a parameter, providing plugin authors with access to the LogLayer instance when implementing `onBeforeDataOut` callbacks. We were always passing it back, just didn't update the type.
+
 *v7 does not have any breaking changes; no migration steps are necessary to upgrade from v6 -> v7 of `loglayer`.*
 
 ## Oct 23, 2025

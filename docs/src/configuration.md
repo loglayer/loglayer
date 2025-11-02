@@ -195,6 +195,23 @@ Example output with flattened fields (default):
 
 Plugins are used to modify logging behavior. See the [Plugins](./plugins/index) section for more information.
 
+## Retrieving Configuration
+
+You can retrieve the current configuration using the `getConfig()` method:
+
+```typescript
+const log = new LogLayer({
+  transport: new ConsoleTransport({ logger: console }),
+  prefix: '[MyApp]',
+  enabled: true,
+})
+
+const config = log.getConfig()
+// Returns the configuration object used to initialize the logger
+```
+
+This method returns the complete configuration object, including any default values that were applied during initialization.
+
 ## Complete Configuration Example
 
 Here's an example showing all configuration options:

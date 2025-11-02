@@ -21,7 +21,10 @@ export { type ILogLayer, LogLevel, type LogLevelType } from "@loglayer/shared";
  *
  * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforedataout | onBeforeDataOut Docs}
  */
-export type PluginBeforeDataOutFn = (params: PluginBeforeDataOutParams) => Record<string, any> | null | undefined;
+export type PluginBeforeDataOutFn = (
+  params: PluginBeforeDataOutParams,
+  loglayer: ILogLayer,
+) => Record<string, any> | null | undefined;
 
 /**
  * Callback function for determining if the message should be sent to the transport library.

@@ -116,6 +116,10 @@ export class MockLogLayer implements ILogLayer {
     return undefined;
   }
 
+  getConfig() {
+    return {} as any;
+  }
+
   /**
    * Sets the mock log builder to use for testing.
    */

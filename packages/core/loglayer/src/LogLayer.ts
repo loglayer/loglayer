@@ -115,6 +115,13 @@ export class LogLayer implements ILogLayer {
     return this.contextManager as M;
   }
 
+  /**
+   * Returns the configuration object used to initialize the logger.
+   */
+  getConfig(): LogLayerConfig {
+    return this._config;
+  }
+
   private _initializeTransports(transports: LogLayerTransport | Array<LogLayerTransport>) {
     // Dispose of any existing transports
     if (this.idToTransport) {

@@ -386,6 +386,25 @@ export interface ILogLayer extends ILogBuilder {
   getContextManager<M extends IContextManager = IContextManager>(): M;
 
   /**
+   * Returns the configuration object used to initialize the logger.
+   */
+  getConfig(): {
+    prefix?: string;
+    enabled?: boolean;
+    consoleDebug?: boolean;
+    transport: LogLayerTransport | Array<LogLayerTransport>;
+    plugins?: Array<LogLayerPlugin>;
+    errorSerializer?: (err: any) => Record<string, any> | string;
+    errorFieldName?: string;
+    copyMsgOnOnlyError?: boolean;
+    errorFieldInMetadata?: boolean;
+    contextFieldName?: string;
+    metadataFieldName?: string;
+    muteContext?: boolean;
+    muteMetadata?: boolean;
+  };
+
+  /**
    * Logs a raw log entry with complete control over all log parameters.
    *
    * This method allows you to bypass the normal LogLayer API and directly specify
