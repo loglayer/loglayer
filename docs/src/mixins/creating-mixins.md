@@ -151,30 +151,128 @@ Mixins can optionally include [plugins](/plugins/) that work alongside the mixin
 - You need to transform or filter logs based on how mixin methods are used
 - The mixin needs to interact with the logging pipeline
 
-Plugins are included in the registration function's return value via the `pluginsToAdd` array:
+The key insight is that **plugins receive the LogLayer instance as a parameter**, allowing them to access any state or methods that your mixin has added to the LogLayer instance. This creates a powerful integration where mixin methods can set state, and plugins can automatically include that state in every log entry.
+
+Here's a complete example showing how a mixin and plugin work together:
 
 ```typescript
-import type { LogLayerPlugin, PluginBeforeDataOutParams } from 'loglayer';
+import type { LogLayerPlugin, PluginBeforeDataOutParams, LogLayer } from 'loglayer';
 
-// Create a plugin that works with your mixin
-const customMixinPlugin: LogLayerPlugin = {
-  onBeforeDataOut: (params: PluginBeforeDataOutParams, loglayer: LogLayer) => {
-    // Access mixin state or enrich log data
-    // For example, add mixin-specific metadata to all logs
-    return {
-      ...params.data,
-      mixinData: /* access mixin state here */
+// 1. Declare the mixin method that tracks request context
+declare module 'loglayer' {
+  interface LogLayer {
+    /**
+     * Sets the current request ID for correlation tracking
+     */
+    setRequestId(requestId: string): LogLayer;
+    
+    /**
+     * Gets the current request ID
+     */
+    getRequestId(): string | undefined;
+  }
+  
+  interface MockLogLayer {
+    setRequestId(requestId: string): MockLogLayer;
+    getRequestId(): string | undefined;
+  }
+}
+
+// 2. Mixin implementation that stores request ID on each LogLayer instance
+// Use a shared Symbol so both onConstruct and augment methods can access the same property
+const REQUEST_ID_KEY = Symbol('requestId');
+
+const requestTrackingMixinImpl: LogLayerMixin = {
+  augmentationType: LogLayerMixinAugmentType.LogLayer,
+  
+  // Initialize per-instance state when LogLayer is constructed
+  onConstruct: (instance: LogLayer) => {
+    // Initialize the request ID storage on this instance
+    (instance as any)[REQUEST_ID_KEY] = undefined;
+  },
+  
+  augment: (prototype) => {
+    prototype.setRequestId = function (this: LogLayer, requestId: string): LogLayer {
+      // Store the request ID on this instance
+      (this as any)[REQUEST_ID_KEY] = requestId;
+      return this;
+    };
+    
+    prototype.getRequestId = function (this: LogLayer): string | undefined {
+      return (this as any)[REQUEST_ID_KEY];
+    };
+  },
+  
+  augmentMock: (prototype) => {
+    prototype.setRequestId = function (this: MockLogLayer, requestId: string): MockLogLayer {
+      return this; // No-op for mocks
+    };
+    
+    prototype.getRequestId = function (this: MockLogLayer): string | undefined {
+      return undefined; // No-op for mocks
     };
   }
 };
 
-export function useCustomMixin(config?: CustomMixinConfig): LogLayerMixinRegistration {
+// 3. Plugin that automatically adds request ID to every log entry
+const requestIdPlugin: LogLayerPlugin = {
+  onBeforeDataOut: (params: PluginBeforeDataOutParams, loglayer: LogLayer) => {
+    // Access the mixin's state via the LogLayer instance
+    const requestId = loglayer.getRequestId();
+    
+    // Automatically enrich all log entries with request ID if present
+    if (requestId) {
+      return {
+        ...(params.data || {}),
+        requestId: requestId
+      };
+    }
+    
+    // Return original data if no request ID is set
+    return params.data;
+  }
+};
+
+// 4. Registration function that includes both mixin and plugin
+export function requestTrackingMixin(): LogLayerMixinRegistration {
   return {
-    mixinsToAdd: [customMixinImplementation],
-    pluginsToAdd: [customMixinPlugin] // Include the plugin
+    mixinsToAdd: [requestTrackingMixinImpl],
+    pluginsToAdd: [requestIdPlugin] // Plugin automatically enriches logs
   };
 }
 ```
+
+**Usage example:**
+
+```typescript
+import { useLogLayerMixin, LogLayer, ConsoleTransport } from 'loglayer';
+import { requestTrackingMixin } from '@your-package/request-tracking';
+
+// Register the mixin (includes the plugin automatically)
+useLogLayerMixin(requestTrackingMixin());
+
+// Create LogLayer instance
+const log = new LogLayer({
+  transport: new ConsoleTransport({ logger: console })
+});
+
+// Use the mixin method to set request context
+log.setRequestId('req-123');
+
+// All subsequent logs automatically include the request ID via the plugin
+log.info('Processing user request');
+// Output: { requestId: 'req-123', message: 'Processing user request', ... }
+
+log.withMetadata({ userId: 456 }).info('User action');
+// Output: { requestId: 'req-123', userId: 456, message: 'User action', ... }
+
+// Clear or change the request ID
+log.setRequestId('req-789');
+log.info('New request');
+// Output: { requestId: 'req-789', message: 'New request', ... }
+```
+
+This pattern demonstrates the key interaction: the mixin provides methods to manage state on the LogLayer instance, and the plugin automatically reads that state and enriches log data without requiring manual intervention in your logging code.
 
 Plugins registered through `pluginsToAdd` are automatically added to all LogLayer instances created **after** the mixin is registered, just like the mixin methods themselves.
 
@@ -395,52 +493,19 @@ When creating a reusable mixin package:
 
 You need `loglayer` for types. Since mixins are registered before LogLayer is used, `loglayer` should be installed as a **peer dependency** as the end-user will have their own version of loglayer.
 
-**Important:** Specify the minimal version of `loglayer` required for your mixin using the `>=` version range. For example, if your mixin requires features introduced in LogLayer v7.0.0:
+**Important:** Specify the minimal version of `loglayer` required for your mixin using the `>=` version range. For example, if your mixin requires features introduced in LogLayer v7.0.2:
 
 ### Package.json
 
 ```json
 {
   "peerDependencies": {
-    "loglayer": ">=7.0.0"
+    "loglayer": ">=7.0.2"
   }
 }
 ```
 
 This ensures that users have at least version 7.0.0 of `loglayer` installed, while allowing them to use any newer compatible versions (7.1.0, 8.0.0, etc.).
-
-### Recommended Project Structure
-
-Organize your mixin package with the following structure:
-
-```
-your-mixin-package/
-├── src/
-│   ├── __tests__/
-│   │   ├── index.test.ts          # Unit tests
-│   │   └── livetest.ts            # Optional: Live integration tests
-│   ├── LogLayer.augment.ts        # Real class augmentation (or LogBuilder.augment.ts)
-│   ├── LogLayer.types.ts          # TypeScript type declarations for LogLayer
-│   ├── MockLogLayer.augment.ts    # Mock class augmentation (or MockLogBuilder.augment.ts)
-│   ├── MockLogLayer.types.ts      # TypeScript type declarations for MockLogLayer
-│   ├── client.ts                  # Optional: Shared utilities/client setup
-│   └── index.ts                   # Main entry point with registration function
-├── dist/                          # Compiled output (generated)
-├── package.json
-├── tsconfig.json
-├── tsdown.config.json             # Or your build tool config
-└── README.md
-```
-
-**Key Files:**
-
-- **`src/index.ts`**: Exports your registration function (e.g., `hotshotsMixin()`)
-- **`src/LogLayer.augment.ts`**: Contains the `augment` function implementation
-- **`src/MockLogLayer.augment.ts`**: Contains the `augmentMock` function implementation
-- **`src/LogLayer.types.ts`**: TypeScript declarations for `LogLayer` interface
-- **`src/MockLogLayer.types.ts`**: TypeScript declarations for `MockLogLayer` interface
-
-This separation keeps your code organized and makes it easier to maintain. You can also combine related files (e.g., both augment functions in one file) if your mixin is simple.
 
 ## Important Considerations
 
@@ -473,186 +538,8 @@ prototype.myMethod = function (this: LogLayer, ...args: any[]): LogLayer {
 } as any;
 ```
 
-## Example
+## Boilerplate / Template Code
 
-Here's a complete example of a performance timing mixin that adds `withPerfStart()` and `withPerfEnd()` methods to both `LogLayer` and `LogBuilder`. The methods track the time between start and end calls and automatically add the timing data to log metadata via a plugin.
+A sample project that you can use as a template is provided here:
 
-### TypeScript Declarations
-
-```typescript
-declare module 'loglayer' {
-  interface LogLayer {
-    /**
-     * Starts a performance timer with the given ID
-     */
-    withPerfStart(id: string): LogBuilder;
-    
-    /**
-     * Ends a performance timer with the given ID and adds timing to metadata
-     */
-    withPerfEnd(id: string): LogBuilder;
-  }
-  
-  interface LogBuilder {
-    /**
-     * Starts a performance timer with the given ID
-     */
-    withPerfStart(id: string): LogBuilder;
-    
-    /**
-     * Ends a performance timer with the given ID and adds timing to metadata
-     */
-    withPerfEnd(id: string): LogBuilder;
-  }
-  
-  // Mock class declarations (required)
-  interface MockLogLayer {
-    withPerfStart(id: string): any;
-    withPerfEnd(id: string): any;
-  }
-  
-  interface MockLogBuilder {
-    withPerfStart(id: string): MockLogBuilder;
-    withPerfEnd(id: string): MockLogBuilder;
-  }
-}
-```
-
-### Mixin Implementation
-
-```typescript
-import type {
-  LogLayerMixin,
-  LogBuilderMixin,
-  LogLayer,
-  LogBuilder,
-  LogLayerMixinRegistration,
-  LogLayerPlugin,
-  LogLayerConfig,
-  MockLogLayer,
-  MockLogBuilder
-} from 'loglayer';
-import { LogLayerMixinAugmentType, LogBuilder, MockLogBuilder } from 'loglayer';
-import type { PluginBeforeDataOutParams } from 'loglayer';
-
-// Module-level storage for performance timing state
-const perfStartTimes = new Map<string, number>();
-const perfDurations = new Map<string, number>();
-
-// LogLayer mixin - methods return LogBuilder
-const logLayerPerfMixin: LogLayerMixin = {
-  augmentationType: LogLayerMixinAugmentType.LogLayer,
-  augment: (prototype) => {
-    prototype.withPerfStart = function (this: LogLayer, id: string): LogBuilder {
-      return new LogBuilder(this).withPerfStart(id);
-    };
-    
-    prototype.withPerfEnd = function (this: LogLayer, id: string): LogBuilder {
-      return new LogBuilder(this).withPerfEnd(id);
-    };
-  },
-  augmentMock: (prototype) => {
-    prototype.withPerfStart = function (this: MockLogLayer, id: string): any {
-      return new MockLogBuilder(this).withPerfStart(id);
-    };
-    
-    prototype.withPerfEnd = function (this: MockLogLayer, id: string): any {
-      return new MockLogBuilder(this).withPerfEnd(id);
-    };
-  }
-};
-
-// LogBuilder mixin - actual implementation
-const logBuilderPerfMixin: LogBuilderMixin = {
-  augmentationType: LogLayerMixinAugmentType.LogBuilder,
-  augment: (prototype) => {
-    prototype.withPerfStart = function (this: LogBuilder, id: string): LogBuilder {
-      perfStartTimes.set(id, Date.now());
-      return this;
-    };
-    
-    prototype.withPerfEnd = function (this: LogBuilder, id: string): LogBuilder {
-      const startTime = perfStartTimes.get(id);
-      
-      if (startTime !== undefined) {
-        const duration = Date.now() - startTime;
-        perfDurations.set(id, duration);
-        perfStartTimes.delete(id);
-      }
-      
-      return this;
-    };
-  },
-  augmentMock: (prototype) => {
-    prototype.withPerfStart = function (this: MockLogBuilder, id: string): MockLogBuilder {
-      // Mock implementation - no-op for testing
-      return this;
-    };
-    
-    prototype.withPerfEnd = function (this: MockLogBuilder, id: string): MockLogBuilder {
-      // Mock implementation - no-op for testing
-      return this;
-    };
-  }
-};
-
-// Plugin that adds performance timings to log metadata
-const perfPlugin: LogLayerPlugin = {
-  onBeforeDataOut: (params: PluginBeforeDataOutParams) => {
-    const perfTimings: Record<string, number> = {};
-    
-    // Collect all durations and clear them
-    for (const [id, duration] of perfDurations.entries()) {
-      perfTimings[id] = duration;
-      perfDurations.delete(id);
-    }
-    
-    if (Object.keys(perfTimings).length > 0) {
-      return {
-        ...params.data,
-        perfTimings
-      };
-    }
-    
-    return params.data;
-  }
-};
-
-// Registration function
-export function perfTimingMixin(): LogLayerMixinRegistration {
-  return {
-    mixinsToAdd: [logLayerPerfMixin, logBuilderPerfMixin],
-    pluginsToAdd: [perfPlugin]
-  };
-}
-```
-
-### Usage
-
-```typescript
-import { useLogLayerMixin, LogLayer, ConsoleTransport } from 'loglayer';
-import { perfTimingMixin } from './perf-timing-mixin';
-
-// Register a single mixin
-useLogLayerMixin(perfTimingMixin());
-
-// Or register multiple mixins at once
-// useLogLayerMixin([
-//   perfTimingMixin(),
-//   // otherMixin(),
-// ]);
-
-// Create LogLayer instance
-const log = new LogLayer({
-  transport: new ConsoleTransport({ logger: console })
-});
-
-// Usage on LogLayer - creates LogBuilder automatically
-log.withPerfStart('api-call')
-   .withMetadata({ userId: 123 })
-   .info('API request started');
-
-// Later, end the timer and send the log
-log.withPerfEnd('api-call').info('API request completed');
-// The log will include perfTimings: { 'api-call': <duration in ms> } in metadata
-```
+[GitHub Boilerplate Template](https://github.com/loglayer/loglayer-mixin-boilerplate)
