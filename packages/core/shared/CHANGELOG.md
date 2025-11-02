@@ -1,5 +1,11 @@
 # `@loglayer/shared` Changelog
 
+## 2.6.0
+
+### Minor Changes
+
+- [`8554479`](https://github.com/loglayer/loglayer/commit/85544794d50ed92a427fed09edfbd3c29df8bacd) Thanks [@theogravity](https://github.com/theogravity)! - Add `getConfig()` method to `LogLayer` to get the user settings used when creating the instance.
+
 ## 2.5.3
 
 ### Patch Changes

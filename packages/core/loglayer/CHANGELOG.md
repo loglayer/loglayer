@@ -1,5 +1,19 @@
 # `loglayer` Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`8554479`](https://github.com/loglayer/loglayer/commit/85544794d50ed92a427fed09edfbd3c29df8bacd) Thanks [@theogravity](https://github.com/theogravity)! - Add `getConfig()` method to `LogLayer` to get the user settings used when creating the instance.
+
+### Patch Changes
+
+- Updated dependencies [[`8554479`](https://github.com/loglayer/loglayer/commit/85544794d50ed92a427fed09edfbd3c29df8bacd), [`8554479`](https://github.com/loglayer/loglayer/commit/85544794d50ed92a427fed09edfbd3c29df8bacd)]:
+  - @loglayer/plugin@2.1.7
+  - @loglayer/shared@2.6.0
+  - @loglayer/context-manager@1.1.7
+  - @loglayer/transport@2.3.5
+
 ## 7.0.1
 
 ### Patch Changes

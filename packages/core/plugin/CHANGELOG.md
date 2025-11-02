@@ -1,5 +1,14 @@
 # `@loglayer/plugin` Changelog
 
+## 2.1.7
+
+### Patch Changes
+
+- [`8554479`](https://github.com/loglayer/loglayer/commit/85544794d50ed92a427fed09edfbd3c29df8bacd) Thanks [@theogravity](https://github.com/theogravity)! - Update PluginBeforeDataOutFn to include missing loglayer reference
+
+- Updated dependencies [[`8554479`](https://github.com/loglayer/loglayer/commit/85544794d50ed92a427fed09edfbd3c29df8bacd)]:
+  - @loglayer/shared@2.6.0
+
 ## 2.1.6
 
 ### Patch Changes
