@@ -1,5 +1,12 @@
 # `@loglayer/transport-simple-pretty-terminal` Changelog
 
+## 2.2.9
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.5
+
 ## 2.2.8
 
 ### Patch Changes

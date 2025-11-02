@@ -1,5 +1,12 @@
 # @loglayer/transport-sentry
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.5
+
 ## 1.0.0
 
 ### Major Changes

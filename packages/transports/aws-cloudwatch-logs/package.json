@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-aws-cloudwatch-logs",
   "description": "AWS CloudWatch Logs logger transport for the LogLayer logging library",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "exports": {
     ".": {

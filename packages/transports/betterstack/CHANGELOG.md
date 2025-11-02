@@ -1,5 +1,13 @@
 # @loglayer/transport-betterstack
 
+## 1.0.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport-http@1.1.3
+  - @loglayer/transport@2.3.5
+
 ## 1.0.1
 
 ### Patch Changes

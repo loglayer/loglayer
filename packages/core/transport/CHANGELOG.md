@@ -1,5 +1,12 @@
 # `@loglayer/transport` Changelog
 
+## 2.3.5
+
+### Patch Changes
+
+- Updated dependencies [[`8554479`](https://github.com/loglayer/loglayer/commit/85544794d50ed92a427fed09edfbd3c29df8bacd)]:
+  - @loglayer/shared@2.6.0
+
 ## 2.3.4
 
 ### Patch Changes
