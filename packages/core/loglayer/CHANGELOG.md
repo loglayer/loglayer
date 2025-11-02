@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 7.0.1
+
+### Patch Changes
+
+- [`4e3b8cd`](https://github.com/loglayer/loglayer/commit/4e3b8cd07fa0b2ecee448548304dc67699a87824) Thanks [@theogravity](https://github.com/theogravity)! - Fix bug where mixin plugins were not being initialized with LogLayer
+
 ## 7.0.0
 
 ### Major Changes
