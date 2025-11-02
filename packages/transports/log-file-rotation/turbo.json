@@ -6,10 +6,12 @@
   "tasks": {
     "clean": {},
     "test": {
+      "cache": true,
       "inputs": [
         "*.ts",
-        "src/**",
-        "*.json"
+        "src/**/*.ts",
+        "*.json",
+        "!audit.json"
       ]
     },
     "lint": {

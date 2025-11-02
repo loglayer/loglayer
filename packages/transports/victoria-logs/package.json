@@ -43,19 +43,19 @@
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
     "@loglayer/transport": "workspace:*",
-    "@types/node": "24.7.2",
+    "@types/node": "24.9.2",
     "dotenv": "17.2.3",
     "loglayer": "workspace:*",
     "serialize-error": "12.0.0",
-    "tsdown": "0.15.7",
+    "tsdown": "0.15.12",
     "tsx": "4.20.6",
     "typescript": "5.9.3",
-    "vitest": "3.2.4"
+    "vitest": "4.0.6"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "files": [
     "dist"
   ],
   "homepage": "https://loglayer.dev/transports/victoria-logs",
-  "packageManager": "pnpm@10.18.2"
+  "packageManager": "pnpm@10.20.0"
 }

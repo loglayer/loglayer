@@ -16,11 +16,11 @@
   "devDependencies": {
     "glob": "11.0.3",
     "vitepress": "1.6.4",
-    "vitepress-plugin-llms": "1.8.0"
+    "vitepress-plugin-llms": "1.8.1"
   },
   "engineStrict": true,
   "engines": {
     "node": ">=20.16.0"
   },
-  "packageManager": "pnpm@10.18.2"
+  "packageManager": "pnpm@10.20.0"
 }

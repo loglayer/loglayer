@@ -11,11 +11,11 @@ function stripAnsi(str: string): string {
 }
 
 describe("SimplePrettyTerminalTransport", () => {
-  let logSpy: ReturnType<typeof vi.spyOn>;
-  let infoSpy: ReturnType<typeof vi.spyOn>;
-  let warnSpy: ReturnType<typeof vi.spyOn>;
-  let errorSpy: ReturnType<typeof vi.spyOn>;
-  let debugSpy: ReturnType<typeof vi.spyOn>;
+  let logSpy: any;
+  let infoSpy: any;
+  let warnSpy: any;
+  let errorSpy: any;
+  let debugSpy: any;
   let stdoutSpy: any;
 
   beforeEach(() => {

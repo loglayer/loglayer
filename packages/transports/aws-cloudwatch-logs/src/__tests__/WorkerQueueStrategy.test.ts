@@ -20,7 +20,7 @@ vi.mock("../../vendor/exit-hook/index.js", () => ({
 
 // Mock the worker file
 vi.mock("../strategies/worker-queue/worker.js?thread", () => ({
-  default: vi.fn().mockImplementation(() => ({
+  default: vi.fn(() => ({
     postMessage: vi.fn(),
     on: vi.fn(),
     off: vi.fn(),

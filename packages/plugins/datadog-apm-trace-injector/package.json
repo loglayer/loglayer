@@ -50,14 +50,14 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "24.7.2",
+    "@types/node": "24.9.2",
     "dd-trace": "5.71.0",
     "express": "5.1.0",
     "loglayer": "workspace:*",
-    "tsdown": "0.15.7",
+    "tsdown": "0.15.12",
     "tsx": "4.20.6",
     "typescript": "5.9.3",
-    "vitest": "3.2.4"
+    "vitest": "4.0.6"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {
@@ -67,5 +67,5 @@
     "dist"
   ],
   "homepage": "https://loglayer.dev",
-  "packageManager": "pnpm@10.18.2"
+  "packageManager": "pnpm@10.20.0"
 }

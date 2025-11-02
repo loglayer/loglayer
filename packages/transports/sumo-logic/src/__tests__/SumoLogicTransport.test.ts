@@ -25,7 +25,7 @@ describe("SumoLogicTransport", () => {
     },
   };
 
-  global.CompressionStream = vi.fn().mockImplementation(() => mockStream);
+  global.CompressionStream = vi.fn(() => mockStream) as unknown as typeof CompressionStream;
 
   beforeEach(() => {
     mockFetch.mockReset();
@@ -273,7 +273,7 @@ describe("SumoLogicTransport", () => {
   it("should call onError when compressed payload size exceeds limit", async () => {
     const onError = vi.fn();
     // Mock compression to always return a large payload
-    global.CompressionStream = vi.fn().mockImplementation(() => ({
+    global.CompressionStream = vi.fn(() => ({
       readable: {
         getReader: () => ({
           read: vi
@@ -288,7 +288,7 @@ describe("SumoLogicTransport", () => {
           close: vi.fn().mockResolvedValue(undefined),
         }),
       },
-    }));
+    })) as unknown as typeof CompressionStream;
 
     const transport = new SumoLogicTransport({
       url: "https://collectors.sumologic.com/receiver/v1/http/123",

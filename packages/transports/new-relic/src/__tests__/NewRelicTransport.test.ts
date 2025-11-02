@@ -21,7 +21,7 @@ describe("NewRelicTransport", () => {
         }),
       ),
     );
-    global.fetch = mockFetch;
+    global.fetch = mockFetch as typeof fetch;
 
     // Mock CompressionStream
     const mockWriter = {
@@ -41,10 +41,10 @@ describe("NewRelicTransport", () => {
       readable: { getReader: () => mockReader },
     };
 
-    global.CompressionStream = vi.fn().mockImplementation(() => mockStream);
-    global.TextEncoder = vi.fn().mockImplementation(() => ({
+    global.CompressionStream = vi.fn(() => mockStream) as unknown as typeof CompressionStream;
+    global.TextEncoder = vi.fn(() => ({
       encode: (str: string) => new Uint8Array(str.length),
-    }));
+    })) as unknown as typeof TextEncoder;
   });
 
   afterEach(() => {

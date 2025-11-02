@@ -81,10 +81,10 @@ describe("utils", () => {
         getReader: vi.fn().mockReturnValue(mockReader),
       };
 
-      const mockCompressionStream = vi.fn().mockReturnValue({
+      const mockCompressionStream = vi.fn(() => ({
         writable: mockWritable,
         readable: mockReadable,
-      });
+      }));
 
       (global as any).CompressionStream = mockCompressionStream;
 

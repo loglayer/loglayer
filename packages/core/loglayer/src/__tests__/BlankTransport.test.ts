@@ -1,15 +1,16 @@
 import { LogLevel } from "@loglayer/shared";
 import type { LogLayerTransportParams } from "@loglayer/transport";
+import type { Mock } from "vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { BlankTransport } from "../transports/BlankTransport.js";
 
 describe("BlankTransport", () => {
-  let mockShipToLogger: ReturnType<typeof vi.fn>;
+  let mockShipToLogger: Mock<(params: LogLayerTransportParams) => any[]>;
   let transport: BlankTransport;
   let consoleSpy: any;
 
   beforeEach(() => {
-    mockShipToLogger = vi.fn().mockReturnValue(["test message"]);
+    mockShipToLogger = vi.fn().mockReturnValue(["test message"]) as Mock<(params: LogLayerTransportParams) => any[]>;
     transport = new BlankTransport({
       shipToLogger: mockShipToLogger,
     });
