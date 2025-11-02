@@ -73,7 +73,8 @@ export class LogLayer implements ILogLayer {
     }
 
     this.contextManager = new DefaultContextManager();
-    this.pluginManager = new PluginManager(config.plugins || []);
+    const plugins = [...(config.plugins || []), ...mixinRegistry.pluginsToInit];
+    this.pluginManager = new PluginManager(plugins);
 
     if (!this._config.errorFieldName) {
       this._config.errorFieldName = "err";
