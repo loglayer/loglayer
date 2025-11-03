@@ -1,5 +1,11 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- [`2af6615`](https://github.com/loglayer/loglayer/commit/2af661515a7920474af43ee92b02dab22bf685b0) Thanks [@theogravity](https://github.com/theogravity)! - Allow for a null hot-shots client to be passed
+
 ## 1.0.1
 
 ### Patch Changes
