@@ -1,8 +1,8 @@
 import type { StatsD } from "hot-shots";
 
-let client: StatsD;
+let client: StatsD | null = null;
 
-export function setStatsDClient(c: StatsD) {
+export function setStatsDClient(c: StatsD | null) {
   client = c;
 }
 

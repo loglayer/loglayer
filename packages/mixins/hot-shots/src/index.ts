@@ -17,7 +17,7 @@ const logLayerMixin: LogLayerMixin = {
 /**
  * Use with useLogLayerMixin() in LogLayer to add the hot-shots mixin.
  */
-export function hotshotsMixin(hotShotsClient: StatsD): LogLayerMixinRegistration {
+export function hotshotsMixin(hotShotsClient: StatsD | null): LogLayerMixinRegistration {
   setStatsDClient(hotShotsClient);
 
   return {
