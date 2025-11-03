@@ -1,5 +1,11 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 1.0.1
+
+### Patch Changes
+
+- [`b2e42cc`](https://github.com/loglayer/loglayer/commit/b2e42ccd1a72ccbdab051ac39576f115f61192d9) Thanks [@theogravity](https://github.com/theogravity)! - Add missing exports for the module declaration types
+
 ## 1.0.0
 
 ### Major Changes
