@@ -32,6 +32,7 @@ A mixin consists of several key components:
 Use TypeScript declaration merging to add type definitions for your new methods. **You must declare methods for both the real class and its corresponding mock class** to ensure type safety in both production code and tests:
 
 ```typescript
+// types.ts
 declare module 'loglayer' {
   interface LogLayer {
     /**
@@ -506,6 +507,18 @@ You need `loglayer` for types. Since mixins are registered before LogLayer is us
 ```
 
 This ensures that users have at least version 7.0.0 of `loglayer` installed, while allowing them to use any newer compatible versions (7.1.0, 8.0.0, etc.).
+
+### Exporting Type Declarations
+
+**Important:** If your type declarations are in separate files (e.g., `types.ts`), you must import them in your main entry file (typically `index.ts`) so TypeScript includes them when the package is consumed. Otherwise, the type declarations won't be available to users of your package:
+
+```typescript
+// index.ts
+import "./types.js";
+// ... rest of your code
+```
+
+These side-effect imports ensure that TypeScript processes the `declare module` directives and makes them available to consumers of your package.
 
 ## Important Considerations
 
