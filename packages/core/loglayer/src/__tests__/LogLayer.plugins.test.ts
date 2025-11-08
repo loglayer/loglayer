@@ -1,8 +1,9 @@
 import { LogLevel } from "@loglayer/shared";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { LogLayer } from "../LogLayer.js";
 import { TestLoggingLibrary } from "../TestLoggingLibrary.js";
 import { ConsoleTransport } from "../transports/ConsoleTransport.js";
+import { TestTransport } from "../transports/TestTransport.js";
 import type { LogLayerConfig } from "../types/index.js";
 
 function getLogger(config?: Partial<LogLayerConfig>) {
@@ -12,6 +13,18 @@ function getLogger(config?: Partial<LogLayerConfig>) {
     transport: new ConsoleTransport({
       id: "console",
       // @ts-expect-error
+      logger: genericLogger,
+    }),
+    ...(config || {}),
+  });
+}
+
+function getLoggerWithTestTransport(config?: Partial<LogLayerConfig>) {
+  const genericLogger = new TestLoggingLibrary();
+
+  return new LogLayer({
+    transport: new TestTransport({
+      id: "test",
       logger: genericLogger,
     }),
     ...(config || {}),
@@ -122,6 +135,300 @@ describe("LogLayer plugin system", () => {
         expect.objectContaining({
           level: LogLevel.info,
           data: ["Modified message"],
+        }),
+      );
+    });
+  });
+
+  describe("transformLogLevel", () => {
+    it("should transform log level from info to error", () => {
+      const log = getLogger();
+      log.addPlugins([
+        {
+          transformLogLevel: () => LogLevel.error,
+        },
+      ]);
+
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.info("Test message");
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.error,
+          data: ["Test message"],
+        }),
+      );
+    });
+
+    it("should use original log level when plugin returns null", () => {
+      const log = getLogger();
+      log.addPlugins([
+        {
+          transformLogLevel: () => null,
+        },
+      ]);
+
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.warn("Test message");
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.warn,
+          data: ["Test message"],
+        }),
+      );
+    });
+
+    it("should use original log level when plugin returns undefined", () => {
+      const log = getLogger();
+      log.addPlugins([
+        {
+          transformLogLevel: () => undefined,
+        },
+      ]);
+
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.debug("Test message");
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.debug,
+          data: ["Test message"],
+        }),
+      );
+    });
+
+    it("should use original log level when plugin returns false", () => {
+      const log = getLogger();
+      log.addPlugins([
+        {
+          transformLogLevel: () => false,
+        },
+      ]);
+
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.trace("Test message");
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.trace,
+          data: ["Test message"],
+        }),
+      );
+    });
+
+    it("should transform log level based on metadata", () => {
+      const log = getLoggerWithTestTransport();
+      const transformSpy = vi.fn(({ logLevel, metadata, data }) => {
+        // Check both metadata parameter and data object (metadata is in both)
+        if (metadata?.critical || data?.critical) {
+          return LogLevel.fatal;
+        }
+        return null;
+      });
+
+      log.addPlugins([
+        {
+          transformLogLevel: transformSpy,
+        },
+      ]);
+
+      const genericLogger = log.getLoggerInstance("test") as TestLoggingLibrary;
+
+      log.withMetadata({ critical: true }).error("Critical error");
+
+      // Verify what was passed to transformLogLevel
+      expect(transformSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          logLevel: LogLevel.error,
+          metadata: { critical: true },
+        }),
+        expect.any(Object),
+      );
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.fatal,
+          data: expect.arrayContaining(["Critical error"]),
+        }),
+      );
+    });
+
+    it("should transform log level based on error", () => {
+      const log = getLoggerWithTestTransport();
+      const transformSpy = vi.fn(({ logLevel, error }) => {
+        // Check error parameter
+        if (error?.stack) {
+          return LogLevel.fatal;
+        }
+        return null;
+      });
+
+      log.addPlugins([
+        {
+          transformLogLevel: transformSpy,
+        },
+      ]);
+
+      const genericLogger = log.getLoggerInstance("test") as TestLoggingLibrary;
+
+      const testError = new Error("Test error");
+      log.withError(testError).error("Error message");
+
+      // Verify what was passed to transformLogLevel
+      expect(transformSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          logLevel: LogLevel.error,
+          error: testError,
+        }),
+        expect.any(Object),
+      );
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.fatal,
+          data: expect.arrayContaining(["Error message"]),
+        }),
+      );
+    });
+
+    it("should use last plugin that returns a valid log level", () => {
+      const log = getLogger();
+      log.addPlugins([
+        {
+          transformLogLevel: () => null, // Skip
+        },
+        {
+          transformLogLevel: () => LogLevel.warn, // This will be overridden
+        },
+        {
+          transformLogLevel: () => LogLevel.error, // Last one wins
+        },
+      ]);
+
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.info("Test message");
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.error,
+          data: ["Test message"],
+        }),
+      );
+    });
+
+    it("should transform log level after onBeforeDataOut processes data", () => {
+      const log = getLogger();
+      const onBeforeDataOutSpy = vi.fn(({ logLevel, data }) => {
+        // onBeforeDataOut receives original log level
+        expect(logLevel).toBe(LogLevel.info);
+        return { ...data, processed: true };
+      });
+
+      log.addPlugins([
+        {
+          onBeforeDataOut: onBeforeDataOutSpy,
+        },
+        {
+          transformLogLevel: ({ data }) => {
+            // transformLogLevel receives processed data from onBeforeDataOut
+            if (data?.processed) {
+              return LogLevel.error;
+            }
+            return null;
+          },
+        },
+      ]);
+
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.info("Test message");
+
+      expect(onBeforeDataOutSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          logLevel: LogLevel.info,
+        }),
+        expect.any(Object),
+      );
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.error,
+        }),
+      );
+    });
+
+    it("should transform log level after onBeforeMessageOut processes messages", () => {
+      const log = getLogger();
+      const onBeforeMessageOutSpy = vi.fn(({ logLevel }) => {
+        // onBeforeMessageOut receives original log level
+        expect(logLevel).toBe(LogLevel.info);
+        return ["Modified message"];
+      });
+
+      log.addPlugins([
+        {
+          onBeforeMessageOut: onBeforeMessageOutSpy,
+        },
+        {
+          transformLogLevel: () => LogLevel.warn,
+        },
+      ]);
+
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.info("Test message");
+
+      expect(onBeforeMessageOutSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          logLevel: LogLevel.info,
+        }),
+        expect.any(Object),
+      );
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.warn,
+          data: ["Modified message"],
+        }),
+      );
+    });
+
+    it("should transform log level before shouldSendToLogger receives it", () => {
+      const log = getLoggerWithTestTransport();
+      const shouldSendToLoggerSpy = vi.fn(({ logLevel }) => {
+        expect(logLevel).toBe(LogLevel.fatal);
+        return true;
+      });
+
+      log.addPlugins([
+        {
+          transformLogLevel: () => LogLevel.fatal,
+        },
+        {
+          shouldSendToLogger: shouldSendToLoggerSpy,
+        },
+      ]);
+
+      const genericLogger = log.getLoggerInstance("test") as TestLoggingLibrary;
+
+      log.info("Test message");
+
+      expect(shouldSendToLoggerSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          logLevel: LogLevel.fatal,
+        }),
+        expect.any(Object),
+      );
+
+      expect(genericLogger.popLine()).toStrictEqual(
+        expect.objectContaining({
+          level: LogLevel.fatal,
         }),
       );
     });

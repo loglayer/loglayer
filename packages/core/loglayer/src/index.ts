@@ -4,6 +4,7 @@ export type {
   PluginOnContextCalledFn,
   PluginOnMetadataCalledFn,
   PluginShouldSendToLoggerFn,
+  PluginTransformLogLevelFn,
 } from "@loglayer/plugin";
 export { PluginCallbackType } from "@loglayer/plugin";
 export type {
@@ -19,6 +20,7 @@ export type {
   PluginBeforeDataOutParams,
   PluginBeforeMessageOutParams,
   PluginShouldSendToLoggerParams,
+  PluginTransformLogLevelParams,
 } from "@loglayer/shared";
 export { LogLevel } from "@loglayer/shared";
 export { LogBuilder } from "./LogBuilder.js";

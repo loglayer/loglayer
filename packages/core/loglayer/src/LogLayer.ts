@@ -777,16 +777,33 @@ export class LogLayer implements ILogLayer {
       );
     }
 
+    // Transform log level if plugins are registered (after onBeforeDataOut and onBeforeMessageOut)
+    if (this.pluginManager.hasPlugins(PluginCallbackType.transformLogLevel)) {
+      logLevel = this.pluginManager.runTransformLogLevel(
+        {
+          data: hasObjData ? d : undefined,
+          logLevel,
+          error: err,
+          metadata,
+          context: contextData,
+        },
+        this,
+      );
+    }
+
     if (this.hasMultipleTransports) {
       const transportPromises = (this._config.transport as LogLayerTransport[])
         .filter((transport) => transport.enabled)
         .map(async (transport) => {
+          // Capture the transformed logLevel in the closure
+          const currentLogLevel = logLevel;
+
           if (this.pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)) {
             const shouldSend = this.pluginManager.runShouldSendToLogger(
               {
                 messages: [...params],
                 data: hasObjData ? d : undefined,
-                logLevel,
+                logLevel: currentLogLevel,
                 transportId: transport.id,
                 error: err,
                 metadata,
@@ -801,7 +818,7 @@ export class LogLayer implements ILogLayer {
           }
 
           return transport._sendToLogger({
-            logLevel,
+            logLevel: currentLogLevel,
             messages: [...params],
             data: hasObjData ? d : undefined,
             hasData: hasObjData,
