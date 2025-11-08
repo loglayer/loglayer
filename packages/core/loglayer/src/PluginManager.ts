@@ -138,6 +138,7 @@ export class PluginManager {
           {
             data: params.data,
             logLevel: params.logLevel,
+            messages: params.messages,
             error: params.error,
             metadata: params.metadata,
             context: params.context,

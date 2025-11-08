@@ -75,6 +75,7 @@ describe("PluginManager", () => {
     it("should return the original log level when no plugins transform it", () => {
       const params: PluginTransformLogLevelParams = {
         logLevel: LogLevel.info,
+        messages: [],
         data: { key: "value" },
       };
 
@@ -92,6 +93,7 @@ describe("PluginManager", () => {
 
       const params: PluginTransformLogLevelParams = {
         logLevel: LogLevel.info,
+        messages: [],
         data: { key: "value" },
       };
 
@@ -117,6 +119,7 @@ describe("PluginManager", () => {
 
       const params: PluginTransformLogLevelParams = {
         logLevel: LogLevel.info,
+        messages: [],
         data: { key: "value" },
       };
 
@@ -134,6 +137,7 @@ describe("PluginManager", () => {
 
       const params: PluginTransformLogLevelParams = {
         logLevel: LogLevel.debug,
+        messages: [],
         data: { key: "value" },
       };
 
@@ -151,6 +155,7 @@ describe("PluginManager", () => {
 
       const params: PluginTransformLogLevelParams = {
         logLevel: LogLevel.trace,
+        messages: [],
         data: { key: "value" },
       };
 
@@ -168,6 +173,7 @@ describe("PluginManager", () => {
 
       const params: PluginTransformLogLevelParams = {
         logLevel: LogLevel.fatal,
+        messages: [],
         data: { key: "value" },
       };
 
@@ -175,10 +181,11 @@ describe("PluginManager", () => {
       expect(result).toBe(LogLevel.fatal);
     });
 
-    it("should pass metadata, error, and context parameters to transformLogLevel", () => {
+    it("should pass metadata, error, context, and messages parameters to transformLogLevel", () => {
       const testError = new Error("test error");
       const testMetadata = { metaKey: "metaValue" };
       const testContext = { contextKey: "contextValue" };
+      const testMessages = ["test message", "another message"];
 
       const transformPlugin = {
         id: "transform-1",
@@ -187,6 +194,7 @@ describe("PluginManager", () => {
           expect(params.metadata).toEqual(testMetadata);
           expect(params.error).toBe(testError);
           expect(params.context).toEqual(testContext);
+          expect(params.messages).toEqual(testMessages);
           expect(params.data).toEqual({ key: "value" });
           return LogLevel.error;
         }),
@@ -196,6 +204,7 @@ describe("PluginManager", () => {
 
       const params: PluginTransformLogLevelParams = {
         logLevel: LogLevel.info,
+        messages: testMessages,
         data: { key: "value" },
         metadata: testMetadata,
         error: testError,
@@ -208,6 +217,7 @@ describe("PluginManager", () => {
       expect(transformPlugin.transformLogLevel).toHaveBeenCalledWith(
         {
           logLevel: LogLevel.info,
+          messages: testMessages,
           data: { key: "value" },
           metadata: testMetadata,
           error: testError,
@@ -235,6 +245,7 @@ describe("PluginManager", () => {
 
       const params: PluginTransformLogLevelParams = {
         logLevel: LogLevel.info,
+        messages: [],
         data: { key: "value" },
       };
 

@@ -27,6 +27,10 @@ export interface PluginTransformLogLevelParams extends LogLayerCommonDataParams 
    * Log level of the data
    */
   logLevel: LogLevelType;
+  /**
+   * Message data that is copied from the original.
+   */
+  messages: any[];
 }
 
 /**
@@ -86,12 +90,13 @@ export interface LogLayerPluginParams {
 export interface LogLayerPlugin extends LogLayerPluginParams {
   /**
    * Called after `onBeforeDataOut` and `onBeforeMessageOut` but before `shouldSendToLogger` to transform the log level.
-   * This allows you to change the log level based on the processed log data, metadata, context, or error.
+   * This allows you to change the log level based on the processed log data, metadata, context, error, or messages.
    *
    * - The shape of `data` varies depending on your `fieldName` configuration
    * for metadata / context / error. The metadata / context / error data is a *shallow* clone.
    * - If data was not found for assembly, `undefined` is used as the `data` input.
    * - The `data` parameter will contain any modifications made by `onBeforeDataOut` plugins.
+   * - The `messages` parameter will contain any modifications made by `onBeforeMessageOut` plugins.
    * - If multiple plugins define `transformLogLevel`, the last one that returns a valid log level wins.
    *
    * @returns [LogLevelType] The log level to use for the log. Returning null, undefined, or false

@@ -783,6 +783,7 @@ export class LogLayer implements ILogLayer {
         {
           data: hasObjData ? d : undefined,
           logLevel,
+          messages: [...params],
           error: err,
           metadata,
           context: contextData,

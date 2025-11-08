@@ -148,6 +148,10 @@ export const createTimestampPlugin = (options: TimestampPluginOptions = {}, logl
 
 Allows you to transform the log level after `onBeforeDataOut` and `onBeforeMessageOut` have processed the data, but before `shouldSendToLogger` is called. This is useful for dynamically adjusting log levels based on the processed log data, metadata, context, or error information.
 
+This callback runs after `onBeforeDataOut` and `onBeforeMessageOut`, so the `data` parameter will contain any modifications made by `onBeforeDataOut` plugins, and the `messages` parameter will contain any modifications made by `onBeforeMessageOut` plugins. The transformed log level will be used by `shouldSendToLogger` and when sending to transports.
+
+If multiple plugins define `transformLogLevel`, the last one that returns a valid log level (not null, undefined, or false) will be used.
+
 **Method Signature:**
 ```typescript
 transformLogLevel?(params: PluginTransformLogLevelParams, loglayer: ILogLayer): LogLevelType | null | undefined | false
@@ -158,6 +162,7 @@ transformLogLevel?(params: PluginTransformLogLevelParams, loglayer: ILogLayer): 
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `logLevel` | `LogLevel` | Log level of the data |
+| `messages` | `any[]` | Message data that is copied from the original |
 | `data` | `Record<string, any>` (optional) | Combined object data containing the metadata, context, and / or error data in a structured format configured by the user |
 | `metadata` | `Record<string, any>` (optional) | Individual metadata object passed to the log message method |
 | `error` | `any` (optional) | Error passed to the log message method |
@@ -168,14 +173,10 @@ transformLogLevel?(params: PluginTransformLogLevelParams, loglayer: ILogLayer): 
 - Returns a `LogLevelType` (or equivalent string) to use the transformed log level
 - Returns `null`, `undefined`, or `false` to use the log level originally specified
 
-**Note:** This callback runs after `onBeforeDataOut` and `onBeforeMessageOut`, so the `data` parameter will contain any modifications made by those plugins. The transformed log level will be used by `shouldSendToLogger` and when sending to transports.
-
-If multiple plugins define `transformLogLevel`, the last one that returns a valid log level (not null, undefined, or false) will be used.
-
 **Example:**
 ```typescript
 const logLevelTransformerPlugin = {
-  transformLogLevel: ({ logLevel, error, metadata }: PluginTransformLogLevelParams, loglayer: ILogLayer) => {
+  transformLogLevel: ({ logLevel, error, metadata, messages }: PluginTransformLogLevelParams, loglayer: ILogLayer) => {
     // Upgrade errors to fatal if they have a specific flag
     if (logLevel === 'error' && metadata?.critical) {
       return 'fatal'
@@ -186,8 +187,13 @@ const logLevelTransformerPlugin = {
       return 'info'
     }
     
+    // Upgrade to error if message contains "CRITICAL"
+    if (messages.some(msg => String(msg).includes('CRITICAL'))) {
+      return 'error'
+    }
+    
     // Use original log level if no transformation needed
-    return null
+    return
   }
 }
 ```
@@ -240,7 +246,7 @@ const dataEnrichmentPlugin = {
 }
 ```
 
-::: info
+::: info Changing the log level
 Including `logLevel` in the returned data object (as shown in the example above) only adds it as a field in the data object sent to the logging library. It does **not** modify the actual log level used by LogLayer. If you need to transform the log level itself, use the [`transformLogLevel`](#transformloglevel) callback instead.
 :::
 
