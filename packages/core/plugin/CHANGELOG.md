@@ -1,5 +1,16 @@
 # `@loglayer/plugin` Changelog
 
+## 2.2.0
+
+### Minor Changes
+
+- [#295](https://github.com/loglayer/loglayer/pull/295) [`4b0996c`](https://github.com/loglayer/loglayer/commit/4b0996ce75a2863359a1f5de0d563ab24828ec80) Thanks [@theogravity](https://github.com/theogravity)! - Add `transformLogLevel` plugin callback
+
+### Patch Changes
+
+- Updated dependencies [[`4b0996c`](https://github.com/loglayer/loglayer/commit/4b0996ce75a2863359a1f5de0d563ab24828ec80)]:
+  - @loglayer/shared@2.7.0
+
 ## 2.1.7
 
 ### Patch Changes
