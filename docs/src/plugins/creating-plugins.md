@@ -240,7 +240,7 @@ const dataEnrichmentPlugin = {
 }
 ```
 
-::: note
+::: info
 Including `logLevel` in the returned data object (as shown in the example above) only adds it as a field in the data object sent to the logging library. It does **not** modify the actual log level used by LogLayer. If you need to transform the log level itself, use the [`transformLogLevel`](#transformloglevel) callback instead.
 :::
 
