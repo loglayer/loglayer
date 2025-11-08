@@ -3,16 +3,18 @@ import type {
   PluginBeforeDataOutParams,
   PluginBeforeMessageOutParams,
   PluginShouldSendToLoggerParams,
+  PluginTransformLogLevelParams,
 } from "@loglayer/plugin";
 
 import { PluginCallbackType } from "@loglayer/plugin";
-import type { ILogLayer, LogLayerData, LogLayerMetadata, MessageDataType } from "@loglayer/shared";
+import type { ILogLayer, LogLayerData, LogLayerMetadata, LogLevelType, MessageDataType } from "@loglayer/shared";
 
 const CALLBACK_LIST = [
   PluginCallbackType.onBeforeDataOut,
   PluginCallbackType.onMetadataCalled,
-  PluginCallbackType.shouldSendToLogger,
   PluginCallbackType.onBeforeMessageOut,
+  PluginCallbackType.transformLogLevel,
+  PluginCallbackType.shouldSendToLogger,
   PluginCallbackType.onContextCalled,
 ];
 
@@ -27,6 +29,7 @@ interface LogLayerPluginWithTimestamp extends LogLayerPlugin {
 export class PluginManager {
   private idToPlugin: Record<string, LogLayerPluginWithTimestamp>;
   // Indexes for each plugin type
+  private transformLogLevel: Array<string> = [];
   private onBeforeDataOut: Array<string> = [];
   private shouldSendToLogger: Array<string> = [];
   private onMetadataCalled: Array<string> = [];
@@ -55,6 +58,7 @@ export class PluginManager {
   }
 
   private indexPlugins() {
+    this.transformLogLevel = [];
     this.onBeforeDataOut = [];
     this.shouldSendToLogger = [];
     this.onMetadataCalled = [];
@@ -117,6 +121,41 @@ export class PluginManager {
   removePlugin(id: string) {
     delete this.idToPlugin[id];
     this.indexPlugins();
+  }
+
+  /**
+   * Runs plugins that define transformLogLevel. Returns the transformed log level or the original if no transformation is applied.
+   * If multiple plugins transform the log level, the last one wins.
+   */
+  runTransformLogLevel(params: PluginTransformLogLevelParams, loglayer: ILogLayer): LogLevelType {
+    let transformedLevel: LogLevelType | null | undefined | false = null;
+
+    for (const pluginId of this.transformLogLevel) {
+      const plugin = this.idToPlugin[pluginId];
+
+      if (plugin.transformLogLevel) {
+        const result = plugin.transformLogLevel(
+          {
+            data: params.data,
+            logLevel: params.logLevel,
+            error: params.error,
+            metadata: params.metadata,
+            context: params.context,
+          },
+          loglayer,
+        );
+
+        // Use the last non-null/undefined/false result (last one wins)
+        if (result !== null && result !== undefined && result !== false) {
+          transformedLevel = result;
+        }
+      }
+    }
+
+    // Return transformed level if found, otherwise return original
+    return transformedLevel !== null && transformedLevel !== undefined && transformedLevel !== false
+      ? transformedLevel
+      : params.logLevel;
   }
 
   /**

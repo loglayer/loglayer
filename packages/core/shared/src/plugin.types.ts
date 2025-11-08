@@ -19,6 +19,17 @@ export interface PluginBeforeDataOutParams extends LogLayerCommonDataParams {
 }
 
 /**
+ * Input for the `transformLogLevel` plugin lifecycle method.
+ * @see {@link https://loglayer.dev/plugins/creating-plugins.html#transformloglevel | Creating Plugins}
+ */
+export interface PluginTransformLogLevelParams extends LogLayerCommonDataParams {
+  /**
+   * Log level of the data
+   */
+  logLevel: LogLevelType;
+}
+
+/**
  * Input for the `shouldSendToLogger` plugin lifecycle method.
  * @see {@link https://loglayer.dev/plugins/creating-plugins.html#shouldsendtologger | Creating Plugins}
  */
@@ -73,6 +84,26 @@ export interface LogLayerPluginParams {
  * @see {@link https://loglayer.dev/plugins/creating-plugins.html | Creating Plugins}
  */
 export interface LogLayerPlugin extends LogLayerPluginParams {
+  /**
+   * Called after `onBeforeDataOut` and `onBeforeMessageOut` but before `shouldSendToLogger` to transform the log level.
+   * This allows you to change the log level based on the processed log data, metadata, context, or error.
+   *
+   * - The shape of `data` varies depending on your `fieldName` configuration
+   * for metadata / context / error. The metadata / context / error data is a *shallow* clone.
+   * - If data was not found for assembly, `undefined` is used as the `data` input.
+   * - The `data` parameter will contain any modifications made by `onBeforeDataOut` plugins.
+   * - If multiple plugins define `transformLogLevel`, the last one that returns a valid log level wins.
+   *
+   * @returns [LogLevelType] The log level to use for the log. Returning null, undefined, or false
+   * will use the log level originally specified.
+   *
+   * @see {@link https://loglayer.dev/plugins/creating-plugins.html#transformloglevel | Creating Plugins}
+   */
+  transformLogLevel?(
+    params: PluginTransformLogLevelParams,
+    loglayer: ILogLayer,
+  ): LogLevelType | null | undefined | false;
+
   /**
    * Called after the assembly of the data object that contains
    * the metadata / context / error data before being sent to the destination logging

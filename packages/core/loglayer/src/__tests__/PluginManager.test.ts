@@ -4,6 +4,7 @@ import {
   type PluginBeforeMessageOutParams,
   PluginCallbackType,
   type PluginShouldSendToLoggerParams,
+  type PluginTransformLogLevelParams,
 } from "@loglayer/plugin";
 import { type ILogLayer, LogLevel } from "@loglayer/shared";
 import { beforeEach, describe, expect, it, vi, vitest } from "vitest";
@@ -68,6 +69,194 @@ describe("PluginManager", () => {
   it("should initialize with passed plugins", () => {
     expect(pluginManager.hasPlugins(PluginCallbackType.onBeforeDataOut)).toBe(true);
     expect(pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)).toBe(true);
+  });
+
+  describe("runTransformLogLevel", () => {
+    it("should return the original log level when no plugins transform it", () => {
+      const params: PluginTransformLogLevelParams = {
+        logLevel: LogLevel.info,
+        data: { key: "value" },
+      };
+
+      const result = pluginManager.runTransformLogLevel(params, mockLogLayer);
+      expect(result).toBe(LogLevel.info);
+    });
+
+    it("should transform log level when plugin returns a new level", () => {
+      pluginManager.addPlugins([
+        {
+          id: "transform-1",
+          transformLogLevel: () => LogLevel.error,
+        },
+      ]);
+
+      const params: PluginTransformLogLevelParams = {
+        logLevel: LogLevel.info,
+        data: { key: "value" },
+      };
+
+      const result = pluginManager.runTransformLogLevel(params, mockLogLayer);
+      expect(result).toBe(LogLevel.error);
+    });
+
+    it("should use the last plugin that returns a valid log level", () => {
+      pluginManager.addPlugins([
+        {
+          id: "transform-1",
+          transformLogLevel: () => null, // Skip this one
+        },
+        {
+          id: "transform-2",
+          transformLogLevel: () => LogLevel.warn, // This will be overridden
+        },
+        {
+          id: "transform-3",
+          transformLogLevel: () => LogLevel.error, // Last one wins
+        },
+      ]);
+
+      const params: PluginTransformLogLevelParams = {
+        logLevel: LogLevel.info,
+        data: { key: "value" },
+      };
+
+      const result = pluginManager.runTransformLogLevel(params, mockLogLayer);
+      expect(result).toBe(LogLevel.error);
+    });
+
+    it("should return original log level when plugin returns null", () => {
+      pluginManager.addPlugins([
+        {
+          id: "transform-1",
+          transformLogLevel: () => null,
+        },
+      ]);
+
+      const params: PluginTransformLogLevelParams = {
+        logLevel: LogLevel.debug,
+        data: { key: "value" },
+      };
+
+      const result = pluginManager.runTransformLogLevel(params, mockLogLayer);
+      expect(result).toBe(LogLevel.debug);
+    });
+
+    it("should return original log level when plugin returns undefined", () => {
+      pluginManager.addPlugins([
+        {
+          id: "transform-1",
+          transformLogLevel: () => undefined,
+        },
+      ]);
+
+      const params: PluginTransformLogLevelParams = {
+        logLevel: LogLevel.trace,
+        data: { key: "value" },
+      };
+
+      const result = pluginManager.runTransformLogLevel(params, mockLogLayer);
+      expect(result).toBe(LogLevel.trace);
+    });
+
+    it("should return original log level when plugin returns false", () => {
+      pluginManager.addPlugins([
+        {
+          id: "transform-1",
+          transformLogLevel: () => false,
+        },
+      ]);
+
+      const params: PluginTransformLogLevelParams = {
+        logLevel: LogLevel.fatal,
+        data: { key: "value" },
+      };
+
+      const result = pluginManager.runTransformLogLevel(params, mockLogLayer);
+      expect(result).toBe(LogLevel.fatal);
+    });
+
+    it("should pass metadata, error, and context parameters to transformLogLevel", () => {
+      const testError = new Error("test error");
+      const testMetadata = { metaKey: "metaValue" };
+      const testContext = { contextKey: "contextValue" };
+
+      const transformPlugin = {
+        id: "transform-1",
+        transformLogLevel: vi.fn((params) => {
+          // Verify all parameters are passed correctly
+          expect(params.metadata).toEqual(testMetadata);
+          expect(params.error).toBe(testError);
+          expect(params.context).toEqual(testContext);
+          expect(params.data).toEqual({ key: "value" });
+          return LogLevel.error;
+        }),
+      };
+
+      pluginManager.addPlugins([transformPlugin]);
+
+      const params: PluginTransformLogLevelParams = {
+        logLevel: LogLevel.info,
+        data: { key: "value" },
+        metadata: testMetadata,
+        error: testError,
+        context: testContext,
+      };
+
+      const result = pluginManager.runTransformLogLevel(params, mockLogLayer);
+      expect(result).toBe(LogLevel.error);
+
+      expect(transformPlugin.transformLogLevel).toHaveBeenCalledWith(
+        {
+          logLevel: LogLevel.info,
+          data: { key: "value" },
+          metadata: testMetadata,
+          error: testError,
+          context: testContext,
+        },
+        mockLogLayer,
+      );
+    });
+
+    it("should handle multiple plugins with null/undefined/false returns", () => {
+      pluginManager.addPlugins([
+        {
+          id: "transform-1",
+          transformLogLevel: () => null,
+        },
+        {
+          id: "transform-2",
+          transformLogLevel: () => undefined,
+        },
+        {
+          id: "transform-3",
+          transformLogLevel: () => false,
+        },
+      ]);
+
+      const params: PluginTransformLogLevelParams = {
+        logLevel: LogLevel.info,
+        data: { key: "value" },
+      };
+
+      const result = pluginManager.runTransformLogLevel(params, mockLogLayer);
+      expect(result).toBe(LogLevel.info);
+    });
+
+    it("should count plugins with transformLogLevel callback", () => {
+      pluginManager.addPlugins([
+        {
+          id: "transform-1",
+          transformLogLevel: () => LogLevel.error,
+        },
+        {
+          id: "transform-2",
+          transformLogLevel: () => LogLevel.warn,
+        },
+      ]);
+
+      expect(pluginManager.countPlugins(PluginCallbackType.transformLogLevel)).toBe(2);
+      expect(pluginManager.hasPlugins(PluginCallbackType.transformLogLevel)).toBe(true);
+    });
   });
 
   it("adds plugins to the list", () => {

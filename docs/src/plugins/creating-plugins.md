@@ -23,6 +23,11 @@ interface LogLayerPlugin {
   disabled?: boolean;
   
   /**
+   * Called after onBeforeDataOut and onBeforeMessageOut but before shouldSendToLogger to transform the log level.
+   */
+  transformLogLevel?(params: PluginTransformLogLevelParams, loglayer: ILogLayer): LogLevelType | null | undefined | false;
+  
+  /**
    * Called after the assembly of the data object that contains
    * metadata / context / error data before being sent to the logging library.
    */
@@ -139,6 +144,69 @@ export const createTimestampPlugin = (options: TimestampPluginOptions = {}, logl
 
 ## Plugin Lifecycle Methods
 
+### transformLogLevel
+
+Allows you to transform the log level after `onBeforeDataOut` and `onBeforeMessageOut` have processed the data, but before `shouldSendToLogger` is called. This is useful for dynamically adjusting log levels based on the processed log data, metadata, context, or error information.
+
+**Method Signature:**
+```typescript
+transformLogLevel?(params: PluginTransformLogLevelParams, loglayer: ILogLayer): LogLevelType | null | undefined | false
+```
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `logLevel` | `LogLevel` | Log level of the data |
+| `data` | `Record<string, any>` (optional) | Combined object data containing the metadata, context, and / or error data in a structured format configured by the user |
+| `metadata` | `Record<string, any>` (optional) | Individual metadata object passed to the log message method |
+| `error` | `any` (optional) | Error passed to the log message method |
+| `context` | `Record<string, any>` (optional) | Context data that is included with each log entry |
+
+**Return Value:**
+
+- Returns a `LogLevelType` (or equivalent string) to use the transformed log level
+- Returns `null`, `undefined`, or `false` to use the log level originally specified
+
+**Note:** This callback runs after `onBeforeDataOut` and `onBeforeMessageOut`, so the `data` parameter will contain any modifications made by those plugins. The transformed log level will be used by `shouldSendToLogger` and when sending to transports.
+
+If multiple plugins define `transformLogLevel`, the last one that returns a valid log level (not null, undefined, or false) will be used.
+
+**Example:**
+```typescript
+const logLevelTransformerPlugin = {
+  transformLogLevel: ({ logLevel, error, metadata }: PluginTransformLogLevelParams, loglayer: ILogLayer) => {
+    // Upgrade errors to fatal if they have a specific flag
+    if (logLevel === 'error' && metadata?.critical) {
+      return 'fatal'
+    }
+    
+    // Downgrade debug logs in production
+    if (logLevel === 'debug' && process.env.NODE_ENV === 'production') {
+      return 'info'
+    }
+    
+    // Use original log level if no transformation needed
+    return null
+  }
+}
+```
+
+**Example:**
+```typescript
+const errorLevelUpgradePlugin = {
+  transformLogLevel: ({ logLevel, error }: PluginTransformLogLevelParams, loglayer: ILogLayer) => {
+    // Upgrade all errors with stack traces to fatal
+    if (logLevel === 'error' && error?.stack) {
+      return 'fatal'
+    }
+    
+    // Use original log level
+    return undefined
+  }
+}
+```
+
 ### onBeforeDataOut
 
 Allows you to modify or transform the data object containing metadata, context, and error information before it's sent to the logging library. This is useful for adding additional fields, transforming data formats, or filtering sensitive information.
@@ -166,11 +234,15 @@ const dataEnrichmentPlugin = {
       ...(data || {}),
       environment: process.env.NODE_ENV,
       timestamp: new Date().toISOString(),
-      logLevel
+      logLevel  // Note: This adds logLevel as a field in the data object, but does not modify the actual log level
     }
   }
 }
 ```
+
+::: note
+Including `logLevel` in the returned data object (as shown in the example above) only adds it as a field in the data object sent to the logging library. It does **not** modify the actual log level used by LogLayer. If you need to transform the log level itself, use the [`transformLogLevel`](#transformloglevel) callback instead.
+:::
 
 ### onBeforeMessageOut
 

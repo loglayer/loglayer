@@ -1,8 +1,10 @@
 import type {
   ILogLayer,
+  LogLevelType,
   PluginBeforeDataOutParams,
   PluginBeforeMessageOutParams,
   PluginShouldSendToLoggerParams,
+  PluginTransformLogLevelParams,
 } from "@loglayer/shared";
 
 export type {
@@ -11,9 +13,20 @@ export type {
   PluginBeforeDataOutParams,
   PluginBeforeMessageOutParams,
   PluginShouldSendToLoggerParams,
+  PluginTransformLogLevelParams,
 } from "@loglayer/shared";
 
 export { type ILogLayer, LogLevel, type LogLevelType } from "@loglayer/shared";
+
+/**
+ * Callback function for transforming the log level after onBeforeDataOut and onBeforeMessageOut but before shouldSendToLogger.
+ *
+ * @see {@link https://loglayer.dev/plugins/creating-plugins.html#transformloglevel | transformLogLevel Docs}
+ */
+export type PluginTransformLogLevelFn = (
+  params: PluginTransformLogLevelParams,
+  loglayer: ILogLayer,
+) => LogLevelType | null | undefined | false;
 
 /**
  * Callback function for transforming the data object containing metadata, context, and error information before it's
@@ -63,6 +76,7 @@ export type PluginOnContextCalledFn = (
 /**
  * List of plugin callbacks that can be called by the plugin manager.
  *
+ * @see {@link https://loglayer.dev/plugins/creating-plugins.html#transformloglevel | transformLogLevel Docs}
  * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforedataout | onBeforeDataOut Docs}
  * @see {@link https://loglayer.dev/plugins/creating-plugins.html#shouldsendtologger | shouldSendToLogger Docs}
  * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onmetadatacalled | onMetadataCalled Docs}
@@ -70,6 +84,7 @@ export type PluginOnContextCalledFn = (
  * @see {@link https://loglayer.dev/plugins/creating-plugins.html#oncontextcalled | onContextCalled Docs}
  */
 export enum PluginCallbackType {
+  transformLogLevel = "transformLogLevel",
   onBeforeDataOut = "onBeforeDataOut",
   shouldSendToLogger = "shouldSendToLogger",
   onMetadataCalled = "onMetadataCalled",
