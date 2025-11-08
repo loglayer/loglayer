@@ -1,5 +1,12 @@
 # @loglayer/transport-logflare
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport-http@1.1.5
+
 ## 1.0.4
 
 ### Patch Changes

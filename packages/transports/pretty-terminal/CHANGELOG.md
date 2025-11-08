@@ -1,5 +1,13 @@
 # `@loglayer/transport-pretty-terminal` Changelog
 
+## 4.1.3
+
+### Patch Changes
+
+- Updated dependencies [[`8f10f44`](https://github.com/loglayer/loglayer/commit/8f10f4422b7577a048a167e27958bbfa59ab6076)]:
+  - @loglayer/shared@2.7.1
+  - @loglayer/transport@2.3.7
+
 ## 4.1.2
 
 ### Patch Changes

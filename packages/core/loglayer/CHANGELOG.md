@@ -1,5 +1,17 @@
 # `loglayer` Changelog
 
+## 7.2.1
+
+### Patch Changes
+
+- [`8f10f44`](https://github.com/loglayer/loglayer/commit/8f10f4422b7577a048a167e27958bbfa59ab6076) Thanks [@theogravity](https://github.com/theogravity)! - Add the message param to `PluginTransformLogLevelParams`
+
+- Updated dependencies [[`8f10f44`](https://github.com/loglayer/loglayer/commit/8f10f4422b7577a048a167e27958bbfa59ab6076)]:
+  - @loglayer/shared@2.7.1
+  - @loglayer/context-manager@1.1.9
+  - @loglayer/plugin@2.2.1
+  - @loglayer/transport@2.3.7
+
 ## 7.2.0
 
 ### Minor Changes
