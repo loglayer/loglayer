@@ -1,5 +1,12 @@
 # `@loglayer/transport-opentelemetry` Changelog
 
+## 3.0.9
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.7
+
 ## 3.0.8
 
 ### Patch Changes

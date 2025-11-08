@@ -1,5 +1,11 @@
 # `@loglayer/shared` Changelog
 
+## 2.7.1
+
+### Patch Changes
+
+- [`8f10f44`](https://github.com/loglayer/loglayer/commit/8f10f4422b7577a048a167e27958bbfa59ab6076) Thanks [@theogravity](https://github.com/theogravity)! - Add the message param to `PluginTransformLogLevelParams`
+
 ## 2.7.0
 
 ### Minor Changes
