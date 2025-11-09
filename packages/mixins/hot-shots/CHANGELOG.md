@@ -1,5 +1,11 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 1.0.3
+
+### Patch Changes
+
+- [#299](https://github.com/loglayer/loglayer/pull/299) [`230f0aa`](https://github.com/loglayer/loglayer/commit/230f0aafa49c377abb868a6bcfba9f9ab4865b4f) Thanks [@theogravity](https://github.com/theogravity)! - Add mixin support for ILogLayer
+
 ## 1.0.2
 
 ### Patch Changes
