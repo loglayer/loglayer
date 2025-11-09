@@ -48,6 +48,9 @@ declare module 'loglayer' {
      */
     customMethod(param: string): MockLogLayer;
   }
+  
+  // Extend ILogLayer to include the augmented methods
+  interface ILogLayer extends LogLayer {}
 }
 ```
 
@@ -69,8 +72,15 @@ declare module 'loglayer' {
      */
     customBuilderMethod(param: string): MockLogBuilder;
   }
+  
+  // Extend ILogBuilder to include the augmented methods
+  interface ILogBuilder extends LogBuilder {}
 }
 ```
+
+::: danger Required Interface Extensions
+You **must** include the `interface ILogLayer extends LogLayer {}` declaration for `LogLayer` class mixins and `interface ILogBuilder extends LogBuilder {}` for `LogBuilder` class mixins. Without these declarations, if code uses the `ILogLayer` or `ILogBuilder` interfaces (which is common in dependency injection and testing scenarios), TypeScript will not recognize the mixin methods, causing type errors and preventing access to your mixin functionality.
+:::
 
 ### Mixin Implementation
 
@@ -177,6 +187,9 @@ declare module 'loglayer' {
     setRequestId(requestId: string): MockLogLayer;
     getRequestId(): string | undefined;
   }
+  
+  // Extend ILogLayer to include the augmented methods
+  interface ILogLayer extends LogLayer {}
 }
 
 // 2. Mixin implementation that stores request ID on each LogLayer instance
@@ -443,6 +456,9 @@ declare module 'loglayer' {
   interface MockLogLayer {
     recordMetric(name: string, value: number): MockLogLayer;
   }
+  
+  // Extend ILogLayer to include the augmented methods
+  interface ILogLayer extends LogLayer {}
 }
 
 // 2. Create the mixin
