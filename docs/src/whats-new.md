@@ -21,7 +21,7 @@ Documentation:
 
 `@loglayer/plugin`:
 
-- Added new `transformLogLevel` plugin callback that allows you to dynamically transform log levels before any other plugin lifecycle methods are called. This is useful for adjusting log levels based on log data, metadata, context, or error information. Returning `null`, `undefined`, or `false` will use the log level originally specified. See [Creating Plugins documentation](/plugins/creating-plugins#transformloglevel) for usage examples.
+- Added new `transformLogLevel` plugin callback that allows you to dynamically transform log levels. This is useful for adjusting log levels based on log data, metadata, context, or error information. See [Creating Plugins documentation](/plugins/creating-plugins#transformloglevel) for usage examples.
 
 ## Nov 2, 2025
 
