@@ -604,4 +604,6 @@ declare module "loglayer" {
       callback?: StatsCb,
     ): LogLayer;
   }
+
+  interface ILogLayer extends LogLayer {}
 }

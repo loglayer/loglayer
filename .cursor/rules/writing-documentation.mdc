@@ -110,3 +110,41 @@ The tables should have the following headers:
 - Type: The parameter / property type 
 - Default: The default value for the parameter if any. Use backticks to format the type if applicable
 - Description: The description of what the parameter / property does
+
+### Adding tips / info boxes
+
+These are called "custom containers" in vitepress. If we need to note something, we
+should use a custom container.
+
+::: info Title
+This is an info box.
+:::
+
+::: tip Title
+This is a tip.
+:::
+
+::: warning Title
+This is a warning.
+:::
+
+::: danger Title
+This is a dangerous warning.
+:::
+
+The danger custom container should be used when there is a MUST type of instruction
+that we want to emphasize.
+
+::: details Title
+This is a details block.
+:::
+
+The details block has additional functionality where the contents are collapsed
+by default. If we need to have lengthy details that are optional for the user to consume, we should
+consider using the details custom container.
+
+example:
+
+::: tip Defining constants
+Use the `const` keyword to define a constant.
+:::
