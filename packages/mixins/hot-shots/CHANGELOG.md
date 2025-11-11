@@ -1,5 +1,11 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 1.0.4
+
+### Patch Changes
+
+- [`2dc8a30`](https://github.com/loglayer/loglayer/commit/2dc8a306d558707bb15df7b7f7c61c36b09a9e92) Thanks [@theogravity](https://github.com/theogravity)! - Removed the `interface ILogLayer extends LogLayer {}` from the module declaration.
+
 ## 1.0.3
 
 ### Patch Changes
