@@ -7,15 +7,15 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
-## Nov 9, 2025
+## Nov 11, 2025
 
 Documentation:
 
-- Updated [Creating Mixins documentation](/mixins/creating-mixins) to clarify the requirement for extending `ILogLayer` and `ILogBuilder` interfaces when creating mixins. Without these interface extensions, TypeScript will not recognize mixin methods when code uses the `ILogLayer` or `ILogBuilder` interfaces, which is common in dependency injection and testing scenarios.
+Updated [Creating Mixins documentation](/mixins/creating-mixins) to note that mixin augments currently won't be captured by the `ILogLayer` and `ILogBuilder` types. If you are a TypeScript expert, we welcome ideas on how to improve this.
 
 `@loglayer/mixin-hot-shots`:
 
-- Added `interface ILogLayer extends LogLayer {}` declaration to ensure the `ILogLayer` interface includes all augmented methods from the mixin. This ensures proper TypeScript type checking when using the `ILogLayer` interface with the hot-shots mixin.
+Removed the `interface ILogLayer extends LogLayer {}` from the module declaration.
 
 ## Nov 7, 2025
 

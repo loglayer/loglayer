@@ -50,6 +50,8 @@ log.statsIncrement('request.count').info('Request received');
 log.statsTiming('request.duration', 150).info('Request processed');
 ```
 
+<!--@include: ./_partials/typescript-interface-limitations.md-->
+
 ## Creating Mixins
 
 To learn how to create your own mixins, see the [Creating Mixins](/mixins/creating-mixins) guide.
