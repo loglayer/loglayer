@@ -50,7 +50,9 @@ log.statsIncrement('request.count').info('Request received');
 log.statsTiming('request.duration', 150).info('Request processed');
 ```
 
-<!--@include: ./_partials/typescript-interface-limitations.md-->
+### TypeScript Interface Support
+
+<!--@include: ./_partials/using-mixins-with-iloglayer.md--> 
 
 ## Creating Mixins
 

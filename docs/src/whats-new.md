@@ -7,6 +7,18 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Nov 12, 2025
+
+Documentation:
+
+Figured out proper support for `ILogLayer` and `ILogBuilder` interfaces with mixins.
+
+Updated [Mixins documentation](/mixins/), [Creating Mixins guide](/mixins/creating-mixins), and [TypeScript tips](/logging-api/typescript) with information on how to properly support those interfaces.
+
+`@loglayer/mixin-hot-shots`:
+
+- **v2.0.0**: Updated to use the new generic interface pattern (`IHotShotsMixin<T>`) for `ILogLayer` support. The mixin interface is now exported and can be combined with `ILogLayer` using intersection types. See the [migration guide](/mixins/hot-shots#migration-from-v1-to-v2) for details on updating your code if you're using the `ILogLayer` interface.
+
 ## Nov 11, 2025
 
 Documentation:
