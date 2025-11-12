@@ -29,50 +29,40 @@ A mixin consists of several key components:
 
 ### TypeScript Type Declarations
 
-Use TypeScript declaration merging to add type definitions for your new methods. **You must declare methods for both the real class and its corresponding mock class** to ensure type safety in both production code and tests:
+Use TypeScript declaration merging to add type definitions for your new methods. For flexible and reusable type definitions, create a **generic** mixin interface that can be combined with `ILogLayer` or `ILogBuilder`. The generic type parameter is necessary so we can use the same interface definition for both `LogLayer` and `MockLogLayer` (or `LogBuilder` and `MockLogBuilder`) without duplicating the method definitions:
 
 ```typescript
 // types.ts
+import type { ILogLayer } from 'loglayer';
+
+export interface ICustomMixin<T> {
+  /**
+   * Your method documentation
+   */
+  customMethod(param: string): T;
+}
+
 declare module 'loglayer' {
-  interface LogLayer {
-    /**
-     * Your method documentation
-     */
-    customMethod(param: string): LogLayer;
-  }
-  
-  // Also declare for MockLogLayer (required)
-  interface MockLogLayer {
-    /**
-     * Your method documentation
-     */
-    customMethod(param: string): MockLogLayer;
-  }
+  interface LogLayer extends ICustomMixin<LogLayer> {}
+  interface MockLogLayer extends ICustomMixin<MockLogLayer> {}
 }
 ```
 
-For LogBuilder mixins:
+By parameterizing the return type with the generic `T`, we define the mixin methods once and reuse them for both classes, with each class getting methods that return the correct type (`LogLayer` or `MockLogLayer`).
+
+This approach allows users of your mixin to create combined types for better TypeScript support:
 
 ```typescript
-declare module 'loglayer' {
-  interface LogBuilder {
-    /**
-     * Your method documentation
-     */
-    customBuilderMethod(param: string): LogBuilder;
-  }
-  
-  // Also declare for MockLogBuilder (required)
-  interface MockLogBuilder {
-    /**
-     * Your method documentation
-     */
-    customBuilderMethod(param: string): MockLogBuilder;
-  }
+import type { ILogLayer } from 'loglayer';
+import type { ICustomMixin } from '@your-package/mixin';
+
+export type ILogLayerWithMixins = ILogLayer & ICustomMixin<ILogLayer>;
+
+function getLogger(): ILogLayerWithMixins {
+  // Your implementation
+  return log;
 }
 ```
-
-<!--@include: ./_partials/typescript-interface-limitations.md-->
 
 ### Mixin Implementation
 
@@ -249,13 +239,17 @@ export function requestTrackingMixin(): LogLayerMixinRegistration {
 
 ```typescript
 import { useLogLayerMixin, LogLayer, ConsoleTransport } from 'loglayer';
+import type { ILogLayer } from 'loglayer';
 import { requestTrackingMixin } from '@your-package/request-tracking';
+import type { IRequestTrackingMixin } from '@your-package/request-tracking';
+
+export type ILogLayerWithMixins = ILogLayer & IRequestTrackingMixin<ILogLayer>;
 
 // Register the mixin (includes the plugin automatically)
 useLogLayerMixin(requestTrackingMixin());
 
 // Create LogLayer instance
-const log = new LogLayer({
+const log: ILogLayerWithMixins = new LogLayer({
   transport: new ConsoleTransport({ logger: console })
 });
 
@@ -430,26 +424,23 @@ If you want to quickly add a mixin for your own project:
 
 ```typescript
 import { LogLayer, useLogLayerMixin, ConsoleTransport, LogLayerMixinAugmentType } from 'loglayer';
-import type { LogLayerMixin, LogLayerMixinRegistration, LogLayer } from 'loglayer';
+import type { LogLayerMixin, LogLayerMixinRegistration, LogLayer, ILogLayer } from 'loglayer';
+import type { MockLogLayer } from 'loglayer';
 
-// 1. Define TypeScript declarations
+// 1. Define TypeScript declarations using a generic interface
+export interface IMetricsMixin<T> {
+  /**
+   * Records a custom metric
+   */
+  recordMetric(name: string, value: number): T;
+}
+
 declare module 'loglayer' {
-  interface LogLayer {
-    /**
-     * Records a custom metric
-     */
-    recordMetric(name: string, value: number): LogLayer;
-  }
-  
-  // Also declare for MockLogLayer (required)
-  interface MockLogLayer {
-    recordMetric(name: string, value: number): MockLogLayer;
-  }
+  interface LogLayer extends IMetricsMixin<LogLayer> {}
+  interface MockLogLayer extends IMetricsMixin<MockLogLayer> {}
 }
 
 // 2. Create the mixin
-import type { MockLogLayer } from 'loglayer';
-
 const metricsMixin: LogLayerMixin = {
   augmentationType: LogLayerMixinAugmentType.LogLayer,
   augment: (prototype) => {
@@ -479,7 +470,12 @@ useLogLayerMixin({
 // ]);
 
 // 4. Create LogLayer instance and use your custom method
-const log = new LogLayer({
+// If your mixin interface is in a separate file, import it:
+// import type { IMetricsMixin } from './your-mixin-file';
+
+export type ILogLayerWithMixins = ILogLayer & IMetricsMixin<ILogLayer>;
+
+const log: ILogLayerWithMixins = new LogLayer({
   transport: new ConsoleTransport({
     logger: console
   })
@@ -521,6 +517,30 @@ import "./types.js";
 ```
 
 These side-effect imports ensure that TypeScript processes the `declare module` directives and makes them available to consumers of your package.
+
+**Make sure to export the generic mixin interface** so users can import it to create combined types:
+
+```typescript
+// types.ts
+import type { ILogLayer } from 'loglayer';
+
+export interface ICustomMixin<T> {
+  customMethod(param: string): T;
+}
+
+declare module 'loglayer' {
+  interface LogLayer extends ICustomMixin<LogLayer> {}
+  interface MockLogLayer extends ICustomMixin<MockLogLayer> {}
+}
+```
+
+```typescript
+// index.ts
+export * from "./types.js"; // Export the interface for users
+// ... rest of your code
+```
+
+This allows users to create combined types like `ILogLayer & ICustomMixin<ILogLayer>` for better TypeScript support when using interfaces.
 
 ## Important Considerations
 

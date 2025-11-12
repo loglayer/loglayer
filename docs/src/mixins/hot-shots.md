@@ -63,6 +63,29 @@ log.statsTiming('request.duration', 150).info('Request processed');
 log.statsGauge('active.connections', 42).info('Connection established');
 ```
 
+### TypeScript Type Usage
+
+<!--@include: ./_partials/using-mixins-with-iloglayer.md-->
+
+## Migration from v1 to v2
+
+In v2, the mixin now uses a generic interface pattern (`IHotShotsMixin<T>`) that allows usage with the `ILogLayer` interface.
+
+If you want `ILogLayer` compatibility with mixin methods, create a composite type:
+
+```typescript
+import type { ILogLayer } from 'loglayer';
+import type { IHotShotsMixin } from '@loglayer/mixin-hot-shots';
+
+export type ILogLayerWithMixins = ILogLayer & IHotShotsMixin<ILogLayer>;
+
+function getLogger(): ILogLayerWithMixins {
+  return log;
+}
+```
+
+Replace your usage of `ILogLayer` with `ILogLayerWithMixins` wherever you need TypeScript support for mixin methods.
+
 ## Configuration
 
 The `hotshotsMixin` function requires a configured `StatsD` client instance from the `hot-shots` library.

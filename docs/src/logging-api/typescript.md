@@ -16,6 +16,12 @@ import type { ILogLayer } from 'loglayer'
 const logger: ILogLayer = new LogLayer()
 ```
 
+### Using Mixins with `ILogLayer`
+
+<!--@include: ../mixins/_partials/using-mixins-with-iloglayer.md-->
+
+See the [Mixins documentation](/mixins/) for more details.
+
 ## Use `LogLevelType` if you need to type your log level when creating a logger
 
 ```typescript
