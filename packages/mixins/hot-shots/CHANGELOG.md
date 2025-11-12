@@ -1,5 +1,11 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 2.0.0
+
+### Major Changes
+
+- [#302](https://github.com/loglayer/loglayer/pull/302) [`29afffc`](https://github.com/loglayer/loglayer/commit/29afffc4cf4b6f19c128863cbc0e2fcf061d2d3a) Thanks [@theogravity](https://github.com/theogravity)! - Update interface definitions to also work with the `ILogLayer` type.
+
 ## 1.0.4
 
 ### Patch Changes
