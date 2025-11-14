@@ -22,6 +22,8 @@ Four log level managers are available:
 
 See the [Log Level Managers documentation](/log-level-managers/) for more information.
 
+*v8 does not have any breaking changes; no migration steps are necessary to upgrade from v7 -> v8 of `loglayer`.
+
 ## Nov 12, 2025
 
 Documentation:

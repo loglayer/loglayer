@@ -5,6 +5,12 @@ description: Learn how to migrate different versions of LogLayer to the latest v
 
 # Migrating LogLayer to the latest version
 
+## Migrating from 7.x to 8.x
+
+New version 8 introduces [Log Level Managers](/log-level-managers/), a system for controlling how log levels are inherited and propagated between parent and child loggers. Log level managers provide fine-grained control over log level behavior, allowing you to choose between independent log level management, global log level changes, one-way propagation, or bidirectional synchronization.
+
+*v8 does not have any breaking changes; no migration steps are necessary to upgrade from v7 -> v8 of `loglayer`.*
+
 ## Migrating from 6.x to 7.x
 
 New version 7 introduces [Mixins](/mixins/), a system for extending LogLayer and LogBuilder prototypes with custom methods and functionality. Unlike plugins (which intercept and modify log processing) or transports (which send logs to destinations), mixins add new methods directly to the LogLayer API, enabling you to integrate third-party libraries and add domain-specific capabilities beyond logging.
