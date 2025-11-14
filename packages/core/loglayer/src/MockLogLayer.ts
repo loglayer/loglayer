@@ -1,11 +1,15 @@
 /* eslint @typescript-eslint/no-empty-function: 0 */
 /* istanbul ignore file */
 
+import { MockContextManager } from "@loglayer/context-manager";
+import { MockLogLevelManager } from "@loglayer/log-level-manager";
 import type { LogLayerPlugin } from "@loglayer/plugin";
 import type {
   ErrorOnlyOpts,
+  IContextManager,
   ILogBuilder,
   ILogLayer,
+  ILogLevelManager,
   LogLayerTransport,
   LogLevel,
   MessageDataType,
@@ -19,6 +23,8 @@ import { MockLogBuilder } from "./MockLogBuilder.js";
  */
 export class MockLogLayer implements ILogLayer {
   private mockLogBuilder: ILogBuilder = new MockLogBuilder();
+  private mockContextManager: IContextManager = new MockContextManager();
+  private mockLogLevelManager: ILogLevelManager = new MockLogLevelManager();
 
   info(..._messages: MessageDataType[]): void {}
   warn(..._messages: MessageDataType[]): void {}
@@ -112,8 +118,16 @@ export class MockLogLayer implements ILogLayer {
     return this;
   }
 
-  getContextManager() {
-    return undefined;
+  getContextManager<M extends IContextManager = IContextManager>(): M {
+    return this.mockContextManager as M;
+  }
+
+  withLogLevelManager(_logLevelManager: ILogLevelManager) {
+    return this;
+  }
+
+  getLogLevelManager<M extends ILogLevelManager = ILogLevelManager>(): M {
+    return this.mockLogLevelManager as M;
   }
 
   getConfig() {

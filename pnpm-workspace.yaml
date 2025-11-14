@@ -3,6 +3,7 @@ packages:
   - packages/transports/*
   - packages/plugins/*
   - packages/context-managers/*
+  - packages/log-level-managers/*
   - packages/mixins/*
   - docs
 

@@ -147,12 +147,14 @@ loglayer/
 ├── packages/
 │   ├── core/                     # Core packages
 │   │   ├── context-manager/      # Context manager system core
+│   │   ├── log-level-manager/    # Log level manager system core
 │   │   ├── loglayer/             # Main LogLayer implementation
 │   │   ├── plugin/               # Plugin system core
 │   │   ├── transport/            # Transport system core
 │   │   ├── shared/               # Shared utilities and types
 │   │   └── tsconfig/             # Shared TypeScript configurations
 │   ├── context-managers/         # Official context manager implementations
+│   ├── log-level-managers/       # Official log level manager implementations
 │   ├── transports/               # Official transport implementations
 │   ├── mixins/                   # Official mixins implementations
 │   └── plugins/                  # Official plugins

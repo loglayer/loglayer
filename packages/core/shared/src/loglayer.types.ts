@@ -103,6 +103,88 @@ export interface IContextManager {
 }
 
 /**
+ * Log Level Manager callback function for when a child logger is created.
+ */
+export interface OnChildLogLevelManagerCreatedParams {
+  /**
+   * The parent logger instance
+   */
+  parentLogger: ILogLayer;
+  /**
+   * The child logger instance
+   */
+  childLogger: ILogLayer;
+  /**
+   * The parent logger's log level manager
+   */
+  parentLogLevelManager: ILogLevelManager;
+  /**
+   * The child logger's log level manager
+   */
+  childLogLevelManager: ILogLevelManager;
+}
+
+/**
+ * Interface for implementing a log level manager instance.
+ *
+ * Log level managers are responsible for managing log level settings across logger instances.
+ * They control how log levels are inherited and propagated between parent and child loggers.
+ *
+ * @see {@link https://loglayer.dev/log-level-managers/creating-log-level-managers.html | Creating Log Level Managers Docs}
+ */
+export interface ILogLevelManager {
+  /**
+   * Sets the minimum log level to be used by the logger. Only messages with
+   * this level or higher severity will be logged.
+   *
+   * **When triggered:** Called when `logger.setLevel()` is invoked on a LogLayer instance.
+   */
+  setLevel(logLevel: LogLevelType): void;
+  /**
+   * Enables a specific log level.
+   *
+   * **When triggered:** Called when `logger.enableIndividualLevel()` is invoked on a LogLayer instance.
+   */
+  enableIndividualLevel(logLevel: LogLevelType): void;
+  /**
+   * Disables a specific log level.
+   *
+   * **When triggered:** Called when `logger.disableIndividualLevel()` is invoked on a LogLayer instance.
+   */
+  disableIndividualLevel(logLevel: LogLevelType): void;
+  /**
+   * Checks if a specific log level is enabled.
+   *
+   * **When triggered:** Called before every log method execution (e.g., `info()`, `warn()`, `error()`, `debug()`, `trace()`, `fatal()`, `raw()`, `metadataOnly()`, `errorOnly()`) to determine if the log should be processed. Also called when `logger.isLevelEnabled()` is invoked directly.
+   */
+  isLevelEnabled(logLevel: LogLevelType): boolean;
+  /**
+   * Enable sending logs to the logging library.
+   *
+   * **When triggered:** Called when `logger.enableLogging()` is invoked on a LogLayer instance.
+   */
+  enableLogging(): void;
+  /**
+   * All logging inputs are dropped and stops sending logs to the logging library.
+   *
+   * **When triggered:** Called when `logger.disableLogging()` is invoked on a LogLayer instance, or when a LogLayer instance is created with `enabled: false` in the configuration.
+   */
+  disableLogging(): void;
+  /**
+   * Called when a child logger is created. Use to manipulate log level settings between parent and child.
+   *
+   * **When triggered:** Called automatically when `logger.child()` is invoked, after the child logger is created and the parent's log level manager has been cloned. This allows the manager to establish relationships between parent and child loggers.
+   */
+  onChildLoggerCreated(params: OnChildLogLevelManagerCreatedParams): void;
+  /**
+   * Creates a new instance of the log level manager with the same log level settings.
+   *
+   * **When triggered:** Called automatically when `logger.child()` is invoked to create a new log level manager instance for the child logger. The cloned instance should have the same initial log level state as the parent, but can be modified independently (unless the manager implements shared state behavior).
+   */
+  clone(): ILogLevelManager;
+}
+
+/**
  * Input to the LogLayer transport shipToLogger() method.
  * @see {@link https://loglayer.dev/transports/creating-transports.html | Creating Transports Docs}
  */
@@ -384,6 +466,16 @@ export interface ILogLayer extends ILogBuilder {
    * Gets the context manager used by the logger.
    */
   getContextManager<M extends IContextManager = IContextManager>(): M;
+
+  /**
+   * Sets the log level manager to use for managing log levels.
+   */
+  withLogLevelManager(manager: ILogLevelManager): ILogLayer;
+
+  /**
+   * Gets the log level manager used by the logger.
+   */
+  getLogLevelManager<M extends ILogLevelManager = ILogLevelManager>(): M;
 
   /**
    * Returns the configuration object used to initialize the logger.

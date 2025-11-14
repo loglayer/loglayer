@@ -1,7 +1,7 @@
 {
-  "name": "loglayer",
-  "description": "A modern logging library with a fluent API for specifying log messages, metadata and errors",
-  "version": "7.2.1",
+  "name": "@loglayer/log-level-manager",
+  "description": "Base log level manager used to implement log level managers for loglayer.",
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -20,32 +20,16 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/loglayer/loglayer.git",
-    "directory": "packages/core/loglayer"
+    "directory": "packages/core/log-level-manager"
   },
   "author": "Theo Gravity <theo@suteki.nu>",
   "keywords": [
     "logging",
     "log",
-    "opentelemetry",
-    "otel",
-    "winston",
-    "bunyan",
-    "structured logs",
-    "structured logging",
-    "file rotation",
-    "structured",
-    "abstraction",
-    "pino",
-    "electron",
-    "loglevel",
-    "datadog",
-    "log rotation",
-    "rotation",
-    "rotate logs",
-    "typescript",
-    "statsd",
-    "metrics",
-    "telemetry"
+    "loglayer",
+    "log level manager",
+    "log level",
+    "manager"
   ],
   "scripts": {
     "build": "tsdown src/index.ts",
@@ -57,11 +41,7 @@
     "verify-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@loglayer/context-manager": "workspace:*",
-    "@loglayer/log-level-manager": "workspace:*",
-    "@loglayer/plugin": "workspace:*",
-    "@loglayer/shared": "workspace:*",
-    "@loglayer/transport": "workspace:*"
+    "@loglayer/shared": "workspace:*"
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",

@@ -1,14 +1,15 @@
 import { DefaultContextManager } from "@loglayer/context-manager";
+import { DefaultLogLevelManager } from "@loglayer/log-level-manager";
 import { type LogLayerPlugin, PluginCallbackType } from "@loglayer/plugin";
 import {
   type ErrorOnlyOpts,
   type IContextManager,
   type ILogLayer,
+  type ILogLevelManager,
   type LogLayerContext,
   type LogLayerData,
   type LogLayerMetadata,
   LogLevel,
-  LogLevelPriority,
   type LogLevelType,
   type MessageDataType,
   type RawLogEntry,
@@ -27,15 +28,6 @@ interface FormatLogParams {
   context?: LogLayerContext | null;
 }
 
-interface LogLevelEnabledStatus {
-  info: boolean;
-  warn: boolean;
-  error: boolean;
-  debug: boolean;
-  trace: boolean;
-  fatal: boolean;
-}
-
 /**
  * Wraps around a logging framework to provide convenience methods that allow
  * developers to programmatically specify their errors and metadata along with
@@ -47,14 +39,7 @@ export class LogLayer implements ILogLayer {
   private hasMultipleTransports: boolean;
   private singleTransport: LogLayerTransport | null;
   private contextManager: IContextManager;
-  private logLevelEnabledStatus: LogLevelEnabledStatus = {
-    info: true,
-    warn: true,
-    error: true,
-    debug: true,
-    trace: true,
-    fatal: true,
-  };
+  private logLevelManager: ILogLevelManager;
 
   /**
    * The configuration object used to initialize the logger.
@@ -68,11 +53,12 @@ export class LogLayer implements ILogLayer {
       enabled: config.enabled ?? true,
     };
 
+    this.contextManager = new DefaultContextManager();
+    this.logLevelManager = new DefaultLogLevelManager();
+
     if (!this._config.enabled) {
       this.disableLogging();
     }
-
-    this.contextManager = new DefaultContextManager();
     const plugins = [...(config.plugins || []), ...mixinRegistry.pluginsToInit];
     this.pluginManager = new PluginManager(plugins);
 
@@ -113,6 +99,26 @@ export class LogLayer implements ILogLayer {
    */
   getContextManager<M extends IContextManager = IContextManager>(): M {
     return this.contextManager as M;
+  }
+
+  /**
+   * Sets the log level manager to use for managing log levels.
+   */
+  withLogLevelManager(logLevelManager: ILogLevelManager): LogLayer {
+    // Dispose of the existing log level manager if it implements Disposable
+    if (this.logLevelManager && typeof (this.logLevelManager as any)[Symbol.dispose] === "function") {
+      (this.logLevelManager as any)[Symbol.dispose]();
+    }
+
+    this.logLevelManager = logLevelManager;
+    return this;
+  }
+
+  /**
+   * Returns the log level manager instance being used.
+   */
+  getLogLevelManager<M extends ILogLevelManager = ILogLevelManager>(): M {
+    return this.logLevelManager as M;
   }
 
   /**
@@ -277,12 +283,21 @@ export class LogLayer implements ILogLayer {
 
     const childLogger = new LogLayer(childConfig)
       .withPluginManager(this.pluginManager)
-      .withContextManager(this.contextManager.clone());
+      .withContextManager(this.contextManager.clone())
+      .withLogLevelManager(this.logLevelManager.clone());
 
     // Notify context manager about child logger creation
     this.contextManager.onChildLoggerCreated({
       parentContextManager: this.contextManager,
       childContextManager: childLogger.contextManager,
+      parentLogger: this,
+      childLogger,
+    });
+
+    // Notify log level manager about child logger creation
+    this.logLevelManager.onChildLoggerCreated({
+      parentLogLevelManager: this.logLevelManager,
+      childLogLevelManager: childLogger.logLevelManager,
       parentLogger: this,
       childLogger,
     });
@@ -495,9 +510,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   disableLogging() {
-    for (const level of Object.keys(this.logLevelEnabledStatus)) {
-      this.logLevelEnabledStatus[level as keyof LogLevelEnabledStatus] = false;
-    }
+    this.logLevelManager.disableLogging();
     return this;
   }
 
@@ -507,9 +520,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   enableLogging() {
-    for (const level of Object.keys(this.logLevelEnabledStatus)) {
-      this.logLevelEnabledStatus[level as keyof LogLevelEnabledStatus] = true;
-    }
+    this.logLevelManager.enableLogging();
     return this;
   }
 
@@ -559,10 +570,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   enableIndividualLevel(logLevel: LogLevelType): ILogLayer {
-    const level = logLevel as keyof LogLevelEnabledStatus;
-    if (level in this.logLevelEnabledStatus) {
-      this.logLevelEnabledStatus[level] = true;
-    }
+    this.logLevelManager.enableIndividualLevel(logLevel);
     return this;
   }
 
@@ -572,10 +580,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   disableIndividualLevel(logLevel: LogLevelType): ILogLayer {
-    const level = logLevel as keyof LogLevelEnabledStatus;
-    if (level in this.logLevelEnabledStatus) {
-      this.logLevelEnabledStatus[level] = false;
-    }
+    this.logLevelManager.disableIndividualLevel(logLevel);
     return this;
   }
 
@@ -596,16 +601,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
   setLevel(logLevel: LogLevelType): ILogLayer {
-    const minLogValue = LogLevelPriority[logLevel];
-
-    // Enable levels with value >= minLogValue, disable others
-    for (const level of Object.values(LogLevel)) {
-      const levelKey = level as keyof LogLevelEnabledStatus;
-      const levelValue = LogLevelPriority[level];
-
-      this.logLevelEnabledStatus[levelKey] = levelValue >= minLogValue;
-    }
-
+    this.logLevelManager.setLevel(logLevel);
     return this;
   }
 
@@ -615,8 +611,7 @@ export class LogLayer implements ILogLayer {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#checking-if-a-log-level-is-enabled | Checking if a Log Level is Enabled Docs}
    */
   isLevelEnabled(logLevel: LogLevelType): boolean {
-    const level = logLevel as keyof LogLevelEnabledStatus;
-    return this.logLevelEnabledStatus[level];
+    return this.logLevelManager.isLevelEnabled(logLevel);
   }
 
   private formatContext(context: LogLayerContext | null) {
