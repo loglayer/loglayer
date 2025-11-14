@@ -55,7 +55,7 @@
     "@types/better-sqlite3": "7.6.13",
     "@types/express": "5.0.5",
     "@types/keypress": "2.0.30",
-    "@types/node": "24.9.2",
+    "@types/node": "24.10.1",
     "express": "5.1.0",
     "loglayer": "workspace:*",
     "serialize-error": "12.0.0",

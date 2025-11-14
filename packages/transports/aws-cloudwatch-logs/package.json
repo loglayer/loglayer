@@ -45,13 +45,13 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "24.9.2",
+    "@types/node": "24.10.1",
     "loglayer": "workspace:*",
     "rolldown": "1.0.0-beta.43",
     "tsdown": "0.15.12",
     "tsx": "4.20.6",
     "typescript": "5.9.3",
-    "vitest": "4.0.6"
+    "vitest": "4.0.9"
   },
   "peerDependencies": {
     "@aws-sdk/client-cloudwatch-logs": "*"
