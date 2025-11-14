@@ -1,5 +1,22 @@
 # `loglayer` Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- [#305](https://github.com/loglayer/loglayer/pull/305) [`5af0d6b`](https://github.com/loglayer/loglayer/commit/5af0d6b28f0316007fbbe796c631b711630c6787) Thanks [@theogravity](https://github.com/theogravity)! - New version 8 of LogLayer introduces [Log Level Managers](https://loglayer.dev/log-level-managers/), a system for managing log level settings across logger instances. Log level managers provide a way to control how log levels are inherited and propagated between parent and child loggers.
+
+  _v8 does not have any breaking changes; no migration steps are necessary to upgrade from v7 -> v8 of `loglayer`._
+
+### Patch Changes
+
+- Updated dependencies [[`5af0d6b`](https://github.com/loglayer/loglayer/commit/5af0d6b28f0316007fbbe796c631b711630c6787), [`5af0d6b`](https://github.com/loglayer/loglayer/commit/5af0d6b28f0316007fbbe796c631b711630c6787)]:
+  - @loglayer/shared@3.0.0
+  - @loglayer/log-level-manager@1.0.0
+  - @loglayer/context-manager@1.1.10
+  - @loglayer/plugin@2.2.2
+  - @loglayer/transport@2.3.8
+
 ## 7.2.1
 
 ### Patch Changes
