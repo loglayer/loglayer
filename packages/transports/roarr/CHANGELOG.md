@@ -1,5 +1,12 @@
 # `@loglayer/transport-roarr` Changelog
 
+## 3.1.11
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.8
+
 ## 3.1.10
 
 ### Patch Changes

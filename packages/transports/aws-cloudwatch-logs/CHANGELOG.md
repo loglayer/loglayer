@@ -1,5 +1,12 @@
 # `@loglayer/transport-aws-cloudwatch-logs` Changelog
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.8
+
 ## 1.0.3
 
 ### Patch Changes

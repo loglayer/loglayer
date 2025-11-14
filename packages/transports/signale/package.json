@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-signale",
   "description": "Signale transport for the LogLayer logging library.",
-  "version": "2.1.10",
+  "version": "2.1.11",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

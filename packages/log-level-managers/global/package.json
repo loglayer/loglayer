@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/log-level-manager-global",
   "description": "Log level manager for loglayer that applies log level changes to all loggers globally.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
