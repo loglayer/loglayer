@@ -35,6 +35,8 @@ export default defineConfig({
           'plugins/_partials/*',
           'context-managers/changelogs/*',
           'context-managers/_partials/*',
+          'log-level-managers/changelogs/*',
+          'log-level-managers/_partials/*',
           'core-changelogs/*',
           '_partials/*',
           'ai-support.md',
@@ -213,6 +215,19 @@ export default defineConfig({
           { text: 'Available Mixins', items: [
               { text: 'Hot-Shots (StatsD)', link: '/mixins/hot-shots' },
           ]}
+        ]
+      },
+      {
+        text: 'Log Level Managers (v8)',
+        items: [
+          { text: 'Overview', link: '/log-level-managers/' },
+          { text: 'Creating Log Level Managers', link: '/log-level-managers/creating-log-level-managers' },
+          { text: 'Available Log Level Managers', items: [
+              { text: 'Default', link: '/log-level-managers/default' },
+              { text: 'Global', link: '/log-level-managers/global' },
+              { text: 'One Way', link: '/log-level-managers/one-way' },
+              { text: 'Linked', link: '/log-level-managers/linked' }
+            ]}
         ]
       },
       {

@@ -7,6 +7,21 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Nov 14, 2025
+
+`loglayer`:
+
+New version 8 introduces [Log Level Managers](/log-level-managers/), a system for managing log level settings across logger instances. Log level managers provide a way to control how log levels are inherited and propagated between parent and child loggers.
+
+Four log level managers are available:
+
+- **Default Log Level Manager** - (This has always been the default LogLayer behavior) Children inherit log level from parent, but changes from parent do not propagate down
+- **Global Log Level Manager** - Changes apply to all loggers globally, regardless of parent/child relationships
+- **One Way Log Level Manager** - Parent changes affect children, but child changes do not affect parents
+- **Linked Log Level Manager** - Parent and child changes affect each other bidirectionally
+
+See the [Log Level Managers documentation](/log-level-managers/) for more information.
+
 ## Nov 12, 2025
 
 Documentation:

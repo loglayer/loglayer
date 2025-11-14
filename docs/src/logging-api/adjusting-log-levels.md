@@ -88,3 +88,32 @@ if (log.isLevelEnabled(LogLevel.debug)) {
 }
 ```
 
+## Log Level Managers
+
+*New in LogLayer v8*.
+
+Log level managers control how log levels are inherited and propagated between parent and child loggers. By default, LogLayer uses the [**Default Log Level Manager**](/log-level-managers/default), which provides independent log level management for each logger instance.
+
+With the default log level manager, child loggers inherit the log level from their parent when created, but subsequent changes to the parent's log level do not affect existing children:
+
+```typescript
+import { LogLayer, ConsoleTransport, LogLevel } from "loglayer";
+
+const parentLog = new LogLayer({
+  transport: new ConsoleTransport({ logger: console })
+});
+
+parentLog.setLevel(LogLevel.warn);
+const childLog = parentLog.child();
+
+// Child inherits parent's log level at creation
+childLog.isLevelEnabled(LogLevel.warn); // true
+childLog.isLevelEnabled(LogLevel.info); // false
+
+// Parent change does not affect child
+parentLog.setLevel(LogLevel.debug);
+childLog.isLevelEnabled(LogLevel.debug); // false (child not affected)
+```
+
+For more information about log level managers and available options, see the [Log Level Managers documentation](/log-level-managers/).
+
