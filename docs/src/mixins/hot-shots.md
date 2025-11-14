@@ -67,6 +67,21 @@ log.statsGauge('active.connections', 42).info('Connection established');
 
 <!--@include: ./_partials/using-mixins-with-iloglayer.md-->
 
+### Troubleshooting
+
+If TypeScript types still do not work after following the [TypeScript Type Usage](#typescript-type-usage) instructions, you can manually add the module declaration to a type declaration file. Create a type declaration file (e.g., `loglayer.d.ts` or add it to an existing declaration file) and include the following:
+
+```typescript
+import type { IHotShotsMixin } from '@loglayer/mixin-hot-shots';
+
+declare module "loglayer" {
+  interface LogLayer extends IHotShotsMixin<LogLayer> {}
+  interface MockLogLayer extends IHotShotsMixin<MockLogLayer> {}
+}
+```
+
+This will ensure TypeScript recognizes the mixin methods on your `LogLayer` instances.
+
 ## Migration from v1 to v2
 
 In v2, the mixin now uses a generic interface pattern (`IHotShotsMixin<T>`) that allows usage with the `ILogLayer` interface.
