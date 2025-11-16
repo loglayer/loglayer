@@ -6,7 +6,7 @@
 
 Adds StatsD metrics functionality to the [LogLayer](https://loglayer.dev) logging library using [hot-shots](https://github.com/bdeitte/hot-shots).
 
-All hot-shots methods are namespaced with `stats`, so `increment` becomes `statsIncrement`, `timing` becomes `statsTiming`, etc. See the [hot-shots documentation](https://github.com/bdeitte/hot-shots) for detailed usage information about available methods and options.
+The mixin provides a fluent builder API for sending metrics to StatsD, DogStatsD, and Telegraf through a `stats` property on LogLayer instances. See the [hot-shots documentation](https://github.com/bdeitte/hot-shots) for detailed usage information about available methods and options.
 
 ## Installation
 
@@ -45,11 +45,18 @@ const log = new LogLayer({
   })
 });
 
-// Use StatsD methods on LogLayer
-log.statsIncrement('request.count').withMetadata({ reqId: '1234' }).info('Request received');
-log.statsDecrement('request.count');
-log.statsTiming('request.duration', 150).info('Request processed');
-log.statsGauge('active.connections', 42).info('Connection established');
+// Use StatsD methods through the stats property
+log.stats.increment('request.count').send();
+log.stats.decrement('request.count').send();
+log.stats.timing('request.duration', 150).send();
+log.stats.gauge('active.connections', 42).send();
+
+// Use builder pattern for advanced configuration
+log.stats.increment('request.count')
+  .withValue(5)
+  .withTags(['env:production', 'service:api'])
+  .withSampleRate(0.5)
+  .send();
 ```
 
 ## Documentation

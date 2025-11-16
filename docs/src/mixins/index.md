@@ -45,9 +45,9 @@ const log = new LogLayer({
   })
 });
 
-// Use the mixin methods
-log.statsIncrement('request.count').info('Request received');
-log.statsTiming('request.duration', 150).info('Request processed');
+// Use the mixin methods through the stats property
+log.stats.increment('request.count').send();
+log.stats.timing('request.duration', 150).send();
 ```
 
 ### TypeScript Interface Support

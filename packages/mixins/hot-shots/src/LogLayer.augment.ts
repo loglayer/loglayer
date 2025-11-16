@@ -1,121 +1,39 @@
-import type { LogLayer } from "loglayer";
-import { getStatsDClient } from "./client.js";
+import type { LogLayer, LogLayerMixin } from "loglayer";
+import { LogLayerMixinAugmentType } from "loglayer";
+import "./types.js"; // Import types to ensure declarations are processed
+import { getStatsClient } from "./LogBuilder.augment.js";
+import { StatsAPI } from "./StatsAPI.js";
 
-export function augmentLogLayer(prototype: typeof LogLayer.prototype): void {
-  // statsIncrement
-  prototype.statsIncrement = function (this: LogLayer, ...args: any[]): LogLayer {
-    const client = getStatsDClient();
-    if (client) {
-      (client.increment as any)(...args);
-    }
-    return this;
-  } as any;
-
-  // statsDecrement
-  prototype.statsDecrement = function (this: LogLayer, ...args: any[]): LogLayer {
-    const client = getStatsDClient();
-    if (client) {
-      (client.decrement as any)(...args);
-    }
-    return this;
-  } as any;
-
-  // statsTiming
-  prototype.statsTiming = function (this: LogLayer, ...args: any[]): LogLayer {
-    const client = getStatsDClient();
-    if (client) {
-      (client.timing as any)(...args);
-    }
-    return this;
-  } as any;
-
-  // statsTimer
-  prototype.statsTimer = ((...args: any[]): any => {
-    const client = getStatsDClient();
-    if (client) {
-      return (client.timer as any)(...args);
-    }
-    return args[0]; // Return the function if client is null
-  }) as any;
-
-  // statsAsyncTimer
-  prototype.statsAsyncTimer = ((...args: any[]): any => {
-    const client = getStatsDClient();
-    if (client) {
-      return (client.asyncTimer as any)(...args);
-    }
-    return args[0]; // Return the function if client is null
-  }) as any;
-
-  // statsAsyncDistTimer
-  prototype.statsAsyncDistTimer = ((...args: any[]): any => {
-    const client = getStatsDClient();
-    if (client) {
-      return (client.asyncDistTimer as any)(...args);
-    }
-    return args[0]; // Return the function if client is null
-  }) as any;
-
-  // statsHistogram
-  prototype.statsHistogram = function (this: LogLayer, ...args: any[]): LogLayer {
-    const client = getStatsDClient();
-    if (client) {
-      (client.histogram as any)(...args);
-    }
-    return this;
-  } as any;
-
-  // statsDistribution
-  prototype.statsDistribution = function (this: LogLayer, ...args: any[]): LogLayer {
-    const client = getStatsDClient();
-    if (client) {
-      (client.distribution as any)(...args);
-    }
-    return this;
-  } as any;
-
-  // statsGauge
-  prototype.statsGauge = function (this: LogLayer, ...args: any[]): LogLayer {
-    const client = getStatsDClient();
-    if (client) {
-      (client.gauge as any)(...args);
-    }
-    return this;
-  } as any;
-
-  // statsGaugeDelta
-  prototype.statsGaugeDelta = function (this: LogLayer, ...args: any[]): LogLayer {
-    const client = getStatsDClient();
-    if (client) {
-      (client.gaugeDelta as any)(...args);
-    }
-    return this;
-  } as any;
-
-  // statsSet
-  prototype.statsSet = function (this: LogLayer, ...args: any[]): LogLayer {
-    const client = getStatsDClient();
-    if (client) {
-      (client.set as any)(...args);
-    }
-    return this;
-  } as any;
-
-  // statsUnique
-  prototype.statsUnique = function (this: LogLayer, ...args: any[]): LogLayer {
-    const client = getStatsDClient();
-    if (client) {
-      (client.unique as any)(...args);
-    }
-    return this;
-  } as any;
-
-  // statsCheck
-  prototype.statsCheck = function (this: LogLayer, ...args: any[]): LogLayer {
-    const client = getStatsDClient();
-    if (client) {
-      (client.check as any)(...args);
-    }
-    return this;
-  } as any;
-}
+/**
+ * LogLayer mixin that adds a `stats` property to LogLayer instances.
+ * Provides access to the StatsAPI for sending metrics.
+ */
+export const logLayerHotShotsMixin: LogLayerMixin = {
+  augmentationType: LogLayerMixinAugmentType.LogLayer,
+  augment: (prototype) => {
+    Object.defineProperty(prototype, "stats", {
+      get(this: LogLayer) {
+        // Create stats API lazily and cache it
+        if (!(this as any)._statsAPI) {
+          (this as any)._statsAPI = new StatsAPI(getStatsClient());
+        }
+        return (this as any)._statsAPI;
+      },
+      enumerable: true,
+      configurable: true,
+    });
+  },
+  augmentMock: (prototype) => {
+    // Mock implementation - return a no-op stats API
+    Object.defineProperty(prototype, "stats", {
+      get() {
+        if (!(this as any)._statsAPI) {
+          (this as any)._statsAPI = new StatsAPI(getStatsClient());
+        }
+        return (this as any)._statsAPI;
+      },
+      enumerable: true,
+      configurable: true,
+    });
+  },
+};

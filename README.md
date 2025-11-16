@@ -98,10 +98,13 @@ const log = new LogLayer({
   })
 });
 
-// Use StatsD methods directly on LogLayer
-log.statsIncrement('request.count').info('Request received');
-log.statsTiming('request.duration', 150).info('Request processed');
-log.statsGauge('active.connections', 42).info('Connection established');
+// Use StatsD methods through the stats property
+log.stats.increment('request.count').send();
+log.info('Request received');
+log.stats.timing('request.duration', 150).send();
+log.info('Request processed');
+log.stats.gauge('active.connections', 42).send();
+log.info('Connection established');
 ```
 
 ## Development Setup
