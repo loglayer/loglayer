@@ -7,6 +7,31 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Nov 15, 2025
+
+`@loglayer/mixin-hot-shots`:
+
+- **v3.0.0**: Major refactoring of the mixin API to use a fluent builder pattern. The mixin now exposes a `stats` property on LogLayer instances with a builder-based API for sending metrics. This provides better type safety, more flexible configuration, and a cleaner API surface.
+
+It was noted during real-world testing that the API didn't feel right; for example:
+
+```typescript
+log.statsIncrement("blah").withMetadata({
+  data: blah
+}).info("test")
+```
+
+Someone mistook withMetadata usage here to mean that the stats itself would be tagged.
+
+**Breaking Changes:**
+- All stats methods are now accessed through the `stats` property: `log.stats.increment('counter').send()` instead of `log.statsIncrement('counter')`
+- Stats methods no longer return LogLayer instances for chaining; they use a builder pattern with a `send()` method
+- Optional parameters are now configured using builder methods: `withValue()`, `withTags()`, `withSampleRate()`, `withCallback()`
+
+We do not expect to make any further breaking changes to the API.
+
+See the [migration guide](/mixins/hot-shots#migration-from-v2-to-v3) for detailed steps on updating your code.
+
 ## Nov 14, 2025
 
 `loglayer`:

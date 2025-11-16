@@ -1,553 +1,142 @@
-import type { CheckOptions, DatadogChecksValues, StatsCb, Tags } from "hot-shots";
+import type { CheckOptions, DatadogChecksValues } from "hot-shots";
 
-export interface IHotShotsMixin<T> {
+// Type for StatsD client instance
+export type StatsDClient = InstanceType<typeof import("hot-shots").default>;
+
+/**
+ * Callback function type for stats operations
+ */
+export type StatsCallback = (error?: Error, bytes?: number) => void;
+
+/**
+ * Tags can be provided as an array of strings or an object
+ */
+export type StatsTags = string[] | Record<string, string>;
+
+/**
+ * Builder interface for chaining stats method configurations
+ */
+export interface IStatsBuilder {
   /**
-   * Increments a counter stat by one.
-   * @param stat - The stat name to increment
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @returns The instance instance for chaining
+   * Add tags to the metric
    */
-  statsIncrement(stat: string, tags?: Tags): T;
-  /**
-   * Increments a counter stat by a specified value.
-   * @param stat - The stat name(s) to increment
-   * @param value - The value to increment by
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsIncrement(stat: string | string[], value: number, sampleRate?: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Increments a counter stat by a specified value.
-   * @param stat - The stat name(s) to increment
-   * @param value - The value to increment by
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsIncrement(stat: string | string[], value: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Increments a counter stat by a specified value.
-   * @param stat - The stat name(s) to increment
-   * @param value - The value to increment by
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsIncrement(stat: string | string[], value: number, callback?: StatsCb): T;
-  /**
-   * Increments a counter stat by a specified value.
-   * @param stat - The stat name(s) to increment
-   * @param value - The value to increment by
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsIncrement(stat: string | string[], value: number, sampleRate?: number, callback?: StatsCb): T;
+  withTags(tags: StatsTags): IStatsBuilder;
 
   /**
-   * Decrements a counter stat by one.
-   * @param stat - The stat name to decrement
-   * @returns The instance instance for chaining
+   * Set the sample rate for the metric (0.0 to 1.0)
    */
-  statsDecrement(stat: string): T;
-  /**
-   * Decrements a counter stat by one.
-   * @param stat - The stat name to decrement
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @returns The instance instance for chaining
-   */
-  statsDecrement(stat: string, tags?: Tags): T;
-  /**
-   * Decrements a counter stat by a specified value.
-   * @param stat - The stat name(s) to decrement
-   * @param value - The value to decrement by
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsDecrement(stat: string | string[], value: number, sampleRate?: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Decrements a counter stat by a specified value.
-   * @param stat - The stat name(s) to decrement
-   * @param value - The value to decrement by
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsDecrement(stat: string | string[], value: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Decrements a counter stat by a specified value.
-   * @param stat - The stat name(s) to decrement
-   * @param value - The value to decrement by
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsDecrement(stat: string | string[], value: number, callback?: StatsCb): T;
-  /**
-   * Decrements a counter stat by a specified value.
-   * @param stat - The stat name(s) to decrement
-   * @param value - The value to decrement by
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsDecrement(stat: string | string[], value: number, sampleRate?: number, callback?: StatsCb): T;
+  withSampleRate(rate: number): IStatsBuilder;
 
   /**
-   * Sends a timing command with the specified milliseconds or Date object.
-   * If a Date object is provided, the difference from now is calculated in milliseconds.
-   * @param stat - The stat name(s) to record timing for
-   * @param value - The timing value in milliseconds, or a Date object to calculate the difference
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
+   * Add a callback function to be called after sending the metric
    */
-  statsTiming(stat: string | string[], value: number | Date, sampleRate?: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Sends a timing command with the specified milliseconds or Date object.
-   * @param stat - The stat name(s) to record timing for
-   * @param value - The timing value in milliseconds, or a Date object to calculate the difference
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsTiming(stat: string | string[], value: number | Date, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Sends a timing command with the specified milliseconds or Date object.
-   * @param stat - The stat name(s) to record timing for
-   * @param value - The timing value in milliseconds, or a Date object to calculate the difference
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsTiming(stat: string | string[], value: number | Date, callback?: StatsCb): T;
-  /**
-   * Sends a timing command with the specified milliseconds or Date object.
-   * @param stat - The stat name(s) to record timing for
-   * @param value - The timing value in milliseconds, or a Date object to calculate the difference
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsTiming(stat: string | string[], value: number | Date, sampleRate?: number, callback?: StatsCb): T;
+  withCallback(callback: StatsCallback): IStatsBuilder;
 
   /**
-   * Returns a function that records how long the first parameter (function) takes to execute
-   * and then sends that value using timing. The returned function accepts the same parameters
-   * as the original function.
-   * @param func - The function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function with the same signature as the input function that records timing
+   * Send the metric with the configured options
    */
-  statsTimer<P extends any[], R>(
-    func: (...args: P) => R,
-    stat: string | string[],
-    sampleRate?: number,
-    tags?: Tags,
-    callback?: StatsCb,
-  ): (...args: P) => R;
+  send(): void;
+}
+
+/**
+ * Builder interface specifically for increment/decrement methods with withValue support
+ */
+export interface IIncrementDecrementBuilder extends IStatsBuilder {
   /**
-   * Returns a function that records how long the first parameter (function) takes to execute
-   * and then sends that value using timing.
-   * @param func - The function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function with the same signature as the input function that records timing
+   * Set the increment/decrement value
    */
-  statsTimer<P extends any[], R>(
-    func: (...args: P) => R,
-    stat: string | string[],
-    tags?: Tags,
-    callback?: StatsCb,
-  ): (...args: P) => R;
+  withValue(value: number): IIncrementDecrementBuilder;
+}
+
+/**
+ * Builder interface specifically for event method with withText support
+ */
+export interface IEventBuilder extends IStatsBuilder {
   /**
-   * Returns a function that records how long the first parameter (function) takes to execute
-   * and then sends that value using timing.
-   * @param func - The function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function with the same signature as the input function that records timing
+   * Set the event text
    */
-  statsTimer<P extends any[], R>(
-    func: (...args: P) => R,
-    stat: string | string[],
-    callback?: StatsCb,
-  ): (...args: P) => R;
+  withText(text: string): IEventBuilder;
+}
+
+/**
+ * Builder interface specifically for check method with withOptions support
+ */
+export interface ICheckBuilder extends IStatsBuilder {
   /**
-   * Returns a function that records how long the first parameter (function) takes to execute
-   * and then sends that value using timing.
-   * @param func - The function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function with the same signature as the input function that records timing
+   * Set service check options
    */
-  statsTimer<P extends any[], R>(
-    func: (...args: P) => R,
-    stat: string | string[],
-    sampleRate?: number,
-    callback?: StatsCb,
-  ): (...args: P) => R;
+  withOptions(options: CheckOptions): ICheckBuilder;
+}
+
+/**
+ * Stats API interface containing all hot-shots methods
+ */
+export interface IStatsAPI {
+  /**
+   * Increment a counter metric
+   */
+  increment(stat: string | string[]): IIncrementDecrementBuilder;
 
   /**
-   * Similar to statsTimer, but for functions that return a Promise. Returns a Promise that
-   * records the timing of the function execution.
-   * @param func - The async function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function that returns a Promise with the same signature as the input function
+   * Decrement a counter metric
    */
-  statsAsyncTimer<P extends any[], R>(
-    func: (...args: P) => Promise<R>,
-    stat: string | string[],
-    sampleRate?: number,
-    tags?: Tags,
-    callback?: StatsCb,
-  ): (...args: P) => Promise<R>;
-  /**
-   * Similar to statsTimer, but for functions that return a Promise.
-   * @param func - The async function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function that returns a Promise with the same signature as the input function
-   */
-  statsAsyncTimer<P extends any[], R>(
-    func: (...args: P) => Promise<R>,
-    stat: string | string[],
-    tags?: Tags,
-    callback?: StatsCb,
-  ): (...args: P) => Promise<R>;
-  /**
-   * Similar to statsTimer, but for functions that return a Promise.
-   * @param func - The async function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function that returns a Promise with the same signature as the input function
-   */
-  statsAsyncTimer<P extends any[], R>(
-    func: (...args: P) => Promise<R>,
-    stat: string | string[],
-    callback?: StatsCb,
-  ): (...args: P) => Promise<R>;
-  /**
-   * Similar to statsTimer, but for functions that return a Promise.
-   * @param func - The async function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function that returns a Promise with the same signature as the input function
-   */
-  statsAsyncTimer<P extends any[], R>(
-    func: (...args: P) => Promise<R>,
-    stat: string | string[],
-    sampleRate?: number,
-    callback?: StatsCb,
-  ): (...args: P) => Promise<R>;
+  decrement(stat: string | string[]): IIncrementDecrementBuilder;
 
   /**
-   * Similar to statsAsyncTimer, but records the timing as a distribution metric instead of a timing.
-   * Distribution metrics track the statistical distribution of values (DogStatsD).
-   * @param func - The async function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function that returns a Promise with the same signature as the input function
+   * Set a gauge metric to a specific value
    */
-  statsAsyncDistTimer<P extends any[], R>(
-    func: (...args: P) => Promise<R>,
-    stat: string | string[],
-    sampleRate?: number,
-    tags?: Tags,
-    callback?: StatsCb,
-  ): (...args: P) => Promise<R>;
-  /**
-   * Similar to statsAsyncTimer, but records the timing as a distribution metric.
-   * @param func - The async function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function that returns a Promise with the same signature as the input function
-   */
-  statsAsyncDistTimer<P extends any[], R>(
-    func: (...args: P) => Promise<R>,
-    stat: string | string[],
-    tags?: Tags,
-    callback?: StatsCb,
-  ): (...args: P) => Promise<R>;
-  /**
-   * Similar to statsAsyncTimer, but records the timing as a distribution metric.
-   * @param func - The async function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function that returns a Promise with the same signature as the input function
-   */
-  statsAsyncDistTimer<P extends any[], R>(
-    func: (...args: P) => Promise<R>,
-    stat: string | string[],
-    callback?: StatsCb,
-  ): (...args: P) => Promise<R>;
-  /**
-   * Similar to statsAsyncTimer, but records the timing as a distribution metric.
-   * @param func - The async function to instrument
-   * @param stat - The stat name(s) to record timing for
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns A function that returns a Promise with the same signature as the input function
-   */
-  statsAsyncDistTimer<P extends any[], R>(
-    func: (...args: P) => Promise<R>,
-    stat: string | string[],
-    sampleRate?: number,
-    callback?: StatsCb,
-  ): (...args: P) => Promise<R>;
+  gauge(stat: string | string[], value: number): IStatsBuilder;
 
   /**
-   * Records a value in a histogram. Histograms track the statistical distribution of values
-   * across your infrastructure (DogStatsD/Telegraf only).
-   * @param stat - The stat name(s) to record
-   * @param value - The value to record
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
+   * Change a gauge metric by a delta amount
    */
-  statsHistogram(stat: string | string[], value: number, sampleRate?: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Records a value in a histogram.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to record
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsHistogram(stat: string | string[], value: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Records a value in a histogram.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to record
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsHistogram(stat: string | string[], value: number, callback?: StatsCb): T;
-  /**
-   * Records a value in a histogram.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to record
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsHistogram(stat: string | string[], value: number, sampleRate?: number, callback?: StatsCb): T;
+  gaugeDelta(stat: string | string[], delta: number): IStatsBuilder;
 
   /**
-   * Tracks the statistical distribution of a set of values across your infrastructure (DogStatsD v6).
-   * Similar to histogram but optimized for distributions.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to record
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
+   * Record a histogram value
    */
-  statsDistribution(stat: string | string[], value: number, sampleRate?: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Tracks the statistical distribution of a set of values.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to record
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsDistribution(stat: string | string[], value: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Tracks the statistical distribution of a set of values.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to record
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsDistribution(stat: string | string[], value: number, callback?: StatsCb): T;
-  /**
-   * Tracks the statistical distribution of a set of values.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to record
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsDistribution(stat: string | string[], value: number, sampleRate?: number, callback?: StatsCb): T;
+  histogram(stat: string | string[], value: number): IStatsBuilder;
 
   /**
-   * Sets or changes a gauge stat to the specified value.
-   * @param stat - The stat name(s) to set
-   * @param value - The value to set the gauge to
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
+   * Record a distribution value (DataDog v6)
    */
-  statsGauge(stat: string | string[], value: number, sampleRate?: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Sets or changes a gauge stat to the specified value.
-   * @param stat - The stat name(s) to set
-   * @param value - The value to set the gauge to
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsGauge(stat: string | string[], value: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Sets or changes a gauge stat to the specified value.
-   * @param stat - The stat name(s) to set
-   * @param value - The value to set the gauge to
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsGauge(stat: string | string[], value: number, callback?: StatsCb): T;
-  /**
-   * Sets or changes a gauge stat to the specified value.
-   * @param stat - The stat name(s) to set
-   * @param value - The value to set the gauge to
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsGauge(stat: string | string[], value: number, sampleRate?: number, callback?: StatsCb): T;
+  distribution(stat: string | string[], value: number): IStatsBuilder;
 
   /**
-   * Changes a gauge stat by a specified amount rather than setting it to a value.
-   * Use this to increment or decrement a gauge by a delta.
-   * @param stat - The stat name(s) to change
-   * @param value - The delta value to change the gauge by (can be positive or negative)
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
+   * Record a timing value in milliseconds
    */
-  statsGaugeDelta(stat: string | string[], value: number, sampleRate?: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Changes a gauge stat by a specified amount rather than setting it.
-   * @param stat - The stat name(s) to change
-   * @param value - The delta value to change the gauge by
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsGaugeDelta(stat: string | string[], value: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Changes a gauge stat by a specified amount rather than setting it.
-   * @param stat - The stat name(s) to change
-   * @param value - The delta value to change the gauge by
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsGaugeDelta(stat: string | string[], value: number, callback?: StatsCb): T;
-  /**
-   * Changes a gauge stat by a specified amount rather than setting it.
-   * @param stat - The stat name(s) to change
-   * @param value - The delta value to change the gauge by
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsGaugeDelta(stat: string | string[], value: number, sampleRate?: number, callback?: StatsCb): T;
+  timing(stat: string | string[], value: number | Date): IStatsBuilder;
 
   /**
-   * Counts unique occurrences of a stat. Records how many unique elements were tracked.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to track uniqueness for (number or string)
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
+   * Record a unique/set value
    */
-  statsSet(stat: string | string[], value: number | string, sampleRate?: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Counts unique occurrences of a stat.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to track uniqueness for (number or string)
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsSet(stat: string | string[], value: number | string, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Counts unique occurrences of a stat.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to track uniqueness for (number or string)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsSet(stat: string | string[], value: number | string, callback?: StatsCb): T;
-  /**
-   * Counts unique occurrences of a stat.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to track uniqueness for (number or string)
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsSet(stat: string | string[], value: number | string, sampleRate?: number, callback?: StatsCb): T;
+  set(stat: string | string[], value: string | number): IStatsBuilder;
 
   /**
-   * Counts unique occurrences of a stat (alias for statsSet).
-   * Records how many unique elements were tracked.
-   * @param stat - The stat name(s) to record
-   * @param value - The value to track uniqueness for (number or string)
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
+   * Record a unique/set value (alias of set)
    */
-  statsUnique(stat: string | string[], value: number | string, sampleRate?: number, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Counts unique occurrences of a stat (alias for statsSet).
-   * @param stat - The stat name(s) to record
-   * @param value - The value to track uniqueness for (number or string)
-   * @param tags - Optional tags to attach to the metric (DogStatsD/Telegraf only)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsUnique(stat: string | string[], value: number | string, tags?: Tags, callback?: StatsCb): T;
-  /**
-   * Counts unique occurrences of a stat (alias for statsSet).
-   * @param stat - The stat name(s) to record
-   * @param value - The value to track uniqueness for (number or string)
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsUnique(stat: string | string[], value: number | string, callback?: StatsCb): T;
-  /**
-   * Counts unique occurrences of a stat (alias for statsSet).
-   * @param stat - The stat name(s) to record
-   * @param value - The value to track uniqueness for (number or string)
-   * @param sampleRate - Optional sample rate (0-1). The StatsD daemon will compensate for sampling
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
-   */
-  statsUnique(stat: string | string[], value: number | string, sampleRate?: number, callback?: StatsCb): T;
+  unique(stat: string | string[], value: string | number): IStatsBuilder;
 
   /**
-   * Sends a service check status (DogStatsD only).
-   * Service checks monitor the status of an external service that your application depends on.
-   * @param name - The name of the service check
-   * @param status - The status of the check (OK, WARNING, CRITICAL, UNKNOWN)
-   * @param options - Optional check options (hostname, timestamp, message)
-   * @param tags - Optional tags to attach to the check
-   * @param callback - Optional callback function that receives (error, bytes)
-   * @returns The instance instance for chaining
+   * Send an event (DataDog only)
    */
-  statsCheck(name: string, status: DatadogChecksValues, options?: CheckOptions, tags?: Tags, callback?: StatsCb): T;
+  event(title: string): IEventBuilder;
+
+  /**
+   * Send a service check (DataDog only)
+   */
+  check(name: string, status: DatadogChecksValues): ICheckBuilder;
+}
+
+/**
+ * Generic mixin interface for hot-shots stats methods
+ * T is the instance type (LogLayer or MockLogLayer)
+ */
+export interface IHotShotsMixin<_T> {
+  /**
+   * Access to stats API for sending metrics
+   */
+  stats: IStatsAPI;
 }
 
 declare module "loglayer" {

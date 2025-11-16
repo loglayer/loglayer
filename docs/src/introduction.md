@@ -162,8 +162,10 @@ const log = new LogLayer({
 });
 
 // Send metrics and logs together
-log.statsIncrement('request.count').withMetadata({ reqId: '1234' }).info('Request received');
-log.statsTiming('request.duration', 150).info('Request processed');
+log.stats.increment('request.count').send();
+log.withMetadata({ reqId: '1234' }).info('Request received');
+log.stats.timing('request.duration', 150).send();
+log.info('Request processed');
 ```
 
 See more about [mixins](/mixins/).
