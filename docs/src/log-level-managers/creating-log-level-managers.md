@@ -155,10 +155,69 @@ interface ILogLevelManager {
 
 When using a log level manager with a LogLayer logger instance:
 
-1. The log level manager is initialized when the logger is created (or when `withLogLevelManager()` is called)
-2. When a child logger is created via `child()`, the parent's log level manager is cloned
-3. The `onChildLoggerCreated()` method is called to allow the manager to set up relationships between parent and child
-4. Log level changes are managed through the manager's methods
+- The log level manager is initialized when the logger is created (or when `withLogLevelManager()` is called)
+  - If the existing log level manager implements [`Disposable`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management), it will be called to clean up resources
+- When a child logger is created via `child()`, the parent's log level manager is cloned
+- The `onChildLoggerCreated()` method is called to allow the manager to set up relationships between parent and child
+- Log level changes are managed through the manager's methods
+
+## Resource Cleanup with Disposable
+
+If your log level manager needs to clean up resources (like parent-child references, memory, or external connections), 
+you can implement the [`Disposable`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management) interface. 
+
+LogLayer will automatically call the dispose method when the log level manager is replaced using `withLogLevelManager()` if defined.
+
+### Implementing Disposable
+
+To make your log level manager disposable:
+
+1. Add `Disposable` to your class implementation
+2. Implement the `[Symbol.dispose]()` method
+3. Add a flag to track the disposed state
+4. Guard your methods against calls after disposal
+
+Here's an example:
+
+```typescript
+export class MyLogLevelManager implements ILogLevelManager, Disposable {
+  private isDisposed = false;
+  private logLevelEnabledStatus: LogLevelEnabledStatus = {
+    info: true,
+    warn: true,
+    error: true,
+    debug: true,
+    trace: true,
+    fatal: true,
+  };
+  private parentManager: WeakRef<MyLogLevelManager> | null = null;
+  private childManagers: Set<WeakRef<MyLogLevelManager>> = new Set();
+
+  // ... other methods ...
+  setLevel(logLevel: LogLevelType): void {
+    if (this.isDisposed) return;
+    // Implementation
+  }
+
+  isLevelEnabled(logLevel: LogLevelType): boolean {
+    if (this.isDisposed) return false;
+    // Implementation
+  }
+
+  [Symbol.dispose](): void {
+    if (this.isDisposed) return;
+    
+    // Clean up resources
+    this.parentManager = null;
+    this.childManagers.clear();
+    this.isDisposed = true;
+  }
+}
+```
+
+:::tip
+Always implement `Disposable` if your log level manager holds onto resources that need cleanup (like parent-child references). This ensures proper resource management and prevents memory leaks.
+:::
 
 ## Example Implementation
 

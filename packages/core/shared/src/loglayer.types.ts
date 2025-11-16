@@ -73,6 +73,11 @@ export interface OnChildLoggerCreatedParams {
 
 /**
  * Interface for implementing a context manager instance.
+ *
+ * If your context manager needs to clean up resources (like file handles, memory, or external connections),
+ * you can optionally implement the {@link https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management | Disposable} interface.
+ * LogLayer will automatically call the dispose method when the context manager is replaced using `withContextManager()`.
+ *
  * @see {@link https://loglayer.dev/context-managers/creating-context-managers.html | Creating Context Managers Docs}
  */
 export interface IContextManager {
@@ -129,6 +134,10 @@ export interface OnChildLogLevelManagerCreatedParams {
  *
  * Log level managers are responsible for managing log level settings across logger instances.
  * They control how log levels are inherited and propagated between parent and child loggers.
+ *
+ * If your log level manager needs to clean up resources (like parent-child references, memory, or external connections),
+ * you can optionally implement the {@link https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management | Disposable} interface.
+ * LogLayer will automatically call the dispose method when the log level manager is replaced using `withLogLevelManager()`.
  *
  * @see {@link https://loglayer.dev/log-level-managers/creating-log-level-managers.html | Creating Log Level Managers Docs}
  */

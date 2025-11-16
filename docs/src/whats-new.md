@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## November 16, 2025
+
+`@loglayer/log-level-manager-one-way` and `@loglayer/log-level-manager-linked`:
+
+- **Memory leak fix**: Fixed a memory leak issue where circular references between parent and child log level managers prevented proper garbage collection. The managers now use `WeakRef` for parent and child references, allowing objects to be garbage collected when no longer referenced.
+
 ## Nov 15, 2025
 
 `@loglayer/mixin-hot-shots`:

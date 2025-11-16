@@ -15,7 +15,7 @@ interface LogLevelEnabledStatus {
  * Parent changes affect children, but child changes do not affect parents.
  * Changes only apply to a parent and their children (not separate instances).
  */
-export class OneWayLogLevelManager implements ILogLevelManager {
+export class OneWayLogLevelManager implements ILogLevelManager, Disposable {
   private logLevelContainer: { status: LogLevelEnabledStatus } = {
     status: {
       info: true,
@@ -26,8 +26,34 @@ export class OneWayLogLevelManager implements ILogLevelManager {
       fatal: true,
     },
   };
-  private parentManager: OneWayLogLevelManager | null = null;
-  private childManagers: Set<OneWayLogLevelManager> = new Set();
+  private parentManager: WeakRef<OneWayLogLevelManager> | null = null;
+  private childManagers: Set<WeakRef<OneWayLogLevelManager>> = new Set();
+  private isDisposed = false;
+
+  /**
+   * Gets all alive child managers and removes dead references.
+   * This prevents memory leaks by cleaning up references to garbage collected children.
+   */
+  private getAliveChildren(): OneWayLogLevelManager[] {
+    const aliveChildren: OneWayLogLevelManager[] = [];
+    const deadRefs: WeakRef<OneWayLogLevelManager>[] = [];
+
+    for (const childRef of this.childManagers) {
+      const child = childRef.deref();
+      if (child) {
+        aliveChildren.push(child);
+      } else {
+        deadRefs.push(childRef);
+      }
+    }
+
+    // Clean up dead references
+    for (const deadRef of deadRefs) {
+      this.childManagers.delete(deadRef);
+    }
+
+    return aliveChildren;
+  }
 
   /**
    * Sets the minimum log level to be used by the logger. Only messages with
@@ -36,6 +62,8 @@ export class OneWayLogLevelManager implements ILogLevelManager {
    * If this is a child, the change only applies to this instance.
    */
   setLevel(logLevel: LogLevelType): void {
+    if (this.isDisposed) return;
+
     const minLogValue = LogLevelPriority[logLevel];
 
     // Enable levels with value >= minLogValue, disable others
@@ -47,10 +75,9 @@ export class OneWayLogLevelManager implements ILogLevelManager {
     }
 
     // If this is a parent, propagate changes to all children
-    if (this.childManagers.size > 0) {
-      for (const child of this.childManagers) {
-        child.setLevel(logLevel);
-      }
+    const aliveChildren = this.getAliveChildren();
+    for (const child of aliveChildren) {
+      child.setLevel(logLevel);
     }
   }
 
@@ -60,16 +87,17 @@ export class OneWayLogLevelManager implements ILogLevelManager {
    * If this is a child, the change only applies to this instance.
    */
   enableIndividualLevel(logLevel: LogLevelType): void {
+    if (this.isDisposed) return;
+
     const level = logLevel as keyof LogLevelEnabledStatus;
     if (level in this.logLevelContainer.status) {
       this.logLevelContainer.status[level] = true;
     }
 
     // If this is a parent, propagate changes to all children
-    if (this.childManagers.size > 0) {
-      for (const child of this.childManagers) {
-        child.enableIndividualLevel(logLevel);
-      }
+    const aliveChildren = this.getAliveChildren();
+    for (const child of aliveChildren) {
+      child.enableIndividualLevel(logLevel);
     }
   }
 
@@ -79,16 +107,17 @@ export class OneWayLogLevelManager implements ILogLevelManager {
    * If this is a child, the change only applies to this instance.
    */
   disableIndividualLevel(logLevel: LogLevelType): void {
+    if (this.isDisposed) return;
+
     const level = logLevel as keyof LogLevelEnabledStatus;
     if (level in this.logLevelContainer.status) {
       this.logLevelContainer.status[level] = false;
     }
 
     // If this is a parent, propagate changes to all children
-    if (this.childManagers.size > 0) {
-      for (const child of this.childManagers) {
-        child.disableIndividualLevel(logLevel);
-      }
+    const aliveChildren = this.getAliveChildren();
+    for (const child of aliveChildren) {
+      child.disableIndividualLevel(logLevel);
     }
   }
 
@@ -96,6 +125,8 @@ export class OneWayLogLevelManager implements ILogLevelManager {
    * Checks if a specific log level is enabled
    */
   isLevelEnabled(logLevel: LogLevelType): boolean {
+    if (this.isDisposed) return false;
+
     const level = logLevel as keyof LogLevelEnabledStatus;
     return this.logLevelContainer.status[level];
   }
@@ -106,15 +137,16 @@ export class OneWayLogLevelManager implements ILogLevelManager {
    * If this is a child, the change only applies to this instance.
    */
   enableLogging(): void {
+    if (this.isDisposed) return;
+
     for (const level of Object.keys(this.logLevelContainer.status)) {
       this.logLevelContainer.status[level as keyof LogLevelEnabledStatus] = true;
     }
 
     // If this is a parent, propagate changes to all children
-    if (this.childManagers.size > 0) {
-      for (const child of this.childManagers) {
-        child.enableLogging();
-      }
+    const aliveChildren = this.getAliveChildren();
+    for (const child of aliveChildren) {
+      child.enableLogging();
     }
   }
 
@@ -124,15 +156,16 @@ export class OneWayLogLevelManager implements ILogLevelManager {
    * If this is a child, the change only applies to this instance.
    */
   disableLogging(): void {
+    if (this.isDisposed) return;
+
     for (const level of Object.keys(this.logLevelContainer.status)) {
       this.logLevelContainer.status[level as keyof LogLevelEnabledStatus] = false;
     }
 
     // If this is a parent, propagate changes to all children
-    if (this.childManagers.size > 0) {
-      for (const child of this.childManagers) {
-        child.disableLogging();
-      }
+    const aliveChildren = this.getAliveChildren();
+    for (const child of aliveChildren) {
+      child.disableLogging();
     }
   }
 
@@ -142,6 +175,8 @@ export class OneWayLogLevelManager implements ILogLevelManager {
    * Parent changes will propagate to children, but child changes won't affect the parent.
    */
   onChildLoggerCreated({ parentLogLevelManager, childLogLevelManager }: OnChildLogLevelManagerCreatedParams) {
+    if (this.isDisposed) return;
+
     if (
       childLogLevelManager instanceof OneWayLogLevelManager &&
       parentLogLevelManager instanceof OneWayLogLevelManager
@@ -152,9 +187,9 @@ export class OneWayLogLevelManager implements ILogLevelManager {
       // Initialize child's container with parent's current status
       child.logLevelContainer.status = { ...parent.logLevelContainer.status };
 
-      // Set up parent-child relationship
-      child.parentManager = parent;
-      parent.childManagers.add(child);
+      // Set up parent-child relationship using WeakRef to prevent memory leaks
+      child.parentManager = new WeakRef(parent);
+      parent.childManagers.add(new WeakRef(child));
     }
   }
 
@@ -163,9 +198,31 @@ export class OneWayLogLevelManager implements ILogLevelManager {
    * The clone is independent and not linked to the original.
    */
   clone(): ILogLevelManager {
+    if (this.isDisposed) {
+      const clone = new OneWayLogLevelManager();
+      return clone;
+    }
+
     const clone = new OneWayLogLevelManager();
     // Clone gets its own container with the same initial status
     clone.logLevelContainer.status = { ...this.logLevelContainer.status };
     return clone;
+  }
+
+  /**
+   * Implements the Disposable interface for cleanup.
+   * Clears all parent and child references to prevent memory leaks.
+   */
+  [Symbol.dispose](): void {
+    if (this.isDisposed) return;
+
+    // Clear parent reference
+    this.parentManager = null;
+
+    // Clear all child references
+    this.childManagers.clear();
+
+    // Mark as disposed
+    this.isDisposed = true;
   }
 }
