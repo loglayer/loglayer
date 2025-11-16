@@ -66,4 +66,28 @@ describe("hotshotsMixin", () => {
       expect(result).toBeUndefined();
     });
   });
+
+  describe("getClient", () => {
+    it("should return the configured client on LogLayer", () => {
+      const log = new LogLayer({
+        transport: new TestTransport({
+          logger: new TestLoggingLibrary(),
+        }),
+      });
+
+      const client = log.getClient();
+
+      expect(client).toBe(mockClient);
+      expect(typeof client.increment).toBe("function");
+    });
+
+    it("should return the configured client on MockLogLayer", () => {
+      const mockLog = new MockLogLayer();
+
+      const client = mockLog.getClient();
+
+      expect(client).toBe(mockClient);
+      expect(typeof client.increment).toBe("function");
+    });
+  });
 });

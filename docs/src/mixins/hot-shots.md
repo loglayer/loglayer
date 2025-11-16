@@ -188,7 +188,13 @@ For detailed information about configuring the `StatsD` client, see the [hot-sho
 
 ## Available Methods
 
-All stats methods are accessed through the `stats` property on LogLayer instances. Each method returns a builder that supports chaining configuration methods before calling `send()`. For detailed usage information, parameters, and examples, refer to the [hot-shots documentation](https://github.com/bdeitte/hot-shots).
+All stats methods are accessed through the `stats` property on LogLayer instances. Each method returns a builder that supports chaining configuration methods before calling `send()` or `create()`. For detailed usage information, parameters, and examples, refer to the [hot-shots documentation](https://github.com/bdeitte/hot-shots).
+
+### Accessing the StatsD Client
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `getClient()` | `StatsD` | Returns the underlying hot-shots StatsD client instance that was configured when the mixin was registered. Useful for accessing advanced features that aren't directly exposed through the mixin API. |
 
 ### Counters
 
@@ -204,12 +210,43 @@ All stats methods are accessed through the `stats` property on LogLayer instance
 | Method | Returns | Description |
 |--------|---------|-------------|
 | `stats.timing(stat, value)` | `IStatsBuilder` | Sends a timing command. The value can be milliseconds (number) or a Date object |
+| `stats.timer(func, stat)` | `ITimerBuilder` | Wraps a synchronous function to automatically time its execution. Returns a builder that supports chaining with `withTags()`, `withSampleRate()`, and `withCallback()`. Call `create()` to get the wrapped function |
+| `stats.asyncTimer(func, stat)` | `IAsyncTimerBuilder` | Wraps an async function to automatically time its execution. Returns a builder that supports chaining with `withTags()`, `withSampleRate()`, and `withCallback()`. Call `create()` to get the wrapped function |
+| `stats.asyncDistTimer(func, stat)` | `IAsyncDistTimerBuilder` | Wraps an async function to automatically time its execution as a distribution metric (DogStatsD only). Returns a builder that supports chaining with `withTags()`, `withSampleRate()`, and `withCallback()`. Call `create()` to get the wrapped function |
 
-**Builder methods**: `withTags(tags)`, `withSampleRate(rate)`, `withCallback(callback)`, `send()`
+**Builder methods for `timing`**: `withTags(tags)`, `withSampleRate(rate)`, `withCallback(callback)`, `send()`
 
-::: tip Timer Functions
-The hot-shots library provides `timer()` and `asyncTimer()` functions for automatically timing function execution. These are not directly exposed through the mixin, but you can access them through the underlying StatsD client if needed.
-:::
+**Builder methods for `timer`, `asyncTimer`, and `asyncDistTimer`**: `withTags(tags)`, `withSampleRate(rate)`, `withCallback(callback)`, `create()`
+
+```typescript
+// Wrap a synchronous function to automatically time it
+const processData = (data: string) => {
+  // Your synchronous logic
+  return data.toUpperCase();
+};
+
+const timedProcess = log.stats.timer(processData, 'data.process.duration').create();
+const result = timedProcess('hello'); // Automatically records timing
+
+// Wrap an async function to automatically time it
+const fetchData = async (url: string) => {
+  const response = await fetch(url);
+  return response.json();
+};
+
+// Simple usage
+const timedFetch = log.stats.asyncTimer(fetchData, 'api.fetch.duration').create();
+const data = await timedFetch('https://api.example.com/data');
+
+// With tags and sample rate
+const timedFetchWithOptions = log.stats
+  .asyncTimer(fetchData, 'api.fetch.duration')
+  .withTags(['env:production', 'service:api'])
+  .withSampleRate(0.5)
+  .create();
+
+const data2 = await timedFetchWithOptions('https://api.example.com/data');
+```
 
 ### Histograms and Distributions
 

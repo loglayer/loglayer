@@ -6,12 +6,15 @@ import "./types.js"; // Import types to ensure declarations are processed
 
 // Export generic interface so users can create combined types
 export type {
+  IAsyncDistTimerBuilder,
+  IAsyncTimerBuilder,
   ICheckBuilder,
   IEventBuilder,
   IHotShotsMixin,
   IIncrementDecrementBuilder,
   IStatsAPI,
   IStatsBuilder,
+  ITimerBuilder,
   StatsCallback,
   StatsDClient,
   StatsTags,
