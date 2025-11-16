@@ -1,5 +1,11 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 3.0.0
+
+### Major Changes
+
+- [#307](https://github.com/loglayer/loglayer/pull/307) [`1bf73aa`](https://github.com/loglayer/loglayer/commit/1bf73aa6821c4d74aa6e0aa1ebe48c0191125546) Thanks [@theogravity](https://github.com/theogravity)! - Complete overhaul of the API. See the documentation on migration instructions.
+
 ## 2.0.0
 
 ### Major Changes

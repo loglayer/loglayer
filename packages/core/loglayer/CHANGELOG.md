@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 8.0.1
+
+### Patch Changes
+
+- [#307](https://github.com/loglayer/loglayer/pull/307) [`1bf73aa`](https://github.com/loglayer/loglayer/commit/1bf73aa6821c4d74aa6e0aa1ebe48c0191125546) Thanks [@theogravity](https://github.com/theogravity)! - README.md update
+
 ## 8.0.0
 
 ### Major Changes
