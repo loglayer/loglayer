@@ -1,5 +1,11 @@
 # `@loglayer/shared` Changelog
 
+## 3.0.1
+
+### Patch Changes
+
+- [`fa69748`](https://github.com/loglayer/loglayer/commit/fa69748f770bb70733efdfd02218f47770640fc1) Thanks [@theogravity](https://github.com/theogravity)! - Add optional disposable method to the `IContextManager` and `ILogLevelManager` interfaces. They've always supported it, but it was not explicitly noted for the interface.
+
 ## 3.0.0
 
 ### Major Changes

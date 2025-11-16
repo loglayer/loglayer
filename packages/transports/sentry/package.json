@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-sentry",
   "description": "Sentry transport for the LogLayer logging library.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
