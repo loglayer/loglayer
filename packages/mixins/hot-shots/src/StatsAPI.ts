@@ -1,4 +1,6 @@
 import type { DatadogChecksValues } from "hot-shots";
+import { AsyncDistTimerBuilder } from "./builders/AsyncDistTimerBuilder.js";
+import { AsyncTimerBuilder } from "./builders/AsyncTimerBuilder.js";
 import { DecrementBuilder } from "./builders/DecrementBuilder.js";
 import { DistributionBuilder } from "./builders/DistributionBuilder.js";
 import { EventBuilder } from "./builders/EventBuilder.js";
@@ -7,15 +9,19 @@ import { GaugeDeltaBuilder } from "./builders/GaugeDeltaBuilder.js";
 import { HistogramBuilder } from "./builders/HistogramBuilder.js";
 import { IncrementBuilder } from "./builders/IncrementBuilder.js";
 import { SetBuilder } from "./builders/SetBuilder.js";
+import { TimerBuilder } from "./builders/TimerBuilder.js";
 import { TimingBuilder } from "./builders/TimingBuilder.js";
 import { UniqueBuilder } from "./builders/UniqueBuilder.js";
 import { CheckBuilder } from "./CheckBuilder.js";
 import type {
+  IAsyncDistTimerBuilder,
+  IAsyncTimerBuilder,
   ICheckBuilder,
   IEventBuilder,
   IIncrementDecrementBuilder,
   IStatsAPI,
   IStatsBuilder,
+  ITimerBuilder,
   StatsDClient,
 } from "./types.js";
 
@@ -158,5 +164,47 @@ export class StatsAPI implements IStatsAPI {
    */
   check(name: string, status: DatadogChecksValues): ICheckBuilder {
     return new CheckBuilder(this.client, name, status);
+  }
+
+  /**
+   * Wrap an async function to automatically time its execution.
+   * Returns a builder that supports chaining with withTags(), withSampleRate(), and withCallback().
+   * Call create() to get the wrapped function.
+   *
+   * @param func - The async function to wrap
+   * @param stat - The stat name(s) to record timing to. Can be a single string or an array of strings.
+   * @returns A builder instance for chaining additional options
+   */
+  asyncTimer<P extends unknown[], R>(func: (...args: P) => Promise<R>, stat: string | string[]): IAsyncTimerBuilder {
+    return new AsyncTimerBuilder(this.client, func as (...args: unknown[]) => Promise<unknown>, stat);
+  }
+
+  /**
+   * Wrap an async function to automatically time its execution as a distribution metric (DogStatsD only).
+   * Returns a builder that supports chaining with withTags(), withSampleRate(), and withCallback().
+   * Call create() to get the wrapped function.
+   *
+   * @param func - The async function to wrap
+   * @param stat - The stat name(s) to record timing to. Can be a single string or an array of strings.
+   * @returns A builder instance for chaining additional options
+   */
+  asyncDistTimer<P extends unknown[], R>(
+    func: (...args: P) => Promise<R>,
+    stat: string | string[],
+  ): IAsyncDistTimerBuilder {
+    return new AsyncDistTimerBuilder(this.client, func as (...args: unknown[]) => Promise<unknown>, stat);
+  }
+
+  /**
+   * Wrap a synchronous function to automatically time its execution.
+   * Returns a builder that supports chaining with withTags(), withSampleRate(), and withCallback().
+   * Call create() to get the wrapped function.
+   *
+   * @param func - The synchronous function to wrap
+   * @param stat - The stat name(s) to record timing to. Can be a single string or an array of strings.
+   * @returns A builder instance for chaining additional options
+   */
+  timer<P extends unknown[], R>(func: (...args: P) => R, stat: string | string[]): ITimerBuilder {
+    return new TimerBuilder(this.client, func as (...args: unknown[]) => unknown, stat);
   }
 }

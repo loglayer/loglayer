@@ -69,6 +69,84 @@ export interface ICheckBuilder extends IStatsBuilder {
 }
 
 /**
+ * Builder interface for asyncTimer method that returns a wrapped function
+ */
+export interface IAsyncTimerBuilder extends IStatsBuilder {
+  /**
+   * Add tags to the metric
+   */
+  withTags(tags: StatsTags): IAsyncTimerBuilder;
+
+  /**
+   * Set the sample rate for the metric (0.0 to 1.0)
+   */
+  withSampleRate(rate: number): IAsyncTimerBuilder;
+
+  /**
+   * Add a callback function to be called after sending the metric
+   */
+  withCallback(callback: StatsCallback): IAsyncTimerBuilder;
+
+  /**
+   * Create the wrapped async function that will automatically time its execution
+   * @returns The wrapped function that records timing when executed
+   */
+  create<P extends unknown[], R>(): (...args: P) => Promise<R>;
+}
+
+/**
+ * Builder interface for asyncDistTimer method that returns a wrapped function
+ */
+export interface IAsyncDistTimerBuilder extends IStatsBuilder {
+  /**
+   * Add tags to the metric
+   */
+  withTags(tags: StatsTags): IAsyncDistTimerBuilder;
+
+  /**
+   * Set the sample rate for the metric (0.0 to 1.0)
+   */
+  withSampleRate(rate: number): IAsyncDistTimerBuilder;
+
+  /**
+   * Add a callback function to be called after sending the metric
+   */
+  withCallback(callback: StatsCallback): IAsyncDistTimerBuilder;
+
+  /**
+   * Create the wrapped async function that will automatically time its execution as a distribution metric
+   * @returns The wrapped function that records timing when executed
+   */
+  create<P extends unknown[], R>(): (...args: P) => Promise<R>;
+}
+
+/**
+ * Builder interface for timer method that returns a wrapped function
+ */
+export interface ITimerBuilder extends IStatsBuilder {
+  /**
+   * Add tags to the metric
+   */
+  withTags(tags: StatsTags): ITimerBuilder;
+
+  /**
+   * Set the sample rate for the metric (0.0 to 1.0)
+   */
+  withSampleRate(rate: number): ITimerBuilder;
+
+  /**
+   * Add a callback function to be called after sending the metric
+   */
+  withCallback(callback: StatsCallback): ITimerBuilder;
+
+  /**
+   * Create the wrapped synchronous function that will automatically time its execution
+   * @returns The wrapped function that records timing when executed
+   */
+  create<P extends unknown[], R>(): (...args: P) => R;
+}
+
+/**
  * Stats API interface containing all hot-shots methods
  */
 export interface IStatsAPI {
@@ -126,6 +204,42 @@ export interface IStatsAPI {
    * Send a service check (DataDog only)
    */
   check(name: string, status: DatadogChecksValues): ICheckBuilder;
+
+  /**
+   * Wrap an async function to automatically time its execution.
+   * Returns a builder that supports chaining with withTags(), withSampleRate(), and withCallback().
+   * Call create() to get the wrapped function.
+   *
+   * @param func - The async function to wrap
+   * @param stat - The stat name(s) to record timing to. Can be a single string or an array of strings.
+   * @returns A builder instance for chaining additional options
+   */
+  asyncTimer<P extends unknown[], R>(func: (...args: P) => Promise<R>, stat: string | string[]): IAsyncTimerBuilder;
+
+  /**
+   * Wrap an async function to automatically time its execution as a distribution metric (DogStatsD only).
+   * Returns a builder that supports chaining with withTags(), withSampleRate(), and withCallback().
+   * Call create() to get the wrapped function.
+   *
+   * @param func - The async function to wrap
+   * @param stat - The stat name(s) to record timing to. Can be a single string or an array of strings.
+   * @returns A builder instance for chaining additional options
+   */
+  asyncDistTimer<P extends unknown[], R>(
+    func: (...args: P) => Promise<R>,
+    stat: string | string[],
+  ): IAsyncDistTimerBuilder;
+
+  /**
+   * Wrap a synchronous function to automatically time its execution.
+   * Returns a builder that supports chaining with withTags(), withSampleRate(), and withCallback().
+   * Call create() to get the wrapped function.
+   *
+   * @param func - The synchronous function to wrap
+   * @param stat - The stat name(s) to record timing to. Can be a single string or an array of strings.
+   * @returns A builder instance for chaining additional options
+   */
+  timer<P extends unknown[], R>(func: (...args: P) => R, stat: string | string[]): ITimerBuilder;
 }
 
 /**
@@ -137,6 +251,12 @@ export interface IHotShotsMixin<_T> {
    * Access to stats API for sending metrics
    */
   stats: IStatsAPI;
+
+  /**
+   * Get the underlying hot-shots StatsD client instance
+   * @returns The StatsD client instance that was configured when the mixin was registered
+   */
+  getClient(): StatsDClient;
 }
 
 declare module "loglayer" {

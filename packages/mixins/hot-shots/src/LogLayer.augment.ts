@@ -22,6 +22,10 @@ export const logLayerHotShotsMixin: LogLayerMixin = {
       enumerable: true,
       configurable: true,
     });
+
+    prototype.getClient = function (this: LogLayer) {
+      return getStatsClient();
+    };
   },
   augmentMock: (prototype) => {
     // Mock implementation - return a no-op stats API
@@ -35,5 +39,9 @@ export const logLayerHotShotsMixin: LogLayerMixin = {
       enumerable: true,
       configurable: true,
     });
+
+    prototype.getClient = function () {
+      return getStatsClient();
+    };
   },
 };

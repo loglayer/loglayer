@@ -42,4 +42,38 @@ log.stats
   })
   .send();
 
+// Test asyncTimer
+const asyncFunc = async (x: number) => {
+  await new Promise((resolve) => setTimeout(resolve, 10));
+  return x * 2;
+};
+
+const timedAsyncFunc = log.stats.asyncTimer(asyncFunc, "test.async.timer").create();
+const result = await timedAsyncFunc(5);
+console.log(`Async timer result: ${result}`);
+
+// Test asyncDistTimer with options
+const timedAsyncFuncWithOptions = log.stats
+  .asyncDistTimer(asyncFunc, "test.async.dist.timer")
+  .withTags(["env:test"])
+  .withSampleRate(1.0)
+  .create();
+const result2 = await timedAsyncFuncWithOptions(10);
+console.log(`Async dist timer result: ${result2}`);
+
+// Test timer (synchronous)
+const syncFunc = (x: number) => x * 3;
+const timedSyncFunc = log.stats.timer(syncFunc, "test.sync.timer").create();
+const result3 = timedSyncFunc(7);
+console.log(`Sync timer result: ${result3}`);
+
+// Test timer with options
+const timedSyncFuncWithOptions = log.stats
+  .timer(syncFunc, "test.sync.timer.options")
+  .withTags(["env:test"])
+  .withSampleRate(1.0)
+  .create();
+const result4 = timedSyncFuncWithOptions(8);
+console.log(`Sync timer with options result: ${result4}`);
+
 console.log("Live test completed!");
