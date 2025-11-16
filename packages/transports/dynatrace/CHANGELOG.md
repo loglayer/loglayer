@@ -1,5 +1,12 @@
 # `@loglayer/transport-dynatrace` Changelog
 
+## 2.1.12
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.9
+
 ## 2.1.11
 
 ### Patch Changes

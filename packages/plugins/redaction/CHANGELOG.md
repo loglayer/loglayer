@@ -1,5 +1,12 @@
 # `@loglayer/plugin-redaction` Changelog
 
+## 2.1.11
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/plugin@2.2.3
+
 ## 2.1.10
 
 ### Patch Changes

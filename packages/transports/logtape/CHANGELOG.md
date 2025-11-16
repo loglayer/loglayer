@@ -1,5 +1,12 @@
 # `@loglayer/transport-logtape` Changelog
 
+## 1.0.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.9
+
 ## 1.0.5
 
 ### Patch Changes

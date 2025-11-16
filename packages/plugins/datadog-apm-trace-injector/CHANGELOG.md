@@ -1,5 +1,13 @@
 # `@loglayer/datadog-apm-trace-injector` Changelog
 
+## 1.0.12
+
+### Patch Changes
+
+- Updated dependencies [[`fa69748`](https://github.com/loglayer/loglayer/commit/fa69748f770bb70733efdfd02218f47770640fc1)]:
+  - @loglayer/shared@3.0.1
+  - @loglayer/plugin@2.2.3
+
 ## 1.0.11
 
 ### Patch Changes

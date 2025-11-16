@@ -1,5 +1,14 @@
 # @loglayer/log-level-manager-linked
 
+## 1.0.1
+
+### Patch Changes
+
+- [`fa69748`](https://github.com/loglayer/loglayer/commit/fa69748f770bb70733efdfd02218f47770640fc1) Thanks [@theogravity](https://github.com/theogravity)! - Fixed a memory leak issue where circular references between parent and child log level managers prevented proper garbage collection. The manager now uses `WeakRef` for parent and child references, allowing objects to be garbage collected when no longer referenced.
+
+- Updated dependencies []:
+  - @loglayer/log-level-manager@1.0.1
+
 ## 1.0.0
 
 ### Major Changes
