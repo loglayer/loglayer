@@ -1,5 +1,6 @@
+import type { StatsD } from "hot-shots";
 import { CommonStatsBuilder } from "../CommonStatsBuilder.js";
-import type { IEventBuilder, StatsDClient } from "../types.js";
+import type { IEventBuilder } from "../types.js";
 
 /**
  * Builder for the event method (DataDog only).
@@ -17,7 +18,7 @@ export class EventBuilder extends CommonStatsBuilder implements IEventBuilder {
    * @param client - The hot-shots StatsD client instance
    * @param title - The event title
    */
-  constructor(client: StatsDClient, title: string) {
+  constructor(client: StatsD, title: string) {
     super(client);
     this.title = title;
   }

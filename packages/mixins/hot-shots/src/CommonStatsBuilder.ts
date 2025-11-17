@@ -1,4 +1,5 @@
-import type { IStatsBuilder, StatsCallback, StatsDClient, StatsTags } from "./types.js";
+import type { StatsD } from "hot-shots";
+import type { IStatsBuilder, StatsCallback, StatsTags } from "./types.js";
 
 /**
  * Base class for common stats builder functionality.
@@ -12,14 +13,14 @@ export abstract class CommonStatsBuilder implements IStatsBuilder {
   /** Callback function to call after sending the metric */
   protected callback?: StatsCallback;
   /** The hot-shots client instance */
-  protected readonly client: StatsDClient;
+  protected readonly client: StatsD;
 
   /**
    * Creates a new CommonStatsBuilder instance.
    *
    * @param client - The hot-shots StatsD client instance
    */
-  constructor(client: StatsDClient) {
+  constructor(client: StatsD) {
     this.client = client;
   }
 

@@ -1,7 +1,4 @@
-import type { CheckOptions, DatadogChecksValues } from "hot-shots";
-
-// Type for StatsD client instance
-export type StatsDClient = InstanceType<typeof import("hot-shots").default>;
+import type { CheckOptions, DatadogChecksValues, StatsD } from "hot-shots";
 
 /**
  * Callback function type for stats operations
@@ -256,7 +253,7 @@ export interface IHotShotsMixin<_T> {
    * Get the underlying hot-shots StatsD client instance
    * @returns The StatsD client instance that was configured when the mixin was registered
    */
-  getClient(): StatsDClient;
+  getClient(): StatsD;
 }
 
 declare module "loglayer" {

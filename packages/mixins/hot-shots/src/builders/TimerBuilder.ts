@@ -1,5 +1,6 @@
+import type { StatsD } from "hot-shots";
 import { CommonStatsBuilder } from "../CommonStatsBuilder.js";
-import type { ITimerBuilder, StatsCallback, StatsDClient, StatsTags } from "../types.js";
+import type { ITimerBuilder, StatsCallback, StatsTags } from "../types.js";
 
 /**
  * Builder for the timer method.
@@ -19,7 +20,7 @@ export class TimerBuilder extends CommonStatsBuilder implements ITimerBuilder {
    * @param func - The synchronous function to wrap
    * @param stat - The stat name(s) to record timing to. Can be a single string or an array of strings.
    */
-  constructor(client: StatsDClient, func: (...args: unknown[]) => unknown, stat: string | string[]) {
+  constructor(client: StatsD, func: (...args: unknown[]) => unknown, stat: string | string[]) {
     super(client);
     this.func = func;
     this.stat = stat;

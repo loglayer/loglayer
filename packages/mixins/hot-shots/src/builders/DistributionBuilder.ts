@@ -1,5 +1,6 @@
+import type { StatsD } from "hot-shots";
 import { CommonStatsBuilder } from "../CommonStatsBuilder.js";
-import type { StatsCallback, StatsDClient } from "../types.js";
+import type { StatsCallback } from "../types.js";
 
 /**
  * Builder for the distribution method (DataDog v6 only).
@@ -18,7 +19,7 @@ export class DistributionBuilder extends CommonStatsBuilder {
    * @param stat - The stat name(s) to record. Can be a single string or an array of strings.
    * @param value - The distribution value to record
    */
-  constructor(client: StatsDClient, stat: string | string[], value: number) {
+  constructor(client: StatsD, stat: string | string[], value: number) {
     super(client);
     this.stat = stat;
     this.value = value;

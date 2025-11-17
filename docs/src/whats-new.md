@@ -7,11 +7,17 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
-## November 16, 2025
+## Nov 17, 2025
+
+`@loglayer/mixin-hot-shots`:
+
+Updated to use the named `StatsD` type import from `hot-shots` instead of the default export and removed the `StatsDClient` type alias. All type references now use `StatsD` directly from `hot-shots`, providing better type consistency and eliminating the need for type aliases.
+
+## Nov 16, 2025
 
 `@loglayer/log-level-manager-one-way` and `@loglayer/log-level-manager-linked`:
 
-- **Memory leak fix**: Fixed a memory leak issue where circular references between parent and child log level managers prevented proper garbage collection. The managers now use `WeakRef` for parent and child references, allowing objects to be garbage collected when no longer referenced.
+**Memory leak fix**: Fixed a memory leak issue where circular references between parent and child log level managers prevented proper garbage collection. The managers now use `WeakRef` for parent and child references, allowing objects to be garbage collected when no longer referenced.
 
 ## Nov 15, 2025
 

@@ -1,6 +1,6 @@
-import type { CheckOptions, DatadogChecksValues } from "hot-shots";
+import type { CheckOptions, DatadogChecksValues, StatsD } from "hot-shots";
 import { CommonStatsBuilder } from "./CommonStatsBuilder.js";
-import type { ICheckBuilder, StatsCallback, StatsDClient } from "./types.js";
+import type { ICheckBuilder, StatsCallback } from "./types.js";
 
 /**
  * Builder for the check method that supports withOptions().
@@ -21,7 +21,7 @@ export class CheckBuilder extends CommonStatsBuilder implements ICheckBuilder {
    * @param name - The service check name
    * @param status - The service check status (OK, WARNING, CRITICAL, UNKNOWN)
    */
-  constructor(client: StatsDClient, name: string, status: DatadogChecksValues) {
+  constructor(client: StatsD, name: string, status: DatadogChecksValues) {
     super(client);
     this.name = name;
     this.status = status;

@@ -1,8 +1,8 @@
-import type { StatsDClient } from "./types.js";
+import type { StatsD } from "hot-shots";
 import "./types.js"; // Import types to ensure declarations are processed
 
 // Store the hot-shots client - set during mixin registration
-let statsClient: StatsDClient | null = null;
+let statsClient: StatsD | null = null;
 
 /**
  * Set the hot-shots client for the mixin.
@@ -10,7 +10,7 @@ let statsClient: StatsDClient | null = null;
  *
  * @param client - The hot-shots StatsD client instance
  */
-export function setStatsClient(client: StatsDClient): void {
+export function setStatsClient(client: StatsD): void {
   statsClient = client;
 }
 
@@ -21,7 +21,7 @@ export function setStatsClient(client: StatsDClient): void {
  *
  * @returns The hot-shots StatsD client instance (or a mock if not configured)
  */
-export function getStatsClient(): StatsDClient {
+export function getStatsClient(): StatsD {
   if (!statsClient) {
     // Return a no-op mock client if not configured
     // This allows the mixin to work even without a client configured
@@ -37,7 +37,7 @@ export function getStatsClient(): StatsDClient {
       unique: () => {},
       event: () => {},
       check: () => {},
-    } as unknown as StatsDClient;
+    } as unknown as StatsD;
   }
   return statsClient;
 }

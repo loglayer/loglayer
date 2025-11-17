@@ -1,5 +1,6 @@
+import type { StatsD } from "hot-shots";
 import { CommonStatsBuilder } from "../CommonStatsBuilder.js";
-import type { StatsCallback, StatsDClient } from "../types.js";
+import type { StatsCallback } from "../types.js";
 
 /**
  * Builder for the gaugeDelta method.
@@ -18,7 +19,7 @@ export class GaugeDeltaBuilder extends CommonStatsBuilder {
    * @param stat - The stat name(s) to modify. Can be a single string or an array of strings.
    * @param delta - The amount to change the gauge by (can be positive or negative)
    */
-  constructor(client: StatsDClient, stat: string | string[], delta: number) {
+  constructor(client: StatsD, stat: string | string[], delta: number) {
     super(client);
     this.stat = stat;
     this.delta = delta;

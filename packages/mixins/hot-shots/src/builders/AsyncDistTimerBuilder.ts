@@ -1,5 +1,6 @@
+import type { StatsD } from "hot-shots";
 import { CommonStatsBuilder } from "../CommonStatsBuilder.js";
-import type { IAsyncDistTimerBuilder, StatsCallback, StatsDClient, StatsTags } from "../types.js";
+import type { IAsyncDistTimerBuilder, StatsCallback, StatsTags } from "../types.js";
 
 /**
  * Builder for the asyncDistTimer method.
@@ -19,7 +20,7 @@ export class AsyncDistTimerBuilder extends CommonStatsBuilder implements IAsyncD
    * @param func - The async function to wrap
    * @param stat - The stat name(s) to record timing to. Can be a single string or an array of strings.
    */
-  constructor(client: StatsDClient, func: (...args: unknown[]) => Promise<unknown>, stat: string | string[]) {
+  constructor(client: StatsD, func: (...args: unknown[]) => Promise<unknown>, stat: string | string[]) {
     super(client);
     this.func = func;
     this.stat = stat;

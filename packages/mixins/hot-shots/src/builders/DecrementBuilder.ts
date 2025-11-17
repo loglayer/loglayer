@@ -1,5 +1,6 @@
+import type { StatsD } from "hot-shots";
 import { CommonStatsBuilder } from "../CommonStatsBuilder.js";
-import type { IIncrementDecrementBuilder, StatsCallback, StatsDClient } from "../types.js";
+import type { IIncrementDecrementBuilder, StatsCallback } from "../types.js";
 
 /**
  * Builder for the decrement method.
@@ -17,7 +18,7 @@ export class DecrementBuilder extends CommonStatsBuilder implements IIncrementDe
    * @param client - The hot-shots StatsD client instance
    * @param stat - The stat name(s) to decrement. Can be a single string or an array of strings.
    */
-  constructor(client: StatsDClient, stat: string | string[]) {
+  constructor(client: StatsD, stat: string | string[]) {
     super(client);
     this.stat = stat;
   }

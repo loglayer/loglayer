@@ -1,4 +1,4 @@
-import type { DatadogChecksValues } from "hot-shots";
+import type { DatadogChecksValues, StatsD } from "hot-shots";
 import { AsyncDistTimerBuilder } from "./builders/AsyncDistTimerBuilder.js";
 import { AsyncTimerBuilder } from "./builders/AsyncTimerBuilder.js";
 import { DecrementBuilder } from "./builders/DecrementBuilder.js";
@@ -22,7 +22,6 @@ import type {
   IStatsAPI,
   IStatsBuilder,
   ITimerBuilder,
-  StatsDClient,
 } from "./types.js";
 
 /**
@@ -35,7 +34,7 @@ export class StatsAPI implements IStatsAPI {
    *
    * @param client - The hot-shots StatsD client instance to use for sending metrics
    */
-  constructor(private readonly client: StatsDClient) {}
+  constructor(private readonly client: StatsD) {}
 
   /**
    * Increment a counter metric.

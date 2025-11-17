@@ -1,15 +1,14 @@
-import StatsD from "hot-shots";
+import { StatsD } from "hot-shots";
 import { LogLayer, MockLogLayer, TestLoggingLibrary, TestTransport, useLogLayerMixin } from "loglayer";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { hotshotsMixin } from "../index.js";
 
 // Create a StatsD instance to access CHECKS enum
-// @ts-expect-error - hot-shots default export is constructable at runtime
 const statsDInstance = new StatsD({ mock: true });
 const _CHECKS = statsDInstance.CHECKS;
 
 describe("hotshotsMixin", () => {
-  let mockClient: InstanceType<typeof import("hot-shots").default>;
+  let mockClient: StatsD;
 
   beforeAll(() => {
     // Create a mock hot-shots client
@@ -25,7 +24,7 @@ describe("hotshotsMixin", () => {
       unique: vi.fn(),
       event: vi.fn(),
       check: vi.fn(),
-    } as unknown as InstanceType<typeof import("hot-shots").default>;
+    } as unknown as StatsD;
 
     // Register the mixin
     useLogLayerMixin(hotshotsMixin(mockClient));

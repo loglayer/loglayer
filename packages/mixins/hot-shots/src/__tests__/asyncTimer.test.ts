@@ -1,9 +1,10 @@
+import type { StatsD } from "hot-shots";
 import { LogLayer, TestLoggingLibrary, TestTransport, useLogLayerMixin } from "loglayer";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { hotshotsMixin } from "../index.js";
 
 describe("asyncTimer", () => {
-  let mockClient: InstanceType<typeof import("hot-shots").default>;
+  let mockClient: StatsD;
 
   beforeAll(() => {
     mockClient = {
@@ -19,7 +20,7 @@ describe("asyncTimer", () => {
       event: vi.fn(),
       check: vi.fn(),
       asyncTimer: vi.fn((fn, _stat) => fn),
-    } as unknown as InstanceType<typeof import("hot-shots").default>;
+    } as unknown as StatsD;
 
     useLogLayerMixin(hotshotsMixin(mockClient));
   });
