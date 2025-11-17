@@ -1,7 +1,8 @@
 import type { LogLayer, LogLayerMixin } from "loglayer";
 import { LogLayerMixinAugmentType } from "loglayer";
 import "./types.js"; // Import types to ensure declarations are processed
-import { getStatsClient } from "./LogBuilder.augment.js";
+import { getStatsClient, isNoOpClient } from "./LogBuilder.augment.js";
+import { MockStatsAPI } from "./MockStatsAPI.js";
 import { StatsAPI } from "./StatsAPI.js";
 
 /**
@@ -15,7 +16,8 @@ export const logLayerHotShotsMixin: LogLayerMixin = {
       get(this: LogLayer) {
         // Create stats API lazily and cache it
         if (!(this as any)._statsAPI) {
-          (this as any)._statsAPI = new StatsAPI(getStatsClient());
+          // Use MockStatsAPI if no client is configured, otherwise use real StatsAPI
+          (this as any)._statsAPI = isNoOpClient() ? new MockStatsAPI() : new StatsAPI(getStatsClient());
         }
         return (this as any)._statsAPI;
       },
@@ -32,7 +34,8 @@ export const logLayerHotShotsMixin: LogLayerMixin = {
     Object.defineProperty(prototype, "stats", {
       get() {
         if (!(this as any)._statsAPI) {
-          (this as any)._statsAPI = new StatsAPI(getStatsClient());
+          // Use MockStatsAPI if no client is configured, otherwise use real StatsAPI
+          (this as any)._statsAPI = isNoOpClient() ? new MockStatsAPI() : new StatsAPI(getStatsClient());
         }
         return (this as any)._statsAPI;
       },

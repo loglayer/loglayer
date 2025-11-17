@@ -4,9 +4,9 @@ import { setStatsClient } from "./LogBuilder.augment.js";
 import { logLayerHotShotsMixin } from "./LogLayer.augment.js";
 import "./types.js"; // Import types to ensure declarations are processed
 
-// Re-export StatsD type for convenience
 export type { StatsD } from "hot-shots";
-// Export generic interface so users can create combined types
+export { MockStatsAPI } from "./MockStatsAPI.js";
+export { StatsAPI } from "./StatsAPI.js";
 export type {
   IAsyncDistTimerBuilder,
   IAsyncTimerBuilder,
@@ -39,7 +39,7 @@ export type {
  * useLogLayerMixin(hotshotsMixin(statsClient));
  * ```
  */
-export function hotshotsMixin(client: StatsD): LogLayerMixinRegistration {
+export function hotshotsMixin(client: StatsD | null): LogLayerMixinRegistration {
   // Set the client for the mixin
   setStatsClient(client);
 

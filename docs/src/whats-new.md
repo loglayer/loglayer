@@ -11,7 +11,8 @@ description: Learn about the latest features and improvements in LogLayer
 
 `@loglayer/mixin-hot-shots`:
 
-Updated to use the named `StatsD` type import from `hot-shots` instead of the default export and removed the `StatsDClient` type alias. All type references now use `StatsD` directly from `hot-shots`, providing better type consistency and eliminating the need for type aliases.
+- Updated to use the named `StatsD` type import from `hot-shots` instead of the default export and removed the `StatsDClient` type alias. All type references now use `StatsD` directly from `hot-shots`, providing better type consistency and eliminating the need for type aliases.
+- Feed in `null` to `hotshotsMixin` was not working. Created a no-op version of the mixin to support this case.
 
 ## Nov 16, 2025
 

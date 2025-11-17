@@ -1,4 +1,5 @@
 import type { StatsD } from "hot-shots";
+import { createNoOpStatsClient } from "./MockStatsAPI.js";
 import "./types.js"; // Import types to ensure declarations are processed
 
 // Store the hot-shots client - set during mixin registration
@@ -10,8 +11,17 @@ let statsClient: StatsD | null = null;
  *
  * @param client - The hot-shots StatsD client instance
  */
-export function setStatsClient(client: StatsD): void {
+export function setStatsClient(client: StatsD | null): void {
   statsClient = client;
+}
+
+/**
+ * Check if the client is null (no-op mode)
+ *
+ * @returns True if the client is null, false otherwise
+ */
+export function isNoOpClient(): boolean {
+  return statsClient === null;
 }
 
 /**
@@ -23,21 +33,7 @@ export function setStatsClient(client: StatsD): void {
  */
 export function getStatsClient(): StatsD {
   if (!statsClient) {
-    // Return a no-op mock client if not configured
-    // This allows the mixin to work even without a client configured
-    return {
-      increment: () => {},
-      decrement: () => {},
-      gauge: () => {},
-      gaugeDelta: () => {},
-      histogram: () => {},
-      distribution: () => {},
-      timing: () => {},
-      set: () => {},
-      unique: () => {},
-      event: () => {},
-      check: () => {},
-    } as unknown as StatsD;
+    return createNoOpStatsClient();
   }
   return statsClient;
 }
