@@ -1,5 +1,11 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 3.2.0
+
+### Minor Changes
+
+- [`4bf19bb`](https://github.com/loglayer/loglayer/commit/4bf19bb52bd95737bf5bda01d538105ea12c1a31) Thanks [@theogravity](https://github.com/theogravity)! - Fix issue where passing `null` to `hotshotsMixin` did not work. A new set of no-ops were created to address this situation
+
 ## 3.1.1
 
 ### Patch Changes
