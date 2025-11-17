@@ -1,5 +1,11 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 3.1.1
+
+### Patch Changes
+
+- [`9955b2f`](https://github.com/loglayer/loglayer/commit/9955b2f27529197d152ca7dee0e24c158b02f241) Thanks [@theogravity](https://github.com/theogravity)! - Updated to use the named `StatsD` type import from `hot-shots` instead of the default export and removed the `StatsDClient` type alias. All type references now use `StatsD` directly from `hot-shots`, providing better type consistency and eliminating the need for type aliases.
+
 ## 3.1.0
 
 ### Minor Changes
