@@ -152,3 +152,7 @@ Use the `const` keyword to define a constant.
 ## Writing What's New
 
 Use a tool to calculate the current date (with month being the short form) before writing the what's new entry. If there is already a date in the what's new documentation for the current date, then add / modify that.
+
+## Changelogs
+
+Do not write changelog entries. They must be manually entered by the user.

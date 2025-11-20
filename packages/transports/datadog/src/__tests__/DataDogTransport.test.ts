@@ -1,5 +1,5 @@
 import type { DataDogTransport as DatadogTransportCommon } from "datadog-transport-common";
-import { LogLayer } from "loglayer";
+import { LogLayer, LogLevel } from "loglayer";
 import { beforeEach, describe, expect, it, vitest } from "vitest";
 import { DataDogTransport } from "../DataDogTransport.js";
 
@@ -161,6 +161,147 @@ describe("structured transport with datadog", () => {
       message: "this is a test message",
       level: "info",
       timestamp: mockTimestamp,
+    });
+  });
+
+  describe("level filtering", () => {
+    it("should filter out logs below the configured level", () => {
+      const transport = new DataDogTransport({
+        id: "datadog",
+        options: {
+          ddClientConf: {
+            authMethods: {
+              apiKeyAuth: "TEST-KEY",
+            },
+          },
+          ddServerConf: {
+            site: "datadoghq.eu",
+          },
+        },
+        level: LogLevel.warn,
+      });
+
+      log = new LogLayer({ transport });
+      ddTransport = transport["transport"];
+      ddTransport.processLog = vitest.fn();
+
+      // These should be filtered out
+      log.trace("trace message");
+      log.debug("debug message");
+      log.info("info message");
+
+      expect(ddTransport.processLog).not.toHaveBeenCalled();
+
+      // These should pass through
+      log.warn("warn message");
+      log.error("error message");
+      log.fatal("fatal message");
+
+      expect(ddTransport.processLog).toHaveBeenCalledTimes(3);
+    });
+
+    it("should send all logs when level is set to trace", () => {
+      const transport = new DataDogTransport({
+        id: "datadog",
+        options: {
+          ddClientConf: {
+            authMethods: {
+              apiKeyAuth: "TEST-KEY",
+            },
+          },
+          ddServerConf: {
+            site: "datadoghq.eu",
+          },
+        },
+        level: LogLevel.trace,
+      });
+
+      log = new LogLayer({ transport });
+      ddTransport = transport["transport"];
+      ddTransport.processLog = vitest.fn();
+
+      log.trace("trace message");
+      log.debug("debug message");
+      log.info("info message");
+      log.warn("warn message");
+      log.error("error message");
+      log.fatal("fatal message");
+
+      expect(ddTransport.processLog).toHaveBeenCalledTimes(6);
+    });
+
+    it("should send all logs when no level is configured", () => {
+      const transport = new DataDogTransport({
+        id: "datadog",
+        options: {
+          ddClientConf: {
+            authMethods: {
+              apiKeyAuth: "TEST-KEY",
+            },
+          },
+          ddServerConf: {
+            site: "datadoghq.eu",
+          },
+        },
+      });
+
+      log = new LogLayer({ transport });
+      ddTransport = transport["transport"];
+      ddTransport.processLog = vitest.fn();
+
+      log.trace("trace message");
+      log.debug("debug message");
+      log.info("info message");
+      log.warn("warn message");
+      log.error("error message");
+      log.fatal("fatal message");
+
+      expect(ddTransport.processLog).toHaveBeenCalledTimes(6);
+    });
+
+    it("should filter correctly at error level", () => {
+      const transport = new DataDogTransport({
+        id: "datadog",
+        options: {
+          ddClientConf: {
+            authMethods: {
+              apiKeyAuth: "TEST-KEY",
+            },
+          },
+          ddServerConf: {
+            site: "datadoghq.eu",
+          },
+        },
+        level: LogLevel.error,
+      });
+
+      log = new LogLayer({ transport });
+      ddTransport = transport["transport"];
+      ddTransport.processLog = vitest.fn();
+
+      // These should be filtered out
+      log.trace("trace message");
+      log.debug("debug message");
+      log.info("info message");
+      log.warn("warn message");
+
+      expect(ddTransport.processLog).not.toHaveBeenCalled();
+
+      // These should pass through
+      log.error("error message");
+      log.fatal("fatal message");
+
+      expect(ddTransport.processLog).toHaveBeenCalledTimes(2);
+      expect(ddTransport.processLog).toHaveBeenNthCalledWith(1, {
+        message: "error message",
+        level: "error",
+        time: mockISOString,
+      });
+      expect(ddTransport.processLog).toHaveBeenNthCalledWith(2, {
+        message: "fatal message",
+        level: "fatal",
+        time: mockISOString,
+      });
     });
   });
 });
