@@ -26,7 +26,7 @@ pnpm add @loglayer/log-level-manager
 ## Understanding Log Level Hierarchy
 
 ::: warning Log Level Hierarchy
-Log level managers must follow the [log level hierarchy](/logging-api/adjusting-log-levels#log-level-hierarchy) described in the Adjusting Log Levels documentation. The hierarchy defines the priority of log levels, with lower numeric values indicating higher priority.
+Log level managers must follow the [log level hierarchy](/logging-api/adjusting-log-levels#log-level-hierarchy) described in the Adjusting Log Levels documentation. The hierarchy defines the priority of log levels, with higher numeric values indicating higher severity.
 
 You can import `LogLevel`, `LogLevelPriority`, and `LogLevelPriorityToNames` from `@loglayer/log-level-manager` to work with the hierarchy in your implementation.
 :::
@@ -256,7 +256,7 @@ export class IsolatedLogLevelManager implements ILogLevelManager {
    */
   setLevel(logLevel: LogLevelType): void {
     // Get the numeric priority value for the specified log level
-    // Lower values = higher priority (fatal=10, error=20, warn=30, etc.)
+    // Higher values = higher severity (trace=10, debug=20, info=30, warn=40, error=50, fatal=60)
     const minLogValue = LogLevelPriority[logLevel as LogLevel];
 
     // Iterate through all log levels and enable/disable based on hierarchy
@@ -264,8 +264,8 @@ export class IsolatedLogLevelManager implements ILogLevelManager {
       const levelKey = level as keyof LogLevelEnabledStatus;
       const levelValue = LogLevelPriority[level];
 
-      // Enable if the level's priority is >= the minimum (higher or equal priority)
-      // Disable if the level's priority is < the minimum (lower priority)
+      // Enable if the level's severity is >= the minimum (higher or equal severity)
+      // Disable if the level's severity is < the minimum (lower severity)
       this.logLevelEnabledStatus[levelKey] = levelValue >= minLogValue;
     }
   }

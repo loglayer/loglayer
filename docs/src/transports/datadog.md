@@ -84,11 +84,11 @@ const log = new LogLayer({
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `enabled` | `boolean` | `true` | Whether the transport is enabled |
+| `level` | `LogLevel` or `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | - | Minimum log level to send to DataDog. Logs below this level will be filtered out. See [Log Level Hierarchy](/logging-api/adjusting-log-levels#log-level-hierarchy) for more details |
 | `messageField` | `string` | `"message"` | The field name to use for the message |
 | `levelField` | `string` | `"level"` | The field name to use for the log level |
 | `timestampField` | `string` | `"time"` | The field name to use for the timestamp |
 | `timestampFunction` | `() => any` | - | A custom function to stamp the timestamp. The default timestamp uses the ISO 8601 format |
-| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
 
 ## Changelog
 

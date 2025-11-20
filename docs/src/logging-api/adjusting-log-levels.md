@@ -15,23 +15,23 @@ For example, if LogLayer's global level is set to `debug`, but a transport or lo
 
 ## Log Level Hierarchy
 
-Log levels follow a hierarchy, with lower numeric values indicating higher priority:
+Log levels follow a hierarchy, with higher numeric values indicating higher severity:
 
 | Level | Value |
 |-------|-------|
-| `trace` | 60 |
-| `debug` | 50 |
-| `info` | 40 |
-| `warn` | 30 |
-| `error` | 20 |
-| `fatal` | 10 |
+| `trace` | 10 |
+| `debug` | 20 |
+| `info` | 30 |
+| `warn` | 40 |
+| `error` | 50 |
+| `fatal` | 60 |
 
-For example, when using `setLevel()`, all levels equal to and below it are also enabled. 
+For example, when using `setLevel()`, all levels equal to and above it are also enabled.
 
 For example, if you set the log level to `warn`:
 
-- higher levels `info`, `debug`, and `trace` messages will be ignored.
-- equal and lower levels `warn`, `error`, and `fatal` messages will be logged
+- lower severity levels `trace`, `debug`, and `info` messages will be ignored.
+- equal and higher severity levels `warn`, `error`, and `fatal` messages will be logged
 
 ## Enabling/Disabling Logging
 
@@ -39,12 +39,12 @@ All of these methods can be used during runtime to dynamically adjust log levels
 
 ### Set Log Level
 
-All levels equal to and below the set level are enabled.
+All levels equal to and above the set level are enabled.
 
 ```typescript
 import type { LogLevel } from 'loglayer'
 
-// Enable warn, error, and fatal (disable info, debug, trace)
+// Enable warn, error, and fatal (disable trace, debug, info)
 log.setLevel(LogLevel.warn)
 ```
 

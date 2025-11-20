@@ -7,6 +7,16 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Nov 20, 2025
+
+`@loglayer/transport-datadog`:
+
+- Added `level` configuration option to filter logs by minimum log level.
+
+Documentation:
+
+- **Fixed log level hierarchy documentation** - Corrected the log level priority values throughout the documentation to match the actual code implementation. The hierarchy now correctly shows that higher numeric values indicate higher severity (trace=10, debug=20, info=30, warn=40, error=50, fatal=60). Previously, the documentation incorrectly stated that lower values indicated higher priority.
+
 ## Nov 17, 2025
 
 `@loglayer/mixin-hot-shots`:

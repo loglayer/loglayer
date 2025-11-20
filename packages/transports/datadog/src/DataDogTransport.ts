@@ -1,5 +1,5 @@
-import type { LoggerlessTransportConfig, LogLayerTransportParams } from "@loglayer/transport";
-import { LoggerlessTransport } from "@loglayer/transport";
+import type { LoggerlessTransportConfig, LogLayerTransportParams, LogLevelType } from "@loglayer/transport";
+import { LoggerlessTransport, type LogLevel, LogLevelPriority } from "@loglayer/transport";
 import { DataDogTransport as DatadogTransportCommon, type DDTransportOptions } from "datadog-transport-common";
 
 export interface DatadogTransportConfig extends LoggerlessTransportConfig {
@@ -23,6 +23,11 @@ export interface DatadogTransportConfig extends LoggerlessTransportConfig {
    * A custom function to stamp the timestamp
    */
   timestampFunction?: () => any;
+  /**
+   * Minimum log level to send to DataDog. Logs below this level will be filtered out.
+   * For example, if set to "warn", only warn, error, and fatal logs will be sent.
+   */
+  level?: LogLevelType;
 }
 
 export class DataDogTransport extends LoggerlessTransport {
@@ -31,6 +36,7 @@ export class DataDogTransport extends LoggerlessTransport {
   private timestampField: string;
   private timestampFunction?: () => any;
   private transport: DatadogTransportCommon;
+  private minLevelPriority?: number;
 
   constructor(config: DatadogTransportConfig) {
     super(config);
@@ -44,16 +50,28 @@ export class DataDogTransport extends LoggerlessTransport {
     this.levelField = config.levelField ?? "level";
     this.timestampField = config.timestampField ?? "time";
     this.timestampFunction = config.timestampFunction;
+
+    if (config.level) {
+      this.minLevelPriority = LogLevelPriority[config.level as LogLevel];
+    }
   }
 
   shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams) {
-    const logEntry: Record<string, any> = {};
-
     if (!this.transport) {
       throw new Error(
         "DataDogTransport was previously disabled; enabling the flag manually on the transport instance is not supported.",
       );
     }
+
+    // Filter out logs below the minimum level
+    if (this.minLevelPriority !== undefined) {
+      const currentLevelPriority = LogLevelPriority[logLevel as LogLevel];
+      if (currentLevelPriority < this.minLevelPriority) {
+        return messages;
+      }
+    }
+
+    const logEntry: Record<string, any> = {};
 
     if (data && hasData) {
       Object.assign(logEntry, data);
