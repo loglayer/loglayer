@@ -1,5 +1,11 @@
 # `@loglayer/transport-datadog` Changelog
 
+## 3.3.0
+
+### Minor Changes
+
+- [#314](https://github.com/loglayer/loglayer/pull/314) [`c6bb911`](https://github.com/loglayer/loglayer/commit/c6bb9111317f16903998b69e2f7894769c9491d2) Thanks [@theogravity](https://github.com/theogravity)! - Added `level` configuration option to filter logs by minimum log level.
+
 ## 3.2.11
 
 ### Patch Changes
