@@ -1,5 +1,11 @@
 # `@loglayer/plugin-redaction` Changelog
 
+## 2.1.12-alpha-0.0
+
+### Patch Changes
+
+- @loglayer/plugin@2.2.4-alpha-0.0
+
 ## 2.1.11
 
 ### Patch Changes

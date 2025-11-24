@@ -1,5 +1,11 @@
 # `@loglayer/transport-google-cloud-logging` Changelog
 
+## 2.2.11-alpha-0.0
+
+### Patch Changes
+
+- @loglayer/transport@2.3.10-alpha-0.0
+
 ## 2.2.10
 
 ### Patch Changes

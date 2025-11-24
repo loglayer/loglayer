@@ -53,5 +53,7 @@
     "@loglayer/transport-victoria-logs": "1.0.16",
     "@loglayer/transport-winston": "2.1.12"
   },
-  "changesets": []
+  "changesets": [
+    "easy-poems-hammer"
+  ]
 }

@@ -1,5 +1,11 @@
 # `@loglayer/transport-opentelemetry` Changelog
 
+## 3.0.12-alpha-0.0
+
+### Patch Changes
+
+- @loglayer/transport@2.3.10-alpha-0.0
+
 ## 3.0.11
 
 ### Patch Changes

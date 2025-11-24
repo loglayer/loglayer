@@ -1,5 +1,11 @@
 # `@loglayer/transport-tslog` Changelog
 
+## 3.0.10-alpha-0.0
+
+### Patch Changes
+
+- @loglayer/transport@2.3.10-alpha-0.0
+
 ## 3.0.9
 
 ### Patch Changes

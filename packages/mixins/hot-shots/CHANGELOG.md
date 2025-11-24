@@ -1,5 +1,11 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 3.3.0-alpha-0.0
+
+### Minor Changes
+
+- d5bb7f7: Better mixin support
+
 ## 3.2.0
 
 ### Minor Changes
