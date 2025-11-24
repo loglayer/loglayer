@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
+    "@loglayer/shared": "workspace:*",
     "@types/node": "24.10.1",
     "loglayer": "workspace:*",
     "tsdown": "0.15.12",

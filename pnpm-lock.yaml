@@ -337,6 +337,9 @@ importers:
       '@internal/tsconfig':
         specifier: workspace:*
         version: link:../../core/tsconfig
+      '@loglayer/shared':
+        specifier: workspace:*
+        version: link:../../core/shared
       '@types/node':
         specifier: 24.10.1
         version: 24.10.1
@@ -355,6 +358,27 @@ importers:
       vitest:
         specifier: 4.0.9
         version: 4.0.9(@types/debug@4.1.12)(@types/node@24.10.1)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.20.6)
+
+  packages/mixins/type-tests:
+    devDependencies:
+      '@internal/tsconfig':
+        specifier: workspace:*
+        version: link:../../core/tsconfig
+      '@loglayer/mixin-hot-shots':
+        specifier: workspace:*
+        version: link:../hot-shots
+      '@loglayer/shared':
+        specifier: workspace:*
+        version: link:../../core/shared
+      hot-shots:
+        specifier: 11.2.0
+        version: 11.2.0
+      loglayer:
+        specifier: workspace:*
+        version: link:../../core/loglayer
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/plugins/datadog-apm-trace-injector:
     dependencies:

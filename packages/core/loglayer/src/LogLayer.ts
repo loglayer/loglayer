@@ -33,7 +33,7 @@ interface FormatLogParams {
  * developers to programmatically specify their errors and metadata along with
  * a message in a consistent fashion.
  */
-export class LogLayer implements ILogLayer {
+export class LogLayer implements ILogLayer<LogLayer> {
   private pluginManager: PluginManager;
   private idToTransport: Record<string, any>;
   private hasMultipleTransports: boolean;
@@ -529,7 +529,7 @@ export class LogLayer implements ILogLayer {
    *
    * @see {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
    */
-  muteContext(): ILogLayer {
+  muteContext() {
     this._config.muteContext = true;
     return this;
   }
@@ -539,7 +539,7 @@ export class LogLayer implements ILogLayer {
    *
    * @see {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
    */
-  unMuteContext(): ILogLayer {
+  unMuteContext() {
     this._config.muteContext = false;
     return this;
   }
@@ -549,7 +549,7 @@ export class LogLayer implements ILogLayer {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
    */
-  muteMetadata(): ILogLayer {
+  muteMetadata() {
     this._config.muteMetadata = true;
     return this;
   }
@@ -559,7 +559,7 @@ export class LogLayer implements ILogLayer {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
    */
-  unMuteMetadata(): ILogLayer {
+  unMuteMetadata() {
     this._config.muteMetadata = false;
     return this;
   }
@@ -569,7 +569,7 @@ export class LogLayer implements ILogLayer {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  enableIndividualLevel(logLevel: LogLevelType): ILogLayer {
+  enableIndividualLevel(logLevel: LogLevelType) {
     this.logLevelManager.enableIndividualLevel(logLevel);
     return this;
   }
@@ -579,7 +579,7 @@ export class LogLayer implements ILogLayer {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  disableIndividualLevel(logLevel: LogLevelType): ILogLayer {
+  disableIndividualLevel(logLevel: LogLevelType) {
     this.logLevelManager.disableIndividualLevel(logLevel);
     return this;
   }
@@ -600,7 +600,7 @@ export class LogLayer implements ILogLayer {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  setLevel(logLevel: LogLevelType): ILogLayer {
+  setLevel(logLevel: LogLevelType) {
     this.logLevelManager.setLevel(logLevel);
     return this;
   }

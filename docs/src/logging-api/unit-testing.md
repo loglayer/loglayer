@@ -102,6 +102,12 @@ describe('UserService', () => {
 When a new instance of `MockLogLayer` is created, it also internally creates a new instance of a [`MockLogBuilder`](https://github.com/loglayer/loglayer/blob/master/packages/core/loglayer/src/MockLogBuilder.ts), which is used
 when chaining methods like `withMetadata`, `withError`, etc.
 
+`MockLogLayer` and `MockLogBuilder` both implement their respective interfaces with generic type parameters:
+- `MockLogLayer` implements `ILogLayer<MockLogLayer>` and `ILogBuilder<MockLogLayer>`
+- `MockLogBuilder` implements `ILogBuilder<MockLogBuilder>`
+
+This allows proper type preservation through method chaining and mixin support in tests.
+
 `MockLogLayer` has three methods to help with directly testing the logger itself:
 
 - `getMockLogBuilder(): ILogBuilder`: Returns the underlying `MockLogBuilder` instance.

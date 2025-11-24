@@ -97,20 +97,80 @@ log.stats.gauge('active.connections', 42)
 
 <!--@include: ./_partials/using-mixins-with-iloglayer.md-->
 
+### Method Chaining
+
+The hot-shots mixin integrates seamlessly with LogLayer's method chaining. You can chain LogLayer methods before accessing stats, but note that `send()` returns `void` and ends the chain:
+
+```typescript
+// Chain LogLayer methods BEFORE stats (stats call ends the chain)
+log
+  .withContext({ userId: '123' })
+  .withPrefix('API')
+  .stats.increment('user.login').send(); // send() returns void - chain ends here
+
+// Use stats after creating a child logger
+log
+  .child()
+  .withPrefix('Auth')
+  .stats.gauge('active.sessions', 42).send(); // Chain ends at send()
+
+// Stats methods are available on all LogLayer instances
+const childLogger = log.child();
+childLogger.stats.timing('operation.duration', 150).send();
+
+// To continue logging, start a new statement
+log.withContext({ userId: '123' })
+  .stats.increment('login').send();
+log.info('User logged in'); // New statement after stats
+```
+
+**Important**: The `stats` methods use a builder pattern where `send()` returns `void`, so stats calls should be placed at the end of a method chain. You can chain LogLayer methods before accessing `.stats`, but after calling `.send()`, the chain terminates.
+
+### Testing with MockLogLayer
+
+The hot-shots mixin is fully compatible with `MockLogLayer` for unit testing:
+
+```typescript
+import { MockLogLayer } from 'loglayer';
+import { useLogLayerMixin } from 'loglayer';
+import { hotshotsMixin, MockStatsAPI } from '@loglayer/mixin-hot-shots';
+
+// Register the mixin with a null client for testing
+useLogLayerMixin(hotshotsMixin(null));
+
+const mockLogger = new MockLogLayer();
+
+// All stats methods are available on MockLogLayer
+mockLogger.stats.increment('counter').send();
+mockLogger.stats.gauge('gauge', 100).send();
+mockLogger.stats.timing('timer', 500).send();
+
+// The stats property will be a MockStatsAPI when using null client
+// No actual metrics are sent, making it safe for unit tests
+```
+
+For more information on testing with MockLogLayer, see the [Unit Testing documentation](/logging-api/unit-testing).
+
 ### Troubleshooting
 
-If TypeScript types still do not work after following the [TypeScript Type Usage](#typescript-type-usage) instructions, you can manually add the module declaration to a type declaration file. Create a type declaration file (e.g., `loglayer.d.ts` or add it to an existing declaration file) and include the following:
+If TypeScript types still do not work after following the [TypeScript Type Usage](#typescript-type-usage) instructions, you can manually add the module declarations to a type declaration file. Create a type declaration file (e.g., `loglayer.d.ts` or add it to an existing declaration file) and include the following:
 
 ```typescript
 import type { IHotShotsMixin } from '@loglayer/mixin-hot-shots';
 
+// Required: Augment @loglayer/shared for type preservation through method chaining
+declare module "@loglayer/shared" {
+  interface ILogLayer<This> extends IHotShotsMixin<This> {}
+}
+
+// Required: Augment loglayer for runtime prototype augmentation
 declare module "loglayer" {
   interface LogLayer extends IHotShotsMixin<LogLayer> {}
   interface MockLogLayer extends IHotShotsMixin<MockLogLayer> {}
 }
 ```
 
-This will ensure TypeScript recognizes the mixin methods on your `LogLayer` instances.
+Both augmentations are required to ensure TypeScript recognizes the mixin methods on your `LogLayer` instances and preserves types through method chaining.
 
 ## Migration from v2 to v3
 
