@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/log-level-manager",
   "description": "Base log level manager used to implement log level managers for loglayer.",
-  "version": "1.0.2-alpha-0.0",
+  "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
