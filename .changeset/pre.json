@@ -1,5 +1,5 @@
 {
-  "mode": "pre",
+  "mode": "exit",
   "tag": "alpha-0",
   "initialVersions": {
     "@loglayer/docs": "3.1.1",
@@ -54,6 +54,7 @@
     "@loglayer/transport-winston": "2.1.12"
   },
   "changesets": [
-    "easy-poems-hammer"
+    "easy-poems-hammer",
+    "mass-motivation-bliss"
   ]
 }
