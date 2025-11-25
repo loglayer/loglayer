@@ -1,5 +1,11 @@
 # @loglayer/log-level-manager-global
 
+## 1.0.2-alpha-0.0
+
+### Patch Changes
+
+- @loglayer/log-level-manager@1.0.2-alpha-0.0
+
 ## 1.0.1
 
 ### Patch Changes

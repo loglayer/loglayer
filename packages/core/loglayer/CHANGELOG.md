@@ -1,5 +1,20 @@
 # `loglayer` Changelog
 
+## 8.1.0-alpha-0.0
+
+### Minor Changes
+
+- d5bb7f7: Better mixin support
+
+### Patch Changes
+
+- Updated dependencies [d5bb7f7]
+  - @loglayer/shared@3.1.0-alpha-0.0
+  - @loglayer/context-manager@1.1.12-alpha-0.0
+  - @loglayer/log-level-manager@1.0.2-alpha-0.0
+  - @loglayer/plugin@2.2.4-alpha-0.0
+  - @loglayer/transport@2.3.10-alpha-0.0
+
 ## 8.0.2
 
 ### Patch Changes

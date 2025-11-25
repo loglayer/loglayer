@@ -7,6 +7,47 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Nov 24, 2025
+
+`loglayer`:
+
+_All changes are backwards-compatible._
+
+**Enhanced Mixin Type System** - Major improvements to mixin type preservation through method chaining:
+
+- `ILogLayer` and `ILogBuilder` interfaces are now generic with a `This` parameter (e.g., `ILogLayer<This = ILogLayer<any>>`), enabling automatic type preservation through method chaining
+- All methods that preserve the logger instance (like `withContext()`, `child()`, `withPrefix()`) now return `This`, ensuring mixin methods remain available throughout the chain
+- Methods that transition to the builder phase (`withMetadata()`, `withError()`) return `ILogBuilder<any>`
+- This enhancement means mixin types are automatically preserved without requiring explicit type intersections
+
+**Simplified Mixin Development**:
+
+All mixin type declarations should  now be consolidated into a single module augmentation:
+
+Example:
+```typescript
+declare module 'loglayer' {
+  interface LogLayer extends ICustomMixin<LogLayer> {}
+  interface MockLogLayer extends ICustomMixin<MockLogLayer> {}
+  interface ILogLayer<This> extends ICustomMixin<This> {}
+}
+```
+
+**Easier Mixin Setup**
+
+You now only need to do the following to register mixin types by adding the mixin package 
+to your project's `tsconfig.json` includes:
+
+  ```json
+  {
+    "include": [
+      "./node_modules/@loglayer/mixin-hot-shots"
+    ]
+  }
+  ```
+
+All custom mixin types are no longer required.
+
 ## Nov 20, 2025
 
 `@loglayer/transport-datadog`:

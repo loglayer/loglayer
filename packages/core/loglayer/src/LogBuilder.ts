@@ -9,7 +9,7 @@ import type { PluginManager } from "./PluginManager.js";
  * A class that contains methods to specify log metadata and an error and assembles
  * it to form a data object that can be passed into the transport.
  */
-export class LogBuilder implements ILogBuilder {
+export class LogBuilder implements ILogBuilder<LogBuilder> {
   private err: any;
   private metadata: LogLayerMetadata;
   private structuredLogger: LogLayer;

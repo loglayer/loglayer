@@ -259,4 +259,5 @@ export interface IHotShotsMixin<_T> {
 declare module "loglayer" {
   interface LogLayer extends IHotShotsMixin<LogLayer> {}
   interface MockLogLayer extends IHotShotsMixin<MockLogLayer> {}
+  interface ILogLayer<This> extends IHotShotsMixin<This> {}
 }

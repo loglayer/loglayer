@@ -16,6 +16,20 @@ Mixins are useful when you want to:
 
 ## Using Mixins
 
+### TypeScript Setup
+
+To use mixins with TypeScript, you must register the types by adding each mixin package to your `tsconfig.json` includes:
+
+```json
+{
+  "include": [
+    "./node_modules/@loglayer/mixin-hot-shots"
+  ]
+}
+```
+
+### Registering Mixins
+
 Mixins must be registered **before** creating LogLayer instances. You can register a single mixin or multiple mixins at once:
 
 ```typescript
@@ -49,10 +63,6 @@ const log = new LogLayer({
 log.stats.increment('request.count').send();
 log.stats.timing('request.duration', 150).send();
 ```
-
-### TypeScript Interface Support
-
-<!--@include: ./_partials/using-mixins-with-iloglayer.md--> 
 
 ## Creating Mixins
 

@@ -1,5 +1,11 @@
 # `@loglayer/transport-datadog-browser-logs` Changelog
 
+## 2.2.15-alpha-0.0
+
+### Patch Changes
+
+- @loglayer/transport@2.3.10-alpha-0.0
+
 ## 2.2.14
 
 ### Patch Changes

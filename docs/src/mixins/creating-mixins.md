@@ -29,12 +29,11 @@ A mixin consists of several key components:
 
 ### TypeScript Type Declarations
 
-Use TypeScript declaration merging to add type definitions for your new methods. For flexible and reusable type definitions, create a **generic** mixin interface that can be combined with `ILogLayer` or `ILogBuilder`. The generic type parameter is necessary so we can use the same interface definition for both `LogLayer` and `MockLogLayer` (or `LogBuilder` and `MockLogBuilder`) without duplicating the method definitions:
+All mixins must use TypeScript declaration merging to add type definitions for their methods. Create a **generic** mixin interface and augment the `loglayer` module. The generic type parameter allows you to use the same interface definition for both `LogLayer` and `MockLogLayer` (or `LogBuilder` and `MockLogBuilder`) without duplicating the method definitions:
 
 ```typescript
 // types.ts
-import type { ILogLayer } from 'loglayer';
-
+// Use _T if none of your interface items do not use the template
 export interface ICustomMixin<T> {
   /**
    * Your method documentation
@@ -42,26 +41,83 @@ export interface ICustomMixin<T> {
   customMethod(param: string): T;
 }
 
+// Augment the loglayer module
 declare module 'loglayer' {
   interface LogLayer extends ICustomMixin<LogLayer> {}
   interface MockLogLayer extends ICustomMixin<MockLogLayer> {}
+  interface ILogLayer<This> extends ICustomMixin<This> {}
 }
 ```
 
-By parameterizing the return type with the generic `T`, we define the mixin methods once and reuse them for both classes, with each class getting methods that return the correct type (`LogLayer` or `MockLogLayer`).
+**Module augmentation explanation:**
 
-This approach allows users of your mixin to create combined types for better TypeScript support:
+The `loglayer` module augmentation extends:
+- The concrete `LogLayer` and `MockLogLayer` classes for runtime prototype augmentation (necessary because your mixin implementation adds methods to these class prototypes at runtime)
+- The generic `ILogLayer<This>` interface so that mixin methods are automatically available on the return types of methods like `withContext()`, `child()`, etc. This preserves mixin types through method chaining and enables the generic template system.
+
+By parameterizing the return type with the generic `T`, you define the mixin methods once and reuse them for both classes, with each class getting methods that return the correct type (`LogLayer` or `MockLogLayer`).
+
+#### Augmenting ILogBuilder
+
+Mixins can also augment `ILogBuilder` to add methods available during the builder phase (after calling `withMetadata()` or `withError()`):
 
 ```typescript
-import type { ILogLayer } from 'loglayer';
-import type { ICustomMixin } from '@your-package/mixin';
-
-export type ILogLayerWithMixins = ILogLayer & ICustomMixin<ILogLayer>;
-
-function getLogger(): ILogLayerWithMixins {
-  // Your implementation
-  return log;
+// types.ts
+export interface ICustomBuilderMixin<T> {
+  customBuilderMethod(param: string): T;
 }
+
+// Augment the loglayer module
+declare module 'loglayer' {
+  interface LogBuilder extends ICustomBuilderMixin<LogBuilder> {}
+  interface MockLogBuilder extends ICustomBuilderMixin<MockLogBuilder> {}
+  interface ILogBuilder<This> extends ICustomBuilderMixin<This> {}
+}
+```
+
+Usage:
+
+```typescript
+logger
+  .withMetadata({ foo: 'bar' })        // Returns ILogBuilder<any>
+  .customBuilderMethod('test')         // Mixin method available on builder
+  .withError(error)                    // Builder method
+  .customBuilderMethod('test2')        // Still available through chaining
+  .info('Message');
+```
+
+#### Augmenting Both ILogLayer and ILogBuilder
+
+Many mixins need to work in both the logger and builder phases. Here's an example of a mixin that adds methods to both interfaces:
+
+```typescript
+// types.ts
+export interface IPerfTimingMixin<T> {
+  withPerfStart(id: string): T;
+  withPerfEnd(id: string): T;
+}
+
+// Augment the loglayer module with all interfaces
+declare module 'loglayer' {
+  interface LogLayer extends IPerfTimingMixin<LogLayer> {}
+  interface LogBuilder extends IPerfTimingMixin<LogBuilder> {}
+  interface MockLogLayer extends IPerfTimingMixin<MockLogLayer> {}
+  interface MockLogBuilder extends IPerfTimingMixin<MockLogBuilder> {}
+  interface ILogLayer<This> extends IPerfTimingMixin<This> {}
+  interface ILogBuilder<This> extends IPerfTimingMixin<This> {}
+}
+```
+
+This allows the mixin methods to work in both phases:
+
+```typescript
+// Works on LogLayer
+logger.withPerfStart('operation').info('Started');
+
+// Also works on LogBuilder (after withMetadata/withError)
+logger.withMetadata({ step: 1 })
+  .withPerfStart('operation')
+  .info('Started');
 ```
 
 ### Mixin Implementation
@@ -152,23 +208,23 @@ Here's a complete example showing how a mixin and plugin work together:
 import type { LogLayerPlugin, PluginBeforeDataOutParams, LogLayer } from 'loglayer';
 
 // 1. Declare the mixin method that tracks request context
+export interface IRequestTrackingMixin<T> {
+  /**
+   * Sets the current request ID for correlation tracking
+   */
+  setRequestId(requestId: string): T;
+
+  /**
+   * Gets the current request ID
+   */
+  getRequestId(): string | undefined;
+}
+
+// Augment the loglayer module
 declare module 'loglayer' {
-  interface LogLayer {
-    /**
-     * Sets the current request ID for correlation tracking
-     */
-    setRequestId(requestId: string): LogLayer;
-    
-    /**
-     * Gets the current request ID
-     */
-    getRequestId(): string | undefined;
-  }
-  
-  interface MockLogLayer {
-    setRequestId(requestId: string): MockLogLayer;
-    getRequestId(): string | undefined;
-  }
+  interface LogLayer extends IRequestTrackingMixin<LogLayer> {}
+  interface MockLogLayer extends IRequestTrackingMixin<MockLogLayer> {}
+  interface ILogLayer<This> extends IRequestTrackingMixin<This> {}
 }
 
 // 2. Mixin implementation that stores request ID on each LogLayer instance
@@ -241,15 +297,13 @@ export function requestTrackingMixin(): LogLayerMixinRegistration {
 import { useLogLayerMixin, LogLayer, ConsoleTransport } from 'loglayer';
 import type { ILogLayer } from 'loglayer';
 import { requestTrackingMixin } from '@your-package/request-tracking';
-import type { IRequestTrackingMixin } from '@your-package/request-tracking';
-
-export type ILogLayerWithMixins = ILogLayer & IRequestTrackingMixin<ILogLayer>;
 
 // Register the mixin (includes the plugin automatically)
 useLogLayerMixin(requestTrackingMixin());
 
 // Create LogLayer instance
-const log: ILogLayerWithMixins = new LogLayer({
+// ILogLayer automatically includes mixin methods through the generic parameter
+const log: ILogLayer = new LogLayer({
   transport: new ConsoleTransport({ logger: console })
 });
 
@@ -260,8 +314,9 @@ log.setRequestId('req-123');
 log.info('Processing user request');
 // Output: { requestId: 'req-123', message: 'Processing user request', ... }
 
-log.withMetadata({ userId: 456 }).info('User action');
-// Output: { requestId: 'req-123', userId: 456, message: 'User action', ... }
+// Mixin methods are preserved through method chaining
+log.withMetadata({ userId: 456 }).setRequestId('req-456').info('User action');
+// Output: { requestId: 'req-456', userId: 456, message: 'User action', ... }
 
 // Clear or change the request ID
 log.setRequestId('req-789');
@@ -435,9 +490,11 @@ export interface IMetricsMixin<T> {
   recordMetric(name: string, value: number): T;
 }
 
+// Augment the loglayer module
 declare module 'loglayer' {
   interface LogLayer extends IMetricsMixin<LogLayer> {}
   interface MockLogLayer extends IMetricsMixin<MockLogLayer> {}
+  interface ILogLayer<This> extends IMetricsMixin<This> {}
 }
 
 // 2. Create the mixin
@@ -470,31 +527,47 @@ useLogLayerMixin({
 // ]);
 
 // 4. Create LogLayer instance and use your custom method
-// If your mixin interface is in a separate file, import it:
-// import type { IMetricsMixin } from './your-mixin-file';
-
-export type ILogLayerWithMixins = ILogLayer & IMetricsMixin<ILogLayer>;
-
-const log: ILogLayerWithMixins = new LogLayer({
+// ILogLayer automatically includes mixin methods through the generic parameter
+const log: ILogLayer = new LogLayer({
   transport: new ConsoleTransport({
     logger: console
   })
 });
 
+// Mixin methods are available directly
 log.recordMetric('requests', 1).info('Request received');
+
+// Mixin methods are preserved through method chaining
+log.withContext({ userId: 123 }).recordMetric('requests', 1).info('Request received');
 ```
 
 ## As an NPM Package
 
 When creating a reusable mixin package:
 
-### Install Dependencies
+### TypeScript Setup
 
-You need `loglayer` for types. Since mixins are registered before LogLayer is used, `loglayer` should be installed as a **peer dependency** as the end-user will have their own version of loglayer.
+To use your mixin with TypeScript, users must register the types by adding your mixin package to their `tsconfig.json` includes:
 
-**Important:** Specify the minimal version of `loglayer` required for your mixin using the `>=` version range. For example, if your mixin requires features introduced in LogLayer v7.0.2:
+```json
+{
+  "include": [
+    "./node_modules/@your-package/mixin-name"
+  ]
+}
+```
+
+This ensures TypeScript recognizes the mixin methods on LogLayer instances.
 
 ### Package.json
+
+You need `loglayer` for types.
+
+**Peer Dependencies:**
+
+Since mixins are registered before LogLayer is used, `loglayer` should be installed as a **peer dependency** as the end-user will have their own version of loglayer.
+
+**Important:** Specify the minimal version of `loglayer` required for your mixin using the `>=` version range. For example, if your mixin requires features introduced in LogLayer v7.0.2:
 
 ```json
 {
@@ -504,43 +577,11 @@ You need `loglayer` for types. Since mixins are registered before LogLayer is us
 }
 ```
 
-This ensures that users have at least version 7.0.0 of `loglayer` installed, while allowing them to use any newer compatible versions (7.1.0, 8.0.0, etc.).
+This ensures that users have at least version 7.0.2 of `loglayer` installed, while allowing them to use any newer compatible versions (7.1.0, 8.0.0, etc.).
 
-### Exporting Type Declarations
+## Testing Your Mixin
 
-**Important:** If your type declarations are in separate files (e.g., `types.ts`), you must import them in your main entry file (typically `index.ts`) so TypeScript includes them when the package is consumed. Otherwise, the type declarations won't be available to users of your package:
-
-```typescript
-// index.ts
-import "./types.js";
-// ... rest of your code
-```
-
-These side-effect imports ensure that TypeScript processes the `declare module` directives and makes them available to consumers of your package.
-
-**Make sure to export the generic mixin interface** so users can import it to create combined types:
-
-```typescript
-// types.ts
-import type { ILogLayer } from 'loglayer';
-
-export interface ICustomMixin<T> {
-  customMethod(param: string): T;
-}
-
-declare module 'loglayer' {
-  interface LogLayer extends ICustomMixin<LogLayer> {}
-  interface MockLogLayer extends ICustomMixin<MockLogLayer> {}
-}
-```
-
-```typescript
-// index.ts
-export * from "./types.js"; // Export the interface for users
-// ... rest of your code
-```
-
-This allows users to create combined types like `ILogLayer & ICustomMixin<ILogLayer>` for better TypeScript support when using interfaces.
+Testing mixins is crucial to ensure they work correctly with both `LogLayer` and `MockLogLayer`. For comprehensive testing guidance including unit testing, integration testing, and using LogLayer's testing utilities, see the [Testing Mixins](/mixins/testing-mixins) guide.
 
 ## Important Considerations
 
@@ -549,28 +590,17 @@ This allows users to create combined types like `ILogLayer & ICustomMixin<ILogLa
 When assigning methods to the prototype, always use regular functions (not arrow functions). Arrow functions don't have their own `this` binding and may override the context. However, you can use an arrow function for the `augment` method itself:
 
 ```typescript
-// ✅ Correct: Arrow function for augment is fine
+// Correct: Arrow function for augment is fine
 augment: (prototype) => {
-  // ❌ Wrong: Arrow function for the method itself
+  // Wrong: Arrow function for the method itself
   prototype.myMethod = () => { /* `this` may be wrong */ };
-  
-  // ✅ Correct: Regular function for the method
+
+  // Correct: Regular function for the method
   prototype.myMethod = function (this: LogLayer) {
     // `this` is correctly bound to the instance
     return this;
   };
 }
-```
-
-### TypeScript Type Casting
-
-You may need to use type assertions (`as any`) when implementing methods due to TypeScript's strict type checking on prototype augmentation:
-
-```typescript
-prototype.myMethod = function (this: LogLayer, ...args: any[]): LogLayer {
-  // Implementation
-  return this;
-} as any;
 ```
 
 ## Boilerplate / Template Code

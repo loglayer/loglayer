@@ -20,8 +20,9 @@ import { MockLogBuilder } from "./MockLogBuilder.js";
 /**
  * A mock implementation of the ILogLayer interface that does nothing.
  * Useful for writing unit tests.
+ * MockLogLayer implements both ILogLayer and ILogBuilder for simplicity in testing.
  */
-export class MockLogLayer implements ILogLayer {
+export class MockLogLayer implements ILogLayer<MockLogLayer>, ILogBuilder<MockLogLayer> {
   private mockLogBuilder: ILogBuilder = new MockLogBuilder();
   private mockContextManager: IContextManager = new MockContextManager();
   private mockLogLevelManager: ILogLevelManager = new MockLogLevelManager();
@@ -50,32 +51,28 @@ export class MockLogLayer implements ILogLayer {
 
   disablePlugin(_id: string) {}
 
-  withPrefix(_prefix: string): ILogLayer {
+  withPrefix(_prefix: string) {
     return this;
   }
 
-  withContext(_context?: Record<string, any>): ILogLayer {
+  withContext(_context?: Record<string, any>) {
     return this;
   }
 
-  withError(error: any): ILogBuilder {
-    this.mockLogBuilder.withError(error);
-
-    return this.mockLogBuilder;
+  withError(_error: any) {
+    return this.mockLogBuilder.withError(_error) as any;
   }
 
-  withMetadata(metadata?: Record<string, any>): ILogBuilder {
-    this.mockLogBuilder.withMetadata(metadata);
-
-    return this.mockLogBuilder;
+  withMetadata(_metadata?: Record<string, any>) {
+    return this.mockLogBuilder.withMetadata(_metadata) as any;
   }
 
   getContext(): Record<string, any> {
     return {};
   }
 
-  clearContext(): ILogLayer {
-    return this as ILogLayer;
+  clearContext() {
+    return this;
   }
 
   enableLogging() {
@@ -141,15 +138,15 @@ export class MockLogLayer implements ILogLayer {
     this.mockLogBuilder = mockLogBuilder;
   }
 
-  enableIndividualLevel(_logLevel: LogLevel): ILogLayer {
+  enableIndividualLevel(_logLevel: LogLevel) {
     return this;
   }
 
-  disableIndividualLevel(_logLevel: LogLevel): ILogLayer {
+  disableIndividualLevel(_logLevel: LogLevel) {
     return this;
   }
 
-  setLevel(_logLevel: LogLevel): ILogLayer {
+  setLevel(_logLevel: LogLevel) {
     return this;
   }
 

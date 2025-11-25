@@ -14,7 +14,7 @@ Metadata allows you to add structured data to your log messages. LogLayer provid
 The most common way to add metadata is using the `withMetadata` method:
 
 ```typescript
-log.withMetadata({ 
+log.withMetadata({
   userId: '123',
   action: 'login',
   browser: 'Chrome'

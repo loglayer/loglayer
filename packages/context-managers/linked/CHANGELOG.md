@@ -1,5 +1,11 @@
 # `@loglayer/context-manager-linked` Changelog
 
+## 1.1.12-alpha-0.0
+
+### Patch Changes
+
+- @loglayer/context-manager@1.1.12-alpha-0.0
+
 ## 1.1.11
 
 ### Patch Changes

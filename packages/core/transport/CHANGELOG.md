@@ -1,5 +1,12 @@
 # `@loglayer/transport` Changelog
 
+## 2.3.10-alpha-0.0
+
+### Patch Changes
+
+- Updated dependencies [d5bb7f7]
+  - @loglayer/shared@3.1.0-alpha-0.0
+
 ## 2.3.9
 
 ### Patch Changes

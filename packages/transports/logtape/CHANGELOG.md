@@ -1,5 +1,11 @@
 # `@loglayer/transport-logtape` Changelog
 
+## 1.0.7-alpha-0.0
+
+### Patch Changes
+
+- @loglayer/transport@2.3.10-alpha-0.0
+
 ## 1.0.6
 
 ### Patch Changes

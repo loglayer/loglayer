@@ -7,7 +7,7 @@ import type { ILogBuilder, MessageDataType } from "@loglayer/shared";
  * A mock implementation of the ILogBuilder interface that does nothing.
  * Useful for writing unit tests.
  */
-export class MockLogBuilder implements ILogBuilder {
+export class MockLogBuilder implements ILogBuilder<MockLogBuilder> {
   debug(..._messages: MessageDataType[]): void {}
 
   error(..._messages: MessageDataType[]): void {}
@@ -28,11 +28,11 @@ export class MockLogBuilder implements ILogBuilder {
     return this;
   }
 
-  withMetadata(_metadata?: Record<string, any>): ILogBuilder {
+  withMetadata(_metadata?: Record<string, any>) {
     return this;
   }
 
-  withError(_error: any): ILogBuilder {
+  withError(_error: any) {
     return this;
   }
 }

@@ -56,11 +56,11 @@ export interface OnChildLoggerCreatedParams {
   /**
    * The parent logger instance
    */
-  parentLogger: ILogLayer;
+  parentLogger: ILogLayer<any>;
   /**
    * The child logger instance
    */
-  childLogger: ILogLayer;
+  childLogger: ILogLayer<any>;
   /**
    * The parent logger's context manager
    */
@@ -114,11 +114,11 @@ export interface OnChildLogLevelManagerCreatedParams {
   /**
    * The parent logger instance
    */
-  parentLogger: ILogLayer;
+  parentLogger: ILogLayer<any>;
   /**
    * The child logger instance
    */
-  childLogger: ILogLayer;
+  childLogger: ILogLayer<any>;
   /**
    * The parent logger's log level manager
    */
@@ -247,7 +247,7 @@ export interface LogLayerTransport<LogLibrary = any> {
  * Interface for implementing a LogLayer builder instance.
  * @see {@link https://loglayer.dev | LogLayer Documentation}
  */
-export interface ILogBuilder {
+export interface ILogBuilder<This = ILogBuilder<any>> {
   /**
    * Sends a log message to the logging library under an info log level.
    */
@@ -277,38 +277,86 @@ export interface ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata?: LogLayerMetadata): ILogBuilder;
+  withMetadata(metadata?: LogLayerMetadata): This;
   /**
    * Specifies an Error to include with the log message
    *
    * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
-  withError(error: any): ILogBuilder;
+  withError(error: any): This;
   /**
    * Enable sending logs to the logging library.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  enableLogging(): ILogBuilder;
+  enableLogging(): This;
   /**
    * All logging inputs are dropped and stops sending logs to the logging library.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  disableLogging(): ILogBuilder;
+  disableLogging(): This;
 }
 
 /**
  * Interface for implementing a LogLayer logger instance.
  * @see {@link https://loglayer.dev | LogLayer Documentation}
  */
-export interface ILogLayer extends ILogBuilder {
+export interface ILogLayer<This = ILogLayer<any>> {
+  /**
+   * Sends a log message to the logging library under an info log level.
+   */
+  info(...messages: MessageDataType[]): void;
+  /**
+   * Sends a log message to the logging library under the warn log level
+   */
+  warn(...messages: MessageDataType[]): void;
+  /**
+   * Sends a log message to the logging library under the error log level
+   */
+  error(...messages: MessageDataType[]): void;
+  /**
+   * Sends a log message to the logging library under the debug log level
+   */
+  debug(...messages: MessageDataType[]): void;
+  /**
+   * Sends a log message to the logging library under the trace log level
+   */
+  trace(...messages: MessageDataType[]): void;
+  /**
+   * Sends a log message to the logging library under the fatal log level
+   */
+  fatal(...messages: MessageDataType[]): void;
+  /**
+   * Specifies metadata to include with the log message
+   *
+   * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
+   */
+  withMetadata(metadata?: LogLayerMetadata): ILogBuilder<any>;
+  /**
+   * Specifies an Error to include with the log message
+   *
+   * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
+   */
+  withError(error: any): ILogBuilder<any>;
+  /**
+   * Enable sending logs to the logging library.
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   */
+  enableLogging(): This;
+  /**
+   * All logging inputs are dropped and stops sending logs to the logging library.
+   *
+   * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
+   */
+  disableLogging(): This;
   /**
    * Calls child() and sets the prefix to be included with every log message.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#message-prefixing | Message Prefixing Docs}
    */
-  withPrefix(string: string): ILogLayer;
+  withPrefix(string: string): This;
   /**
    * Appends context data which will be included with
    * every log entry.
@@ -319,25 +367,13 @@ export interface ILogLayer extends ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  withContext(context?: LogLayerContext): ILogLayer;
+  withContext(context?: LogLayerContext): This;
   /**
    * Clears the context data.
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
   clearContext(): void;
-  /**
-   * Specifies metadata to include with the log message
-   *
-   * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
-   */
-  withMetadata(metadata?: LogLayerMetadata): ILogBuilder;
-  /**
-   * Specifies an Error to include with the log message
-   *
-   * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
-   */
-  withError(error: any): ILogBuilder;
   /**
    * Logs only the error object without a log message
    *
@@ -366,44 +402,44 @@ export interface ILogLayer extends ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/child-loggers.html | Child Logging Docs}
    */
-  child(): ILogLayer;
+  child(): This;
 
   /**
    * Disables inclusion of context data in the print
    *
    * @see {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
    */
-  muteContext(): ILogLayer;
+  muteContext(): This;
   /**
    * Enables inclusion of context data in the print
    *
    * @see {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
    */
-  unMuteContext(): ILogLayer;
+  unMuteContext(): This;
   /**
    * Disables inclusion of metadata data in the print
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
    */
-  muteMetadata(): ILogLayer;
+  muteMetadata(): This;
   /**
    * Enables inclusion of metadata data in the print
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
    */
-  unMuteMetadata(): ILogLayer;
+  unMuteMetadata(): This;
   /**
    * Enables a specific log level
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  enableIndividualLevel(logLevel: LogLevelType): ILogLayer;
+  enableIndividualLevel(logLevel: LogLevelType): This;
   /**
    * Disables a specific log level
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  disableIndividualLevel(logLevel: LogLevelType): ILogLayer;
+  disableIndividualLevel(logLevel: LogLevelType): This;
   /**
    * Sets the minimum log level to be used by the logger. Only messages with
    * this level or higher severity will be logged.
@@ -420,7 +456,7 @@ export interface ILogLayer extends ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  setLevel(logLevel: LogLevelType): ILogLayer;
+  setLevel(logLevel: LogLevelType): This;
   /**
    * Checks if a specific log level is enabled
    *
@@ -432,13 +468,13 @@ export interface ILogLayer extends ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  enableLogging(): ILogLayer;
+  enableLogging(): This;
   /**
    * All logging inputs are dropped and stops sending logs to the logging library.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  disableLogging(): ILogLayer;
+  disableLogging(): This;
 
   /**
    * Returns a logger instance for a specific transport
@@ -454,7 +490,7 @@ export interface ILogLayer extends ILogBuilder {
    *
    * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
    */
-  withFreshTransports(transports: LogLayerTransport | Array<LogLayerTransport>): ILogLayer;
+  withFreshTransports(transports: LogLayerTransport | Array<LogLayerTransport>): This;
 
   /**
    * Replaces all existing plugins with new ones.
@@ -464,12 +500,12 @@ export interface ILogLayer extends ILogBuilder {
    *
    * @see {@link https://loglayer.dev/plugins/ | Plugins Docs}
    */
-  withFreshPlugins(plugins: Array<LogLayerPlugin>): ILogLayer;
+  withFreshPlugins(plugins: Array<LogLayerPlugin>): This;
 
   /**
    * Sets the context manager to use for managing context data.
    */
-  withContextManager(manager: IContextManager): ILogLayer;
+  withContextManager(manager: IContextManager): This;
 
   /**
    * Gets the context manager used by the logger.
@@ -479,7 +515,7 @@ export interface ILogLayer extends ILogBuilder {
   /**
    * Sets the log level manager to use for managing log levels.
    */
-  withLogLevelManager(manager: ILogLevelManager): ILogLayer;
+  withLogLevelManager(manager: ILogLevelManager): This;
 
   /**
    * Gets the log level manager used by the logger.
