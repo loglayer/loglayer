@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/mixin-hot-shots",
   "description": "Adds statsd / hot-shots functionality to LogLayer.",
-  "version": "3.3.0-alpha-0.0",
+  "version": "3.3.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

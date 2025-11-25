@@ -1,5 +1,20 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 3.3.0
+
+### Minor Changes
+
+- [#316](https://github.com/loglayer/loglayer/pull/316) [`c45b39a`](https://github.com/loglayer/loglayer/commit/c45b39ac22f8209c9674c1c3c7395a9b4b49c2c9) Thanks [@theogravity](https://github.com/theogravity)! - You now only need to do the following to register mixin types by adding the mixin package
+  to your project's `tsconfig.json` includes:
+
+  ```json
+  {
+    "include": ["./node_modules/@loglayer/mixin-hot-shots"]
+  }
+  ```
+
+  All custom mixin types are no longer required.
+
 ## 3.3.0-alpha-0.0
 
 ### Minor Changes

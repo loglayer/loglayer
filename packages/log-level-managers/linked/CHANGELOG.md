@@ -1,5 +1,12 @@
 # @loglayer/log-level-manager-linked
 
+## 1.0.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/log-level-manager@1.0.2
+
 ## 1.0.2-alpha-0.0
 
 ### Patch Changes

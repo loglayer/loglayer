@@ -1,5 +1,27 @@
 # `loglayer` Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [#316](https://github.com/loglayer/loglayer/pull/316) [`c45b39a`](https://github.com/loglayer/loglayer/commit/c45b39ac22f8209c9674c1c3c7395a9b4b49c2c9) Thanks [@theogravity](https://github.com/theogravity)! - _All changes are backwards-compatible._
+
+  **Enhanced Mixin Type System** - Major improvements to mixin type preservation through method chaining:
+
+  - `ILogLayer` and `ILogBuilder` interfaces are now generic with a `This` parameter (e.g., `ILogLayer<This = ILogLayer<any>>`), enabling automatic type preservation through method chaining
+  - All methods that preserve the logger instance (like `withContext()`, `child()`, `withPrefix()`) now return `This`, ensuring mixin methods remain available throughout the chain
+  - Methods that transition to the builder phase (`withMetadata()`, `withError()`) return `ILogBuilder<any>`
+  - This enhancement means mixin types are automatically preserved without requiring explicit type intersections
+
+### Patch Changes
+
+- Updated dependencies [[`c45b39a`](https://github.com/loglayer/loglayer/commit/c45b39ac22f8209c9674c1c3c7395a9b4b49c2c9)]:
+  - @loglayer/shared@3.1.0
+  - @loglayer/context-manager@1.1.12
+  - @loglayer/log-level-manager@1.0.2
+  - @loglayer/plugin@2.2.4
+  - @loglayer/transport@2.3.10
+
 ## 8.1.0-alpha-0.0
 
 ### Minor Changes

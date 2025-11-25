@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/context-manager-isolated",
   "description": "Context manager for loglayer that maintains isolated context for each logger instance.",
-  "version": "2.0.12-alpha-0.0",
+  "version": "2.0.12",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

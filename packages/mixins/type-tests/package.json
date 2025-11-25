@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/mixin-type-tests",
   "description": "Internal package to test mixin type combinations",
-  "version": "0.1.0-alpha-0.0",
+  "version": "0.1.0",
   "type": "module",
   "private": true,
   "scripts": {
