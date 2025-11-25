@@ -20,22 +20,16 @@ _All changes are backwards-compatible._
 - Methods that transition to the builder phase (`withMetadata()`, `withError()`) return `ILogBuilder<any>`
 - This enhancement means mixin types are automatically preserved without requiring explicit type intersections
 
-**Mixin Development Documentation**:
+**Simplified Mixin Development**:
 
-All mixins should augment both the `@loglayer/shared` and `loglayer` modules:
-
-- **`@loglayer/shared` augmentation** (required): Extends the `ILogLayer<This>` and/or `ILogBuilder<This>` interfaces for type preservation through method chaining
-- **`loglayer` augmentation** (required): Extends the concrete class prototypes (`LogLayer`, `MockLogLayer`, `LogBuilder`, `MockLogBuilder`) for runtime prototype augmentation
+All mixin type declarations should  now be consolidated into a single module augmentation:
 
 Example:
 ```typescript
-declare module '@loglayer/shared' {
-  interface ILogLayer<This> extends ICustomMixin<This> {}
-}
-
 declare module 'loglayer' {
   interface LogLayer extends ICustomMixin<LogLayer> {}
   interface MockLogLayer extends ICustomMixin<MockLogLayer> {}
+  interface ILogLayer<This> extends ICustomMixin<This> {}
 }
 ```
 

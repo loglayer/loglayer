@@ -38,18 +38,14 @@ export interface IPerfTimingMixin<T> {
   withPerfEnd(id: string): T;
 }
 
-// Required: Augment @loglayer/shared for type preservation through method chaining
-declare module '@loglayer/shared' {
-  interface ILogLayer<This> extends IPerfTimingMixin<This> {}
-  interface ILogBuilder<This> extends IPerfTimingMixin<This> {}
-}
-
-// Required: Augment loglayer for runtime prototype augmentation
+// Augment the loglayer module
 declare module 'loglayer' {
   interface LogLayer extends IPerfTimingMixin<LogLayer> {}
   interface LogBuilder extends IPerfTimingMixin<LogBuilder> {}
   interface MockLogLayer extends IPerfTimingMixin<MockLogLayer> {}
   interface MockLogBuilder extends IPerfTimingMixin<MockLogBuilder> {}
+  interface ILogLayer<This> extends IPerfTimingMixin<This> {}
+  interface ILogBuilder<This> extends IPerfTimingMixin<This> {}
 }
 
 // Module-level storage for performance timing state

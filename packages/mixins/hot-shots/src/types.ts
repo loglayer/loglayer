@@ -256,11 +256,8 @@ export interface IHotShotsMixin<_T> {
   getClient(): StatsD;
 }
 
-declare module "@loglayer/shared" {
-  interface ILogLayer<This> extends IHotShotsMixin<This> {}
-}
-
 declare module "loglayer" {
   interface LogLayer extends IHotShotsMixin<LogLayer> {}
   interface MockLogLayer extends IHotShotsMixin<MockLogLayer> {}
+  interface ILogLayer<This> extends IHotShotsMixin<This> {}
 }

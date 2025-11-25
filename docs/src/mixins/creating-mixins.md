@@ -29,10 +29,11 @@ A mixin consists of several key components:
 
 ### TypeScript Type Declarations
 
-All mixins must use TypeScript declaration merging to add type definitions for their methods. Create a **generic** mixin interface and augment both the `@loglayer/shared` and `loglayer` modules. The generic type parameter allows you to use the same interface definition for both `LogLayer` and `MockLogLayer` (or `LogBuilder` and `MockLogBuilder`) without duplicating the method definitions:
+All mixins must use TypeScript declaration merging to add type definitions for their methods. Create a **generic** mixin interface and augment the `loglayer` module. The generic type parameter allows you to use the same interface definition for both `LogLayer` and `MockLogLayer` (or `LogBuilder` and `MockLogBuilder`) without duplicating the method definitions:
 
 ```typescript
 // types.ts
+// Use _T if none of your interface items do not use the template
 export interface ICustomMixin<T> {
   /**
    * Your method documentation
@@ -40,23 +41,19 @@ export interface ICustomMixin<T> {
   customMethod(param: string): T;
 }
 
-// Required: Augment @loglayer/shared for type preservation through method chaining
-declare module '@loglayer/shared' {
-  interface ILogLayer<This> extends ICustomMixin<This> {}
-}
-
-// Required: Augment loglayer for runtime prototype augmentation
+// Augment the loglayer module
 declare module 'loglayer' {
   interface LogLayer extends ICustomMixin<LogLayer> {}
   interface MockLogLayer extends ICustomMixin<MockLogLayer> {}
+  interface ILogLayer<This> extends ICustomMixin<This> {}
 }
 ```
 
-**Both module augmentations are required:**
+**Module augmentation explanation:**
 
-1. **`@loglayer/shared` augmentation**: Extends the `ILogLayer<This>` interface so that mixin methods are automatically available on the return types of methods like `withContext()`, `child()`, etc. This preserves mixin types through method chaining and enables the generic template system.
-
-2. **`loglayer` augmentation**: Extends the concrete `LogLayer` and `MockLogLayer` classes for runtime prototype augmentation. This is necessary because your mixin implementation adds methods to these class prototypes at runtime.
+The `loglayer` module augmentation extends:
+- The concrete `LogLayer` and `MockLogLayer` classes for runtime prototype augmentation (necessary because your mixin implementation adds methods to these class prototypes at runtime)
+- The generic `ILogLayer<This>` interface so that mixin methods are automatically available on the return types of methods like `withContext()`, `child()`, etc. This preserves mixin types through method chaining and enables the generic template system.
 
 By parameterizing the return type with the generic `T`, you define the mixin methods once and reuse them for both classes, with each class getting methods that return the correct type (`LogLayer` or `MockLogLayer`).
 
@@ -70,15 +67,11 @@ export interface ICustomBuilderMixin<T> {
   customBuilderMethod(param: string): T;
 }
 
-// Required: Augment @loglayer/shared for type preservation through method chaining
-declare module '@loglayer/shared' {
-  interface ILogBuilder<This> extends ICustomBuilderMixin<This> {}
-}
-
-// Required: Augment loglayer for runtime prototype augmentation
+// Augment the loglayer module
 declare module 'loglayer' {
   interface LogBuilder extends ICustomBuilderMixin<LogBuilder> {}
   interface MockLogBuilder extends ICustomBuilderMixin<MockLogBuilder> {}
+  interface ILogBuilder<This> extends ICustomBuilderMixin<This> {}
 }
 ```
 
@@ -104,18 +97,14 @@ export interface IPerfTimingMixin<T> {
   withPerfEnd(id: string): T;
 }
 
-// Augment both interfaces in @loglayer/shared
-declare module '@loglayer/shared' {
-  interface ILogLayer<This> extends IPerfTimingMixin<This> {}
-  interface ILogBuilder<This> extends IPerfTimingMixin<This> {}
-}
-
-// Augment all concrete classes in loglayer
+// Augment the loglayer module with all interfaces
 declare module 'loglayer' {
   interface LogLayer extends IPerfTimingMixin<LogLayer> {}
   interface LogBuilder extends IPerfTimingMixin<LogBuilder> {}
   interface MockLogLayer extends IPerfTimingMixin<MockLogLayer> {}
   interface MockLogBuilder extends IPerfTimingMixin<MockLogBuilder> {}
+  interface ILogLayer<This> extends IPerfTimingMixin<This> {}
+  interface ILogBuilder<This> extends IPerfTimingMixin<This> {}
 }
 ```
 
@@ -231,15 +220,11 @@ export interface IRequestTrackingMixin<T> {
   getRequestId(): string | undefined;
 }
 
-// Required: Augment @loglayer/shared for type preservation through method chaining
-declare module '@loglayer/shared' {
-  interface ILogLayer<This> extends IRequestTrackingMixin<This> {}
-}
-
-// Required: Augment loglayer for runtime prototype augmentation
+// Augment the loglayer module
 declare module 'loglayer' {
   interface LogLayer extends IRequestTrackingMixin<LogLayer> {}
   interface MockLogLayer extends IRequestTrackingMixin<MockLogLayer> {}
+  interface ILogLayer<This> extends IRequestTrackingMixin<This> {}
 }
 
 // 2. Mixin implementation that stores request ID on each LogLayer instance
@@ -505,16 +490,11 @@ export interface IMetricsMixin<T> {
   recordMetric(name: string, value: number): T;
 }
 
-// Augment ILogLayer interface for method chaining
-// You'll have to install the @loglayer/shared package as a dep
-declare module '@loglayer/shared' {
-  interface ILogLayer<This> extends IMetricsMixin<This> {}
-}
-
-// Augment concrete classes for runtime
+// Augment the loglayer module
 declare module 'loglayer' {
   interface LogLayer extends IMetricsMixin<LogLayer> {}
   interface MockLogLayer extends IMetricsMixin<MockLogLayer> {}
+  interface ILogLayer<This> extends IMetricsMixin<This> {}
 }
 
 // 2. Create the mixin
@@ -581,15 +561,11 @@ This ensures TypeScript recognizes the mixin methods on LogLayer instances.
 
 ### Package.json
 
-You need `loglayer` and `@loglayer/shared` for types.
+You need `loglayer` for types.
 
 **Peer Dependencies:**
 
 Since mixins are registered before LogLayer is used, `loglayer` should be installed as a **peer dependency** as the end-user will have their own version of loglayer.
-
-**Dev Dependencies:**
-
-Since mixins augment the `@loglayer/shared` module, you need `@loglayer/shared` as a **dev dependency** for TypeScript type definitions during development.
 
 **Important:** Specify the minimal version of `loglayer` required for your mixin using the `>=` version range. For example, if your mixin requires features introduced in LogLayer v7.0.2:
 
@@ -597,9 +573,6 @@ Since mixins augment the `@loglayer/shared` module, you need `@loglayer/shared` 
 {
   "peerDependencies": {
     "loglayer": ">=7.0.2"
-  },
-  "devDependencies": {
-    "@loglayer/shared": ">=7.0.2"
   }
 }
 ```
