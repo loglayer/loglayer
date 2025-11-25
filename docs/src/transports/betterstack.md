@@ -90,11 +90,9 @@ logger.withMetadata({ userId: "123" }).info("User logged in");
 | `enabled` | `boolean` | `true` | If false, the transport will not send logs to the logger |
 | `id` | `string` | - | A user-defined identifier for the transport |
 
-### HTTP Transport Options
+<!--@include: ./_partials/http-transport-options.md-->
 
-The Better Stack transport extends the HTTP transport and supports all its configuration options:
-
-<partial name="http-transport-options" />
+For more details on these options, see the [HTTP transport documentation](/transports/http#configuration).
 
 ## Changelog
 
