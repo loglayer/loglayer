@@ -7,9 +7,11 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
-## Nov 22, 2025
+## Nov 24, 2025
 
 `loglayer`:
+
+_All changes are backwards-compatible._
 
 **Enhanced Mixin Type System** - Major improvements to mixin type preservation through method chaining:
 
@@ -18,9 +20,9 @@ description: Learn about the latest features and improvements in LogLayer
 - Methods that transition to the builder phase (`withMetadata()`, `withError()`) return `ILogBuilder<any>`
 - This enhancement means mixin types are automatically preserved without requiring explicit type intersections
 
-**Mixin Development Requirements**:
+**Mixin Development Documentation**:
 
-All mixins must now augment both the `@loglayer/shared` and `loglayer` modules:
+All mixins should augment both the `@loglayer/shared` and `loglayer` modules:
 
 - **`@loglayer/shared` augmentation** (required): Extends the `ILogLayer<This>` and/or `ILogBuilder<This>` interfaces for type preservation through method chaining
 - **`loglayer` augmentation** (required): Extends the concrete class prototypes (`LogLayer`, `MockLogLayer`, `LogBuilder`, `MockLogBuilder`) for runtime prototype augmentation
@@ -37,25 +39,20 @@ declare module 'loglayer' {
 }
 ```
 
-`@loglayer/mixin-hot-shots`:
+**Easier Mixin Setup**
 
-- Updated to implement dual module augmentation pattern (`@loglayer/shared` and `loglayer`)
-- Now properly supports generic type parameters for full type preservation
+You now only need to do the following to register mixin types by adding the mixin package 
+to your project's `tsconfig.json` includes:
 
-Testing:
+  ```json
+  {
+    "include": [
+      "./node_modules/@loglayer/mixin-hot-shots"
+    ]
+  }
+  ```
 
-- Created internal `@loglayer/mixin-type-tests` package with comprehensive type tests covering 28 scenarios
-- Tests validate automatic type inference, method chaining, multiple mixins, MockLogLayer compatibility, builder transitions, and intersection types
-- Intersection type tests ensure backward compatibility with explicit type intersections (e.g., `ILogLayer & ICustomMixin<ILogLayer>`)
-- Includes hot-shots mixin integration tests with null client
-
-Documentation:
-
-- Updated all mixin documentation to clearly state that both module augmentations are required
-- Added comprehensive mixin testing section with unit testing, integration testing, multiple mixin testing, and type testing examples
-- Updated hot-shots mixin documentation with accurate method chaining behavior (clarified that `send()` returns `void` and terminates the chain)
-- Enhanced troubleshooting sections to show both required augmentations
-- All code examples now consistently use "Required:" comments for both augmentations
+All custom mixin types are no longer required.
 
 ## Nov 20, 2025
 

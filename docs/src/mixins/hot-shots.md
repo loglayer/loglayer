@@ -18,18 +18,32 @@ This mixin requires the [`hot-shots`](https://github.com/bdeitte/hot-shots) libr
 ::: code-group
 
 ```bash [npm]
-npm install loglayer @loglayer/mixin-hot-shots hot-shots
+npm install @loglayer/mixin-hot-shots hot-shots
 ```
 
 ```bash [yarn]
-yarn add loglayer @loglayer/mixin-hot-shots hot-shots
+yarn add @loglayer/mixin-hot-shots hot-shots
 ```
 
 ```bash [pnpm]
-pnpm add loglayer @loglayer/mixin-hot-shots hot-shots
+pnpm add @loglayer/mixin-hot-shots hot-shots
 ```
 
 :::
+
+## TypeScript Setup
+
+To use this mixin with TypeScript, you must register the types by adding the mixin package to your `tsconfig.json` includes:
+
+```json
+{
+  "include": [
+    "./node_modules/@loglayer/mixin-hot-shots"
+  ]
+}
+```
+
+This ensures TypeScript recognizes the mixin methods on your LogLayer instances.
 
 ## Usage
 
@@ -93,10 +107,6 @@ log.stats.gauge('active.connections', 42)
   .send();
 ```
 
-### TypeScript Type Usage
-
-<!--@include: ./_partials/using-mixins-with-iloglayer.md-->
-
 ### Method Chaining
 
 The hot-shots mixin integrates seamlessly with LogLayer's method chaining. You can chain LogLayer methods before accessing stats, but note that `send()` returns `void` and ends the chain:
@@ -150,27 +160,6 @@ mockLogger.stats.timing('timer', 500).send();
 ```
 
 For more information on testing with MockLogLayer, see the [Unit Testing documentation](/logging-api/unit-testing).
-
-### Troubleshooting
-
-If TypeScript types still do not work after following the [TypeScript Type Usage](#typescript-type-usage) instructions, you can manually add the module declarations to a type declaration file. Create a type declaration file (e.g., `loglayer.d.ts` or add it to an existing declaration file) and include the following:
-
-```typescript
-import type { IHotShotsMixin } from '@loglayer/mixin-hot-shots';
-
-// Required: Augment @loglayer/shared for type preservation through method chaining
-declare module "@loglayer/shared" {
-  interface ILogLayer<This> extends IHotShotsMixin<This> {}
-}
-
-// Required: Augment loglayer for runtime prototype augmentation
-declare module "loglayer" {
-  interface LogLayer extends IHotShotsMixin<LogLayer> {}
-  interface MockLogLayer extends IHotShotsMixin<MockLogLayer> {}
-}
-```
-
-Both augmentations are required to ensure TypeScript recognizes the mixin methods on your `LogLayer` instances and preserves types through method chaining.
 
 ## Migration from v2 to v3
 

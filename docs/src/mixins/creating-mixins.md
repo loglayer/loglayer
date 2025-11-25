@@ -131,42 +131,6 @@ logger.withMetadata({ step: 1 })
   .info('Started');
 ```
 
-#### Automatic Type Inference with Generic ILogLayer
-
-Since `ILogLayer` is now generic (`ILogLayer<This>`), **mixin types are automatically preserved through method chaining** without needing explicit combined types:
-
-```typescript
-import type { ILogLayer } from 'loglayer';
-import { LogLayer } from 'loglayer';
-import { customMixin } from '@your-package/mixin';
-
-// Register the mixin
-useLogLayerMixin(customMixin());
-
-// ILogLayer automatically includes mixin methods through the generic parameter
-const log: ILogLayer = new LogLayer({ transport: ... });
-
-// Mixin methods are available on the instance
-log.customMethod('test').info('Message');
-
-// Mixin methods are preserved through method chaining
-log.withContext({ foo: 'bar' }).customMethod('test').info('Message');
-```
-
-However, if you're creating factory functions or want explicit combined types for clarity, you can still create intersection types:
-
-```typescript
-import type { ILogLayer } from 'loglayer';
-import type { ICustomMixin } from '@your-package/mixin';
-
-export type ILogLayerWithMixins = ILogLayer & ICustomMixin<ILogLayer>;
-
-function getLogger(): ILogLayerWithMixins {
-  // Your implementation
-  return log;
-}
-```
-
 ### Mixin Implementation
 
 A mixin is an object that implements either `LogLayerMixin` or `LogBuilderMixin`:
@@ -542,6 +506,7 @@ export interface IMetricsMixin<T> {
 }
 
 // Augment ILogLayer interface for method chaining
+// You'll have to install the @loglayer/shared package as a dep
 declare module '@loglayer/shared' {
   interface ILogLayer<This> extends IMetricsMixin<This> {}
 }
@@ -600,63 +565,46 @@ log.withContext({ userId: 123 }).recordMetric('requests', 1).info('Request recei
 
 When creating a reusable mixin package:
 
-### Install Dependencies
+### TypeScript Setup
 
-You need `loglayer` for types. Since mixins are registered before LogLayer is used, `loglayer` should be installed as a **peer dependency** as the end-user will have their own version of loglayer.
+To use your mixin with TypeScript, users must register the types by adding your mixin package to their `tsconfig.json` includes:
 
-**Important:** Specify the minimal version of `loglayer` required for your mixin using the `>=` version range. For example, if your mixin requires features introduced in LogLayer v7.0.2:
+```json
+{
+  "include": [
+    "./node_modules/@your-package/mixin-name"
+  ]
+}
+```
+
+This ensures TypeScript recognizes the mixin methods on LogLayer instances.
 
 ### Package.json
+
+You need `loglayer` and `@loglayer/shared` for types.
+
+**Peer Dependencies:**
+
+Since mixins are registered before LogLayer is used, `loglayer` should be installed as a **peer dependency** as the end-user will have their own version of loglayer.
+
+**Dev Dependencies:**
+
+Since mixins augment the `@loglayer/shared` module, you need `@loglayer/shared` as a **dev dependency** for TypeScript type definitions during development.
+
+**Important:** Specify the minimal version of `loglayer` required for your mixin using the `>=` version range. For example, if your mixin requires features introduced in LogLayer v7.0.2:
 
 ```json
 {
   "peerDependencies": {
     "loglayer": ">=7.0.2"
+  },
+  "devDependencies": {
+    "@loglayer/shared": ">=7.0.2"
   }
 }
 ```
 
-This ensures that users have at least version 7.0.0 of `loglayer` installed, while allowing them to use any newer compatible versions (7.1.0, 8.0.0, etc.).
-
-### Exporting Type Declarations
-
-**Important:** If your type declarations are in separate files (e.g., `types.ts`), you must import them in your main entry file (typically `index.ts`) so TypeScript includes them when the package is consumed. Otherwise, the type declarations won't be available to users of your package:
-
-```typescript
-// index.ts
-import "./types.js";
-// ... rest of your code
-```
-
-These side-effect imports ensure that TypeScript processes the `declare module` directives and makes them available to consumers of your package.
-
-**Make sure to export the generic mixin interface** so users can optionally import it to create explicit combined types:
-
-```typescript
-// types.ts
-export interface ICustomMixin<T> {
-  customMethod(param: string): T;
-}
-
-// Required: Augment @loglayer/shared for type preservation through method chaining
-declare module '@loglayer/shared' {
-  interface ILogLayer<This> extends ICustomMixin<This> {}
-}
-
-// Required: Augment loglayer for runtime prototype augmentation
-declare module 'loglayer' {
-  interface LogLayer extends ICustomMixin<LogLayer> {}
-  interface MockLogLayer extends ICustomMixin<MockLogLayer> {}
-}
-```
-
-```typescript
-// index.ts
-export * from "./types.js"; // Export the interface for users
-// ... rest of your code
-```
-
-Both module augmentations are required for mixins to work correctly. The `@loglayer/shared` augmentation preserves mixin types through method chaining via `ILogLayer`'s generic parameter, while the `loglayer` augmentation provides runtime prototype augmentation. Users can still create explicit combined types like `ILogLayer & ICustomMixin<ILogLayer>` if they prefer explicit typing for factory functions or documentation purposes.
+This ensures that users have at least version 7.0.2 of `loglayer` installed, while allowing them to use any newer compatible versions (7.1.0, 8.0.0, etc.).
 
 ## Testing Your Mixin
 
@@ -680,17 +628,6 @@ augment: (prototype) => {
     return this;
   };
 }
-```
-
-### TypeScript Type Casting
-
-You may need to use type assertions (`as any`) when implementing methods due to TypeScript's strict type checking on prototype augmentation:
-
-```typescript
-prototype.myMethod = function (this: LogLayer, ...args: any[]): LogLayer {
-  // Implementation
-  return this;
-} as any;
 ```
 
 ## Boilerplate / Template Code
