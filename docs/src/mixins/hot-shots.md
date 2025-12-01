@@ -79,7 +79,7 @@ log.stats.gauge('active.connections', 42).send();
 
 ### Builder Pattern
 
-All stats methods use a fluent builder pattern. You can chain configuration methods before calling `send()`:
+All stats methods use a fluent builder pattern. You can chain configuration methods before calling `send()`. Since `send()` returns `void`, stats calls should be placed at the end of a method chain:
 
 ```typescript
 // Increment with value, tags, and sample rate
@@ -96,45 +96,20 @@ log.stats.increment('request.count')
   })
   .send();
 
-// Timing with tags
-log.stats.timing('request.duration', 150)
-  .withTags({ env: 'production', method: 'GET' })
-  .send();
-
-// Gauge with sample rate
-log.stats.gauge('active.connections', 42)
-  .withSampleRate(1.0)
-  .send();
-```
-
-### Method Chaining
-
-The hot-shots mixin integrates seamlessly with LogLayer's method chaining. You can chain LogLayer methods before accessing stats, but note that `send()` returns `void` and ends the chain:
-
-```typescript
-// Chain LogLayer methods BEFORE stats (stats call ends the chain)
+// Chain LogLayer methods BEFORE stats
 log
   .withContext({ userId: '123' })
   .withPrefix('API')
-  .stats.increment('user.login').send(); // send() returns void - chain ends here
+  .stats.increment('user.login').send(); // Chain ends here
 
-// Use stats after creating a child logger
-log
-  .child()
-  .withPrefix('Auth')
-  .stats.gauge('active.sessions', 42).send(); // Chain ends at send()
-
-// Stats methods are available on all LogLayer instances
+// Stats methods are available on child loggers
 const childLogger = log.child();
 childLogger.stats.timing('operation.duration', 150).send();
 
-// To continue logging, start a new statement
-log.withContext({ userId: '123' })
-  .stats.increment('login').send();
-log.info('User logged in'); // New statement after stats
+// To continue logging after stats, start a new statement
+log.stats.increment('login').send();
+log.info('User logged in');
 ```
-
-**Important**: The `stats` methods use a builder pattern where `send()` returns `void`, so stats calls should be placed at the end of a method chain. You can chain LogLayer methods before accessing `.stats`, but after calling `.send()`, the chain terminates.
 
 ### Testing with MockLogLayer
 
