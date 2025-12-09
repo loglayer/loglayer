@@ -1,5 +1,12 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 3.3.1
+
+### Patch Changes
+
+- [#318](https://github.com/loglayer/loglayer/pull/318) [`358032a`](https://github.com/loglayer/loglayer/commit/358032a222e186cb9e34580a644831e7ce584869) Thanks [@theogravity](https://github.com/theogravity)! - - Add to package.json `sideEffects: false`, which will better help with tree shaking
+  - Dev dependency updates
+
 ## 3.3.0
 
 ### Minor Changes
