@@ -94,6 +94,43 @@ log.withError(new Error('Something went wrong')).error('Failed to process reques
 If you want to use the Console Transport as a structured logger (JSON output), see the [Console Transport structured logging section](/transports/console#structured-logging).
 :::
 
+## Using an Error Serializer
+
+When logging errors, JavaScript `Error` objects don't serialize to JSON well by default. We recommend using an error serializer like `serialize-error` to ensure error details are properly captured:
+
+::: code-group
+
+```sh [npm]
+npm install serialize-error
+```
+
+```sh [pnpm]
+pnpm add serialize-error
+```
+
+```sh [yarn]
+yarn add serialize-error
+```
+
+:::
+
+```typescript
+import { LogLayer, ConsoleTransport } from 'loglayer'
+import { serializeError } from 'serialize-error'
+
+const log = new LogLayer({
+  errorSerializer: serializeError,
+  transport: new ConsoleTransport({
+    logger: console,
+  }),
+})
+
+// Error details will be properly serialized
+log.withError(new Error('Something went wrong')).error('Failed to process request')
+```
+
+For more error handling options, see the [Error Handling documentation](/logging-api/error-handling#error-serialization).
+
 ## Next steps
 
 - Optionally [configure](/configuration) LogLayer to further customize logging behavior.
