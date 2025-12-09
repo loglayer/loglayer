@@ -90,6 +90,10 @@ log.info('Processing request') // Will include requestId
 log.withError(new Error('Something went wrong')).error('Failed to process request')
 ```
 
+::: tip Structured logging
+If you want to use the Console Transport as a structured logger (JSON output), see the [Console Transport structured logging section](/transports/console#structured-logging).
+:::
+
 ## Next steps
 
 - Optionally [configure](/configuration) LogLayer to further customize logging behavior.

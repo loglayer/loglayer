@@ -13,7 +13,7 @@ hero:
     alt: LogLayer
   actions:
     - theme: brand
-      text: What is LogLayer?
+      text: Why Use LogLayer?
       link: /introduction
     - theme: alt
       text: Quickstart

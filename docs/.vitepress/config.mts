@@ -103,7 +103,7 @@ export default defineConfig({
       {
         text: 'Introduction',
         items: [
-          { text: 'What is LogLayer?', link: '/introduction' },
+          { text: 'Why Use LogLayer?', link: '/introduction' },
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Configuration', link: '/configuration' },
           { text: 'Migrating Versions', link: '/migrating' },

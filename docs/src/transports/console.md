@@ -188,7 +188,7 @@ log.withMetadata({ user: 'john' }).info('User logged in');
 // console.info('{"user":"john","msg":"User logged in","timestamp":"2023-12-01T10:30:00.000Z","level":"info"}')
 ```
 
-## Combining Fields
+## Structured Logging
 
 You can combine multiple fields to create structured log objects:
 

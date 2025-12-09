@@ -5,55 +5,35 @@ description: Learn more about LogLayer and how it unifies your logging experienc
 
 # Introduction
 
-`loglayer` is a unified logger that can route logs to various logging libraries, cloud providers, files, 
-and OpenTelemetry while providing a fluent API for specifying log messages, metadata and errors, enhancing and standardizing the developer experience 
-around writing logs.
+Most logging libraries offer the usual methods like `info`, `warn`, and `error`, but vary significantly in how they handle structured metadata and `Error` objects. This inconsistency leads to ad-hoc solutions and code that's tightly coupled to a specific logger.
+
+LogLayer solves this by providing a fluent, expressive API that routes logs to any logging library, cloud provider, files, or OpenTelemetry through its transport system.
 
 ```typescript
 log
-  .withMetadata({ userId: '1234' }) // Add structured metadata
-  .withError(new Error('Something went wrong')) // Attach an Error object
-  .error('User action completed') // Log the message with an error level
+  .withMetadata({ userId: '1234' })
+  .withError(new Error('Something went wrong'))
+  .error('User action completed')
 ```
 
-_LogLayer is designed to work seamlessly across both server-side and browser environments. However, individual transports and plugins may have specific environment requirements, which is indicated on their respective page._
+```json
+{
+  "msg": "User action completed",
+  "userId": "1234",
+  "err": {
+    "message": "Something went wrong",
+    "stack": "Error: Something went wrong\n    at ..."
+  }
+}
+```
 
-LogLayer supports multiple JavaScript runtimes including Node.js, [Deno](/getting-started#deno), and [Bun](/getting-started#bun). See the [getting started guide](/getting-started) for detailed setup instructions for each runtime.
+## Multi-Platform Support
 
-## Why LogLayer?
+LogLayer works seamlessly across server-side and browser environments, and supports multiple JavaScript runtimes including Node.js, Deno, and Bun.
 
-Challenges with logging—choosing, using, and maintaining the right logger for various projects—are a common experience. 
-While most loggers offer the usual methods like `info`, `warn`, and `error`, they vary significantly in handling 
-structured metadata or `Error` objects. This can lead to ad-hoc solutions, like serializing errors or writing custom 
-pipelines, just to get logs formatted correctly.
+_Individual transports and plugins may have specific environment requirements, which is indicated on their respective page._
 
-LogLayer was built to address these pain points by introducing a fluid, expressive API. With methods like 
-`withMetadata()` and `withError()`, **LogLayer separates object injection from the log message itself, making logging code 
-both cleaner and more maintainable.**
-
-Logs are processed through a LogLayer Transport, which acts as an adapter for the preferred logging library. 
-This design offers several key advantages:
-
-- **Multi-Transport Support**: Send logs to multiple destinations (e.g., [DataDog](/transports/datadog) and 
-[New Relic](/transports/new-relic)) simultaneously. This feature can be also used to ship logs directly to DataDog without 
-relying on their APM package or sidecars.
-
-- **Easy Logger Swapping**: You're using `pino` with Next.js, you might find issues where it doesn’t work out of the box 
-after a production build without webpack hacks. With LogLayer, a better-suited library can be swapped in without 
-touching the logging code.
-
-## Battle Tested
-
-LogLayer has been in production use for at least four years at [Airtop.ai](https://airtop.ai) (formerly Switchboard) in
-multiple backend and frontend systems.
-
-*LogLayer is not affiliated with Airtop.*
-
-## Tiny and Tree-Shakable
-
-- `loglayer` standalone is 5kB gzipped. 
-- Most logging-based LogLayer transports are < 1kB gzipped. 
-- All LogLayer packages are tree-shakable.
+See the [getting started guide](/getting-started) for setup instructions.
 
 ## Bring Your Own Logger
 
@@ -76,16 +56,59 @@ bunyan.info({ some: 'data' }, 'my message')      // bunyan
 
 Start with [basic logging](/logging-api/basic-logging).
 
-## Standardized Error Handling
+## Separation of Errors, Context, and Metadata
 
-`loglayer` provides consistent error handling across all logging libraries:
+LogLayer distinguishes between three types of structured data, each serving a specific purpose:
+
+| Type | Method | Scope | Purpose |
+|------|--------|-------|---------|
+| **Context** | `withContext()` | Persistent across all logs | Request IDs, user info, session data |
+| **Metadata** | `withMetadata()` | Single log entry only | Event-specific details like durations, counts |
+| **Errors** | `withError()` | Single log entry only | Error objects with stack traces |
+
+This separation provides several benefits:
+
+- **Clarity**: Each piece of data has a clear purpose and appropriate scope
+- **No pollution**: Per-log metadata doesn't accidentally persist to future logs
+- **Flexible output**: Configure where each type appears in the final log (root level or dedicated fields)
+- **Better debugging**: Errors are handled consistently with proper serialization
 
 ```typescript
-// Error handling works the same way regardless of logging library
-log.withError(new Error('test')).error('Operation failed')
+log
+  .withContext({ requestId: 'abc-123' })     // Persists for all future logs
+  .withMetadata({ duration: 150 })            // Only for this log entry
+  .withError(new Error('Timeout'))            // Only for this log entry
+  .error('Request failed')
 ```
 
-See more about [error handling](/logging-api/error-handling).
+```json
+{
+  "msg": "Request failed",
+  "requestId": "abc-123",
+  "duration": 150,
+  "err": {
+    "message": "Timeout",
+    "stack": "Error: Timeout\n    at ..."
+  }
+}
+```
+
+_Context, metadata, and errors can be placed in dedicated fields via [configuration](/configuration)._
+
+See the dedicated pages for [context](/logging-api/context), [metadata](/logging-api/metadata), and [errors](/logging-api/error-handling).
+
+## Battle Tested
+
+LogLayer has been in production use for at least four years at [Airtop.ai](https://airtop.ai) (formerly Switchboard) in
+multiple backend and frontend systems.
+
+*LogLayer is not affiliated with Airtop.*
+
+## Tiny and Tree-Shakable
+
+- `loglayer` standalone is 5kB gzipped.
+- Most logging-based LogLayer transports are < 1kB gzipped.
+- All LogLayer packages are tree-shakable.
 
 ## Powerful Plugin System
 
@@ -142,6 +165,22 @@ log.info('User logged in successfully')
 ```
 
 See more about [multi-transport support](/transports/multiple-transports).
+
+## HTTP Logging
+
+Send logs directly to any HTTP endpoint without a third-party logging library. Supports batching, retries, and custom headers.
+
+See the [HTTP transport](/transports/http) for more details.
+
+## File Logging
+
+Write logs directly to files with support for rotation based on time or size, optional compression, and batching.
+
+See the [Log File Rotation transport](/transports/log-file-rotation) for more details.
+
+## OpenTelemetry
+
+Send logs to OpenTelemetry collectors with the [OpenTelemetry transport](/transports/opentelemetry), or enrich logs with trace context using the [OpenTelemetry plugin](/plugins/opentelemetry).
 
 ## StatsD Support
 
