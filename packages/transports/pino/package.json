@@ -16,6 +16,7 @@
     }
   },
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -44,12 +45,12 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "24.10.1",
+    "@types/node": "24.10.2",
     "loglayer": "workspace:*",
-    "tsdown": "0.15.12",
-    "tsx": "4.20.6",
+    "tsdown": "0.17.2",
+    "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "vitest": "4.0.9"
+    "vitest": "4.0.15"
   },
   "peerDependencies": {
     "pino": "*"

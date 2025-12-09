@@ -16,6 +16,7 @@
     }
   },
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -46,9 +47,9 @@
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
     "serialize-error": "12.0.0",
-    "tsdown": "0.15.12",
+    "tsdown": "0.17.2",
     "typescript": "5.9.3",
-    "vitest": "4.0.9"
+    "vitest": "4.0.15"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

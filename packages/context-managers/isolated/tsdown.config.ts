@@ -7,5 +7,6 @@ export default defineConfig({
 
   "sourcemap": true,
   "treeshake": true,
-  "nodeProtocol": true
+  "nodeProtocol": true,
+  "fixedExtension": false
 });
