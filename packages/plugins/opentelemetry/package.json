@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/plugin-opentelemetry",
   "description": "OpenTelemetry plugin for LogLayer that adds trace context to logs.",
-  "version": "2.1.12",
+  "version": "2.1.13",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",

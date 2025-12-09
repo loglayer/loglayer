@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-tslog",
   "description": "tslog transport for the LogLayer logging library.",
-  "version": "3.0.10",
+  "version": "3.0.11",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

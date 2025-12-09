@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-google-cloud-logging",
   "description": "Google Cloud Logging (Stackdriver) transport for the LogLayer logging library.",
-  "version": "2.2.11",
+  "version": "2.2.12",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",

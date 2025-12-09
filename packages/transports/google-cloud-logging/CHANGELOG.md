@@ -1,5 +1,14 @@
 # `@loglayer/transport-google-cloud-logging` Changelog
 
+## 2.2.12
+
+### Patch Changes
+
+- [#318](https://github.com/loglayer/loglayer/pull/318) [`358032a`](https://github.com/loglayer/loglayer/commit/358032a222e186cb9e34580a644831e7ce584869) Thanks [@theogravity](https://github.com/theogravity)! - - Add to package.json `sideEffects: false`, which will better help with tree shaking
+  - Dev dependency updates
+- Updated dependencies [[`358032a`](https://github.com/loglayer/loglayer/commit/358032a222e186cb9e34580a644831e7ce584869)]:
+  - @loglayer/transport@2.3.11
+
 ## 2.2.11
 
 ### Patch Changes

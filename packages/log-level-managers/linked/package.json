@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/log-level-manager-linked",
   "description": "Log level manager for loglayer that keeps log levels synchronized between parent and children (parent and child changes affect each other bidirectionally).",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
