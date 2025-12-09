@@ -3,6 +3,7 @@
 [![NPM version](https://img.shields.io/npm/v/loglayer.svg?style=flat-square)](https://www.npmjs.com/package/loglayer)
 ![NPM Downloads](https://img.shields.io/npm/dm/loglayer)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
+![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/loglayer)
 
 `loglayer` is a unified Typescript logger that routes logs to various logging libraries, cloud providers, files, and OpenTelemetry while providing a fluent API for specifying log messages, metadata and errors.
 

@@ -49,6 +49,12 @@ multiple backend and frontend systems.
 
 *LogLayer is not affiliated with Airtop.*
 
+## Tiny and Tree-Shakable
+
+- `loglayer` standalone is 5kB gzipped. 
+- Most logging-based LogLayer transports are < 1kB gzipped. 
+- All LogLayer packages are tree-shakable.
+
 ## Bring Your Own Logger
 
 LogLayer is designed to sit on top of your logging library(s) of choice, such as `pino`, `winston`, `bunyan`, and more.
