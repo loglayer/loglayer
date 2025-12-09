@@ -4,18 +4,19 @@
   "version": "4.1.6",
   "type": "module",
   "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "exports": {
     "import": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
     },
     "require": {
       "types": "./dist/index.d.cts",
       "require": "./dist/index.cjs"
     }
   },
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
+  "sideEffects": false,
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -53,14 +54,14 @@
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
     "@types/better-sqlite3": "7.6.13",
-    "@types/express": "5.0.5",
+    "@types/express": "5.0.6",
     "@types/keypress": "2.0.30",
-    "@types/node": "24.10.1",
+    "@types/node": "24.10.2",
     "express": "5.1.0",
     "loglayer": "workspace:*",
     "serialize-error": "12.0.0",
-    "tsdown": "0.15.12",
-    "tsx": "4.20.6",
+    "tsdown": "0.17.2",
+    "tsx": "4.21.0",
     "typescript": "5.9.3"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",

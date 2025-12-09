@@ -16,6 +16,7 @@
     }
   },
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -48,11 +49,11 @@
     "@internal/tsconfig": "workspace:*",
     "@types/bunyan": "1.8.11",
     "@types/fast-redact": "3.0.4",
-    "@types/node": "24.10.1",
+    "@types/node": "24.10.2",
     "loglayer": "workspace:*",
-    "tsdown": "0.15.12",
+    "tsdown": "0.17.2",
     "typescript": "5.9.3",
-    "vitest": "4.0.9"
+    "vitest": "4.0.15"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

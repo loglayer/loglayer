@@ -7,6 +7,44 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Dec 9, 2025
+
+All packages:
+
+- Added `sideEffects: false` to all package.json files to enable better tree-shaking support in bundlers like webpack, Rollup, and esbuild. This helps reduce bundle sizes by allowing bundlers to safely eliminate unused code.
+
+**Core packages updated:**
+- `loglayer`
+- `@loglayer/shared`
+- `@loglayer/context-manager`
+- `@loglayer/log-level-manager`
+- `@loglayer/plugin`
+- `@loglayer/transport`
+
+**Context managers updated:**
+- `@loglayer/context-manager-linked`
+- `@loglayer/context-manager-isolated`
+
+**Log level managers updated:**
+- `@loglayer/log-level-manager-linked`
+- `@loglayer/log-level-manager-global`
+- `@loglayer/log-level-manager-one-way`
+
+**Mixins updated:**
+- `@loglayer/mixin-hot-shots`
+
+**Plugins updated:**
+- `@loglayer/plugin-filter`
+- `@loglayer/plugin-opentelemetry`
+- `@loglayer/plugin-sprintf`
+- `@loglayer/plugin-redaction`
+- `@loglayer/plugin-datadog-apm-trace-injector`
+
+**Transports updated:**
+- All 30 transport packages
+
+Also dev dependency updates.
+
 ## Nov 24, 2025
 
 `loglayer`:

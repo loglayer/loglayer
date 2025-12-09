@@ -16,7 +16,7 @@
   "devDependencies": {
     "glob": "11.0.3",
     "vitepress": "1.6.4",
-    "vitepress-plugin-llms": "1.9.1"
+    "vitepress-plugin-llms": "1.9.3"
   },
   "engineStrict": true,
   "engines": {
