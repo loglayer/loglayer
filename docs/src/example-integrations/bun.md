@@ -58,7 +58,7 @@ import { getSimplePrettyTerminal } from "@loglayer/transport-simple-pretty-termi
 
 const log = new LogLayer({
   transport: getSimplePrettyTerminal({
-    runtime: "bun",
+    runtime: "node",
     viewMode: "inline"
   })
 });
