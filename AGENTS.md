@@ -14,6 +14,7 @@ This document provides comprehensive guidelines for AI agents working on the Log
 - [Log Level Manager Development](#log-level-manager-development)
 - [Mixin Development](#mixin-development)
 - [Transport Development](#transport-development)
+- [Core LogLayer Development](#core-loglayer-development)
 
 ---
 
@@ -840,6 +841,143 @@ When creating a transport that calls an HTTP API:
 - Support all log levels
 - Implement batching if appropriate
 - Add comprehensive tests (unit + live)
+
+---
+
+## Core LogLayer Development
+
+### Overview
+
+When adding new features or methods to the core LogLayer class, multiple files must be updated to maintain type safety and testing capabilities.
+
+### Adding New Methods to LogLayer
+
+When adding a new method to LogLayer, you must update the following files:
+
+1. **`packages/core/loglayer/src/LogLayer.ts`**: Add the implementation
+2. **`packages/core/shared/src/loglayer.types.ts`**: Add the method signature to `ILogLayer` interface
+3. **`packages/core/loglayer/src/MockLogLayer.ts`**: Add a mock implementation
+4. **`packages/core/loglayer/src/__tests__/`**: Add tests for the new method
+
+### Adding New Methods to LogBuilder
+
+If adding a method to `LogBuilder` (the fluent builder returned by `withMetadata()`, `withError()`, etc.), update:
+
+1. **`packages/core/loglayer/src/LogBuilder.ts`**: Add the implementation
+2. **`packages/core/shared/src/loglayer.types.ts`**: Add the method signature to `ILogBuilder` interface
+3. **`packages/core/loglayer/src/MockLogBuilder.ts`**: Add a mock implementation
+4. **`packages/core/loglayer/src/__tests__/`**: Add tests for the new method
+
+### Implementation Checklist
+
+**For LogLayer methods:**
+
+```markdown
+- [ ] Add method implementation to `LogLayer.ts`
+- [ ] Add method signature to `ILogLayer` interface in `@loglayer/shared`
+- [ ] Add mock implementation to `MockLogLayer.ts`
+- [ ] Write unit tests
+- [ ] Update documentation (site docs if user-facing)
+- [ ] Update `docs/src/whats-new.md` with the new feature
+- [ ] Run `turbo build --filter=loglayer --filter=@loglayer/shared` to build (dependencies must be built first)
+- [ ] Run `turbo lint --filter=loglayer --filter=@loglayer/shared` to verify linting passes
+- [ ] Run `turbo test --filter=loglayer` to verify tests pass
+- [ ] Run `turbo verify-types --filter=loglayer --filter=@loglayer/shared` to verify types
+```
+
+**For LogBuilder methods:**
+
+```markdown
+- [ ] Add method implementation to `LogBuilder.ts`
+- [ ] Add method signature to `ILogBuilder` interface in `@loglayer/shared`
+- [ ] Add mock implementation to `MockLogBuilder.ts`
+- [ ] Write unit tests
+- [ ] Update documentation (site docs if user-facing)
+- [ ] Update `docs/src/whats-new.md` with the new feature
+- [ ] Run `turbo build --filter=loglayer --filter=@loglayer/shared` to build (dependencies must be built first)
+- [ ] Run `turbo lint --filter=loglayer --filter=@loglayer/shared` to verify linting passes
+- [ ] Run `turbo test --filter=loglayer` to verify tests pass
+- [ ] Run `turbo verify-types --filter=loglayer --filter=@loglayer/shared` to verify types
+```
+
+### Example: Adding a New Method
+
+**1. Add implementation to `LogLayer.ts`:**
+
+```typescript
+/**
+ * Description of what this method does.
+ *
+ * @see {@link https://loglayer.dev/logging-api/relevant-page.html | Docs}
+ */
+myNewMethod(param: string): LogLayer {
+  // Implementation
+  return this;
+}
+```
+
+**2. Add interface signature to `loglayer.types.ts`:**
+
+```typescript
+export interface ILogLayer<This = ILogLayer<any>> {
+  // ... existing methods ...
+
+  /**
+   * Description of what this method does.
+   *
+   * @see {@link https://loglayer.dev/logging-api/relevant-page.html | Docs}
+   */
+  myNewMethod(param: string): This;
+}
+```
+
+**3. Add mock implementation to `MockLogLayer.ts`:**
+
+```typescript
+myNewMethod(_param: string) {
+  return this;
+}
+```
+
+**4. Add tests:**
+
+Create or update test files in `packages/core/loglayer/src/__tests__/`. Follow existing test patterns and naming conventions (e.g., `LogLayer.feature-name.test.ts`).
+
+### Parent-Child Logger Behavior
+
+When implementing features that modify logger state (transports, plugins, context, etc.), consider:
+
+1. **Isolation**: Changes to a logger should not affect its parent or children created before the change
+2. **Inheritance**: Child loggers created after a change may or may not inherit the change (document the behavior)
+3. **Disposal**: If replacing resources, properly dispose of old ones
+
+**Example documentation pattern:**
+
+```typescript
+/**
+ * Modifies the thing.
+ *
+ * Changes only affect the current logger instance. Child loggers
+ * created before the change will retain their original configuration,
+ * and parent loggers are not affected when a child modifies its configuration.
+ */
+```
+
+### Testing Core Features
+
+Tests for core LogLayer features should cover:
+
+1. **Basic functionality**: The feature works as expected
+2. **Edge cases**: Empty inputs, invalid inputs, boundary conditions
+3. **Parent-child isolation**: Changes don't leak between parent and child loggers
+4. **Method chaining**: Methods that return `this` can be chained
+5. **Integration with other features**: Context, plugins, transports work together
+
+**Test file naming convention:**
+- `LogLayer.basic.test.ts` - Basic logging functionality
+- `LogLayer.transport-management.test.ts` - Transport-related features
+- `LogLayer.plugins.test.ts` - Plugin-related features
+- `LogLayer.config.test.ts` - Configuration options
 
 ---
 

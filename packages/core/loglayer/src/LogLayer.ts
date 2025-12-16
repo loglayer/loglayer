@@ -308,8 +308,9 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Replaces all existing transports with new ones.
    *
-   * When used with child loggers, it only affects the current logger instance
-   * and does not modify the parent's transports.
+   * Transport changes only affect the current logger instance. Child loggers
+   * created before the change will retain their original transports, and
+   * parent loggers are not affected when a child modifies its transports.
    *
    * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
    */
@@ -317,6 +318,91 @@ export class LogLayer implements ILogLayer<LogLayer> {
     this._config.transport = transports;
     this._initializeTransports(transports);
     return this;
+  }
+
+  /**
+   * Adds one or more transports to the existing transports.
+   * If a transport with the same ID already exists, it will be replaced.
+   *
+   * Transport changes only affect the current logger instance. Child loggers
+   * created before the change will retain their original transports, and
+   * parent loggers are not affected when a child modifies its transports.
+   *
+   * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
+   */
+  addTransport(transports: LogLayerTransport | Array<LogLayerTransport>): LogLayer {
+    const newTransports = Array.isArray(transports) ? transports : [transports];
+    const existingTransports = Array.isArray(this._config.transport)
+      ? this._config.transport
+      : [this._config.transport];
+
+    // Build set of new transport IDs for quick lookup
+    const newTransportIds = new Set(newTransports.map((t) => t.id));
+
+    // Dispose and remove any existing transports with the same IDs
+    for (const transport of newTransports) {
+      const existingTransport = this.idToTransport[transport.id];
+      if (existingTransport && typeof existingTransport[Symbol.dispose] === "function") {
+        existingTransport[Symbol.dispose]();
+      }
+    }
+
+    // Filter out existing transports that will be replaced, then add new ones
+    const filteredExisting = existingTransports.filter((t) => !newTransportIds.has(t.id));
+    const allTransports = [...filteredExisting, ...newTransports];
+    this._config.transport = allTransports;
+
+    // Update the transport map
+    for (const transport of newTransports) {
+      this.idToTransport[transport.id] = transport;
+    }
+
+    // Update optimization flags
+    this.hasMultipleTransports = allTransports.length > 1;
+    this.singleTransport = this.hasMultipleTransports ? null : allTransports[0];
+
+    return this;
+  }
+
+  /**
+   * Removes a transport by its ID.
+   *
+   * Transport changes only affect the current logger instance. Child loggers
+   * created before the change will retain their original transports, and
+   * parent loggers are not affected when a child modifies its transports.
+   *
+   * @returns true if the transport was found and removed, false otherwise.
+   *
+   * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
+   */
+  removeTransport(id: string): boolean {
+    const transport = this.idToTransport[id];
+
+    if (!transport) {
+      return false;
+    }
+
+    // Dispose of the transport if it implements Disposable
+    if (typeof transport[Symbol.dispose] === "function") {
+      transport[Symbol.dispose]();
+    }
+
+    // Remove from the map
+    delete this.idToTransport[id];
+
+    // Update the config.transport array
+    const existingTransports = Array.isArray(this._config.transport)
+      ? this._config.transport
+      : [this._config.transport];
+
+    const remainingTransports = existingTransports.filter((t) => t.id !== id);
+    this._config.transport = remainingTransports.length === 1 ? remainingTransports[0] : remainingTransports;
+
+    // Update optimization flags
+    this.hasMultipleTransports = remainingTransports.length > 1;
+    this.singleTransport = this.hasMultipleTransports ? null : remainingTransports[0] || null;
+
+    return true;
   }
 
   /**

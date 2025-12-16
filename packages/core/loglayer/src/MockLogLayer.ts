@@ -107,6 +107,14 @@ export class MockLogLayer implements ILogLayer<MockLogLayer>, ILogBuilder<MockLo
     return this;
   }
 
+  addTransport(_transports: LogLayerTransport | Array<LogLayerTransport>) {
+    return this;
+  }
+
+  removeTransport(_id: string): boolean {
+    return true;
+  }
+
   withFreshPlugins(_plugins: Array<LogLayerPlugin>) {
     return this;
   }
