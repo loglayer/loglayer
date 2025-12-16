@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-victoria-logs",
   "description": "VictoriaLogs transport for the LogLayer logging library.",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "type": "module",
   "main": "./dist/index.mjs",
   "exports": {

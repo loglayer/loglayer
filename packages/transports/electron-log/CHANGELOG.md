@@ -1,5 +1,12 @@
 # `@loglayer/transport-electron-log` Changelog
 
+## 2.1.15
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.12
+
 ## 2.1.14
 
 ### Patch Changes

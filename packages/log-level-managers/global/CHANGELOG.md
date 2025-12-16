@@ -1,5 +1,12 @@
 # @loglayer/log-level-manager-global
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/log-level-manager@1.0.4
+
 ## 1.0.3
 
 ### Patch Changes

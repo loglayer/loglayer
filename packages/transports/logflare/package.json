@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-logflare",
   "description": "Logflare transport for the LogLayer logging library.",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
