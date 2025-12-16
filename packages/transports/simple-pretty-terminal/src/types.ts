@@ -123,4 +123,6 @@ export interface SimplePrettyTerminalConfig extends LoggerlessTransportConfig {
   runtime: Runtime;
   /** Whether to include data object as second parameter in browser console calls for better debugging. Defaults to false */
   includeDataInBrowserConsole?: boolean;
+  /** Whether to enable sprintf-style message formatting. When true, messages with format specifiers like %s, %d will be parsed. Defaults to false */
+  enableSprintf?: boolean;
 }

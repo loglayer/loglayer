@@ -9,6 +9,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Dec 16, 2025
 
+`@loglayer/transport-simple-pretty-terminal`:
+
+- Added `enableSprintf` option for sprintf-style message formatting, powered by [sprintf-js](https://github.com/alexei/sprintf.js). Supports format specifiers like `%s`, `%d`, `%f`, and `%j`. See the [Sprintf Message Formatting documentation](/transports/simple-pretty-terminal#sprintf-message-formatting) for usage examples.
+
 `loglayer`:
 
 - Added `addTransport()` method to dynamically add one or more transports to an existing logger. If a transport with the same ID already exists, it will be replaced.

@@ -18,6 +18,7 @@ declare global {
 const transport = getSimplePrettyTerminal({
   viewMode: "expanded",
   runtime: "node",
+  enableSprintf: true,
 });
 
 const logger = new LogLayer({
@@ -56,6 +57,16 @@ app.get("/", (req, res) => {
   res.send("Hello World! Check your terminal for pretty logs!");
 });
 
+// Sprintf formatting demo route
+app.get("/sprintf", (req, res) => {
+  req.log.info("User %s logged in from %s", "Alice", "192.168.1.100");
+  req.log.debug("Processing %d items in %.2f seconds", 42, Math.PI);
+  req.log.warn("Memory usage at %d%% - threshold is %d%%", 85, 90);
+  req.log.withMetadata({ requestId: "abc-123" }).info("Request %s completed with status %d", "abc-123", 200);
+
+  res.send("Check your terminal for sprintf-formatted logs!");
+});
+
 // Error handling route
 app.get("/error", (req, res) => {
   try {
@@ -69,5 +80,6 @@ app.get("/error", (req, res) => {
 // Start the server
 const port = 3000;
 app.listen(port, () => {
-  logger.info(`Server is running on http://localhost:${port}`);
+  logger.info("Server is running on http://localhost:%d", port);
+  logger.info("Try these routes: /, /sprintf, /error");
 });

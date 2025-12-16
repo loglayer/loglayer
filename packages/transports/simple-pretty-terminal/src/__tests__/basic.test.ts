@@ -622,4 +622,157 @@ describe("SimplePrettyTerminalTransport", () => {
     expect(infoSpy).toHaveBeenCalledWith(expect.stringContaining("Test message without data"));
     expect(infoSpy).not.toHaveBeenCalledWith(expect.any(String), undefined);
   });
+
+  describe("sprintf support", () => {
+    it("should format messages with sprintf when enableSprintf is true", () => {
+      const transport = getSimplePrettyTerminal({
+        enabled: true,
+        viewMode: "inline",
+        theme: moonlight,
+        runtime: "node",
+        enableSprintf: true,
+      });
+
+      transport.shipToLogger({
+        logLevel: "info",
+        messages: ["Hello %s, you have %d messages", "John", 5],
+        data: undefined,
+        hasData: false,
+      });
+
+      expect(stdoutSpy).toHaveBeenCalled();
+      const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
+      expect(output).toContain("Hello John, you have 5 messages");
+    });
+
+    it("should not format messages with sprintf when enableSprintf is false", () => {
+      const transport = getSimplePrettyTerminal({
+        enabled: true,
+        viewMode: "inline",
+        theme: moonlight,
+        runtime: "node",
+        enableSprintf: false,
+      });
+
+      transport.shipToLogger({
+        logLevel: "info",
+        messages: ["Hello %s, you have %d messages", "John", 5],
+        data: undefined,
+        hasData: false,
+      });
+
+      expect(stdoutSpy).toHaveBeenCalled();
+      const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
+      expect(output).toContain("Hello %s, you have %d messages John 5");
+    });
+
+    it("should not format messages when enableSprintf is not set (default)", () => {
+      const transport = getSimplePrettyTerminal({
+        enabled: true,
+        viewMode: "inline",
+        theme: moonlight,
+        runtime: "node",
+      });
+
+      transport.shipToLogger({
+        logLevel: "info",
+        messages: ["Hello %s, you have %d messages", "John", 5],
+        data: undefined,
+        hasData: false,
+      });
+
+      expect(stdoutSpy).toHaveBeenCalled();
+      const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
+      expect(output).toContain("Hello %s, you have %d messages John 5");
+    });
+
+    it("should handle sprintf with a single message (no formatting needed)", () => {
+      const transport = getSimplePrettyTerminal({
+        enabled: true,
+        viewMode: "inline",
+        theme: moonlight,
+        runtime: "node",
+        enableSprintf: true,
+      });
+
+      transport.shipToLogger({
+        logLevel: "info",
+        messages: ["Single message without format specifiers"],
+        data: undefined,
+        hasData: false,
+      });
+
+      expect(stdoutSpy).toHaveBeenCalled();
+      const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
+      expect(output).toContain("Single message without format specifiers");
+    });
+
+    it("should handle sprintf with various format specifiers", () => {
+      const transport = getSimplePrettyTerminal({
+        enabled: true,
+        viewMode: "inline",
+        theme: moonlight,
+        runtime: "node",
+        enableSprintf: true,
+      });
+
+      transport.shipToLogger({
+        logLevel: "info",
+        messages: ["String: %s, Integer: %d, Float: %.2f, JSON: %j", "test", 42, Math.PI, { key: "value" }],
+        data: undefined,
+        hasData: false,
+      });
+
+      expect(stdoutSpy).toHaveBeenCalled();
+      const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
+      expect(output).toContain("String: test");
+      expect(output).toContain("Integer: 42");
+      expect(output).toContain("Float: 3.14");
+      expect(output).toContain('JSON: {"key":"value"}');
+    });
+
+    it("should fallback to join when sprintf fails", () => {
+      const transport = getSimplePrettyTerminal({
+        enabled: true,
+        viewMode: "inline",
+        theme: moonlight,
+        runtime: "node",
+        enableSprintf: true,
+      });
+
+      // Invalid format specifier that might cause sprintf to fail
+      transport.shipToLogger({
+        logLevel: "info",
+        messages: ["Test %z invalid", "arg"],
+        data: undefined,
+        hasData: false,
+      });
+
+      expect(stdoutSpy).toHaveBeenCalled();
+      // Should fallback to join behavior
+      const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
+      expect(output).toContain("Test %z invalid arg");
+    });
+
+    it("should not apply sprintf when first argument is not a string", () => {
+      const transport = getSimplePrettyTerminal({
+        enabled: true,
+        viewMode: "inline",
+        theme: moonlight,
+        runtime: "node",
+        enableSprintf: true,
+      });
+
+      transport.shipToLogger({
+        logLevel: "info",
+        messages: [123, "test", "message"],
+        data: undefined,
+        hasData: false,
+      });
+
+      expect(stdoutSpy).toHaveBeenCalled();
+      const output = stripAnsi(stdoutSpy.mock.calls[0][0] as string);
+      expect(output).toContain("123 test message");
+    });
+  });
 });
