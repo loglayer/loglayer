@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-log4js",
   "description": "log4js transport for the LogLayer logging library.",
-  "version": "2.1.14",
+  "version": "2.1.15",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",

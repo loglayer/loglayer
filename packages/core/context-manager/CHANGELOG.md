@@ -1,5 +1,12 @@
 # `@loglayer/context-manager` Changelog
 
+## 1.1.14
+
+### Patch Changes
+
+- Updated dependencies [[`9155ec9`](https://github.com/loglayer/loglayer/commit/9155ec9bade32dfc089d449134bd91adc76d44e0)]:
+  - @loglayer/shared@3.2.0
+
 ## 1.1.13
 
 ### Patch Changes

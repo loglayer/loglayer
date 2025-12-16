@@ -1,5 +1,21 @@
 # `loglayer` Changelog
 
+## 8.2.0
+
+### Minor Changes
+
+- [#321](https://github.com/loglayer/loglayer/pull/321) [`9155ec9`](https://github.com/loglayer/loglayer/commit/9155ec9bade32dfc089d449134bd91adc76d44e0) Thanks [@theogravity](https://github.com/theogravity)! - - Added `addTransport()` method to dynamically add one or more transports to an existing logger. If a transport with the same ID already exists, it will be replaced.
+  - Added `removeTransport()` method to remove a transport by its ID. Returns `true` if the transport was found and removed, `false` otherwise.
+
+### Patch Changes
+
+- Updated dependencies [[`9155ec9`](https://github.com/loglayer/loglayer/commit/9155ec9bade32dfc089d449134bd91adc76d44e0)]:
+  - @loglayer/shared@3.2.0
+  - @loglayer/context-manager@1.1.14
+  - @loglayer/log-level-manager@1.0.4
+  - @loglayer/plugin@2.2.6
+  - @loglayer/transport@2.3.12
+
 ## 8.1.1
 
 ### Patch Changes
