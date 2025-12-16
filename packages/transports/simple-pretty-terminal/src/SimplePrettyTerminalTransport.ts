@@ -25,6 +25,7 @@
 import type { LogLayerTransportParams } from "@loglayer/transport";
 import { LoggerlessTransport } from "@loglayer/transport";
 import chalk from "chalk";
+import { sprintf } from "sprintf-js";
 import { moonlight } from "./themes.js";
 import type { PrettyTerminalViewMode, SimplePrettyTerminalConfig } from "./types.js";
 import { SimpleView } from "./views/SimpleView.js";
@@ -115,6 +116,34 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
   }
 
   /**
+   * Applies sprintf formatting to messages if enabled and applicable.
+   * If the first message is a format string and there are additional arguments,
+   * formats them using sprintf-js.
+   *
+   * @param messages - Array of message strings
+   * @returns Formatted message string
+   */
+  private formatMessages(messages: any[]): string {
+    if (!this.config.enableSprintf || messages.length < 2) {
+      return messages.join(" ");
+    }
+
+    const [format, ...args] = messages;
+
+    // Only apply sprintf if the first argument is a string
+    if (typeof format !== "string") {
+      return messages.join(" ");
+    }
+
+    try {
+      return sprintf(format, ...args);
+    } catch (_error) {
+      // If sprintf fails, return original messages joined
+      return messages.join(" ");
+    }
+  }
+
+  /**
    * Main transport method that receives logs from LogLayer.
    * This method is called for each log event and handles:
    * - Generating a unique ID for the log
@@ -137,7 +166,7 @@ export class SimplePrettyTerminalTransport extends LoggerlessTransport {
       id: this.generateId(),
       timestamp: Date.now(),
       level: logLevel,
-      message: messages.join(" "),
+      message: this.formatMessages(messages),
       data: hasData ? JSON.stringify(data) : null,
     };
 

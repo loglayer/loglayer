@@ -91,6 +91,7 @@ log.withMetadata({ foo: "bar" }).info("Hello from Simple Pretty Terminal!");
 | `collapseArrays` | `boolean` | `true` | Whether to collapse arrays in expanded mode for cleaner output |
 | `flattenNestedObjects` | `boolean` | `true` | Whether to flatten nested objects with dot notation in inline mode |
 | `includeDataInBrowserConsole` | `boolean` | `false` | When enabled, also passes the data object as a second argument to browser console methods for easier inspection. Recommended with `viewMode: "inline"` or `"message-only"` |
+| `enableSprintf` | `boolean` | `false` | Enable sprintf-style message formatting with placeholders like `%s`, `%d`, `%f`, `%j` |
 
 ## Runtime Environments
 
@@ -292,3 +293,53 @@ INFO [12:34:56.789] ▶ INFO User logged in { user: { id: 123, name: "Alice" } }
 ```
 
 You can expand the object in the console for deeper inspection.
+
+## Sprintf Message Formatting
+
+The transport supports sprintf-style message formatting when `enableSprintf` is set to `true`, powered by the [sprintf-js](https://github.com/alexei/sprintf.js) package. This allows you to use format specifiers like `%s`, `%d`, `%f`, and `%j` in your log messages.
+
+```typescript
+const transport = getSimplePrettyTerminal({
+  runtime: "node",
+  enableSprintf: true,
+});
+
+const log = new LogLayer({ transport });
+
+// String substitution
+log.info("User %s logged in from %s", "Alice", "192.168.1.100");
+// Output: User Alice logged in from 192.168.1.100
+
+// Integer substitution
+log.info("Processing %d items", 42);
+// Output: Processing 42 items
+
+// Float with precision
+log.info("Completed in %.2f seconds", 3.14159);
+// Output: Completed in 3.14 seconds
+
+// JSON substitution
+log.info("Request body: %j", { name: "John", age: 30 });
+// Output: Request body: {"name":"John","age":30}
+
+// Multiple substitutions
+log.warn("Memory usage at %d%% - threshold is %d%%", 85, 90);
+// Output: Memory usage at 85% - threshold is 90%
+```
+
+### Supported Format Specifiers
+
+| Specifier | Description |
+|-----------|-------------|
+| `%s` | String |
+| `%d` or `%i` | Integer |
+| `%f` | Floating point number |
+| `%.Nf` | Floating point with N decimal places (e.g., `%.2f`) |
+| `%j` | JSON (serializes objects) |
+| `%%` | Literal percent sign |
+
+For the full list of format specifiers and advanced formatting options, see the [sprintf-js documentation](https://github.com/alexei/sprintf.js#format-specification).
+
+::: tip
+If sprintf formatting fails (e.g., invalid format specifier), the transport will gracefully fall back to joining the messages with spaces.
+:::
