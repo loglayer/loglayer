@@ -7,6 +7,15 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Dec 16, 2025
+
+`loglayer`:
+
+- Added `addTransport()` method to dynamically add one or more transports to an existing logger. If a transport with the same ID already exists, it will be replaced.
+- Added `removeTransport()` method to remove a transport by its ID. Returns `true` if the transport was found and removed, `false` otherwise.
+
+See the [Transport Management documentation](/logging-api/transport-management) for usage examples.
+
 ## Dec 9, 2025
 
 All packages:

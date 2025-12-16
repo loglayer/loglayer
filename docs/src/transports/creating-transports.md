@@ -252,12 +252,14 @@ interface LogLayerTransportParams {
 
 ## Resource Cleanup with Disposable
 
-If your transport needs to clean up resources (like network connections, file handles, or external service connections), 
-you can implement the [`Disposable`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management) interface. 
+If your transport needs to clean up resources (like network connections, file handles, or external service connections),
+you can implement the [`Disposable`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management) interface.
 
 LogLayer will automatically call the dispose method when:
 
-- The transport is replaced using `withFreshTransports()`
+- The transport is removed using `removeTransport()`
+- The transport is replaced by another transport with the same ID using `addTransport()`
+- All transports are replaced using `withFreshTransports()`
 
 ### Implementing Disposable
 

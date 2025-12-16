@@ -485,12 +485,39 @@ export interface ILogLayer<This = ILogLayer<any>> {
 
   /**
    * Replaces all existing transports with new ones while preserving other logger configuration.
-   * When used with child loggers, it only affects the current logger instance
-   * and does not modify the parent's transports.
+   *
+   * Transport changes only affect the current logger instance. Child loggers
+   * created before the change will retain their original transports, and
+   * parent loggers are not affected when a child modifies its transports.
    *
    * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
    */
   withFreshTransports(transports: LogLayerTransport | Array<LogLayerTransport>): This;
+
+  /**
+   * Adds one or more transports to the existing transports.
+   * If a transport with the same ID already exists, it will be replaced.
+   *
+   * Transport changes only affect the current logger instance. Child loggers
+   * created before the change will retain their original transports, and
+   * parent loggers are not affected when a child modifies its transports.
+   *
+   * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
+   */
+  addTransport(transports: LogLayerTransport | Array<LogLayerTransport>): This;
+
+  /**
+   * Removes a transport by its ID.
+   *
+   * Transport changes only affect the current logger instance. Child loggers
+   * created before the change will retain their original transports, and
+   * parent loggers are not affected when a child modifies its transports.
+   *
+   * @returns true if the transport was found and removed, false otherwise.
+   *
+   * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
+   */
+  removeTransport(id: string): boolean;
 
   /**
    * Replaces all existing plugins with new ones.

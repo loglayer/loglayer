@@ -5,13 +5,66 @@ description: How to manage transports in LogLayer
 
 # Transport Management
 
-## Replacing Transports
+LogLayer provides methods to dynamically add, remove, and replace transports at runtime.
+
+::: tip Parent-Child Isolation
+Transport changes only affect the current logger instance. Child loggers created before the change will retain their original transports, and parent loggers are not affected when a child modifies its transports.
+:::
+
+## Adding Transports
+
+`addTransport(transports: LogLayerTransport | Array<LogLayerTransport>): ILogLayer`
+
+Adds one or more transports to the existing transports. If a transport with the same ID already exists, it will be replaced and its `[Symbol.dispose]()` method will be called if implemented.
+
+```typescript
+// Add a single transport
+logger.addTransport(new PinoTransport({
+  logger: pino(),
+  id: 'pino'
+}))
+
+// Add multiple transports at once
+logger.addTransport([
+  new ConsoleTransport({ logger: console, id: 'console' }),
+  new PinoTransport({ logger: pino(), id: 'pino' })
+])
+
+// Replace an existing transport by using the same ID
+logger.addTransport(new PinoTransport({
+  logger: pino({ level: 'debug' }),
+  id: 'pino'  // This will replace the existing 'pino' transport
+}))
+```
+
+## Removing Transports
+
+`removeTransport(id: string): boolean`
+
+Removes a transport by its ID. Returns `true` if the transport was found and removed, `false` otherwise.
+
+If the transport implements the [Disposable](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management) interface, its `[Symbol.dispose]()` method will be called automatically when removed.
+
+```typescript
+const log = new LogLayer({
+  transport: [
+    new ConsoleTransport({ logger: console, id: 'console' }),
+    new PinoTransport({ logger: pino(), id: 'pino' })
+  ]
+})
+
+// Remove a specific transport
+const wasRemoved = log.removeTransport('console')  // true
+
+// Trying to remove a non-existent transport returns false
+const notFound = log.removeTransport('nonexistent')  // false
+```
+
+## Replacing All Transports
 
 `withFreshTransports(transports: LogLayerTransport | Array<LogLayerTransport>): ILogLayer`
 
-Replaces the existing transports with the provided transport(s). This can be useful for dynamically changing transports at runtime.
-This only replaces the transports for the current logger instance, so if you are replacing transports for a child logger, it will not affect the parent logger
-and vice versa.
+Replaces all existing transports with the provided transport(s). This is useful when you want to completely change the logging destinations. All existing transports will have their `[Symbol.dispose]()` method called if implemented.
 
 ```typescript
 // Replace with a single transport
