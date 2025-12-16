@@ -1,5 +1,11 @@
 # `@loglayer/transport-simple-pretty-terminal` Changelog
 
+## 2.3.0
+
+### Minor Changes
+
+- [#323](https://github.com/loglayer/loglayer/pull/323) [`2a83e73`](https://github.com/loglayer/loglayer/commit/2a83e7316615ffee59070318866a4e445af4df9a) Thanks [@theogravity](https://github.com/theogravity)! - Added `enableSprintf` option for sprintf-style message formatting, powered by [sprintf-js](https://github.com/alexei/sprintf.js). Supports format specifiers like `%s`, `%d`, `%f`, and `%j`. See the [Sprintf Message Formatting documentation](/transports/simple-pretty-terminal#sprintf-message-formatting) for usage examples.
+
 ## 2.2.16
 
 ### Patch Changes
