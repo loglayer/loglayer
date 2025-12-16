@@ -11,6 +11,11 @@ LogLayer provides methods to dynamically add, remove, and replace transports at 
 Transport changes only affect the current logger instance. Child loggers created before the change will retain their original transports, and parent loggers are not affected when a child modifies its transports.
 :::
 
+::: warning Potential Performance Impact
+Modifying transports at runtime may have a performance impact if you are frequently creating / removing transports.
+It is recommended to re-use the same transport instance(s) where possible.
+:::
+
 ## Adding Transports
 
 `addTransport(transports: LogLayerTransport | Array<LogLayerTransport>): ILogLayer`
@@ -76,11 +81,6 @@ logger.withFreshTransports([
   new PinoTransport({ logger: pino() })
 ])
 ```
-
-::: warning Potential Performance Impact
-Replacing transports at runtime may have a performance impact if you are frequently creating new transports.
-It is recommended to re-use the same transport instance(s) where possible.
-:::
 
 ## Obtaining the underlying logger instance
 
