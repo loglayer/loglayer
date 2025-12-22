@@ -49,6 +49,11 @@ interface ConsoleTransportConfig extends LogLayerTransportConfig<ConsoleType> {
    * Defaults to false.
    */
   stringify?: boolean;
+  /**
+   * Custom function to format the log message output.
+   * Receives log level, messages, and data; returns the formatted string.
+   */
+  messageFn?: (params: LogLayerTransportParams) => string;
 }
 
 /**
@@ -63,6 +68,7 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
   private dateFn?: () => string | number;
   private levelFn?: (logLevel: LogLevelType) => string | number;
   private stringify: boolean;
+  private messageFn?: (params: LogLayerTransportParams) => string;
 
   constructor(params: ConsoleTransportConfig) {
     super(params);
@@ -74,12 +80,21 @@ export class ConsoleTransport extends BaseTransport<ConsoleType> {
     this.dateFn = params.dateFn;
     this.levelFn = params.levelFn;
     this.stringify = params.stringify || false;
+    this.messageFn = params.messageFn;
   }
 
-  shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams) {
+  shipToLogger(params: LogLayerTransportParams) {
+    const { logLevel, data, hasData } = params;
+    let { messages } = params;
+
     // Skip if log level is lower priority than configured minimum
     if (LogLevelPriority[logLevel] < LogLevelPriority[this.logLevel]) {
       return;
+    }
+
+    // Apply messageFn if defined to format the message
+    if (this.messageFn) {
+      messages = [this.messageFn(params)];
     }
 
     if (this.messageField) {

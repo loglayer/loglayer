@@ -1,5 +1,21 @@
 # @loglayer/context-manager-isolated
 
+## 2.0.14
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/context-manager@1.1.14
+
+## 2.0.13
+
+### Patch Changes
+
+- [#318](https://github.com/loglayer/loglayer/pull/318) [`358032a`](https://github.com/loglayer/loglayer/commit/358032a222e186cb9e34580a644831e7ce584869) Thanks [@theogravity](https://github.com/theogravity)! - - Add to package.json `sideEffects: false`, which will better help with tree shaking
+  - Dev dependency updates
+- Updated dependencies [[`358032a`](https://github.com/loglayer/loglayer/commit/358032a222e186cb9e34580a644831e7ce584869)]:
+  - @loglayer/context-manager@1.1.13
+
 ## 2.0.12
 
 ### Patch Changes

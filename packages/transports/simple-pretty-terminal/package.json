@@ -53,15 +53,15 @@
     "@internal/tsconfig": "workspace:*",
     "@types/chalk": "2.2.4",
     "@types/express": "5.0.6",
-    "@types/node": "24.10.2",
+    "@types/node": "25.0.3",
     "@types/sprintf-js": "1.1.4",
     "express": "5.1.0",
     "loglayer": "workspace:*",
     "serialize-error": "12.0.0",
-    "tsdown": "0.17.2",
+    "tsdown": "0.18.2",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "vitest": "4.0.15"
+    "vitest": "4.0.16"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "files": [

@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Dec 21, 2025
+
+`loglayer`:
+
+- Added `messageFn` option to `ConsoleTransport` for custom message formatting. Receives log level, messages, and data; returns the formatted string. See the [Console Transport documentation](/transports/console#custom-message-formatting) for usage examples.
+
 ## Dec 16, 2025
 
 `@loglayer/transport-simple-pretty-terminal`:
