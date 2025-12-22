@@ -135,12 +135,32 @@ To run tests for all packages, use the following command:
 turbo test
 ```
 
+## Linting and Formatting
+
+This project uses [Biome](https://biomejs.dev/) for linting and formatting. To run lint and format across all packages:
+
+```bash
+turbo lint
+```
+
+To run lint only on staged files (used by git hooks):
+
+```bash
+turbo lint:staged
+```
+
 ## Viewing docs
 
 The docs use [vitepress](https://vitepress.dev/). To view the docs locally, run:
 
 ```bash
-turbo docs:dev
+pnpm run docs
+```
+
+To check that docs build correctly and are ready for production:
+
+```bash
+pnpm run docs:build
 ```
 
 ## Project Structure
