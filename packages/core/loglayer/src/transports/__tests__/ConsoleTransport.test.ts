@@ -399,6 +399,136 @@ describe("ConsoleTransport", () => {
     });
   });
 
+  describe("messageFn", () => {
+    it("should format message using messageFn", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageFn: ({ logLevel, messages }) => `[${logLevel.toUpperCase()}] ${messages.join(" ")}`,
+      });
+
+      transport.shipToLogger({
+        logLevel: LogLevel.info,
+        messages: ["Hello", "world"],
+      });
+
+      expect(mockConsole.info).toHaveBeenCalledWith("[INFO] Hello world");
+    });
+
+    it("should pass all params to messageFn", () => {
+      const messageFn = vi.fn(({ logLevel, messages, data }) => {
+        return `[${logLevel}] ${messages.join(" ")} - user: ${data?.user}`;
+      });
+
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageFn,
+      });
+
+      const data = { user: "john" };
+      transport.shipToLogger({
+        logLevel: LogLevel.warn,
+        messages: ["User action"],
+        data,
+        hasData: true,
+      });
+
+      expect(messageFn).toHaveBeenCalledWith({
+        logLevel: LogLevel.warn,
+        messages: ["User action"],
+        data,
+        hasData: true,
+      });
+      // Data is prepended by default (appendObjectData: false)
+      expect(mockConsole.warn).toHaveBeenCalledWith(data, "[warn] User action - user: john");
+    });
+
+    it("should work with messageField", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageFn: ({ logLevel, messages }) => `[${logLevel.toUpperCase()}] ${messages.join(" ")}`,
+        messageField: "msg",
+      });
+
+      transport.shipToLogger({
+        logLevel: LogLevel.error,
+        messages: ["Something failed"],
+      });
+
+      expect(mockConsole.error).toHaveBeenCalledWith({
+        msg: "[ERROR] Something failed",
+      });
+    });
+
+    it("should work with dateField and levelField", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageFn: ({ messages }) => `PREFIX: ${messages.join(" ")}`,
+        levelField: "level",
+      });
+
+      transport.shipToLogger({
+        logLevel: LogLevel.debug,
+        messages: ["test message"],
+      });
+
+      expect(mockConsole.debug).toHaveBeenCalledWith("PREFIX: test message", {
+        level: "debug",
+      });
+    });
+
+    it("should work with data when messageFn is defined but no structured fields", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageFn: ({ logLevel, messages }) => `[${logLevel.toUpperCase()}] ${messages.join(" ")}`,
+      });
+      const data = { user: "john" };
+
+      transport.shipToLogger({
+        logLevel: LogLevel.info,
+        messages: ["User logged in"],
+        data,
+        hasData: true,
+      });
+
+      // messageFn replaces messages, then data is prepended (default behavior)
+      expect(mockConsole.info).toHaveBeenCalledWith(data, "[INFO] User logged in");
+    });
+
+    it("should work with appendObjectData", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageFn: ({ logLevel, messages }) => `[${logLevel.toUpperCase()}] ${messages.join(" ")}`,
+        appendObjectData: true,
+      });
+      const data = { user: "john" };
+
+      transport.shipToLogger({
+        logLevel: LogLevel.info,
+        messages: ["User logged in"],
+        data,
+        hasData: true,
+      });
+
+      // messageFn replaces messages, then data is appended
+      expect(mockConsole.info).toHaveBeenCalledWith("[INFO] User logged in", data);
+    });
+
+    it("should work with prefixed messages", () => {
+      const transport = new ConsoleTransport({
+        logger: mockConsole,
+        messageFn: ({ logLevel, messages }) => `[${logLevel.toUpperCase()}] ${messages.join(" ")}`,
+      });
+
+      // LogLayer applies prefix to messages before sending to transport
+      transport.shipToLogger({
+        logLevel: LogLevel.info,
+        messages: ["[MyApp] User logged in"],
+      });
+
+      expect(mockConsole.info).toHaveBeenCalledWith("[INFO] [MyApp] User logged in");
+    });
+  });
+
   describe("stringify", () => {
     it("should default to false", () => {
       const transport = new ConsoleTransport({

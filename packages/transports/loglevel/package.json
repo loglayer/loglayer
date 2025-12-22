@@ -45,12 +45,12 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "24.10.2",
+    "@types/node": "25.0.3",
     "loglayer": "workspace:*",
-    "tsdown": "0.17.2",
+    "tsdown": "0.18.2",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "vitest": "4.0.15"
+    "vitest": "4.0.16"
   },
   "peerDependencies": {
     "loglevel": "*"

@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@nolebase/ui-asciinema": "2.18.2",
-    "asciinema-player": "3.12.1"
+    "asciinema-player": "3.13.5"
   },
   "devDependencies": {
     "glob": "11.0.3",

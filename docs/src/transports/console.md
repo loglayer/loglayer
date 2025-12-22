@@ -61,6 +61,7 @@ None - all parameters are optional.
 | `dateFn` | `() => string \| number` | - | If defined, a function that returns a string or number for the value to be used for the `dateField` |
 | `levelFn` | `(logLevel: LogLevelType) => string \| number` | - | If defined, a function that returns a string or number for a given log level. The input should be the logLevel |
 | `stringify` | `boolean` | `false` | If true, applies JSON.stringify to the structured log output when messageField, dateField, or levelField is defined |
+| `messageFn` | `(params: LogLayerTransportParams) => string` | - | Custom function to format the log message output. Receives log level, messages, and data; returns the formatted string |
 
 ### Examples
 
@@ -187,6 +188,31 @@ const log = new LogLayer({
 log.withMetadata({ user: 'john' }).info('User logged in');
 // console.info('{"user":"john","msg":"User logged in","timestamp":"2023-12-01T10:30:00.000Z","level":"info"}')
 ```
+
+#### Custom Message Formatting
+```typescript
+import { LogLayer, ConsoleTransport } from 'loglayer';
+import type { LogLayerTransportParams } from 'loglayer';
+
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+    messageFn: ({ logLevel, messages }: LogLayerTransportParams) => {
+      return `[${logLevel.toUpperCase()}] ${messages.join(' ')}`;
+    }
+  })
+});
+
+log.info('User logged in');
+// console.info('[INFO] User logged in')
+
+log.warn('Connection unstable');
+// console.warn('[WARN] Connection unstable')
+```
+
+::: tip Prefix behavior
+If you use `withPrefix()`, the prefix is applied to the messages before they reach `messageFn`. For example, `log.withPrefix('[MyApp]').info('Hello')` would pass `messages: ['[MyApp] Hello']` to your `messageFn`.
+:::
 
 ## Structured Logging
 
