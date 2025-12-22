@@ -80,11 +80,27 @@ log.info('This message will be logged');
 
 #### Object Data Positioning
 ```typescript
-// appendObjectData: false (default)
+// appendObjectData: false (default) - data appears first
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+    appendObjectData: false
+  })
+});
+
 log.withMetadata({ user: 'john' }).info('User logged in');
 // console.info({ user: 'john' }, 'User logged in')
+```
 
-// appendObjectData: true
+```typescript
+// appendObjectData: true - data appears last
+const log = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+    appendObjectData: true
+  })
+});
+
 log.withMetadata({ user: 'john' }).info('User logged in');
 // console.info('User logged in', { user: 'john' })
 ```
