@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 8.3.0
+
+### Minor Changes
+
+- [#329](https://github.com/loglayer/loglayer/pull/329) [`681fe12`](https://github.com/loglayer/loglayer/commit/681fe12d03733838e347347f71c32e37dcf7b645) Thanks [@theogravity](https://github.com/theogravity)! - Add new config option to `ConsoleTransport` called `messageFn` which allows you to customize the output of the log message.
+
 ## 8.2.0
 
 ### Minor Changes
