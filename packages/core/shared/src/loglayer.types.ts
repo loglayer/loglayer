@@ -98,6 +98,11 @@ export interface IContextManager {
    */
   hasContextData(): boolean;
   /**
+   * Clears the context data. If keys are provided, only those keys will be removed.
+   * If no keys are provided, all context data will be cleared.
+   */
+  clearContext(keys?: string | string[]): void;
+  /**
    * Called when a child logger is created. Use to manipulate context data between parent and child.
    */
   onChildLoggerCreated(params: OnChildLoggerCreatedParams): void;
@@ -369,11 +374,12 @@ export interface ILogLayer<This = ILogLayer<any>> {
    */
   withContext(context?: LogLayerContext): This;
   /**
-   * Clears the context data.
+   * Clears the context data. If keys are provided, only those keys will be removed.
+   * If no keys are provided, all context data will be cleared.
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  clearContext(): void;
+  clearContext(keys?: string | string[]): This;
   /**
    * Logs only the error object without a log message
    *

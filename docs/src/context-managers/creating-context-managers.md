@@ -57,19 +57,22 @@ interface OnChildLoggerCreatedParams {
 interface IContextManager {
   // Sets the context data. Set to undefined to clear the context.
   setContext(context?: Record<string, any>): void;
-  
+
   // Appends context data to existing context
   appendContext(context: Record<string, any>): void;
-  
+
   // Returns the current context data
   getContext(): Record<string, any>;
-  
+
   // Returns true if there is context data present
   hasContextData(): boolean;
-  
+
+  // Clears context data. If keys provided, only those keys are removed.
+  clearContext(keys?: string | string[]): void;
+
   // Called when a child logger is created
   onChildLoggerCreated(params: OnChildLoggerCreatedParams): void;
-  
+
   // Creates a new instance with the same context data
   clone(): IContextManager;
 }
@@ -83,6 +86,7 @@ When using a context manager with a LogLayer logger instance:
 - The context manager is attached to a logger using [`withContextManager()`](/context-managers/#using-a-custom-context-manager)
   - If the existing context manager implements [`Disposable`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html#using-declarations-and-explicit-resource-management), it will be called to clean up resources
 - When `withContext()` is called on the logger it calls `appendContext()` on the context manager
+- When `clearContext()` is called on the logger it calls `clearContext()` on the context manager, optionally with keys to remove
 - When a child logger is created:
   - `clone()` is called on the parent's context manager and the cloned context manager is attached to the child logger
   - `onChildLoggerCreated()` is called on the parent's context manager
@@ -282,6 +286,26 @@ export class FileContextManager implements IContextManager, Disposable {
   hasContextData(): boolean {
     if (this.isDisposed) return false;
     return this.hasContext;
+  }
+
+  /**
+   * Clears context data. If keys are provided, only those keys are removed.
+   * If no keys are provided, all context is cleared.
+   */
+  clearContext(keys?: string | string[]): void {
+    if (this.isDisposed) return;
+
+    if (keys === undefined) {
+      this.context = {};
+      this.hasContext = false;
+    } else {
+      const keysToRemove = Array.isArray(keys) ? keys : [keys];
+      for (const key of keysToRemove) {
+        delete this.context[key];
+      }
+      this.hasContext = Object.keys(this.context).length > 0;
+    }
+    this.saveContext();
   }
 
   /**

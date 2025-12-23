@@ -124,4 +124,46 @@ describe("IsolatedContextManager", () => {
     expect(manager.getContext()).toEqual({});
     expect(manager.hasContextData()).toBe(true);
   });
+
+  describe("clearContext", () => {
+    it("should clear all context data when no keys are provided", () => {
+      const manager = new IsolatedContextManager();
+      manager.setContext({ foo: "bar", baz: "qux" });
+      manager.clearContext();
+      expect(manager.getContext()).toEqual({});
+      expect(manager.hasContextData()).toBe(false);
+    });
+
+    it("should remove a single key when a string is provided", () => {
+      const manager = new IsolatedContextManager();
+      manager.setContext({ foo: "bar", baz: "qux", test: "value" });
+      manager.clearContext("foo");
+      expect(manager.getContext()).toEqual({ baz: "qux", test: "value" });
+      expect(manager.hasContextData()).toBe(true);
+    });
+
+    it("should remove multiple keys when an array is provided", () => {
+      const manager = new IsolatedContextManager();
+      manager.setContext({ foo: "bar", baz: "qux", test: "value" });
+      manager.clearContext(["foo", "baz"]);
+      expect(manager.getContext()).toEqual({ test: "value" });
+      expect(manager.hasContextData()).toBe(true);
+    });
+
+    it("should set hasContext to false when all keys are removed", () => {
+      const manager = new IsolatedContextManager();
+      manager.setContext({ foo: "bar", baz: "qux" });
+      manager.clearContext(["foo", "baz"]);
+      expect(manager.getContext()).toEqual({});
+      expect(manager.hasContextData()).toBe(false);
+    });
+
+    it("should handle removing non-existent keys gracefully", () => {
+      const manager = new IsolatedContextManager();
+      manager.setContext({ foo: "bar" });
+      manager.clearContext("nonexistent");
+      expect(manager.getContext()).toEqual({ foo: "bar" });
+      expect(manager.hasContextData()).toBe(true);
+    });
+  });
 });

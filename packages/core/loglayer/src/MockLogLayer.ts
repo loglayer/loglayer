@@ -12,6 +12,7 @@ import type {
   ILogLevelManager,
   LogLayerTransport,
   LogLevel,
+  LogLevelType,
   MessageDataType,
   RawLogEntry,
 } from "@loglayer/shared";
@@ -71,7 +72,7 @@ export class MockLogLayer implements ILogLayer<MockLogLayer>, ILogBuilder<MockLo
     return {};
   }
 
-  clearContext() {
+  clearContext(_keys?: string | string[]) {
     return this;
   }
 
@@ -146,19 +147,19 @@ export class MockLogLayer implements ILogLayer<MockLogLayer>, ILogBuilder<MockLo
     this.mockLogBuilder = mockLogBuilder;
   }
 
-  enableIndividualLevel(_logLevel: LogLevel) {
+  enableIndividualLevel(_logLevel: LogLevelType) {
     return this;
   }
 
-  disableIndividualLevel(_logLevel: LogLevel) {
+  disableIndividualLevel(_logLevel: LogLevelType) {
     return this;
   }
 
-  setLevel(_logLevel: LogLevel) {
+  setLevel(_logLevel: LogLevelType) {
     return this;
   }
 
-  isLevelEnabled(_logLevel: LogLevel): boolean {
+  isLevelEnabled(_logLevel: LogLevelType): boolean {
     return true;
   }
 

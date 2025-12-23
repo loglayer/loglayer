@@ -15,6 +15,7 @@ This document provides comprehensive guidelines for AI agents working on the Log
 - [Mixin Development](#mixin-development)
 - [Transport Development](#transport-development)
 - [Core LogLayer Development](#core-loglayer-development)
+  - [Updating Mock Implementations](#updating-mock-implementations)
 
 ---
 
@@ -876,6 +877,7 @@ If adding a method to `LogBuilder` (the fluent builder returned by `withMetadata
 - [ ] Add method implementation to `LogLayer.ts`
 - [ ] Add method signature to `ILogLayer` interface in `@loglayer/shared`
 - [ ] Add mock implementation to `MockLogLayer.ts`
+- [ ] Add type test to `mock-types.test.ts` to verify mock matches interface
 - [ ] Write unit tests
 - [ ] Update documentation (site docs if user-facing)
 - [ ] Update `docs/src/whats-new.md` with the new feature
@@ -891,6 +893,7 @@ If adding a method to `LogBuilder` (the fluent builder returned by `withMetadata
 - [ ] Add method implementation to `LogBuilder.ts`
 - [ ] Add method signature to `ILogBuilder` interface in `@loglayer/shared`
 - [ ] Add mock implementation to `MockLogBuilder.ts`
+- [ ] Add type test to `mock-types.test.ts` to verify mock matches interface
 - [ ] Write unit tests
 - [ ] Update documentation (site docs if user-facing)
 - [ ] Update `docs/src/whats-new.md` with the new feature
@@ -898,6 +901,61 @@ If adding a method to `LogBuilder` (the fluent builder returned by `withMetadata
 - [ ] Run `turbo lint --filter=loglayer --filter=@loglayer/shared` to verify linting passes
 - [ ] Run `turbo test --filter=loglayer` to verify tests pass
 - [ ] Run `turbo verify-types --filter=loglayer --filter=@loglayer/shared` to verify types
+```
+
+### Updating Mock Implementations
+
+When modifying `ILogLayer`, `ILogBuilder`, `IContextManager`, or `ILogLevelManager` interfaces, you **must** update the corresponding mock implementations to match:
+
+| Interface | Mock Implementation | Type Tests |
+|-----------|-------------------|------------|
+| `ILogLayer` | `packages/core/loglayer/src/MockLogLayer.ts` | `packages/core/loglayer/src/__tests__/mock-types.test.ts` |
+| `ILogBuilder` | `packages/core/loglayer/src/MockLogBuilder.ts` | `packages/core/loglayer/src/__tests__/mock-types.test.ts` |
+| `IContextManager` | `packages/core/context-manager/src/MockContextManager.ts` | `packages/core/context-manager/src/__tests__/mock-types.test.ts` |
+| `ILogLevelManager` | `packages/core/log-level-manager/src/MockLogLevelManager.ts` | `packages/core/log-level-manager/src/__tests__/mock-types.test.ts` |
+
+**Type Tests Catch Mismatches:**
+
+Type tests in the respective `__tests__/mock-types.test.ts` files verify that mock implementations have method signatures exactly matching their interfaces. These tests use `Parameters<>` to check parameter type equality:
+
+```typescript
+// This test fails if MockLogLayer.clearContext has different parameters than ILogLayer.clearContext
+expectTypeOf<Parameters<MockLogLayer["clearContext"]>>().toEqualTypeOf<
+  Parameters<ILogLayer<MockLogLayer>["clearContext"]>
+>();
+```
+
+**Validation:**
+
+Run the following commands to check for type mismatches:
+
+```bash
+# For LogLayer/LogBuilder mocks
+pnpm turbo run verify-types --filter="loglayer"
+
+# For ContextManager mock
+pnpm turbo run verify-types --filter="@loglayer/context-manager"
+
+# For LogLevelManager mock
+pnpm turbo run verify-types --filter="@loglayer/log-level-manager"
+```
+
+If a mock signature doesn't match its interface, the typecheck fails with a descriptive error:
+
+```
+error TS2344: Type '[keys?: string | string[]]' does not satisfy the constraint...
+```
+
+**Adding Type Tests for New Methods:**
+
+When adding new methods to interfaces, add corresponding type tests to `mock-types.test.ts`:
+
+```typescript
+it("should have myNewMethod with the same parameters as ILogLayer", () => {
+  expectTypeOf<Parameters<MockLogLayer["myNewMethod"]>>().toEqualTypeOf<
+    Parameters<ILogLayer<MockLogLayer>["myNewMethod"]>
+  >();
+});
 ```
 
 ### Example: Adding a New Method

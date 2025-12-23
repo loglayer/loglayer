@@ -1,4 +1,4 @@
-import type { IContextManager } from "@loglayer/shared";
+import type { IContextManager, OnChildLoggerCreatedParams } from "@loglayer/shared";
 
 /**
  * A mock context manager that does nothing. Useful for use with unit testing.
@@ -12,7 +12,8 @@ export class MockContextManager implements IContextManager {
   hasContextData(): boolean {
     return false;
   }
-  onChildLoggerCreated(_params: any) {}
+  clearContext(_keys?: string | string[]): void {}
+  onChildLoggerCreated(_params: OnChildLoggerCreatedParams): void {}
   clone(): IContextManager {
     return new MockContextManager();
   }

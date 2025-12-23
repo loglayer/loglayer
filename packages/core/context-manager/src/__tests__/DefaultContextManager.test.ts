@@ -68,6 +68,50 @@ describe("DefaultContextManager", () => {
     });
   });
 
+  describe("clearContext", () => {
+    it("should clear all context data when no keys are provided", () => {
+      contextManager.setContext({ foo: "bar", baz: "qux" });
+      contextManager.clearContext();
+      expect(contextManager.getContext()).toEqual({});
+      expect(contextManager.hasContextData()).toBe(false);
+    });
+
+    it("should remove a single key when a string is provided", () => {
+      contextManager.setContext({ foo: "bar", baz: "qux", test: "value" });
+      contextManager.clearContext("foo");
+      expect(contextManager.getContext()).toEqual({ baz: "qux", test: "value" });
+      expect(contextManager.hasContextData()).toBe(true);
+    });
+
+    it("should remove multiple keys when an array is provided", () => {
+      contextManager.setContext({ foo: "bar", baz: "qux", test: "value" });
+      contextManager.clearContext(["foo", "baz"]);
+      expect(contextManager.getContext()).toEqual({ test: "value" });
+      expect(contextManager.hasContextData()).toBe(true);
+    });
+
+    it("should set hasContext to false when all keys are removed", () => {
+      contextManager.setContext({ foo: "bar", baz: "qux" });
+      contextManager.clearContext(["foo", "baz"]);
+      expect(contextManager.getContext()).toEqual({});
+      expect(contextManager.hasContextData()).toBe(false);
+    });
+
+    it("should handle removing non-existent keys gracefully", () => {
+      contextManager.setContext({ foo: "bar" });
+      contextManager.clearContext("nonexistent");
+      expect(contextManager.getContext()).toEqual({ foo: "bar" });
+      expect(contextManager.hasContextData()).toBe(true);
+    });
+
+    it("should handle empty array of keys", () => {
+      contextManager.setContext({ foo: "bar" });
+      contextManager.clearContext([]);
+      expect(contextManager.getContext()).toEqual({ foo: "bar" });
+      expect(contextManager.hasContextData()).toBe(true);
+    });
+  });
+
   describe("onChildLoggerCreated", () => {
     it("should copy parent context to child logger", () => {
       const parentContext = { foo: "bar" };

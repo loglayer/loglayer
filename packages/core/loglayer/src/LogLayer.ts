@@ -203,10 +203,11 @@ export class LogLayer implements ILogLayer<LogLayer> {
   }
 
   /**
-   * Clears the context data.
+   * Clears the context data. If keys are provided, only those keys will be removed.
+   * If no keys are provided, all context data will be cleared.
    */
-  clearContext() {
-    this.contextManager.setContext(undefined);
+  clearContext(keys?: string | string[]) {
+    this.contextManager.clearContext(keys);
 
     return this;
   }

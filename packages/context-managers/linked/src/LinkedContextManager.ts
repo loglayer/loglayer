@@ -53,6 +53,31 @@ export class LinkedContextManager implements IContextManager {
   }
 
   /**
+   * Clears the context data. If keys are provided, only those keys will be removed.
+   * If no keys are provided, all context data will be cleared.
+   */
+  clearContext(keys?: string | string[]): void {
+    if (keys === undefined) {
+      // We can't just assign an empty object else that would break the link between parent and child.
+      for (const key in this.contextContainer.data) {
+        if (Object.hasOwn(this.contextContainer.data, key)) {
+          delete this.contextContainer.data[key];
+        }
+      }
+      this.contextContainer.hasContext = false;
+      return;
+    }
+
+    const keysToRemove = Array.isArray(keys) ? keys : [keys];
+
+    for (const key of keysToRemove) {
+      delete this.contextContainer.data[key];
+    }
+
+    this.contextContainer.hasContext = Object.keys(this.contextContainer.data).length > 0;
+  }
+
+  /**
    * Links the child context manager's context to be the same as the parent context manager's context.
    */
   onChildLoggerCreated({ parentContextManager, childContextManager }: OnChildLoggerCreatedParams) {

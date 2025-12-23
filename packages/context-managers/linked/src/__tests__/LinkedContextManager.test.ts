@@ -72,6 +72,58 @@ describe("LinkedContextManager", () => {
     });
   });
 
+  describe("clearContext", () => {
+    it("should clear all context data when no keys are provided", () => {
+      contextManager.setContext({ foo: "bar", baz: "qux" });
+      contextManager.clearContext();
+      expect(contextManager.getContext()).toEqual({});
+      expect(contextManager.hasContextData()).toBe(false);
+    });
+
+    it("should remove a single key when a string is provided", () => {
+      contextManager.setContext({ foo: "bar", baz: "qux", test: "value" });
+      contextManager.clearContext("foo");
+      expect(contextManager.getContext()).toEqual({ baz: "qux", test: "value" });
+      expect(contextManager.hasContextData()).toBe(true);
+    });
+
+    it("should remove multiple keys when an array is provided", () => {
+      contextManager.setContext({ foo: "bar", baz: "qux", test: "value" });
+      contextManager.clearContext(["foo", "baz"]);
+      expect(contextManager.getContext()).toEqual({ test: "value" });
+      expect(contextManager.hasContextData()).toBe(true);
+    });
+
+    it("should set hasContext to false when all keys are removed", () => {
+      contextManager.setContext({ foo: "bar", baz: "qux" });
+      contextManager.clearContext(["foo", "baz"]);
+      expect(contextManager.getContext()).toEqual({});
+      expect(contextManager.hasContextData()).toBe(false);
+    });
+
+    it("should maintain the same object reference when clearing specific keys", () => {
+      contextManager.setContext({ foo: "bar", baz: "qux" });
+      const initialContext = contextManager.getContext();
+      contextManager.clearContext("foo");
+      expect(contextManager.getContext()).toBe(initialContext);
+    });
+
+    it("should propagate cleared keys to linked context managers", () => {
+      const childContextManager = new LinkedContextManager();
+
+      contextManager.setContext({ foo: "bar", baz: "qux" });
+      contextManager.onChildLoggerCreated({
+        parentLogger: new MockLogLayer(),
+        childLogger: new MockLogLayer(),
+        parentContextManager: contextManager,
+        childContextManager,
+      });
+
+      contextManager.clearContext("foo");
+      expect(childContextManager.getContext()).toEqual({ baz: "qux" });
+    });
+  });
+
   describe("onChildLoggerCreated", () => {
     it("should link parent and child context", () => {
       const parentContext = { foo: "bar" };
