@@ -1,5 +1,12 @@
 # `@loglayer/transport-consola` Changelog
 
+## 2.1.16
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@2.3.13
+
 ## 2.1.15
 
 ### Patch Changes
