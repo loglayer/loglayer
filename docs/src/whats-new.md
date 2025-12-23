@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Dec 22, 2025
+
+`loglayer`, `@loglayer/context-manager`, `@loglayer/context-manager-linked`, `@loglayer/context-manager-isolated`:
+
+- `clearContext()` now accepts an optional parameter to clear specific context keys instead of all context data. Pass a string to clear a single key, or an array of strings to clear multiple keys. See the [Context documentation](/logging-api/context#clearing-context) for usage examples.
+
 ## Dec 21, 2025
 
 `loglayer`:

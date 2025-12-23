@@ -183,6 +183,68 @@ describe("LogLayer basic functionality", () => {
     });
   });
 
+  it("should clear specific context keys with a single string", () => {
+    const log = getLogger();
+    const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+    log.withContext({
+      sample: "data",
+      other: "value",
+      keep: "this",
+    });
+
+    log.clearContext("sample");
+
+    log.info("test message");
+    expect(genericLogger.popLine()).toStrictEqual(
+      expect.objectContaining({
+        level: "info",
+        data: [{ other: "value", keep: "this" }, "test message"],
+      }),
+    );
+  });
+
+  it("should clear specific context keys with an array", () => {
+    const log = getLogger();
+    const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+    log.withContext({
+      sample: "data",
+      other: "value",
+      keep: "this",
+    });
+
+    log.clearContext(["sample", "other"]);
+
+    log.info("test message");
+    expect(genericLogger.popLine()).toStrictEqual(
+      expect.objectContaining({
+        level: "info",
+        data: [{ keep: "this" }, "test message"],
+      }),
+    );
+  });
+
+  it("should return this for method chaining when clearing context", () => {
+    const log = getLogger();
+    const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+    log
+      .withContext({
+        sample: "data",
+        other: "value",
+      })
+      .clearContext("sample")
+      .info("test message");
+
+    expect(genericLogger.popLine()).toStrictEqual(
+      expect.objectContaining({
+        level: "info",
+        data: [{ other: "value" }, "test message"],
+      }),
+    );
+  });
+
   it("should ignore empty context", () => {
     const log = getLogger();
     const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;

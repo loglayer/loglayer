@@ -46,6 +46,26 @@ export class DefaultContextManager implements IContextManager {
   }
 
   /**
+   * Clears the context data. If keys are provided, only those keys will be removed.
+   * If no keys are provided, all context data will be cleared.
+   */
+  clearContext(keys?: string | string[]): void {
+    if (keys === undefined) {
+      this.context = {};
+      this.hasContext = false;
+      return;
+    }
+
+    const keysToRemove = Array.isArray(keys) ? keys : [keys];
+
+    for (const key of keysToRemove) {
+      delete this.context[key];
+    }
+
+    this.hasContext = Object.keys(this.context).length > 0;
+  }
+
+  /**
    * Copies the parent context data to the child context data.
    */
   onChildLoggerCreated({ parentContextManager, childContextManager }: OnChildLoggerCreatedParams) {

@@ -34,7 +34,7 @@ By default, context data is flattened into the root of the log object:
 ```
 
 ::: warning Clearing context
-Passing an empty value (`null`, `undefined`, or an empty object) to `withContext` will *not* clear the context; it does nothing. Use the `clearContext()` method to remove all context data.
+Passing an empty value (`null`, `undefined`, or an empty object) to `withContext` will *not* clear the context; it does nothing. Use `clearContext()` to remove all context data, or `clearContext(keys)` to remove specific keys.
 :::
 
 ## Context Behavior / Management
@@ -117,10 +117,36 @@ const context = log.getContext()
 
 ### Clearing Context
 
-You can clear context data:
+You can clear all context data:
 
 ```typescript
 log.clearContext()
+```
+
+Or clear specific keys by passing a string or an array of strings:
+
+```typescript
+log.withContext({
+  requestId: '123',
+  userId: 'user_456',
+  sessionId: 'sess_789'
+})
+
+// Clear a single key
+log.clearContext('userId')
+// Context now: { requestId: '123', sessionId: 'sess_789' }
+
+// Clear multiple keys
+log.clearContext(['requestId', 'sessionId'])
+// Context now: {}
+```
+
+The method supports chaining:
+
+```typescript
+log.withContext({ a: 1, b: 2, c: 3 })
+   .clearContext('a')
+   .info('Only b and c in context')
 ```
 
 ### Muting Context
