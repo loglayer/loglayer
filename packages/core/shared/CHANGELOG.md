@@ -1,5 +1,11 @@
 # `@loglayer/shared` Changelog
 
+## 3.3.0
+
+### Minor Changes
+
+- [#333](https://github.com/loglayer/loglayer/pull/333) [`4916581`](https://github.com/loglayer/loglayer/commit/491658199b210c293e195e708fdbed2be14d5880) Thanks [@theogravity](https://github.com/theogravity)! - `clearContext()` now accepts an optional parameter to clear specific context keys instead of all context data.
+
 ## 3.2.0
 
 ### Minor Changes

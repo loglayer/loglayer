@@ -1,5 +1,20 @@
 # `loglayer` Changelog
 
+## 8.4.0
+
+### Minor Changes
+
+- [#333](https://github.com/loglayer/loglayer/pull/333) [`4916581`](https://github.com/loglayer/loglayer/commit/491658199b210c293e195e708fdbed2be14d5880) Thanks [@theogravity](https://github.com/theogravity)! - `clearContext()` now accepts an optional parameter to clear specific context keys instead of all context data.
+
+### Patch Changes
+
+- Updated dependencies [[`4916581`](https://github.com/loglayer/loglayer/commit/491658199b210c293e195e708fdbed2be14d5880)]:
+  - @loglayer/context-manager@1.2.0
+  - @loglayer/shared@3.3.0
+  - @loglayer/log-level-manager@1.0.5
+  - @loglayer/plugin@2.2.7
+  - @loglayer/transport@2.3.13
+
 ## 8.3.0
 
 ### Minor Changes
