@@ -16,6 +16,7 @@ export type {
   LogLayerMetadata,
   LogLayerPlugin,
   LogLayerTransport,
+  LogLayerTransportParams,
   LogLevelType,
   PluginBeforeDataOutParams,
   PluginBeforeMessageOutParams,

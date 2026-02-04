@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Feb 3, 2026
+
+`loglayer`:
+
+- Add `LogLayerTransportParams` to exports
+
 ## Dec 22, 2025
 
 `loglayer`, `@loglayer/context-manager`, `@loglayer/context-manager-linked`, `@loglayer/context-manager-isolated`:
@@ -15,9 +21,8 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Dec 21, 2025
 
-`loglayer`:
-
-- Added `messageFn` option to `ConsoleTransport` for custom message formatting. Receives log level, messages, and data; returns the formatted string. See the [Console Transport documentation](/transports/console#custom-message-formatting) for usage examples.
+- `loglayer`: Added `messageFn` option to `ConsoleTransport` for custom message formatting. Receives log level, messages, and data; returns the formatted string. See the [Console Transport documentation](/transports/console#custom-message-formatting) for usage examples.
+- `@loglayer/plugin-filter`: update `@jsonquerylang/jsonquery` to `5.1.1`
 
 ## Dec 16, 2025
 
