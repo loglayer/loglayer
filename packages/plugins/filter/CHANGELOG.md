@@ -1,5 +1,11 @@
 # `@loglayer/plugin-filter` Changelog
 
+## 3.1.0
+
+### Minor Changes
+
+- [#337](https://github.com/loglayer/loglayer/pull/337) [`f669462`](https://github.com/loglayer/loglayer/commit/f669462006177a6c9729c5b197c2eae0d8dda060) Thanks [@theogravity](https://github.com/theogravity)! - Update `@jsonquerylang/jsonquery` to `5.1.1`
+
 ## 3.0.14
 
 ### Patch Changes
