@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 8.4.1
+
+### Patch Changes
+
+- [#337](https://github.com/loglayer/loglayer/pull/337) [`f669462`](https://github.com/loglayer/loglayer/commit/f669462006177a6c9729c5b197c2eae0d8dda060) Thanks [@theogravity](https://github.com/theogravity)! - Add `LogLayerTransportParams` to exports
+
 ## 8.4.0
 
 ### Minor Changes
