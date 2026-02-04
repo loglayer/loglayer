@@ -50,12 +50,12 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "25.0.3",
+    "@types/node": "25.2.0",
     "loglayer": "workspace:*",
-    "tsdown": "0.18.2",
+    "tsdown": "0.20.1",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "vitest": "4.0.16"
+    "vitest": "4.0.18"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

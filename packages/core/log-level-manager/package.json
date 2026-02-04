@@ -46,10 +46,10 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "serialize-error": "12.0.0",
-    "tsdown": "0.18.2",
+    "serialize-error": "13.0.1",
+    "tsdown": "0.20.1",
     "typescript": "5.9.3",
-    "vitest": "4.0.16"
+    "vitest": "4.0.18"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {
