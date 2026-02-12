@@ -2,8 +2,7 @@
 
 <p align="center">
   <a href="https://loglayer.dev" title="LogLayer Logo"><img src="docs/src/public/images/loglayer.png" alt="LogLayer Logo" width="200" /></a>
-  <br />
-  <sub>Logo by <a href="https://www.linkedin.com/in/akshaya-madhavan">Akshaya Madhavan</a></sub>
+
 </p>
 
 [![NPM version](https://img.shields.io/npm/v/loglayer.svg?style=flat-square)](https://www.npmjs.com/package/loglayer)
@@ -200,4 +199,4 @@ For detailed documentation, visit [https://loglayer.dev](https://loglayer.dev)
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-Made with ❤️ by [Theo Gravity](https://suteki.nu).
+Made with ❤️ by [Theo Gravity](https://suteki.nu). Logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan).

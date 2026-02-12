@@ -2,8 +2,7 @@
 
 <p align="center">
   <a href="https://loglayer.dev" title="LogLayer Logo"><img src="https://loglayer.dev/images/loglayer.png" alt="LogLayer Logo" width="200" /></a>
-  <br />
-  <sub>Logo by <a href="https://www.linkedin.com/in/akshaya-madhavan">Akshaya Madhavan</a></sub>
+
 </p>
 
 [![NPM version](https://img.shields.io/npm/v/loglayer.svg?style=flat-square)](https://www.npmjs.com/package/loglayer)
@@ -143,3 +142,5 @@ log
 
 - See the [LogLayer configuration documentation](https://loglayer.dev/configuration.html) for more configuration options.
 - See the [Console Transport documentation](https://loglayer.dev/transports/console.html) for more configuration options.
+
+Made with ❤️ by [Theo Gravity](https://suteki.nu). Logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan).
