@@ -457,6 +457,25 @@ log.withMetadata({ user: 'john' }).info('User logged in')
 // console.info({ user: 'john', msg: 'User logged in', timestamp: '2023-12-01...', level: 'info' })
 ```
 
+## Structured Logger Transport
+
+Built-in console transport with structured logging enabled by default (level, time, msg fields):
+
+```typescript
+import { LogLayer, StructuredTransport } from 'loglayer'
+
+const log: ILogLayer = new LogLayer({
+  transport: new StructuredTransport({
+    logger: console,
+  })
+})
+
+log.withMetadata({ user: 'john' }).info('User logged in')
+// console.info({ level: 'info', time: '2025-01-01T...', msg: 'User logged in', user: 'john' })
+```
+
+Options: `messageField` (default: 'msg'), `levelField` (default: 'level'), `dateField` (default: 'time'), `dateFn`, `levelFn`, `stringify`, `messageFn`, `level`.
+
 ## Pino Transport
 
 ```typescript
@@ -992,6 +1011,7 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 
 ### Built-in (included with loglayer)
 - ConsoleTransport - Browser/server console
+- StructuredTransport - Console-based structured logging with level, time, and msg fields enabled by default
 - BlankTransport - Custom transport via shipToLogger function
 
 ### Logging Libraries
@@ -1023,12 +1043,14 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 - `@loglayer/transport-sumo-logic` - Sumo Logic
 - `@loglayer/transport-victoria-logs` - VictoriaLogs
 
+### Pretty Printers
+- `@loglayer/transport-pretty-terminal` - Enhanced terminal output
+- `@loglayer/transport-simple-pretty-terminal` - Simple pretty terminal output
+
 ### Other
 - `@loglayer/transport-http` - HTTP endpoint (batching, compression, retries)
 - `@loglayer/transport-log-file-rotation` - Log file rotation with compression
 - `@loglayer/transport-opentelemetry` - OpenTelemetry
-- `@loglayer/transport-pretty-terminal` - Enhanced terminal output
-- `@loglayer/transport-simple-pretty-terminal` - Simple pretty terminal output
 
 ## Available Plugins
 

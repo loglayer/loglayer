@@ -32,5 +32,6 @@ export { useLogLayerMixin } from "./mixins.js";
 export { TestLoggingLibrary } from "./TestLoggingLibrary.js";
 export { BlankTransport } from "./transports/BlankTransport.js";
 export { ConsoleTransport } from "./transports/ConsoleTransport.js";
+export { StructuredTransport } from "./transports/StructuredTransport.js";
 export { TestTransport } from "./transports/TestTransport.js";
 export * from "./types/index.js";

@@ -63,35 +63,38 @@ bun add loglayer
 
 For detailed Bun setup and examples, see the [Bun integration guide](/example-integrations/bun).
 
-## Basic Usage with Console Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
+## Basic Usage with Structured Transport
 
-The simplest way to get started is to use the built-in console transport, which uses the standard `console` object for logging:
+The simplest way to get started is to use the built-in [Structured Transport](/transports/structured-logger), which outputs structured log objects with `level`, `time`, and `msg` fields using the standard `console` object:
 
 ```typescript
-import { LogLayer, ConsoleTransport } from 'loglayer'
+import { LogLayer, StructuredTransport } from 'loglayer'
 
 const log = new LogLayer({
-  transport: new ConsoleTransport({
+  transport: new StructuredTransport({
     logger: console,
   }),
 })
 
 // Basic logging
 log.info('Hello world!')
+// { level: 'info', time: '2025-01-01T00:00:00.000Z', msg: 'Hello world!' }
 
 // Logging with metadata
 log.withMetadata({ user: 'john' }).info('User logged in')
+// { level: 'info', time: '...', msg: 'User logged in', user: 'john' }
 
 // Logging with context (persists across log calls)
 log.withContext({ requestId: '123' })
-log.info('Processing request') // Will include requestId
+log.info('Processing request')
+// { level: 'info', time: '...', msg: 'Processing request', requestId: '123' }
 
 // Logging errors
 log.withError(new Error('Something went wrong')).error('Failed to process request')
 ```
 
-::: tip Structured logging
-If you want to use the Console Transport as a structured logger (JSON output), see the [Console Transport structured logging section](/transports/console#structured-logging).
+::: tip Simple console logging
+If you prefer unstructured console output, use the [Console Transport](/transports/console) instead.
 :::
 
 ## Using an Error Serializer
@@ -115,12 +118,12 @@ yarn add serialize-error
 :::
 
 ```typescript
-import { LogLayer, ConsoleTransport } from 'loglayer'
+import { LogLayer, StructuredTransport } from 'loglayer'
 import { serializeError } from 'serialize-error'
 
 const log = new LogLayer({
   errorSerializer: serializeError,
-  transport: new ConsoleTransport({
+  transport: new StructuredTransport({
     logger: console,
   }),
 })
@@ -134,6 +137,6 @@ For more error handling options, see the [Error Handling documentation](/logging
 ## Next steps
 
 - Optionally [configure](/configuration) LogLayer to further customize logging behavior.
-- See the [Console Transport](/transports/console) documentation for more configuration options.
+- See the [Structured Transport](/transports/structured-logger) or [Console Transport](/transports/console) documentation for more configuration options.
 - Start exploring the [Logging API](/logging-api/basic-logging) section for more advanced logging features.
 - See the [Transports](/transports/) section for more ways to ship logs to different destinations.
