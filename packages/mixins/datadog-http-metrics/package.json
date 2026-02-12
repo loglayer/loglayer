@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/mixin-datadog-http-metrics",
   "description": "Adds Datadog HTTP metrics functionality to LogLayer using the datadog-metrics library.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
