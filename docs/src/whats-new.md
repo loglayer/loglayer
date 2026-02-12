@@ -7,6 +7,11 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Feb 11, 2026
+
+- Commissioned new LogLayer logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan)
+- Updated documentation theme colors.
+
 ## Feb 3, 2026
 
 `loglayer`:

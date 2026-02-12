@@ -1,7 +1,54 @@
+:root {
+  --vp-c-brand-1: #C8B899;
+  --vp-c-brand-2: #B8A888;
+  --vp-c-brand-3: #A89878;
+  --vp-c-brand-soft: rgba(200, 184, 153, 0.14);
+
+  --vp-c-tip-1: #C8B899;
+  --vp-c-tip-2: rgba(200, 184, 153, 0.14);
+  --vp-c-tip-3: rgba(200, 184, 153, 0.14);
+  --vp-c-tip-soft: rgba(200, 184, 153, 0.14);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(135deg, #F0E6D6, #C8B899);
+  --vp-home-hero-image-background-image: linear-gradient(135deg, rgba(200, 184, 153, 0.1), rgba(160, 120, 80, 0.08));
+  --vp-home-hero-image-filter: blur(56px);
+
+  --vp-button-brand-text: #1a1612;
+  --vp-button-brand-bg: #C8B899;
+  --vp-button-brand-hover-text: #1a1612;
+  --vp-button-brand-hover-bg: #D8C8A8;
+  --vp-button-brand-active-text: #1a1612;
+  --vp-button-brand-active-bg: #B8A888;
+
+  --vp-button-alt-text: #E8DCC8;
+  --vp-button-alt-bg: #302820;
+  --vp-button-alt-hover-text: #F0E6D6;
+  --vp-button-alt-hover-bg: #3a3028;
+  --vp-button-alt-active-text: #E8DCC8;
+  --vp-button-alt-active-bg: #282018;
+}
+
+.dark {
+  --vp-c-bg: #1a1612;
+  --vp-c-bg-alt: #1e1915;
+  --vp-c-bg-elv: #211c17;
+  --vp-c-bg-soft: #211c17;
+
+  --vp-c-warning-1: #D4A044;
+  --vp-c-warning-2: #B8862E;
+  --vp-c-warning-3: #8C6820;
+  --vp-c-warning-soft: rgba(180, 130, 50, 0.16);
+  --vp-custom-block-warning-bg: rgba(180, 130, 50, 0.22);
+  --vp-custom-block-warning-text: #E8DCC8;
+  --vp-custom-block-warning-code-bg: rgba(180, 130, 50, 0.2);
+  --vp-custom-block-warning-border: transparent;
+}
+
 .VPImage {
   border-radius: 20px;
-  border: solid 3px #7a8daa59;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  border: none;
+  box-shadow: none;
 }
 
 #js-lib-label {

@@ -65,12 +65,12 @@ export default defineConfig({
       ['link', { rel: 'manifest', href: '/images/icons/site.webmanifest' }],
       ['meta', { name: 'keywords', content: 'loglayer, logging, logger, log, javascript, typescript, nodejs, browser, file, otel, opentelemetry, rotation, library, structured, framework' }],
       ['meta', { property: 'og:type', content: 'website' }],
-      ['meta', { property: 'og:image', content: '/images/loglayer.jpg' }],
+      ['meta', { property: 'og:image', content: '/images/loglayer.png' }],
       ['meta', { property: 'og:site_name', content: 'LogLayer' }],
-      ['meta', { property: 'og:image:alt', content: 'LogLayer Logo' }],
+      ['meta', { property: 'og:image:alt', content: 'LogLayer logo by Akshaya Madhavan' }],
       ['meta', { property: 'og:locale', content: 'en_US' }],
       ['meta', { name: 'twitter:card', content: 'summary' }],
-      ['meta', { name: 'twitter:image:alt', content: 'LogLayer Logo' }],
+      ['meta', { name: 'twitter:image:alt', content: 'LogLayer logo by Akshaya Madhavan' }],
     ]
 
     head.push(['meta', { property: 'og:title', content: String(pageData?.frontmatter?.title ?? defaultTitle).replace(/"/g, '&quot;') }])
@@ -81,8 +81,8 @@ export default defineConfig({
   },
   themeConfig: {
     logo: {
-      src: '/images/loglayer.jpg',
-      alt: 'LogLayer Logo'
+      src: '/images/loglayer.png',
+      alt: 'LogLayer logo by Akshaya Madhavan'
     },
     editLink: {
       pattern: "https://github.com/loglayer/loglayer/edit/master/docs/src/:path",
