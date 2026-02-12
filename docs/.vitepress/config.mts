@@ -1,5 +1,4 @@
 import { defineConfig, HeadConfig } from 'vitepress'
-import llmstxt from 'vitepress-plugin-llms'
 
 const defaultTitle = "LogLayer: The modern logging library for Typescript / Javascript"
 const defaultDescription = "A structured logging library with a fluent API for specifying log messages, metadata and errors"
@@ -20,32 +19,7 @@ export default defineConfig({
         "@nolebase/ui-asciinema",
       ],
     },
-    plugins: [
-      llmstxt({
-        domain: 'https://loglayer.dev',
-        title: "LogLayer",
-        description: "The modern logging library for Typescript / Javascript",
-        details: "LogLayer is structured logging library with a fluent API for specifying log messages, " +
-          "metadata and errors. It supports multiple logging libraries and cloud providers such as pino, " +
-          "winston, and DataDog.",
-        ignoreFiles: [
-          'transports/changelogs/*',
-          'transports/_partials/*',
-          'plugins/changelogs/*',
-          'plugins/_partials/*',
-          'context-managers/changelogs/*',
-          'context-managers/_partials/*',
-          'log-level-managers/changelogs/*',
-          'log-level-managers/_partials/*',
-          'core-changelogs/*',
-          '_partials/*',
-          'ai-support.md',
-          'whats-new.md',
-          'index.md',
-          'migrating.md'
-        ]
-      })
-    ]
+    plugins: []
   },
   async transformHead ({ pageData }) {
     const head: HeadConfig[] = [

@@ -1,0 +1,219 @@
+# LogLayer
+
+> A structured logging library with a fluent API for Typescript / Javascript. It separates log data into context (persistent), metadata (per-message), and errors with support for 25+ transports and plugins.
+
+## Installation
+
+```
+npm install loglayer
+```
+
+## Quick Start
+
+```typescript
+import { LogLayer, ConsoleTransport } from 'loglayer'
+import type { ILogLayer } from 'loglayer'
+
+const log: ILogLayer = new LogLayer({
+  transport: new ConsoleTransport({
+    logger: console,
+  }),
+})
+
+log.info('Hello world!')
+```
+
+## Log Levels
+
+```typescript
+log.trace('Detailed debugging')
+log.debug('Debug information')
+log.info('Informational message')
+log.warn('Warning message')
+log.error('Error occurred')
+log.fatal('Critical failure')
+
+// Multiple parameters
+log.info('User', 123, 'logged in')
+```
+
+## Metadata (per-message data)
+
+```typescript
+// Attach structured data to a single log entry
+log.withMetadata({ userId: '123', action: 'login' }).info('User logged in')
+
+// Log metadata without a message
+log.metadataOnly({ status: 'healthy', cpu: '45%' })
+```
+
+## Context (persistent data across all log entries)
+
+```typescript
+// Set context - persists across all subsequent logs
+log.withContext({ requestId: 'abc-123', service: 'auth' })
+log.info('Processing')   // includes requestId and service
+log.info('Done')          // still includes requestId and service
+
+// Read, clear, mute
+log.getContext()
+log.clearContext()              // clear all
+log.clearContext(['requestId']) // clear specific keys
+log.muteContext()               // temporarily disable
+log.unMuteContext()
+```
+
+## Error Handling
+
+```typescript
+// Error with a message
+log.withError(new Error('Connection failed')).error('DB error')
+
+// Error only (no extra message)
+log.errorOnly(new Error('Connection failed'))
+
+// Combine error with metadata
+log.withError(new Error('Timeout'))
+   .withMetadata({ query: 'SELECT *', duration: 1500 })
+   .error('Query failed')
+```
+
+## Error Serialization (recommended)
+
+```typescript
+import { serializeError } from 'serialize-error'  // npm install serialize-error
+
+const log: ILogLayer = new LogLayer({
+  errorSerializer: serializeError,
+  transport: new ConsoleTransport({ logger: console }),
+})
+```
+
+## Configuration
+
+```typescript
+const log: ILogLayer = new LogLayer({
+  // Required
+  transport: new ConsoleTransport({ logger: console }),
+
+  // Optional
+  prefix: '[MyApp]',           // prepended to all messages
+  enabled: true,               // enable/disable logging
+  contextFieldName: 'context', // nest context under a field (default: flattened)
+  metadataFieldName: 'metadata', // nest metadata under a field (default: flattened)
+  errorFieldName: 'err',       // field name for errors (default: 'err')
+  errorSerializer: (err) => ({ message: err.message, stack: err.stack }),
+  copyMsgOnOnlyError: false,   // copy error.message as log message in errorOnly()
+  errorFieldInMetadata: false, // nest error inside metadata field
+  muteContext: false,
+  muteMetadata: false,
+  plugins: [],
+})
+```
+
+## Child Loggers
+
+```typescript
+const parentLog: ILogLayer = new LogLayer({
+  transport: new ConsoleTransport({ logger: console }),
+})
+
+parentLog.withContext({ service: 'api' })
+
+// Child inherits config, context, and plugins
+const childLog = parentLog.child()
+childLog.withContext({ handler: 'users' })
+childLog.info('Request received')  // has both service and handler context
+```
+
+## Message Prefixing
+
+```typescript
+const log: ILogLayer = new LogLayer({
+  prefix: '[MyApp]',
+  transport: new ConsoleTransport({ logger: console }),
+})
+log.info('Started')  // "[MyApp] Started"
+
+// Or dynamically
+const prefixed = log.withPrefix('[Auth]')
+prefixed.info('Login')  // "[Auth] Login"
+```
+
+## Log Level Control
+
+```typescript
+import { LogLevel } from 'loglayer'
+
+log.setLevel(LogLevel.warn)           // only warn+ will log
+log.enableLogging()                    // turn on
+log.disableLogging()                   // turn off
+log.isLevelEnabled(LogLevel.debug)     // check if level is active
+```
+
+## Multiple Transports
+
+```typescript
+const log: ILogLayer = new LogLayer({
+  transport: [
+    new ConsoleTransport({ logger: console }),
+    new PinoTransport({ logger: pino() }),
+  ],
+})
+```
+
+## Testing / Mocking
+
+```typescript
+import { MockLogLayer } from 'loglayer'
+
+// No-op logger for unit tests - same API, does nothing
+const log = new MockLogLayer()
+```
+
+## Available Transports
+
+Built-in: ConsoleTransport, HTTPTransport, LogFileRotationTransport, BlankTransport, PrettyTerminalTransport, SimplePrettyTerminalTransport
+
+Logging libraries: Pino, Winston, Bunyan, Consola, Log4js, Roarr, Signale, loglevel, LogTape, tslog, Tracer, Electron Log
+
+Cloud providers: DataDog, AWS CloudWatch, AWS Lambda Powertools, Google Cloud Logging, Azure Monitor, New Relic, Dynatrace, Sentry, Axiom, Better Stack, Logflare, Sumo Logic, VictoriaLogs
+
+Other: OpenTelemetry
+
+## Available Plugins
+
+- Filter: conditionally drop logs
+- Redaction: redact sensitive fields
+- Sprintf: printf-style string formatting
+- OpenTelemetry: add trace/span context
+- DataDog APM Trace Injector: inject DD trace IDs
+
+## Documentation
+
+- [Getting Started](https://loglayer.dev/getting-started): Installation and basic usage
+- [Configuration](https://loglayer.dev/configuration): All configuration options
+- [Basic Logging](https://loglayer.dev/logging-api/basic-logging): Log level methods and message formatting
+- [Context](https://loglayer.dev/logging-api/context): Persistent context data
+- [Metadata](https://loglayer.dev/logging-api/metadata): Per-message structured data
+- [Error Handling](https://loglayer.dev/logging-api/error-handling): Error logging and serialization
+- [Child Loggers](https://loglayer.dev/logging-api/child-loggers): Creating inherited logger instances
+- [Log Level Control](https://loglayer.dev/logging-api/adjusting-log-levels): Managing log levels
+- [Transport Overview](https://loglayer.dev/transports/): All supported transports
+- [Transport Configuration](https://loglayer.dev/transports/configuration): Transport setup options
+- [Plugins Overview](https://loglayer.dev/plugins): Plugin system and available plugins
+- [Testing / Mocking](https://loglayer.dev/logging-api/unit-testing): MockLogLayer for tests
+- [TypeScript Tips](https://loglayer.dev/logging-api/typescript): TypeScript-specific guidance
+
+## Optional
+
+- [Creating Transports](https://loglayer.dev/transports/creating-transports): Build custom transports
+- [Creating Plugins](https://loglayer.dev/plugins/creating-plugins): Build custom plugins
+- [Context Managers](https://loglayer.dev/context-managers/): Customize context inheritance behavior
+- [Log Level Managers](https://loglayer.dev/log-level-managers/): Customize log level behavior
+- [Mixins](https://loglayer.dev/mixins/): Extend LogLayer with custom methods
+- [Express Integration](https://loglayer.dev/example-integrations/express): Express.js example
+- [Fastify Integration](https://loglayer.dev/example-integrations/fastify): Fastify example
+- [Next.js Integration](https://loglayer.dev/example-integrations/nextjs): Next.js example
+- [Hono Integration](https://loglayer.dev/example-integrations/hono): Hono example
+- [Async Context Tracking](https://loglayer.dev/example-integrations/async-context): AsyncLocalStorage example

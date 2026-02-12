@@ -11,6 +11,7 @@ description: Learn about the latest features and improvements in LogLayer
 
 - Commissioned new LogLayer logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan)
 - Updated documentation theme colors.
+- Replaced auto-generated `/llms.txt` with a hand-crafted cheat sheet following the [llmstxt.org](https://llmstxt.org/) standard. Added `/llms-full.txt` with the full API reference. See [AI Support](/ai-support) for details.
 
 ## Feb 3, 2026
 

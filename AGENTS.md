@@ -881,6 +881,7 @@ If adding a method to `LogBuilder` (the fluent builder returned by `withMetadata
 - [ ] Write unit tests
 - [ ] Update documentation (site docs if user-facing)
 - [ ] Update `docs/src/whats-new.md` with the new feature
+- [ ] Update `docs/src/public/llms.txt` and `docs/src/public/llms-full.txt` if the API surface changed
 - [ ] Run `turbo build --filter=loglayer --filter=@loglayer/shared` to build (dependencies must be built first)
 - [ ] Run `turbo lint --filter=loglayer --filter=@loglayer/shared` to verify linting passes
 - [ ] Run `turbo test --filter=loglayer` to verify tests pass
@@ -897,6 +898,7 @@ If adding a method to `LogBuilder` (the fluent builder returned by `withMetadata
 - [ ] Write unit tests
 - [ ] Update documentation (site docs if user-facing)
 - [ ] Update `docs/src/whats-new.md` with the new feature
+- [ ] Update `docs/src/public/llms.txt` and `docs/src/public/llms-full.txt` if the API surface changed
 - [ ] Run `turbo build --filter=loglayer --filter=@loglayer/shared` to build (dependencies must be built first)
 - [ ] Run `turbo lint --filter=loglayer --filter=@loglayer/shared` to verify linting passes
 - [ ] Run `turbo test --filter=loglayer` to verify tests pass

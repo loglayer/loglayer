@@ -107,4 +107,4 @@ log.info('Connection established');
 
 <!--@include: ./mixins/_partials/mixin-list.md-->
 
-LogLayer is made with ❤️ by [Theo Gravity](https://suteki.nu).
+LogLayer is made with ❤️ by [Theo Gravity](https://suteki.nu). Logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan).
