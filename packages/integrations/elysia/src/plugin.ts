@@ -1,5 +1,5 @@
-import type { ILogLayer } from "@loglayer/shared";
 import { Elysia } from "elysia";
+import type { ILogLayer } from "loglayer";
 import type {
   ElysiaAutoLoggingConfig,
   ElysiaLogLayerConfig,

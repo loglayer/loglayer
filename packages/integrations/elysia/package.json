@@ -43,16 +43,14 @@
     "lint:staged": "biome check --no-errors-on-unmatched --write --unsafe --staged src",
     "verify-types": "tsc --noEmit"
   },
-  "dependencies": {
-    "@loglayer/shared": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@elysiajs/node": "1.4.4",
     "@internal/tsconfig": "workspace:*",
     "@types/node": "25.2.0",
     "elysia": "1.4.24",
-    "@loglayer/transport-simple-pretty-terminal": "workspace:*",
     "loglayer": "workspace:*",
+    "@loglayer/transport-simple-pretty-terminal": "workspace:*",
     "serialize-error": "13.0.1",
     "tsdown": "0.20.1",
     "tsx": "4.21.0",
@@ -61,7 +59,7 @@
   },
   "peerDependencies": {
     "elysia": ">=1.0.0",
-    "loglayer": ">=8.4.1"
+    "loglayer": "*"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

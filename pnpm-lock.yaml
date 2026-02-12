@@ -251,10 +251,6 @@ importers:
   packages/core/tsconfig: {}
 
   packages/integrations/elysia:
-    dependencies:
-      '@loglayer/shared':
-        specifier: workspace:*
-        version: link:../../core/shared
     devDependencies:
       '@elysiajs/node':
         specifier: 1.4.4

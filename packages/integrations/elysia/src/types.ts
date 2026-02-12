@@ -1,4 +1,4 @@
-import type { ILogLayer, LogLevelType } from "@loglayer/shared";
+import type { ILogLayer, LogLevelType } from "loglayer";
 
 /**
  * Configuration for request logging.
