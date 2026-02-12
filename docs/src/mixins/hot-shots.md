@@ -136,68 +136,6 @@ mockLogger.stats.timing('timer', 500).send();
 
 For more information on testing with MockLogLayer, see the [Unit Testing documentation](/logging-api/unit-testing).
 
-## Migration from v2 to v3
-
-In v3, the mixin API has been refactored to use a builder pattern with a `stats` property instead of direct methods on LogLayer.
-
-### API Changes
-
-**Before (v2):**
-```typescript
-// Mixin registration
-useLogLayerMixin(hotshotsMixin(statsd));
-
-// Usage
-log.statsIncrement('request.count').info('Request received');
-log.statsDecrement('request.count');
-log.statsTiming('request.duration', 150).info('Request processed');
-log.statsGauge('active.connections', 42).info('Connection established');
-```
-
-**After (v3):**
-```typescript
-// Mixin registration (same API, but now uses stats property)
-useLogLayerMixin(hotshotsMixin(statsd));
-
-// Usage (now uses stats property with builder pattern)
-log.stats.increment('request.count').send();
-log.stats.decrement('request.count').send();
-log.stats.timing('request.duration', 150).send();
-log.stats.gauge('active.connections', 42).send();
-```
-
-### Migration Steps
-
-1. **Update method calls**: Replace all `stats*` methods with the `stats` property (mixin registration stays the same: `hotshotsMixin(statsd)`):
-   - `log.statsIncrement(...)` → `log.stats.increment(...).send()`
-   - `log.statsDecrement(...)` → `log.stats.decrement(...).send()`
-   - `log.statsTiming(...)` → `log.stats.timing(...).send()`
-   - `log.statsGauge(...)` → `log.stats.gauge(...).send()`
-   - And so on for all stats methods
-
-3. **Remove LogLayer chaining**: The stats methods no longer return LogLayer instances. If you were chaining logging methods after stats calls, you'll need to separate them:
-   ```typescript
-   // Before
-   log.statsIncrement('request.count').info('Request received');
-   
-   // After
-   log.stats.increment('request.count').send();
-   log.info('Request received');
-   ```
-
-4. **Update method parameters**: Some methods now use the builder pattern for optional parameters:
-   ```typescript
-   // Before
-   log.statsIncrement('counter', 5, 0.5, ['tag:value']);
-   
-   // After
-   log.stats.increment('counter')
-     .withValue(5)
-     .withSampleRate(0.5)
-     .withTags(['tag:value'])
-     .send();
-   ```
-
 ## Configuration
 
 The `hotshotsMixin` function requires a configured `StatsD` client instance from the `hot-shots` library.

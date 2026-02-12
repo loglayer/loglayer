@@ -23,24 +23,31 @@ export type {
  * This adds a `ddStats` property to LogLayer instances,
  * providing a fluent API for sending metrics to Datadog via HTTP.
  *
- * @param options - The BufferedMetricsLogger configuration options, or null for no-op mode
+ * @param options - The BufferedMetricsLogger configuration options, or null for no-op mode.
+ *   Set `enabled: false` to use no-op mode while still passing options.
  * @returns A LogLayer mixin registration object
  *
  * @example
  * ```typescript
  * import { useLogLayerMixin } from 'loglayer';
- * import { datadogMetricsMixin } from '@loglayer/mixin-datadog-metrics';
+ * import { datadogMetricsMixin } from '@loglayer/mixin-datadog-http-metrics';
  *
  * useLogLayerMixin(datadogMetricsMixin({
  *   apiKey: 'your-api-key',
  *   prefix: 'myapp.',
- *   flushIntervalSeconds: 15,
+ *   enabled: process.env.NODE_ENV === 'production',
  * }));
  * ```
  */
-export function datadogMetricsMixin(options: DatadogMetricsOptions | null): LogLayerMixinRegistration {
-  if (options) {
-    const client = new BufferedMetricsLogger(options);
+export function datadogMetricsMixin(
+  options: (DatadogMetricsOptions & { enabled?: boolean }) | null,
+): LogLayerMixinRegistration {
+  if (options && options.enabled !== false) {
+    const { enabled: _, ...metricsOptions } = options;
+    const client = new BufferedMetricsLogger({
+      flushIntervalSeconds: 5,
+      ...metricsOptions,
+    });
     setMetricsClient(client);
   } else {
     setMetricsClient(null);

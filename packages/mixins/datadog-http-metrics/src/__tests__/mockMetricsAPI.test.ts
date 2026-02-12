@@ -8,6 +8,37 @@ vi.mock("datadog-metrics", () => {
   };
 });
 
+describe("MockMetricsAPI (enabled: false)", () => {
+  beforeAll(() => {
+    // Register with enabled: false for no-op mode
+    useLogLayerMixin(datadogMetricsMixin({ apiKey: "test-key", enabled: false }));
+  });
+
+  it("should provide ddStats in no-op mode when enabled is false", () => {
+    const log = new LogLayer({
+      transport: new TestTransport({
+        logger: new TestLoggingLibrary(),
+      }),
+    });
+
+    expect(log.ddStats).toBeDefined();
+    expect(typeof log.ddStats.increment).toBe("function");
+  });
+
+  it("should not throw when calling metrics with enabled: false", () => {
+    const log = new LogLayer({
+      transport: new TestTransport({
+        logger: new TestLoggingLibrary(),
+      }),
+    });
+
+    expect(() => {
+      log.ddStats.increment("test.counter").withValue(5).send();
+      log.ddStats.gauge("test.gauge", 42).send();
+    }).not.toThrow();
+  });
+});
+
 describe("MockMetricsAPI (null client)", () => {
   beforeAll(() => {
     // Register with null for no-op mode
