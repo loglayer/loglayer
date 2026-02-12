@@ -5,6 +5,7 @@ packages:
   - packages/context-managers/*
   - packages/log-level-managers/*
   - packages/mixins/*
+  - packages/integrations/*
   - docs
 
 ignoredBuiltDependencies:

@@ -205,7 +205,13 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Example Integrations',
+        text: 'Integrations',
+        items: [
+          { text: 'ElysiaJS', link: '/integrations/elysia' },
+        ]
+      },
+      {
+        text: 'Integration Guides',
         items: [
           { text: 'Async context tracking', link: '/example-integrations/async-context' },
           { text: 'Bun', link: '/example-integrations/bun' },

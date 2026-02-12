@@ -105,6 +105,8 @@ log.info('Connection established');
 
 <!--@include: ./plugins/_partials/plugin-list.md-->
 
+<!--@include: ./integrations/_partials/integration-list.md-->
+
 <!--@include: ./mixins/_partials/mixin-list.md-->
 
 LogLayer is made with ❤️ by [Theo Gravity](https://suteki.nu). Logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan).
