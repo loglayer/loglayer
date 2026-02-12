@@ -1,0 +1,49 @@
+---
+"@loglayer/context-manager": major
+"@loglayer/context-manager-linked": major
+"@loglayer/context-manager-isolated": major
+"@loglayer/log-level-manager": major
+"@loglayer/log-level-manager-linked": major
+"@loglayer/log-level-manager-global": major
+"@loglayer/log-level-manager-one-way": major
+"@loglayer/plugin": major
+"@loglayer/plugin-filter": major
+"@loglayer/plugin-opentelemetry": major
+"@loglayer/plugin-redaction": major
+"@loglayer/plugin-sprintf": major
+"@loglayer/plugin-datadog-apm-trace-injector": major
+"@loglayer/transport": major
+"@loglayer/transport-aws-cloudwatch-logs": major
+"@loglayer/transport-aws-lambda-powertools": major
+"@loglayer/transport-axiom": major
+"@loglayer/transport-betterstack": major
+"@loglayer/transport-bunyan": major
+"@loglayer/transport-consola": major
+"@loglayer/transport-datadog": major
+"@loglayer/transport-datadog-browser-logs": major
+"@loglayer/transport-dynatrace": major
+"@loglayer/transport-electron-log": major
+"@loglayer/transport-google-cloud-logging": major
+"@loglayer/transport-http": major
+"@loglayer/transport-log-file-rotation": major
+"@loglayer/transport-log4js": major
+"@loglayer/transport-logflare": major
+"@loglayer/transport-loglevel": major
+"@loglayer/transport-logtape": major
+"@loglayer/transport-new-relic": major
+"@loglayer/transport-opentelemetry": major
+"@loglayer/transport-pino": major
+"@loglayer/transport-pretty-terminal": major
+"@loglayer/transport-roarr": major
+"@loglayer/transport-sentry": major
+"@loglayer/transport-signale": major
+"@loglayer/transport-simple-pretty-terminal": major
+"@loglayer/transport-sumo-logic": major
+"@loglayer/transport-tracer": major
+"@loglayer/transport-tslog": major
+"@loglayer/transport-victoria-logs": major
+"@loglayer/transport-winston": major
+"@loglayer/mixin-hot-shots": major
+---
+
+Major version bump to align all packages with loglayer v9. No breaking changes in these packages; update your loglayer dependency to v9 for lazy evaluation support.
