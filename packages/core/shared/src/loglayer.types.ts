@@ -398,7 +398,7 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  getContext(): LogLayerContext;
+  getContext(options?: { evalLazy?: boolean }): LogLayerContext;
 
   /**
    * Creates a new instance of LogLayer but with the initialization

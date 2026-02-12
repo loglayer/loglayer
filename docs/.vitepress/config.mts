@@ -92,6 +92,7 @@ export default defineConfig({
           { text: 'Adjusting Log Levels', link: '/logging-api/adjusting-log-levels' },
           { text: 'Context', link: '/logging-api/context' },
           { text: 'Metadata', link: '/logging-api/metadata' },
+          { text: 'Lazy Evaluation', link: '/logging-api/lazy-evaluation' },
           { text: 'Error Handling', link: '/logging-api/error-handling' },
           { text: 'Child Loggers', link: '/logging-api/child-loggers' },
           { text: 'Transport Management', link: '/logging-api/transport-management' },

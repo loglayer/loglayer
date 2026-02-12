@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Feb 13, 2026
+
+`loglayer` and `@loglayer/shared`:
+
+- Added [`lazy()` function](/logging-api/lazy-evaluation) for dynamic context and metadata evaluation. Wrap any callback with `lazy()` to defer its evaluation until log time — the callback is only invoked when the log level is enabled, avoiding unnecessary computation for disabled log levels. This is useful for expensive operations (like serializing large objects) and for values that change between log calls (like request IDs or memory usage). Taken from [LogTape's lazy evaluation](https://logtape.org/manual/lazy).
+
 ## Feb 12, 2026
 
 `@loglayer/hono`:

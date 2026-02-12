@@ -13,6 +13,7 @@ import {
   type LogLevelType,
   type MessageDataType,
   type RawLogEntry,
+  resolveLazyValues,
 } from "@loglayer/shared";
 import type { LogLayerTransport } from "@loglayer/transport";
 import { LogBuilder } from "./LogBuilder.js";
@@ -212,8 +213,12 @@ export class LogLayer implements ILogLayer<LogLayer> {
     return this;
   }
 
-  getContext(): LogLayerContext {
-    return this.contextManager.getContext();
+  getContext(options?: { evalLazy?: boolean }): LogLayerContext {
+    const context = this.contextManager.getContext();
+    if (options?.evalLazy) {
+      return resolveLazyValues(context);
+    }
+    return context;
   }
 
   /**
@@ -769,7 +774,13 @@ export class LogLayer implements ILogLayer<LogLayer> {
       this._config;
 
     // Use provided context or fall back to context manager
-    const contextData = context !== null ? context : this.contextManager.getContext();
+    // Resolve any lazy values at the root level
+    const contextData = resolveLazyValues(context !== null ? context : this.contextManager.getContext());
+
+    // Resolve any lazy values in metadata at the root level
+    if (metadata) {
+      metadata = resolveLazyValues(metadata) as LogLayerMetadata;
+    }
 
     let hasObjData =
       !!metadata ||

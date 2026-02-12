@@ -11,19 +11,22 @@ export type {
   ErrorOnlyOpts,
   ILogBuilder,
   ILogLayer,
+  LazyLogValue,
   LogLayerContext,
   LogLayerData,
   LogLayerMetadata,
   LogLayerPlugin,
   LogLayerTransport,
   LogLayerTransportParams,
+  LogLevelPriority,
+  LogLevelPriorityToNames,
   LogLevelType,
   PluginBeforeDataOutParams,
   PluginBeforeMessageOutParams,
   PluginShouldSendToLoggerParams,
   PluginTransformLogLevelParams,
 } from "@loglayer/shared";
-export { LogLevel } from "@loglayer/shared";
+export { LogLevel, lazy } from "@loglayer/shared";
 export { LogBuilder } from "./LogBuilder.js";
 export { LogLayer } from "./LogLayer.js";
 export { MockLogBuilder } from "./MockLogBuilder.js";
