@@ -1,5 +1,11 @@
 # `loglayer` Changelog
 
+## 8.5.0
+
+### Minor Changes
+
+- [#343](https://github.com/loglayer/loglayer/pull/343) [`0ef9d4f`](https://github.com/loglayer/loglayer/commit/0ef9d4ffaf3ff3d1e13ee833434acdfa9d886e64) Thanks [@theogravity](https://github.com/theogravity)! - Added new built-in `StructuredTransport` - a console-based transport with structured logging enabled by default. Outputs logs as objects with `level`, `time`, and `msg` fields without requiring manual configuration. All field names are customizable. See the [Structured Logger Transport documentation](/transports/structured-logger) for usage examples.
+
 ## 8.4.1
 
 ### Patch Changes
