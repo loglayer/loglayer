@@ -1,11 +1,15 @@
 import { node } from "@elysiajs/node";
+import { getSimplePrettyTerminal, moonlight } from "@loglayer/transport-simple-pretty-terminal";
 import { Elysia } from "elysia";
-import { ConsoleTransport, LogLayer } from "loglayer";
+import { LogLayer } from "loglayer";
+import { serializeError } from "serialize-error";
 import { elysiaLogLayer } from "../index.js";
 
 const log = new LogLayer({
-  transport: new ConsoleTransport({
-    logger: console,
+  errorSerializer: serializeError,
+  transport: getSimplePrettyTerminal({
+    runtime: "node",
+    theme: moonlight,
   }),
 });
 

@@ -16,11 +16,15 @@ npm install @loglayer/elysia
 
 ```typescript
 import { Elysia } from "elysia";
-import { LogLayer, ConsoleTransport } from "loglayer";
+import { LogLayer } from "loglayer";
+import { getSimplePrettyTerminal, moonlight } from "@loglayer/transport-simple-pretty-terminal";
 import { elysiaLogLayer } from "@loglayer/elysia";
 
 const log = new LogLayer({
-  transport: new ConsoleTransport(),
+  transport: getSimplePrettyTerminal({
+    runtime: "node",
+    theme: moonlight,
+  }),
 });
 
 const app = new Elysia()

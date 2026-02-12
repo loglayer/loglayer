@@ -11,39 +11,41 @@ description: Integrate LogLayer with ElysiaJS for request-scoped logging
 
 An [ElysiaJS](https://elysiajs.com) plugin that provides request-scoped logging with automatic request/response logging and error handling. The auto-logging format follows [pino-http](https://github.com/pinojs/pino-http) conventions.
 
-## Installation with Pino
+## Installation
 
 ::: code-group
 
 ```sh [npm]
-npm i @loglayer/elysia loglayer @loglayer/transport-pino pino serialize-error
+npm i @loglayer/elysia loglayer @loglayer/transport-simple-pretty-terminal serialize-error
 ```
 
 ```sh [pnpm]
-pnpm add @loglayer/elysia loglayer @loglayer/transport-pino pino serialize-error
+pnpm add @loglayer/elysia loglayer @loglayer/transport-simple-pretty-terminal serialize-error
 ```
 
 ```sh [yarn]
-yarn add @loglayer/elysia loglayer @loglayer/transport-pino pino serialize-error
+yarn add @loglayer/elysia loglayer @loglayer/transport-simple-pretty-terminal serialize-error
 ```
 
 :::
 
-Any LogLayer-compatible transport can be used, including [LogTape](/transports/logtape), [Console](/transports/console), [Simple Pretty Terminal](/transports/simple-pretty-terminal), and [others](/transports/overview).
+We're using [Simple Pretty Terminal](/transports/simple-pretty-terminal) here as an example to get nicely formatted logs. Any LogLayer-compatible transport can be used, including [Pino](/transports/pino), [LogTape](/transports/logtape), [Console](/transports/console), and [others](/transports/overview).
 
 ## Basic Usage
 
 ```typescript
 import { Elysia } from "elysia";
 import { LogLayer } from "loglayer";
-import { PinoTransport } from "@loglayer/transport-pino";
 import { serializeError } from "serialize-error";
-import pino from "pino";
+import { getSimplePrettyTerminal, moonlight } from "@loglayer/transport-simple-pretty-terminal";
 import { elysiaLogLayer } from "@loglayer/elysia";
 
 const log = new LogLayer({
   errorSerializer: serializeError,
-  transport: new PinoTransport({ logger: pino() }),
+  transport: getSimplePrettyTerminal({
+    runtime: "node",
+    theme: moonlight,
+  }),
 });
 
 const app = new Elysia()
@@ -102,7 +104,7 @@ The `remoteAddress` is resolved from `x-forwarded-for` or `x-real-ip` headers, o
 
 ### Example Log Output
 
-With the default configuration, a `GET /api/users` request produces two log entries:
+With the default configuration using [Pino](/transports/pino) as the transport, a `GET /api/users` request produces two log entries:
 
 ```json
 // incoming request

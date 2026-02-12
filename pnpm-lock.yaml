@@ -257,20 +257,26 @@ importers:
         version: link:../../core/shared
     devDependencies:
       '@elysiajs/node':
-        specifier: ^1.4.4
+        specifier: 1.4.4
         version: 1.4.4(elysia@1.4.24(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3))
       '@internal/tsconfig':
         specifier: workspace:*
         version: link:../../core/tsconfig
+      '@loglayer/transport-simple-pretty-terminal':
+        specifier: workspace:*
+        version: link:../../transports/simple-pretty-terminal
       '@types/node':
         specifier: 25.2.0
         version: 25.2.0
       elysia:
-        specifier: '>=1.0.0'
+        specifier: 1.4.24
         version: 1.4.24(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3)
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
+      serialize-error:
+        specifier: 13.0.1
+        version: 13.0.1
       tsdown:
         specifier: 0.20.1
         version: 0.20.1(typescript@5.9.3)
