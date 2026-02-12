@@ -1,0 +1,65 @@
+{
+  "name": "@loglayer/mixin-datadog-metrics",
+  "description": "Adds Datadog HTTP metrics functionality to LogLayer using the datadog-metrics library.",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loglayer/loglayer.git",
+    "directory": "packages/mixins/datadog-metrics"
+  },
+  "author": "Theo Gravity <theo@suteki.nu>",
+  "keywords": [
+    "logging",
+    "log",
+    "loglayer",
+    "observability",
+    "datadog",
+    "metrics",
+    "datadog-metrics"
+  ],
+  "scripts": {
+    "build": "tsdown src/index.ts",
+    "test": "vitest --run",
+    "clean": "rm -rf .turbo node_modules dist",
+    "lint": "biome check --no-errors-on-unmatched --write --unsafe src",
+    "lint:staged": "biome check --no-errors-on-unmatched --write --unsafe --staged src",
+    "verify-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@internal/tsconfig": "workspace:*",
+    "@loglayer/shared": "workspace:*",
+    "@types/node": "25.2.0",
+    "loglayer": "workspace:*",
+    "tsdown": "0.20.1",
+    "typescript": "5.9.3",
+    "vitest": "4.0.18"
+  },
+  "peerDependencies": {
+    "datadog-metrics": ">=0.12.0"
+  },
+  "bugs": "https://github.com/loglayer/loglayer/issues",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://loglayer.dev",
+  "packageManager": "pnpm@10.20.0"
+}
