@@ -74,6 +74,8 @@ const log = new LogLayer({
   transport: new StructuredTransport({
     logger: console,
   }),
+  contextFieldName: 'context',
+  metadataFieldName: 'metadata',
 })
 
 // Basic logging
@@ -82,12 +84,12 @@ log.info('Hello world!')
 
 // Logging with metadata
 log.withMetadata({ user: 'john' }).info('User logged in')
-// { level: 'info', time: '...', msg: 'User logged in', user: 'john' }
+// { level: 'info', time: '...', msg: 'User logged in', metadata: { user: 'john' } }
 
 // Logging with context (persists across log calls)
 log.withContext({ requestId: '123' })
 log.info('Processing request')
-// { level: 'info', time: '...', msg: 'Processing request', requestId: '123' }
+// { level: 'info', time: '...', msg: 'Processing request', context: { requestId: '123' } }
 
 // Logging errors
 log.withError(new Error('Something went wrong')).error('Failed to process request')
@@ -136,7 +138,7 @@ For more error handling options, see the [Error Handling documentation](/logging
 
 ## Next steps
 
+- Check out the [Cheat Sheet](/cheatsheet) for a quick reference of the most common APIs.
 - Optionally [configure](/configuration) LogLayer to further customize logging behavior.
 - See the [Structured Transport](/transports/structured-logger) or [Console Transport](/transports/console) documentation for more configuration options.
-- Start exploring the [Logging API](/logging-api/basic-logging) section for more advanced logging features.
 - See the [Transports](/transports/) section for more ways to ship logs to different destinations.

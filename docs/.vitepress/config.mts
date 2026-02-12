@@ -80,6 +80,7 @@ export default defineConfig({
           { text: 'Why Use LogLayer?', link: '/introduction' },
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Configuration', link: '/configuration' },
+          { text: 'Cheat Sheet', link: '/cheatsheet' },
           { text: 'Migrating Versions', link: '/migrating' },
           { text: 'AI Support', link: '/ai-support' },
         ]
