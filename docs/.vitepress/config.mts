@@ -108,6 +108,7 @@ export default defineConfig({
           { text: 'Testing Transports', link: '/transports/testing-transports' },
           { text: 'Built-in Transports', items: [
               { text: 'Console', link: '/transports/console' },
+              { text: 'Structured', link: '/transports/structured-logger' },
               { text: 'Blank', link: '/transports/blank-transport' },
             ]
           },

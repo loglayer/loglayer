@@ -3,6 +3,7 @@
 | Name | Description |
 |------|-------------|
 | [Console](/transports/console) <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" /> | Simple console-based logging for development |
+| [Structured](/transports/structured-logger) <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" /> | Console-based structured logging with `level`, `time`, and `msg` fields enabled by default |
 | [Blank Transport](/transports/blank-transport) <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" /> | For quickly creating / prototyping new transports |
 
 ### Logging Libraries

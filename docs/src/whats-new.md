@@ -9,6 +9,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Feb 12, 2026
 
+`loglayer`:
+
+- Added new built-in [Structured Transport](/transports/structured-logger) - a console-based transport with structured logging (`level`, `time`, `msg` fields) enabled by default. Unlike the [Console Transport](/transports/console), which requires manually configuring `messageField`, `levelField`, and `dateField`, the Structured Transport comes pre-configured with sensible defaults.
+
 `@loglayer/elysia`:
 
 - Added new [ElysiaJS integration](/integrations/elysia) package for request-scoped logging in [ElysiaJS](https://elysiajs.com) applications. Features automatic request/response logging following [pino-http](https://github.com/pinojs/pino-http) conventions, per-request child loggers with requestId context, configurable auto-logging with ignore patterns and custom log levels, and error handling. Supports both Bun and Node.js via `@elysiajs/node` adapter.

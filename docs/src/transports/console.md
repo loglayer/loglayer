@@ -232,6 +232,10 @@ If you use `withPrefix()`, the prefix is applied to the messages before they rea
 
 ## Structured Logging
 
+::: tip
+If you want structured logging enabled by default without manual configuration, use the [Structured Transport](/transports/structured-logger) instead.
+:::
+
 You can combine multiple fields to create structured log objects:
 
 ```typescript

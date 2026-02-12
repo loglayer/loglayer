@@ -173,13 +173,15 @@ const log = new MockLogLayer()
 
 ## Available Transports
 
-Built-in: ConsoleTransport, HTTPTransport, LogFileRotationTransport, BlankTransport, PrettyTerminalTransport, SimplePrettyTerminalTransport
+Built-in: ConsoleTransport, StructuredTransport, BlankTransport
 
 Logging libraries: Pino, Winston, Bunyan, Consola, Log4js, Roarr, Signale, loglevel, LogTape, tslog, Tracer, Electron Log
 
 Cloud providers: DataDog, AWS CloudWatch, AWS Lambda Powertools, Google Cloud Logging, Azure Monitor, New Relic, Dynatrace, Sentry, Axiom, Better Stack, Logflare, Sumo Logic, VictoriaLogs
 
-Other: OpenTelemetry
+Pretty Printers: Pretty Terminal, Simple Pretty Terminal
+
+Other: HTTP, Log File Rotation, OpenTelemetry
 
 ## Available Plugins
 
