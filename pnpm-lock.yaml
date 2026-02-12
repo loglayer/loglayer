@@ -364,7 +364,7 @@ importers:
   packages/mixins/datadog-http-metrics:
     dependencies:
       datadog-metrics:
-        specifier: '>=0.12.0'
+        specifier: ^0.12.1
         version: 0.12.1
     devDependencies:
       '@internal/tsconfig':

@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/mixin-datadog-http-metrics",
   "description": "Adds Datadog HTTP metrics functionality to LogLayer using the datadog-metrics library.",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -39,7 +39,11 @@
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "biome check --no-errors-on-unmatched --write --unsafe src",
     "lint:staged": "biome check --no-errors-on-unmatched --write --unsafe --staged src",
+    "livetest": "tsx src/__tests__/livetest.ts",
     "verify-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "datadog-metrics": "0.12.1"
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
@@ -49,9 +53,6 @@
     "tsdown": "0.20.1",
     "typescript": "5.9.3",
     "vitest": "4.0.18"
-  },
-  "peerDependencies": {
-    "datadog-metrics": ">=0.12.0"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

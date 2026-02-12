@@ -15,20 +15,18 @@ Unlike the [Hot-Shots mixin](/mixins/hot-shots) which sends metrics via StatsD/U
 
 ## Installation
 
-This mixin requires the [`datadog-metrics`](https://github.com/dbader/node-datadog-metrics) library to be installed in your project.
-
 ::: code-group
 
 ```bash [npm]
-npm install @loglayer/mixin-datadog-http-metrics datadog-metrics
+npm install @loglayer/mixin-datadog-http-metrics
 ```
 
 ```bash [yarn]
-yarn add @loglayer/mixin-datadog-http-metrics datadog-metrics
+yarn add @loglayer/mixin-datadog-http-metrics
 ```
 
 ```bash [pnpm]
-pnpm add @loglayer/mixin-datadog-http-metrics datadog-metrics
+pnpm add @loglayer/mixin-datadog-http-metrics
 ```
 
 :::
@@ -51,6 +49,14 @@ This ensures TypeScript recognizes the mixin methods on your LogLayer instances.
 
 Configure the mixin with your Datadog options, then register it **before** creating any LogLayer instances:
 
+::: warning Important: Set your Datadog site
+If your Datadog account is **not** on the default `datadoghq.com` (US1) site, you **must** set the `site` option (or the `DATADOG_SITE` / `DD_SITE` environment variable) to match your account's region. Otherwise, metrics will be sent to the wrong site and will not appear in your dashboard.
+
+You can find your site by looking at your Datadog URL: `app.<site>` (e.g. `app.us5.datadoghq.com` means your site is `us5.datadoghq.com`).
+
+Common sites: `datadoghq.com` (US1), `us3.datadoghq.com` (US3), `us5.datadoghq.com` (US5), `datadoghq.eu` (EU), `ddog-gov.com` (US1-FED), `ap1.datadoghq.com` (AP1).
+:::
+
 ```typescript
 import { LogLayer, useLogLayerMixin, ConsoleTransport } from 'loglayer';
 import { datadogMetricsMixin } from '@loglayer/mixin-datadog-http-metrics';
@@ -58,6 +64,7 @@ import { datadogMetricsMixin } from '@loglayer/mixin-datadog-http-metrics';
 // Register the mixin with Datadog configuration
 useLogLayerMixin(datadogMetricsMixin({
   apiKey: process.env.DATADOG_API_KEY,
+  site: process.env.DATADOG_SITE, // e.g. 'us5.datadoghq.com'
   prefix: 'myapp.',
   defaultTags: ['env:production'],
 }));
@@ -217,16 +224,16 @@ useLogLayerMixin(datadogMetricsMixin({
 
 ### Reporters
 
-The library ships with two built-in reporters:
+The mixin re-exports two built-in reporters from the underlying [`datadog-metrics`](https://github.com/dbader/node-datadog-metrics) library:
 
 - **`DatadogReporter`** (default) — Sends metrics to Datadog's HTTP API with automatic retries.
 - **`NullReporter`** — Discards all metrics. Useful for testing or temporarily disabling metric submission without using the `enabled` flag.
 
 ```typescript
-import metrics from 'datadog-metrics';
+import { datadogMetricsMixin, NullReporter } from '@loglayer/mixin-datadog-http-metrics';
 
 useLogLayerMixin(datadogMetricsMixin({
-  reporter: new metrics.reporters.NullReporter(),
+  reporter: new NullReporter(),
 }));
 ```
 
@@ -242,8 +249,6 @@ useLogLayerMixin(datadogMetricsMixin({
   }
 }));
 ```
-
-For detailed information about configuration options, see the [datadog-metrics documentation](https://github.com/dbader/node-datadog-metrics).
 
 ## Available Methods
 

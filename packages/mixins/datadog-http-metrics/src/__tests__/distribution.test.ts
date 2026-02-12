@@ -13,8 +13,14 @@ const mockClient = {
 };
 
 vi.mock("datadog-metrics", () => ({
-  BufferedMetricsLogger: function MockBufferedMetricsLogger() {
-    Object.assign(this, mockClient);
+  default: {
+    BufferedMetricsLogger: function MockBufferedMetricsLogger() {
+      Object.assign(this, mockClient);
+    },
+    reporters: {
+      NullReporter: class {},
+      DatadogReporter: class {},
+    },
   },
 }));
 

@@ -1,11 +1,10 @@
-import { BufferedMetricsLogger } from "datadog-metrics";
+import metrics from "datadog-metrics";
 import type { LogLayerMixinRegistration } from "loglayer";
 import { setMetricsClient } from "./client.js";
 import { logLayerDatadogMetricsMixin } from "./LogLayer.augment.js";
 import type { DatadogMetricsOptions } from "./types.js";
 import "./types.js"; // Import types to ensure declarations are processed
 
-export type { BufferedMetricsLogger } from "datadog-metrics";
 export { MetricsAPI } from "./MetricsAPI.js";
 export { MockMetricsAPI } from "./MockMetricsAPI.js";
 export type {
@@ -17,6 +16,23 @@ export type {
   IMetricsAPI,
   IMetricsBuilder,
 } from "./types.js";
+
+// Re-export from datadog-metrics so users don't need to install it directly
+export const BufferedMetricsLogger = metrics.BufferedMetricsLogger;
+export type { BufferedMetricsLoggerOptions } from "datadog-metrics";
+
+/**
+ * A reporter that discards all metrics. Useful for testing or temporarily
+ * disabling metric submission without using the `enabled` flag.
+ * Re-exported from the `datadog-metrics` library.
+ */
+export const NullReporter = metrics.reporters.NullReporter;
+
+/**
+ * The default reporter that sends metrics to Datadog's HTTP API with automatic retries.
+ * Re-exported from the `datadog-metrics` library.
+ */
+export const DatadogReporter = metrics.reporters.DatadogReporter;
 
 /**
  * Register the datadog-metrics mixin with LogLayer.
@@ -44,7 +60,7 @@ export function datadogMetricsMixin(
 ): LogLayerMixinRegistration {
   if (options && options.enabled !== false) {
     const { enabled: _, ...metricsOptions } = options;
-    const client = new BufferedMetricsLogger({
+    const client = new metrics.BufferedMetricsLogger({
       flushIntervalSeconds: 5,
       ...metricsOptions,
     });

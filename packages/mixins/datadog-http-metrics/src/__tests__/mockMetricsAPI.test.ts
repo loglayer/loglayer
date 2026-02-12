@@ -2,11 +2,15 @@ import { LogLayer, MockLogLayer, TestLoggingLibrary, TestTransport, useLogLayerM
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { datadogMetricsMixin } from "../index.js";
 
-vi.mock("datadog-metrics", () => {
-  return {
+vi.mock("datadog-metrics", () => ({
+  default: {
     BufferedMetricsLogger: vi.fn(),
-  };
-});
+    reporters: {
+      NullReporter: class {},
+      DatadogReporter: class {},
+    },
+  },
+}));
 
 describe("MockMetricsAPI (enabled: false)", () => {
   beforeAll(() => {
