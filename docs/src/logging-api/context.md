@@ -115,6 +115,12 @@ const context = log.getContext()
 // Returns: { requestId: '123' }
 ```
 
+If your context contains [`lazy()` values](/logging-api/lazy-evaluation), pass `{ evalLazy: true }` to resolve them:
+
+```typescript
+const context = log.getContext({ evalLazy: true })
+```
+
 ### Clearing Context
 
 You can clear all context data:
