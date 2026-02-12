@@ -7,6 +7,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Feb 11, 2026
+
+- New LogLayer logo and documentation theme colors to match.
+
 ## Feb 3, 2026
 
 `loglayer`:

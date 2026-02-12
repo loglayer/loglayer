@@ -9,7 +9,7 @@ hero:
   text: "Unifies Logging"
   tagline: "A layer on top of <span id=\"js-lib-label\" class=\"visible\">Javascript logging libraries</span> to provide a consistent logging experience."
   image:
-    src: /images/loglayer.jpg
+    src: /images/loglayer.png
     alt: LogLayer
   actions:
     - theme: brand
