@@ -1076,6 +1076,21 @@ These commands validate that your changes:
 
 **Never skip these steps.** Even small changes can have cascading effects in a monorepo.
 
+### Commit and PR Title Convention
+
+Use [commitlint conventional](https://www.conventionalcommits.org/) format for both commit messages and PR titles:
+
+```
+type(scope): description
+```
+
+Allowed types: `feat`, `fix`, `docs`, `chore`, `style`, `refactor`, `ci`, `test`, `revert`, `perf`
+
+Examples:
+- `feat: add datadog HTTP metrics mixin`
+- `fix(transport): handle null logger gracefully`
+- `chore: release package(s)`
+
 ### Before Committing
 
 1. **Ensure all tests pass** (`turbo test`)
