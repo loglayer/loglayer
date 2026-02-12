@@ -63,7 +63,7 @@ bun add loglayer
 
 For detailed Bun setup and examples, see the [Bun integration guide](/example-integrations/bun).
 
-## Basic Usage with Structured Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" />
+## Basic Usage with Structured Transport
 
 The simplest way to get started is to use the built-in [Structured Transport](/transports/structured-logger), which outputs structured log objects with `level`, `time`, and `msg` fields using the standard `console` object:
 
