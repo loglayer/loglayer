@@ -209,7 +209,7 @@ log.removePlugin('my-plugin-id')
 log.withFreshPlugins([newPlugin])
 ```
 
-See [Plugins](/plugins) for available plugins and how to create your own.
+See [Plugins](/plugins/) for available plugins and how to create your own.
 
 ## Configuration Options
 
