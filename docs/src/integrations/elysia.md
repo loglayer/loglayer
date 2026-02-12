@@ -29,7 +29,7 @@ yarn add @loglayer/elysia loglayer @loglayer/transport-simple-pretty-terminal se
 
 :::
 
-We're using [Simple Pretty Terminal](/transports/simple-pretty-terminal) here as an example to get nicely formatted logs. Any LogLayer-compatible transport can be used, including [Pino](/transports/pino), [LogTape](/transports/logtape), [Console](/transports/console), and [others](/transports/).
+We're using [Simple Pretty Terminal](/transports/simple-pretty-terminal) here as an example to get nicely formatted logs. Any LogLayer-compatible transport can be used, including [Pino](/transports/pino), [LogTape](/transports/logtape), [Structured](/transports/structured-logger), [Console](/transports/console), and [others](/transports/).
 
 ## Basic Usage
 
