@@ -9,7 +9,8 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Feb 11, 2026
 
-- New LogLayer logo and documentation theme colors to match.
+- Commissioned new LogLayer logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan)
+- Updated documentation theme colors.
 
 ## Feb 3, 2026
 
