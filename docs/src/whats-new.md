@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Feb 12, 2026
+
+`@loglayer/elysia`:
+
+- Added new [ElysiaJS integration](/integrations/elysia) package for request-scoped logging in [ElysiaJS](https://elysiajs.com) applications. Features automatic request/response logging following [pino-http](https://github.com/pinojs/pino-http) conventions, per-request child loggers with requestId context, configurable auto-logging with ignore patterns and custom log levels, and error handling. Supports both Bun and Node.js via `@elysiajs/node` adapter.
+
 ## Feb 11, 2026
 
 - Commissioned new LogLayer logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan)

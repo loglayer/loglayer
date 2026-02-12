@@ -6,7 +6,7 @@ module.exports = {
     {
       "range": ">=",
       "dependencyTypes": ["peer"],
-      "dependencies": ["hot-shots"],
+      "dependencies": ["hot-shots", "elysia", "loglayer"],
       "packages": ["**"]
     },
     {
@@ -17,6 +17,13 @@ module.exports = {
     }
   ],
   "versionGroups": [
+    {
+      "label": "allow elysia peer dependency range",
+      "dependencies": ["elysia", "loglayer"],
+      "dependencyTypes": ["peer"],
+      "packages": ["@loglayer/elysia"],
+      "isIgnored": true
+    },
     {
       "label": "use workspace protocol for local packages",
       "dependencies": ["$LOCAL"],

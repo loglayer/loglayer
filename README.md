@@ -188,7 +188,8 @@ loglayer/
 │   ├── log-level-managers/       # Official log level manager implementations
 │   ├── transports/               # Official transport implementations
 │   ├── mixins/                   # Official mixins implementations
-│   └── plugins/                  # Official plugins
+│   ├── plugins/                  # Official plugins
+│   └── integrations/             # Framework integrations (e.g. ElysiaJS)
 ```
 
 ## Documentation
