@@ -189,6 +189,7 @@ export default defineConfig({
           { text: 'Creating Mixins', link: '/mixins/creating-mixins' },
           { text: 'Testing Mixins', link: '/mixins/testing-mixins' },
           { text: 'Available Mixins', items: [
+              { text: 'Datadog Metrics (HTTP)', link: '/mixins/datadog-http-metrics' },
               { text: 'Hot-Shots (StatsD)', link: '/mixins/hot-shots' },
           ]}
         ]

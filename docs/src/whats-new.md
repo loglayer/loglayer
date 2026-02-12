@@ -9,6 +9,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Feb 12, 2026
 
+`@loglayer/mixin-datadog-http-metrics`:
+
+- Added new [Datadog Metrics (HTTP) Mixin](/mixins/datadog-http-metrics) package. Sends metrics directly to Datadog's HTTP API using the [`datadog-metrics`](https://github.com/dbader/node-datadog-metrics) library. Provides a fluent builder API via `log.ddStats` for counters, gauges, histograms, and distributions. Unlike the [Hot-Shots mixin](/mixins/hot-shots) which uses StatsD/UDP, this mixin doesn't require a local StatsD agent.
+
 `loglayer`:
 
 - Added new built-in [Structured Transport](/transports/structured-logger) - a console-based transport with structured logging (`level`, `time`, `msg` fields) enabled by default. Unlike the [Console Transport](/transports/console), which requires manually configuring `messageField`, `levelField`, and `dateField`, the Structured Transport comes pre-configured with sensible defaults.

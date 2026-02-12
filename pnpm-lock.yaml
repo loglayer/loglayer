@@ -361,6 +361,34 @@ importers:
         specifier: 4.0.18
         version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
+  packages/mixins/datadog-http-metrics:
+    dependencies:
+      datadog-metrics:
+        specifier: 0.12.1
+        version: 0.12.1
+    devDependencies:
+      '@internal/tsconfig':
+        specifier: workspace:*
+        version: link:../../core/tsconfig
+      '@loglayer/shared':
+        specifier: workspace:*
+        version: link:../../core/shared
+      '@types/node':
+        specifier: 25.2.0
+        version: 25.2.0
+      loglayer:
+        specifier: workspace:*
+        version: link:../../core/loglayer
+      tsdown:
+        specifier: 0.20.1
+        version: 0.20.1(typescript@5.9.3)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: 4.0.18
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+
   packages/mixins/hot-shots:
     dependencies:
       hot-shots:
@@ -4379,6 +4407,10 @@ packages:
   data-urls@6.0.0:
     resolution: {integrity: sha512-BnBS08aLUM+DKamupXs3w2tJJoqU+AkaE/+6vQxi/G/DPmIZFJJp9Dkb1kM03AZx8ADehDUZgsNxju3mPXZYIA==}
     engines: {node: '>=20'}
+
+  datadog-metrics@0.12.1:
+    resolution: {integrity: sha512-Gy+17ia7m9Uy+nKQHDd7fljdq0fqqfpgkpxlwW0x1oFKI7RcgDV32pMCfHtv4HKychP6fHtncj3Lf4VN/g4G6A==}
+    engines: {node: '>=12.0.0'}
 
   datadog-transport-common@3.0.2:
     resolution: {integrity: sha512-nniS9G3v+lC9Ly4g7HeGaqOxlrA+jAPkHbtgOlPgLmZZ8rPpwKFKhsTU63Odv1VNj3ICZw2F/cgmVQT8XMdl7Q==}
@@ -9872,6 +9904,14 @@ snapshots:
     dependencies:
       whatwg-mimetype: 4.0.0
       whatwg-url: 15.1.0
+
+  datadog-metrics@0.12.1:
+    dependencies:
+      '@datadog/datadog-api-client': 1.45.0
+      debug: 4.4.3
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
 
   datadog-transport-common@3.0.2:
     dependencies:
