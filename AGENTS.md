@@ -63,6 +63,10 @@ loglayer/
 │   └── plugins/                  # Official plugins
 ```
 
+### New Package Versioning
+
+When creating a new package, always set the initial version to `0.0.1` in `package.json`. Changesets will handle bumping it to `1.0.0` on the first release.
+
 ### Common Package Files
 
 Each package in `packages/` typically includes:
@@ -258,6 +262,21 @@ import { ConsoleTransport } from 'loglayer';
 
 // ❌ INCORRECT - @loglayer/core does not exist
 import { LogLayer } from '@loglayer/core';
+```
+
+**Using StructuredTransport in examples:**
+
+```typescript
+// ✅ CORRECT - StructuredTransport is exported from 'loglayer' and requires a logger
+import { LogLayer, StructuredTransport } from 'loglayer';
+
+const log = new LogLayer({
+  transport: new StructuredTransport({ logger: console }),
+});
+
+// ❌ INCORRECT - wrong package name, wrong class name, missing logger
+import { StructuredLogger } from '@loglayer/transport-structured-logger';
+new StructuredTransport();
 ```
 
 **Configuration Fields:**
