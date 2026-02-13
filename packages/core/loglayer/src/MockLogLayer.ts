@@ -28,21 +28,21 @@ export class MockLogLayer implements ILogLayer<MockLogLayer>, ILogBuilder<MockLo
   private mockContextManager: IContextManager = new MockContextManager();
   private mockLogLevelManager: ILogLevelManager = new MockLogLevelManager();
 
-  info(..._messages: MessageDataType[]): void {}
-  warn(..._messages: MessageDataType[]): void {}
-  error(..._messages: MessageDataType[]): void {}
-  debug(..._messages: MessageDataType[]): void {}
-  trace(..._messages: MessageDataType[]): void {}
-  fatal(..._messages: MessageDataType[]): void {}
-  raw(_rawEntry: RawLogEntry): void {}
+  info(..._messages: MessageDataType[]): void | Promise<void> {}
+  warn(..._messages: MessageDataType[]): void | Promise<void> {}
+  error(..._messages: MessageDataType[]): void | Promise<void> {}
+  debug(..._messages: MessageDataType[]): void | Promise<void> {}
+  trace(..._messages: MessageDataType[]): void | Promise<void> {}
+  fatal(..._messages: MessageDataType[]): void | Promise<void> {}
+  raw(_rawEntry: RawLogEntry): void | Promise<void> {}
 
   getLoggerInstance<_T extends LogLayerTransport>(_id: string) {
     return undefined;
   }
 
-  errorOnly(_error: any, _opts?: ErrorOnlyOpts): void {}
+  errorOnly(_error: any, _opts?: ErrorOnlyOpts): void | Promise<void> {}
 
-  metadataOnly(_metadata?: Record<string, any>, _logLevel?: LogLevel): void {}
+  metadataOnly(_metadata?: Record<string, any>, _logLevel?: LogLevel): void | Promise<void> {}
 
   addPlugins(_plugins: Array<LogLayerPlugin>) {}
 
@@ -68,7 +68,7 @@ export class MockLogLayer implements ILogLayer<MockLogLayer>, ILogBuilder<MockLo
     return this.mockLogBuilder.withMetadata(_metadata) as any;
   }
 
-  getContext(): Record<string, any> {
+  getContext(_options?: { raw?: boolean }): Record<string, any> {
     return {};
   }
 

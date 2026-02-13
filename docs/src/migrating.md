@@ -5,6 +5,12 @@ description: Learn how to migrate different versions of LogLayer to the latest v
 
 # Migrating LogLayer to the latest version
 
+## Migrating from 8.x to 9.x
+
+New version 9 introduces [Lazy Evaluation](/logging-api/lazy-evaluation), a feature for deferring expensive computations in context and metadata using the `lazy()` function. Lazy values are only evaluated when the log level is enabled, avoiding unnecessary computation for disabled log levels.
+
+*v9 does not have any breaking changes; no migration steps are necessary aside from upgrading any external loglayer dependencies to their next major version.*
+
 ## Migrating from 7.x to 8.x
 
 New version 8 introduces [Log Level Managers](/log-level-managers/), a system for controlling how log levels are inherited and propagated between parent and child loggers. Log level managers provide fine-grained control over log level behavior, allowing you to choose between independent log level management, global log level changes, one-way propagation, or bidirectional synchronization.

@@ -7,6 +7,16 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Feb 13, 2026
+
+`loglayer` and `@loglayer/shared`:
+
+- Added [`lazy()` function](/logging-api/lazy-evaluation) for dynamic context and metadata evaluation. Wrap any callback with `lazy()` to defer its evaluation until log time — the callback is only invoked when the log level is enabled, avoiding unnecessary computation for disabled log levels. This is useful for expensive operations (like serializing large objects) and for values that change between log calls (like request IDs or memory usage). Adapted from [LogTape's lazy evaluation](https://logtape.org/manual/lazy). Thank you to the LogTape team for answering questions around its implementation!
+- `lazy()` supports [async callbacks](/logging-api/lazy-evaluation#async-lazy-evaluation) in metadata for values that require asynchronous operations (database queries, API calls, async storage). When async lazy values are present in metadata, log methods return `Promise<void>` so you can `await` the log call to ensure values are resolved before dispatch. Async lazy is not supported in context.
+- `getContext()` now resolves lazy values by default. Use `getContext({ raw: true })` to get the raw lazy wrappers.
+- Lazy evaluation [error handling](/logging-api/lazy-evaluation#error-handling): failed lazy callbacks now replace the value with `"[LazyEvalError]"`, still send the original log, and emit a separate error-level entry describing the failure. The `LAZY_EVAL_ERROR` constant is exported for programmatic detection.
+- Added `LogLevelPriority` and `LogLevelPriorityToNames` exports for mapping between log levels and their numeric priority values.
+
 ## Feb 12, 2026
 
 `@loglayer/hono`:

@@ -8,17 +8,17 @@ import type { ILogBuilder, MessageDataType } from "@loglayer/shared";
  * Useful for writing unit tests.
  */
 export class MockLogBuilder implements ILogBuilder<MockLogBuilder> {
-  debug(..._messages: MessageDataType[]): void {}
+  debug(..._messages: MessageDataType[]): void | Promise<void> {}
 
-  error(..._messages: MessageDataType[]): void {}
+  error(..._messages: MessageDataType[]): void | Promise<void> {}
 
-  info(..._messages: MessageDataType[]): void {}
+  info(..._messages: MessageDataType[]): void | Promise<void> {}
 
-  trace(..._messages: MessageDataType[]): void {}
+  trace(..._messages: MessageDataType[]): void | Promise<void> {}
 
-  warn(..._messages: MessageDataType[]): void {}
+  warn(..._messages: MessageDataType[]): void | Promise<void> {}
 
-  fatal(..._messages: MessageDataType[]): void {}
+  fatal(..._messages: MessageDataType[]): void | Promise<void> {}
 
   enableLogging() {
     return this;

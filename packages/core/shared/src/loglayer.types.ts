@@ -255,28 +255,34 @@ export interface LogLayerTransport<LogLibrary = any> {
 export interface ILogBuilder<This = ILogBuilder<any>> {
   /**
    * Sends a log message to the logging library under an info log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  info(...messages: MessageDataType[]): void;
+  info(...messages: MessageDataType[]): void | Promise<void>;
   /**
-   * Sends a log message to the logging library under the warn log level
+   * Sends a log message to the logging library under the warn log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  warn(...messages: MessageDataType[]): void;
+  warn(...messages: MessageDataType[]): void | Promise<void>;
   /**
-   * Sends a log message to the logging library under the error log level
+   * Sends a log message to the logging library under the error log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  error(...messages: MessageDataType[]): void;
+  error(...messages: MessageDataType[]): void | Promise<void>;
   /**
-   * Sends a log message to the logging library under the debug log level
+   * Sends a log message to the logging library under the debug log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  debug(...messages: MessageDataType[]): void;
+  debug(...messages: MessageDataType[]): void | Promise<void>;
   /**
-   * Sends a log message to the logging library under the trace log level
+   * Sends a log message to the logging library under the trace log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  trace(...messages: MessageDataType[]): void;
+  trace(...messages: MessageDataType[]): void | Promise<void>;
   /**
-   * Sends a log message to the logging library under the fatal log level
+   * Sends a log message to the logging library under the fatal log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  fatal(...messages: MessageDataType[]): void;
+  fatal(...messages: MessageDataType[]): void | Promise<void>;
   /**
    * Specifies metadata to include with the log message
    *
@@ -310,28 +316,34 @@ export interface ILogBuilder<This = ILogBuilder<any>> {
 export interface ILogLayer<This = ILogLayer<any>> {
   /**
    * Sends a log message to the logging library under an info log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  info(...messages: MessageDataType[]): void;
+  info(...messages: MessageDataType[]): void | Promise<void>;
   /**
-   * Sends a log message to the logging library under the warn log level
+   * Sends a log message to the logging library under the warn log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  warn(...messages: MessageDataType[]): void;
+  warn(...messages: MessageDataType[]): void | Promise<void>;
   /**
-   * Sends a log message to the logging library under the error log level
+   * Sends a log message to the logging library under the error log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  error(...messages: MessageDataType[]): void;
+  error(...messages: MessageDataType[]): void | Promise<void>;
   /**
-   * Sends a log message to the logging library under the debug log level
+   * Sends a log message to the logging library under the debug log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  debug(...messages: MessageDataType[]): void;
+  debug(...messages: MessageDataType[]): void | Promise<void>;
   /**
-   * Sends a log message to the logging library under the trace log level
+   * Sends a log message to the logging library under the trace log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  trace(...messages: MessageDataType[]): void;
+  trace(...messages: MessageDataType[]): void | Promise<void>;
   /**
-   * Sends a log message to the logging library under the fatal log level
+   * Sends a log message to the logging library under the fatal log level.
+   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  fatal(...messages: MessageDataType[]): void;
+  fatal(...messages: MessageDataType[]): void | Promise<void>;
   /**
    * Specifies metadata to include with the log message
    *
@@ -385,20 +397,23 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
-  errorOnly(error: any, opts?: ErrorOnlyOpts): void;
+  errorOnly(error: any, opts?: ErrorOnlyOpts): void | Promise<void>;
   /**
    * Logs only metadata without a log message
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  metadataOnly(metadata?: LogLayerMetadata, logLevel?: LogLevelType): void;
+  metadataOnly(metadata?: LogLayerMetadata, logLevel?: LogLevelType): void | Promise<void>;
 
   /**
-   * Returns the context used
+   * Returns the context used.
+   * By default, lazy values are resolved before returning.
+   * Pass `{ raw: true }` to return the raw lazy wrappers without resolving them.
+   * Async lazy values in context are not supported and will be replaced with `"[LazyEvalError]"`.
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  getContext(): LogLayerContext;
+  getContext(options?: { raw?: boolean }): LogLayerContext;
 
   /**
    * Creates a new instance of LogLayer but with the initialization
@@ -587,5 +602,5 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  raw(rawEntry: RawLogEntry): void;
+  raw(rawEntry: RawLogEntry): void | Promise<void>;
 }

@@ -47,6 +47,24 @@ const logger = new LogLayer({
 })
 ```
 
+## Use `LogLevelPriority` and `LogLevelPriorityToNames` for log level mappings
+
+`LogLevelPriority` maps log levels to their numeric priority values. `LogLevelPriorityToNames` maps numeric values back to log level names.
+
+```typescript
+import { LogLevelPriority, LogLevelPriorityToNames } from 'loglayer'
+
+LogLevelPriority.trace  // 10
+LogLevelPriority.debug  // 20
+LogLevelPriority.info   // 30
+LogLevelPriority.warn   // 40
+LogLevelPriority.error  // 50
+LogLevelPriority.fatal  // 60
+
+LogLevelPriorityToNames[10] // "trace"
+LogLevelPriorityToNames[50] // "error"
+```
+
 ## Override types for custom IntelliSense
 
 You can extend LogLayer's base types to provide custom IntelliSense for your specific use case. This is particularly useful when you have consistent fields across your application.
