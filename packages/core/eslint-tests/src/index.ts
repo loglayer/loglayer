@@ -14,6 +14,7 @@
  * - context-prefix-child.ts: Context, prefix, child loggers, enable/disable, log levels, mute, transport/config
  * - plugins.ts: All plugin callbacks, combinations, management, typed function signatures
  * - mock.ts: MockLogLayer
+ * - groups.ts: Groups (withGroup, runtime management, config, mock)
  * - async-lazy.ts: Async lazy metadata (must be awaited)
  */
 import "./setup.js";
@@ -23,4 +24,5 @@ import "./context-prefix-child.js";
 import "./plugins.js";
 import "./mock.js";
 import "./mixins.js";
+import "./groups.js";
 import "./async-lazy.js";

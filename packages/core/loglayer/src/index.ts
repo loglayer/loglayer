@@ -13,6 +13,8 @@ export type {
   ILogBuilder,
   ILogLayer,
   LazyLogValue,
+  LogGroupConfig,
+  LogGroupsConfig,
   LogLayerContext,
   LogLayerData,
   LogLayerMetadata,

@@ -143,6 +143,38 @@ const log: ILogLayer = new LogLayer({
 })
 ```
 
+## Groups (route logs to specific transports)
+
+```typescript
+const log: ILogLayer = new LogLayer({
+  transport: [
+    new ConsoleTransport({ id: 'console', logger: console }),
+    new DatadogTransport({ id: 'datadog', logger: datadog }),
+  ],
+  groups: {
+    database: { transports: ['datadog'], level: 'error' },
+    auth: { transports: ['datadog', 'console'], level: 'warn' },
+  },
+  ungrouped: 'all',  // 'all' (default) | 'none' | string[]
+})
+
+// Per-log tagging
+log.withGroup('database').error('Connection lost')
+log.withGroup(['database', 'auth']).error('Auth DB failure')
+
+// Persistent tagging (child logger)
+const dbLogger = log.withGroup('database')
+dbLogger.error('Pool exhausted')
+
+// Runtime management
+log.disableGroup('database')
+log.setGroupLevel('database', 'debug')
+log.setActiveGroups(['database'])  // only this group active
+log.setActiveGroups(null)          // all groups active
+
+// Env variable: LOGLAYER_GROUPS=database:debug,auth:warn
+```
+
 ## Child Loggers
 
 ```typescript

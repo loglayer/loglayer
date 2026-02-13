@@ -215,6 +215,36 @@ const log = new LogLayer({
 
 See [Multiple Transports](/transports/multiple-transports) for more details.
 
+## Groups
+
+Route logs to specific transports by category:
+
+```typescript
+const log = new LogLayer({
+  transport: [
+    new ConsoleTransport({ id: 'console', logger: console }),
+    new DatadogTransport({ id: 'datadog', logger: datadog }),
+  ],
+  groups: {
+    database: { transports: ['datadog'], level: 'error' },
+  },
+})
+
+// Per-log tagging
+log.withGroup('database').error('Connection lost')
+
+// Persistent tagging (child logger)
+const dbLogger = log.withGroup('database')
+dbLogger.error('Pool exhausted')
+
+// Runtime management
+log.disableGroup('database')
+log.setGroupLevel('database', 'debug')
+log.setActiveGroups(['database'])
+```
+
+See [Groups](/logging-api/groups) for ungrouped behavior, env variable support, and full details.
+
 ## Transport Management
 
 ```typescript
@@ -274,6 +304,11 @@ const log = new LogLayer({
 
   // Plugins
   plugins: [myPlugin],
+
+  // Groups
+  groups: { database: { transports: ['transport-id'], level: 'error' } },
+  activeGroups: null,                            // null = all groups active
+  ungrouped: 'all',                              // 'all' | 'none' | string[]
 })
 ```
 
@@ -331,6 +366,8 @@ See [Basic Logging](/logging-api/basic-logging#raw-logging) for context behavior
 | Create child | `log.child()` | New instance |
 | Set log level | `log.setLevel(LogLevel.warn)` | Persistent |
 | Add prefix | `log.withPrefix('[Tag]')` | New instance |
+| Tag with group | `log.withGroup('db').error('msg')` | Single entry |
+| Group child logger | `log.withGroup('db')` | New instance |
 | Lazy value | `lazy(() => expensiveCall())` | Per evaluation |
 | Log error only | `log.errorOnly(err)` | Single entry |
 | Log metadata only | `log.metadataOnly({...})` | Single entry |

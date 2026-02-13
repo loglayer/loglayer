@@ -1,6 +1,8 @@
 import type {
   ContainsAsyncLazy,
   ErrorOnlyOpts,
+  LogGroupConfig,
+  LogGroupsConfig,
   LogLayerCommonDataParams,
   LogLayerContext,
   LogLayerMetadata,
@@ -217,6 +219,12 @@ export interface LogLayerTransportParams extends LogLayerCommonDataParams {
    * If true, the data object is included in the message parameters
    */
   hasData?: boolean;
+  /**
+   * The group names this log entry belongs to, if any.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  groups?: string[];
 }
 
 /**
@@ -307,6 +315,12 @@ export interface ILogBuilder<This = ILogBuilder<any, any>, IsAsync extends boole
    */
   withError(error: any): ILogBuilder<This, IsAsync>;
   /**
+   * Tags this log entry with one or more groups for routing.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  withGroup(group: string | string[]): ILogBuilder<This, IsAsync>;
+  /**
    * Enable sending logs to the logging library.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
@@ -380,6 +394,57 @@ export interface ILogLayer<This = ILogLayer<any>> {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#message-prefixing | Message Prefixing Docs}
    */
   withPrefix(string: string): This;
+  /**
+   * Creates a child logger with the specified group(s) persistently assigned.
+   * All logs from the child will be tagged with these groups.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  withGroup(group: string | string[]): This;
+  /**
+   * Adds a new group definition at runtime.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  addGroup(name: string, config: LogGroupConfig): This;
+  /**
+   * Removes a group definition at runtime.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  removeGroup(name: string): This;
+  /**
+   * Enables a group by name (sets enabled: true).
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  enableGroup(name: string): This;
+  /**
+   * Disables a group by name (sets enabled: false). Logs tagged with a disabled
+   * group will not be routed through that group.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  disableGroup(name: string): This;
+  /**
+   * Sets the minimum log level for a group at runtime.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  setGroupLevel(name: string, level: LogLevelType): This;
+  /**
+   * Sets which groups are active. Only active groups will route logs.
+   * Pass null to clear the filter (all groups active).
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  setActiveGroups(groups: string[] | null): This;
+  /**
+   * Returns a snapshot of all group configurations.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  getGroups(): LogGroupsConfig;
   /**
    * Appends context data which will be included with
    * every log entry.
@@ -597,6 +662,9 @@ export interface ILogLayer<This = ILogLayer<any>> {
     metadataFieldName?: string;
     muteContext?: boolean;
     muteMetadata?: boolean;
+    groups?: LogGroupsConfig;
+    activeGroups?: string[] | null;
+    ungrouped?: "all" | "none" | string[];
   };
 
   /**

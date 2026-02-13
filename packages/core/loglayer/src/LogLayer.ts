@@ -12,10 +12,13 @@ import {
   type ILogLevelManager,
   isLazy,
   type LazyEvalFailure,
+  type LogGroupConfig,
+  type LogGroupsConfig,
   type LogLayerContext,
   type LogLayerData,
   type LogLayerMetadata,
   LogLevel,
+  LogLevelPriority,
   type LogLevelType,
   type LogReturnType,
   type MessageDataType,
@@ -36,6 +39,7 @@ interface FormatLogParams {
   metadata?: LogLayerMetadata | null;
   err?: any;
   context?: LogLayerContext | null;
+  groups?: string[] | null;
 }
 
 /**
@@ -52,6 +56,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
   private logLevelManager: ILogLevelManager;
   private _isLoggingLazyError = false;
   private _lazyContextCount = 0;
+  private _assignedGroups: string[] | null = null;
+  private _groupsConfig: LogGroupsConfig | null = null;
+  private _activeGroups: Set<string> | null = null;
+  private _ungrouped: "all" | "none" | string[] = "all";
 
   /**
    * The configuration object used to initialize the logger.
@@ -83,6 +91,12 @@ export class LogLayer implements ILogLayer<LogLayer> {
     }
 
     this._initializeTransports(this._config.transport);
+
+    // Initialize groups
+    this._groupsConfig = config.groups ? { ...config.groups } : null;
+    this._ungrouped = config.ungrouped ?? "all";
+    this._activeGroups = config.activeGroups ? new Set(config.activeGroups) : null;
+    this._parseEnvGroups();
 
     if (mixinRegistry.logLayerHandlers.length > 0) {
       mixinRegistry.logLayerHandlers.forEach((mixin) => {
@@ -176,6 +190,110 @@ export class LogLayer implements ILogLayer<LogLayer> {
     logger._config.prefix = prefix;
 
     return logger;
+  }
+
+  /**
+   * Creates a child logger with the specified group(s) persistently assigned.
+   * All logs from the child will be tagged with these groups.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  withGroup(group: string | string[]): LogLayer {
+    const logger = this.child();
+    const newGroups = Array.isArray(group) ? group : [group];
+
+    if (logger._assignedGroups) {
+      const combined = new Set([...logger._assignedGroups, ...newGroups]);
+      logger._assignedGroups = Array.from(combined);
+    } else {
+      logger._assignedGroups = [...newGroups];
+    }
+
+    return logger;
+  }
+
+  /**
+   * Adds a new group definition at runtime.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  addGroup(name: string, config: LogGroupConfig): LogLayer {
+    if (!this._groupsConfig) {
+      this._groupsConfig = {};
+    }
+    this._groupsConfig[name] = { ...config };
+    return this;
+  }
+
+  /**
+   * Removes a group definition at runtime.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  removeGroup(name: string): LogLayer {
+    if (this._groupsConfig) {
+      delete this._groupsConfig[name];
+      if (Object.keys(this._groupsConfig).length === 0) {
+        this._groupsConfig = null;
+      }
+    }
+    return this;
+  }
+
+  /**
+   * Enables a group by name (sets enabled: true).
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  enableGroup(name: string): LogLayer {
+    if (this._groupsConfig?.[name]) {
+      this._groupsConfig[name] = { ...this._groupsConfig[name], enabled: true };
+    }
+    return this;
+  }
+
+  /**
+   * Disables a group by name (sets enabled: false).
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  disableGroup(name: string): LogLayer {
+    if (this._groupsConfig?.[name]) {
+      this._groupsConfig[name] = { ...this._groupsConfig[name], enabled: false };
+    }
+    return this;
+  }
+
+  /**
+   * Sets the minimum log level for a group at runtime.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  setGroupLevel(name: string, level: LogLevelType): LogLayer {
+    if (this._groupsConfig?.[name]) {
+      this._groupsConfig[name] = { ...this._groupsConfig[name], level };
+    }
+    return this;
+  }
+
+  /**
+   * Sets which groups are active. Only active groups will route logs.
+   * Pass null to clear the filter (all groups active).
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  setActiveGroups(groups: string[] | null): LogLayer {
+    this._activeGroups = groups ? new Set(groups) : null;
+    return this;
+  }
+
+  /**
+   * Returns a snapshot of all group configurations.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  getGroups(): LogGroupsConfig {
+    return this._groupsConfig ? { ...this._groupsConfig } : {};
   }
 
   /**
@@ -357,6 +475,14 @@ export class LogLayer implements ILogLayer<LogLayer> {
     childLogger._lazyContextCount = childLogger.contextManager.hasContextData()
       ? countLazyValues(childLogger.contextManager.getContext())
       : 0;
+
+    // Copy groups state to child
+    // _groupsConfig and _activeGroups are shared by reference so runtime changes propagate
+    childLogger._groupsConfig = this._groupsConfig;
+    childLogger._activeGroups = this._activeGroups;
+    childLogger._ungrouped = this._ungrouped;
+    // _assignedGroups is copied so children can have different persistent group tags
+    childLogger._assignedGroups = this._assignedGroups ? [...this._assignedGroups] : null;
 
     return childLogger;
   }
@@ -814,6 +940,124 @@ export class LogLayer implements ILogLayer<LogLayer> {
     return transport.getLoggerInstance();
   }
 
+  /**
+   * Parses the LOGLAYER_GROUPS environment variable and overrides
+   * _activeGroups and group levels accordingly.
+   * Format: "name,name" or "name:level,name:level"
+   */
+  private _parseEnvGroups(): void {
+    const envValue = typeof process !== "undefined" ? process.env?.LOGLAYER_GROUPS : undefined;
+
+    if (!envValue) return;
+
+    const entries = envValue
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const activeNames: string[] = [];
+
+    for (const entry of entries) {
+      const colonIdx = entry.indexOf(":");
+      if (colonIdx > 0) {
+        const name = entry.slice(0, colonIdx);
+        const level = entry.slice(colonIdx + 1) as LogLevelType;
+        activeNames.push(name);
+        // Override group level if the group exists in config
+        if (this._groupsConfig?.[name]) {
+          this._groupsConfig[name] = { ...this._groupsConfig[name], level };
+        }
+      } else {
+        activeNames.push(entry);
+      }
+    }
+
+    this._activeGroups = new Set(activeNames);
+  }
+
+  /**
+   * Merges per-log groups (from LogBuilder) with logger-level assigned groups.
+   */
+  private _mergeGroups(perLogGroups: string[] | null): string[] | null {
+    if (this._assignedGroups && perLogGroups) {
+      const combined = new Set([...this._assignedGroups, ...perLogGroups]);
+      return Array.from(combined);
+    }
+    return perLogGroups || this._assignedGroups;
+  }
+
+  /**
+   * Applies ungrouped routing rules for a transport.
+   */
+  private _applyUngroupedRules(transportId: string): boolean {
+    if (this._ungrouped === "all") return true;
+    if (this._ungrouped === "none") return false;
+    return this._ungrouped.includes(transportId);
+  }
+
+  /**
+   * Determines whether a transport should receive a log entry based on group routing rules.
+   */
+  private _shouldTransportReceiveLog(transportId: string, logLevel: LogLevelType, groups: string[] | null): boolean {
+    // If no groups config at all, all transports get all logs (backward compat)
+    if (!this._groupsConfig) {
+      return true;
+    }
+
+    // Merge per-log groups with logger-level assigned groups
+    const effectiveGroups = this._mergeGroups(groups);
+
+    // If log has no groups, apply ungrouped rules
+    if (!effectiveGroups || effectiveGroups.length === 0) {
+      return this._applyUngroupedRules(transportId);
+    }
+
+    // Check if ANY of the log's groups allow this transport
+    let hasAnyDefinedGroup = false;
+
+    for (const groupName of effectiveGroups) {
+      const groupConfig = this._groupsConfig[groupName];
+
+      if (!groupConfig) {
+        // Group not defined in config -- skip
+        continue;
+      }
+
+      hasAnyDefinedGroup = true;
+
+      // Check group.enabled (default true)
+      if (groupConfig.enabled === false) {
+        continue;
+      }
+
+      // Check activeGroups filter
+      if (this._activeGroups && !this._activeGroups.has(groupName)) {
+        continue;
+      }
+
+      // Check group level
+      if (groupConfig.level) {
+        const groupLevelPriority = LogLevelPriority[groupConfig.level as LogLevel];
+        const logLevelPriority = LogLevelPriority[logLevel as LogLevel];
+        if (logLevelPriority < groupLevelPriority) {
+          continue;
+        }
+      }
+
+      // Check if transport is in this group's transports list
+      if (groupConfig.transports.includes(transportId)) {
+        return true;
+      }
+    }
+
+    // If log had groups but none were defined in config, treat as ungrouped
+    if (!hasAnyDefinedGroup) {
+      return this._applyUngroupedRules(transportId);
+    }
+
+    // Log had defined groups but none passed for this transport
+    return false;
+  }
+
   _formatMessage(messages: MessageDataType[] = []) {
     const { prefix } = this._config;
 
@@ -822,7 +1066,14 @@ export class LogLayer implements ILogLayer<LogLayer> {
     }
   }
 
-  _formatLog({ logLevel, params = [], metadata = null, err, context = null }: FormatLogParams): void | Promise<void> {
+  _formatLog({
+    logLevel,
+    params = [],
+    metadata = null,
+    err,
+    context = null,
+    groups = null,
+  }: FormatLogParams): void | Promise<void> {
     // Use provided context or fall back to context manager
     const rawContext = context !== null ? context : this.contextManager.getContext();
 
@@ -864,10 +1115,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
     const metadataHasPromises = metadata ? hasPromiseValues(metadata) : false;
 
     if (metadataHasPromises) {
-      return this._resolveAsyncAndProcess(logLevel, params, finalContextData, metadata, err, context);
+      return this._resolveAsyncAndProcess(logLevel, params, finalContextData, metadata, err, context, groups);
     }
 
-    this._processLog(logLevel, params, finalContextData, metadata, err, context);
+    this._processLog(logLevel, params, finalContextData, metadata, err, context, groups);
   }
 
   /**
@@ -881,6 +1132,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
     metadata: LogLayerMetadata | null,
     err: any,
     context: LogLayerContext | null,
+    groups: string[] | null,
   ): Promise<void> {
     let resolvedMetadata: LogLayerMetadata | null = null;
     if (metadata) {
@@ -891,7 +1143,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
       }
     }
 
-    this._processLog(logLevel, params, contextData, resolvedMetadata, err, context);
+    this._processLog(logLevel, params, contextData, resolvedMetadata, err, context, groups);
   }
 
   /**
@@ -971,6 +1223,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
     metadata: LogLayerMetadata | null,
     err: any,
     context: LogLayerContext | null,
+    groups: string[] | null = null,
   ) {
     const { errorSerializer, errorFieldInMetadata, muteContext, contextFieldName, metadataFieldName, errorFieldName } =
       this._config;
@@ -1078,9 +1331,16 @@ export class LogLayer implements ILogLayer<LogLayer> {
       );
     }
 
+    const effectiveGroups = this._mergeGroups(groups) ?? undefined;
+
     if (this.hasMultipleTransports) {
       const transportPromises = (this._config.transport as LogLayerTransport[])
-        .filter((transport) => transport.enabled)
+        .filter((transport) => {
+          if (!transport.enabled) return false;
+          // Group routing check
+          if (!this._shouldTransportReceiveLog(transport.id!, logLevel, groups)) return false;
+          return true;
+        })
         .map(async (transport) => {
           // Capture the transformed logLevel in the closure
           const currentLogLevel = logLevel;
@@ -1095,6 +1355,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
                 error: err,
                 metadata,
                 context: contextData,
+                groups: effectiveGroups,
               },
               this,
             );
@@ -1112,6 +1373,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
             error: err,
             metadata,
             context: contextData,
+            groups: effectiveGroups,
           });
         });
 
@@ -1127,6 +1389,11 @@ export class LogLayer implements ILogLayer<LogLayer> {
         return;
       }
 
+      // Group routing check
+      if (!this._shouldTransportReceiveLog(this.singleTransport.id!, logLevel, groups)) {
+        return;
+      }
+
       if (this.pluginManager.hasPlugins(PluginCallbackType.shouldSendToLogger)) {
         const shouldSend = this.pluginManager.runShouldSendToLogger(
           {
@@ -1137,6 +1404,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
             error: err,
             metadata,
             context: contextData,
+            groups: effectiveGroups,
           },
           this,
         );
@@ -1155,6 +1423,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
         error: err,
         metadata,
         context: contextData,
+        groups: effectiveGroups,
       });
     }
   }

@@ -244,6 +244,31 @@ interface LogLayerTransportParams {
    * Context data that is included with each log entry.
    */
   context?: Record<string, any>;
+  /**
+   * Group tags assigned to this log entry.
+   */
+  groups?: string[];
+}
+```
+
+### Using Groups in Transports
+
+Transports receive the `groups` array in `LogLayerTransportParams`, so custom transports can use [group](/logging-api/groups) information in their output:
+
+```typescript
+shipToLogger({ logLevel, messages, data, hasData, groups }: LogLayerTransportParams) {
+  const payload: Record<string, any> = {
+    level: logLevel,
+    message: messages.join(' '),
+    ...(data && hasData ? data : {}),
+  }
+
+  if (groups && groups.length > 0) {
+    payload.groups = groups
+  }
+
+  this.service.send(payload)
+  return messages
 }
 ```
 

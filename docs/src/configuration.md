@@ -191,6 +191,28 @@ Example output with flattened fields (default):
 }
 ```
 
+### Groups
+
+Groups let you route logs to specific transports based on named categories, with per-group log levels:
+
+```typescript
+{
+  // Define named routing groups
+  groups: {
+    database: { transports: ['datadog'], level: 'error' },
+    auth: { transports: ['sentry', 'datadog'], level: 'warn' },
+  },
+
+  // Only these groups are active (env LOGLAYER_GROUPS overrides)
+  activeGroups: ['database', 'auth'],
+
+  // What happens to ungrouped logs (default: 'all')
+  ungrouped: 'all',  // 'all' | 'none' | string[]
+}
+```
+
+See [Groups](/logging-api/groups) for full documentation on routing, runtime management, and environment variable support.
+
 ### Plugin System
 
 Plugins are used to modify logging behavior. See the [Plugins](./plugins/index) section for more information.
@@ -251,6 +273,13 @@ const log = new LogLayer({
         return data
       }
     }
-  ]
+  ],
+
+  // Groups (route logs to specific transports)
+  groups: {
+    database: { transports: ['my-transport-id'], level: 'error' },
+  },
+  activeGroups: null,  // null = all groups active
+  ungrouped: 'all',    // ungrouped logs go to all transports
 })
 ``` 

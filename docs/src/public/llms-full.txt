@@ -365,6 +365,14 @@ const log: ILogLayer = new LogLayer({
 
   // Plugins
   plugins: [],
+
+  // Groups (route logs to specific transports)
+  groups: {
+    database: { transports: ['datadog'], level: 'error' },
+    auth: { transports: ['sentry', 'datadog'], level: 'warn' },
+  },
+  activeGroups: null,              // null = all groups active; string[] to restrict
+  ungrouped: 'all',                // 'all' | 'none' | string[]
 })
 ```
 
@@ -454,6 +462,143 @@ const log: ILogLayer = new LogLayer({
     new WinstonTransport({ logger: winstonLogger }),
   ],
 })
+```
+
+## Groups (route logs to specific transports)
+
+Groups are named routing rules that give fine-grained control over which logs go to which transports. In a large system with many subsystems (database, auth, payments, etc.), groups let you "listen" to only certain categories of logs instead of adjusting global log levels.
+
+### Configuration
+
+```typescript
+const log: ILogLayer = new LogLayer({
+  transport: [
+    new ConsoleTransport({ id: 'console', logger: console }),
+    new DatadogTransport({ id: 'datadog', logger: datadog }),
+    new SentryTransport({ id: 'sentry', logger: sentry }),
+  ],
+  groups: {
+    database: { transports: ['datadog'], level: 'error' },
+    auth: { transports: ['sentry', 'datadog'], level: 'warn' },
+  },
+  activeGroups: null,    // null = all groups active; string[] to restrict
+  ungrouped: 'all',      // 'all' (default) | 'none' | string[]
+})
+```
+
+### Group Options
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `transports` | `string[]` | (required) | Transport IDs this group routes to |
+| `level` | `LogLevelType` | `"trace"` | Minimum log level for this group |
+| `enabled` | `boolean` | `true` | Whether this group is active |
+
+### Per-Log Tagging
+
+Tag individual log entries with one or more groups:
+
+```typescript
+log.withGroup('database').error('Connection timeout')
+
+// Combine with metadata and errors
+log.withMetadata({ query: 'SELECT *' }).withGroup('database').error('Query failed')
+
+// Multiple groups — log goes to union of both groups' transports
+log.withGroup(['database', 'auth']).error('Auth DB connection failed')
+```
+
+### Persistent Tagging (Child Loggers)
+
+Use `withGroup()` on a LogLayer instance to create a child logger with groups permanently assigned:
+
+```typescript
+const dbLogger = log.withGroup('database')
+dbLogger.error('Pool exhausted')  // always routed through 'database' group
+dbLogger.info('Connected')         // also routed through 'database' group
+
+// Groups are additive across child loggers
+const authDbLogger = log.withGroup('auth').withGroup('database')
+authDbLogger.error('Auth DB failure')  // routes to both auth + database transports
+```
+
+### Group Level Filtering
+
+Each group has its own minimum log level. Logs below the group's level are dropped for that group:
+
+```typescript
+log.withGroup('database').info('Query took 50ms')   // dropped (below 'error')
+log.withGroup('database').error('Connection lost')    // sent to datadog
+```
+
+### Ungrouped Logs
+
+The `ungrouped` config controls what happens to logs with no group tag:
+
+```typescript
+{ ungrouped: 'all' }          // default: go to ALL transports (backward compatible)
+{ ungrouped: 'none' }         // drop ungrouped logs
+{ ungrouped: ['console'] }    // only to listed transports
+```
+
+### Active Groups Filter
+
+Restrict which groups are active. Logs tagged with inactive groups are dropped:
+
+```typescript
+const log = new LogLayer({
+  ...
+  activeGroups: ['database'],  // only database group is active
+})
+```
+
+### Environment Variable
+
+The `LOGLAYER_GROUPS` env variable overrides `activeGroups` at construction time:
+
+```bash
+LOGLAYER_GROUPS=database,auth
+LOGLAYER_GROUPS=database:debug,auth:warn   # with level overrides
+```
+
+### Runtime Management
+
+```typescript
+log.addGroup('inbox', { transports: ['datadog'], level: 'error' })
+log.removeGroup('inbox')
+log.enableGroup('database')
+log.disableGroup('database')
+log.setGroupLevel('database', 'debug')
+log.setActiveGroups(['database'])   // only database active
+log.setActiveGroups(null)           // all groups active
+log.getGroups()                     // returns all group configs
+```
+
+### Plugin Integration
+
+The `shouldSendToLogger` plugin hook receives the `groups` array:
+
+```typescript
+{
+  shouldSendToLogger: ({ groups, transportId, logLevel }) => {
+    if (groups?.includes('sensitive')) {
+      return transportId === 'encrypted-transport'
+    }
+    return true
+  }
+}
+```
+
+### Transport Integration
+
+Transports receive the `groups` array in `LogLayerTransportParams`:
+
+```typescript
+shipToLogger({ logLevel, messages, groups }) {
+  if (groups) {
+    // Include group info in structured output
+  }
+}
 ```
 
 ## Transport Management
@@ -683,6 +828,7 @@ interface LogLayerTransportParams {
   metadata?: Record<string, any>  // individual metadata
   error?: any                     // individual error
   context?: Record<string, any>   // individual context
+  groups?: string[]               // group tags for this log entry
 }
 ```
 
@@ -745,7 +891,7 @@ interface LogLayerPlugin {
   transformLogLevel?(params: { logLevel, messages, data, metadata, error, context }, loglayer): LogLevelType | null
 
   // Control whether a log should be sent (return false to drop)
-  shouldSendToLogger?(params: { messages, logLevel, transportId, data, metadata, error, context }, loglayer): boolean
+  shouldSendToLogger?(params: { messages, logLevel, transportId, data, metadata, error, context, groups }, loglayer): boolean
 
   // Intercept withMetadata() / metadataOnly() calls
   onMetadataCalled?(metadata, loglayer): Record<string, any> | null
@@ -1163,6 +1309,7 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 - [Lazy Evaluation](https://loglayer.dev/logging-api/lazy-evaluation): Deferred computation for context and metadata
 - [Child Loggers](https://loglayer.dev/logging-api/child-loggers): Creating inherited logger instances
 - [Log Level Control](https://loglayer.dev/logging-api/adjusting-log-levels): Managing log levels
+- [Groups](https://loglayer.dev/logging-api/groups): Route logs to specific transports by category
 - [Transport Management](https://loglayer.dev/logging-api/transport-management): Dynamic transport control
 - [TypeScript Tips](https://loglayer.dev/logging-api/typescript): TypeScript guidance
 - [Testing / Mocking](https://loglayer.dev/logging-api/unit-testing): MockLogLayer for tests

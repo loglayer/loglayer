@@ -15,6 +15,7 @@ export class LogBuilder implements ILogBuilder<LogBuilder, boolean> {
   private structuredLogger: LogLayer;
   private hasMetadata: boolean;
   private pluginManager: PluginManager;
+  private _groups: string[] | null = null;
 
   constructor(structuredLogger: LogLayer) {
     this.err = null;
@@ -84,6 +85,24 @@ export class LogBuilder implements ILogBuilder<LogBuilder, boolean> {
    */
   withError(error: any) {
     this.err = error;
+    return this as any;
+  }
+
+  /**
+   * Tags this log entry with one or more groups for routing.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  withGroup(group: string | string[]) {
+    const newGroups = Array.isArray(group) ? group : [group];
+
+    if (this._groups) {
+      const combined = new Set([...this._groups, ...newGroups]);
+      this._groups = Array.from(combined);
+    } else {
+      this._groups = [...newGroups];
+    }
+
     return this as any;
   }
 
@@ -176,6 +195,7 @@ export class LogBuilder implements ILogBuilder<LogBuilder, boolean> {
       params,
       metadata: hasData ? this.metadata : null,
       err: this.err,
+      groups: this._groups,
     });
   }
 }

@@ -35,4 +35,8 @@ export class MockLogBuilder implements ILogBuilder<MockLogBuilder, false> {
   withError(_error: any) {
     return this as any;
   }
+
+  withGroup(_group: string | string[]) {
+    return this as any;
+  }
 }

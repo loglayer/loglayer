@@ -11,6 +11,8 @@ import type {
   ILogBuilder,
   ILogLayer,
   ILogLevelManager,
+  LogGroupConfig,
+  LogGroupsConfig,
   LogLayerMetadata,
   LogLayerTransport,
   LogLevel,
@@ -56,6 +58,38 @@ export class MockLogLayer implements ILogLayer<MockLogLayer> {
 
   withPrefix(_prefix: string) {
     return this;
+  }
+
+  withGroup(_group: string | string[]) {
+    return this;
+  }
+
+  addGroup(_name: string, _config: LogGroupConfig) {
+    return this;
+  }
+
+  removeGroup(_name: string) {
+    return this;
+  }
+
+  enableGroup(_name: string) {
+    return this;
+  }
+
+  disableGroup(_name: string) {
+    return this;
+  }
+
+  setGroupLevel(_name: string, _level: LogLevelType) {
+    return this;
+  }
+
+  setActiveGroups(_groups: string[] | null) {
+    return this;
+  }
+
+  getGroups(): LogGroupsConfig {
+    return {};
   }
 
   withContext(_context?: Record<string, any>) {

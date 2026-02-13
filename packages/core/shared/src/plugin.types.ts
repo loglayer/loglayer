@@ -50,6 +50,12 @@ export interface PluginShouldSendToLoggerParams extends LogLayerCommonDataParams
    * Log level of the message
    */
   logLevel: LogLevelType;
+  /**
+   * The group names this log entry belongs to, if any.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  groups?: string[];
 }
 
 /**
