@@ -46,18 +46,11 @@ log.debug("This won't trigger any lazy callbacks");
 
 Child loggers inherit the lazy wrapper, not the resolved value, so they always see the latest value.
 
-## Async Lazy Evaluation
+### Async callbacks
 
-`lazy()` supports async callbacks in **metadata** for values that require asynchronous operations like database queries, API calls, or async storage lookups.
-
-When any metadata lazy callback returns a Promise, the log method returns a `Promise<void>` that you can `await` to ensure the async values are resolved before the log is dispatched.
+`lazy()` also accepts async callbacks in **metadata** for values that require asynchronous operations like database queries, API calls, or async storage lookups. When any metadata lazy callback returns a Promise, the log method returns a `Promise<void>` that you can `await` to ensure the async values are resolved before the log is dispatched.
 
 ```typescript
-import { LogLayer, lazy } from "loglayer";
-
-const log = new LogLayer({ ... });
-
-// Async metadata values
 await log.withMetadata({
   result: lazy(async () => await fetchResult()),
   dbStatus: lazy(async () => await db.ping()),
