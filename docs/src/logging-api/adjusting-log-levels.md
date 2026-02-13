@@ -133,7 +133,7 @@ if (log.isLevelEnabled(LogLevel.debug)) {
 
 *New in LogLayer v8*.
 
-Log level managers control how log levels are inherited and propagated between parent and child loggers. By default, LogLayer uses the [**Default Log Level Manager**](/log-level-managers/default), which provides independent log level management for each logger instance.
+Log level managers control how the **global log level** (tier 1) is inherited and propagated between parent and child loggers. They do not affect group-level or transport-level filtering. By default, LogLayer uses the [**Default Log Level Manager**](/log-level-managers/default), which provides independent log level management for each logger instance.
 
 With the default log level manager, child loggers inherit the log level from their parent when created, but subsequent changes to the parent's log level do not affect existing children:
 
