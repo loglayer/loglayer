@@ -1,6 +1,8 @@
 /**
  * Symbol used to identify lazy values in context and metadata.
- * @internal
+ * Can be used to check if a value is a lazy wrapper: `LAZY_SYMBOL in value`.
+ *
+ * @see {@link https://loglayer.dev/logging-api/lazy-evaluation | Lazy Evaluation Docs}
  */
 export const LAZY_SYMBOL: unique symbol = Symbol.for("loglayer.lazy");
 
