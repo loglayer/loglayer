@@ -1,5 +1,11 @@
 # @loglayer/mixin-datadog-http-metrics
 
+## 2.0.0
+
+### Major Changes
+
+- [`fc56d4b`](https://github.com/loglayer/loglayer/commit/fc56d4b0a989d464f4e727b27ee53cfe22835ddd) Thanks [@theogravity](https://github.com/theogravity)! - Major version bump to align all packages with loglayer v9. No breaking changes in these packages; update your loglayer dependency to v9 for lazy evaluation support.
+
 ## 1.0.0
 
 ### Major Changes
