@@ -243,7 +243,7 @@ log.setGroupLevel('database', 'debug')
 log.setActiveGroups(['database'])
 ```
 
-See [Groups](/logging-api/groups) for ungrouped behavior, env variable support, and full details.
+See [Groups](/logging-api/groups) for `ungroupedBehavior`, env variable support, and full details.
 
 ## Transport Management
 
@@ -308,7 +308,7 @@ const log = new LogLayer({
   // Groups
   groups: { database: { transports: ['transport-id'], level: 'error' } },
   activeGroups: null,                            // null = all groups active
-  ungrouped: 'all',                              // 'all' | 'none' | string[]
+  ungroupedBehavior: 'all',                       // 'all' | 'none' | string[]
 })
 ```
 

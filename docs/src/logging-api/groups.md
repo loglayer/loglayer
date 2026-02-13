@@ -51,7 +51,7 @@ const log = new LogLayer({
 |------|------|---------|-------------|
 | `groups` | `Record<string, LogGroupConfig>` | `undefined` | Named routing groups |
 | `activeGroups` | `string[] \| null` | `null` | When set, only these groups are active. The `LOGLAYER_GROUPS` env variable overrides this. |
-| `ungrouped` | `'all' \| 'none' \| string[]` | `'all'` | Controls what happens to logs with no group tags |
+| `ungroupedBehavior` | `'all' \| 'none' \| string[]` | `'all'` | Controls what happens to logs with no group tags |
 
 ## Per-Log Tagging
 
@@ -114,17 +114,17 @@ log.withGroup('database').error('Connection lost')   // sent to datadog
 
 ## Ungrouped Logs
 
-The `ungrouped` config controls what happens to logs that have no group tag:
+The `ungroupedBehavior` config controls what happens to logs that have no group tag:
 
 ```typescript
 // Default: ungrouped logs go to ALL transports (backward compatible)
-{ ungrouped: 'all' }
+{ ungroupedBehavior: 'all' }
 
 // Drop ungrouped logs entirely
-{ ungrouped: 'none' }
+{ ungroupedBehavior: 'none' }
 
 // Send ungrouped logs only to specific transports
-{ ungrouped: ['console'] }
+{ ungroupedBehavior: ['console'] }
 ```
 
 ::: tip
@@ -198,4 +198,4 @@ When a grouped log is processed, filters are checked in this order:
 5. **Transport level** — does the log level meet the transport's own minimum?
 6. **`shouldSendToLogger` plugin** — does the plugin allow it?
 
-If a log is tagged with a group that doesn't exist in the config, it falls through to ungrouped rules.
+If a log is tagged with a group that doesn't exist in the config, it falls through to `ungroupedBehavior` rules.

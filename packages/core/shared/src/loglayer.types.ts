@@ -664,7 +664,7 @@ export interface ILogLayer<This = ILogLayer<any>> {
     muteMetadata?: boolean;
     groups?: LogGroupsConfig;
     activeGroups?: string[] | null;
-    ungrouped?: "all" | "none" | string[];
+    ungroupedBehavior?: "all" | "none" | string[];
   };
 
   /**

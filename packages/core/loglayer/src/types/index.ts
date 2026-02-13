@@ -121,5 +121,5 @@ export interface LogLayerConfig {
    *
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
-  ungrouped?: "all" | "none" | string[];
+  ungroupedBehavior?: "all" | "none" | string[];
 }

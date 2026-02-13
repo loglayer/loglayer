@@ -276,7 +276,7 @@ describe("LogLayer groups functionality", () => {
   });
 
   describe("ungrouped behavior", () => {
-    it("should send ungrouped logs to all transports by default (ungrouped: 'all')", () => {
+    it("should send ungrouped logs to all transports by default (ungroupedBehavior: 'all')", () => {
       const transport1 = createTestTransport("t1");
       const transport2 = createTestTransport("t2");
 
@@ -285,7 +285,7 @@ describe("LogLayer groups functionality", () => {
         groups: {
           database: { transports: ["t1"] },
         },
-        ungrouped: "all",
+        ungroupedBehavior: "all",
       });
 
       log.info("ungrouped");
@@ -293,7 +293,7 @@ describe("LogLayer groups functionality", () => {
       expect(getLogger(log, "t2").popLine()).toBeDefined();
     });
 
-    it("should drop ungrouped logs when ungrouped: 'none'", () => {
+    it("should drop ungrouped logs when ungroupedBehavior: 'none'", () => {
       const transport1 = createTestTransport("t1");
       const transport2 = createTestTransport("t2");
 
@@ -302,7 +302,7 @@ describe("LogLayer groups functionality", () => {
         groups: {
           database: { transports: ["t1"] },
         },
-        ungrouped: "none",
+        ungroupedBehavior: "none",
       });
 
       log.info("ungrouped");
@@ -310,7 +310,7 @@ describe("LogLayer groups functionality", () => {
       expect(getLogger(log, "t2").popLine()).toBeUndefined();
     });
 
-    it("should send ungrouped logs only to specific transports when ungrouped is string[]", () => {
+    it("should send ungrouped logs only to specific transports when ungroupedBehavior is string[]", () => {
       const transport1 = createTestTransport("t1");
       const transport2 = createTestTransport("t2");
 
@@ -319,7 +319,7 @@ describe("LogLayer groups functionality", () => {
         groups: {
           database: { transports: ["t1"] },
         },
-        ungrouped: ["t2"],
+        ungroupedBehavior: ["t2"],
       });
 
       log.info("ungrouped");

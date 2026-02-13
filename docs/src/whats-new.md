@@ -11,7 +11,7 @@ description: Learn about the latest features and improvements in LogLayer
 
 `v9.1.0`:
 
-- Added [Groups](/logging-api/groups) for routing logs to specific transports by named category. Inspired by [categories in LogTape](https://logtape.org/manual/categories). Define groups with per-group log levels and transport lists, then tag individual logs with `withGroup('database').error('...')` or create persistent child loggers with `log.withGroup('database')`. Supports runtime management (`addGroup`, `removeGroup`, `enableGroup`, `disableGroup`, `setGroupLevel`, `setActiveGroups`), `ungrouped` config for backward compatibility, and a `LOGLAYER_GROUPS` environment variable for filtering active groups without code changes. Groups are passed through to transports and the `shouldSendToLogger` plugin hook.
+- Added [Groups](/logging-api/groups) for routing logs to specific transports by named category. Inspired by [categories in LogTape](https://logtape.org/manual/categories). Define groups with per-group log levels and transport lists, then tag individual logs with `withGroup('database').error('...')` or create persistent child loggers with `log.withGroup('database')`. Supports runtime management (`addGroup`, `removeGroup`, `enableGroup`, `disableGroup`, `setGroupLevel`, `setActiveGroups`), `ungroupedBehavior` config for backward compatibility, and a `LOGLAYER_GROUPS` environment variable for filtering active groups without code changes. Groups are passed through to transports and the `shouldSendToLogger` plugin hook.
 
 `v9.0.1`:
 

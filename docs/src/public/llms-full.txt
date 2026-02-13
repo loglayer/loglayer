@@ -372,7 +372,7 @@ const log: ILogLayer = new LogLayer({
     auth: { transports: ['sentry', 'datadog'], level: 'warn' },
   },
   activeGroups: null,              // null = all groups active; string[] to restrict
-  ungrouped: 'all',                // 'all' | 'none' | string[]
+  ungroupedBehavior: 'all',        // 'all' | 'none' | string[]
 })
 ```
 
@@ -482,7 +482,7 @@ const log: ILogLayer = new LogLayer({
     auth: { transports: ['sentry', 'datadog'], level: 'warn' },
   },
   activeGroups: null,    // null = all groups active; string[] to restrict
-  ungrouped: 'all',      // 'all' (default) | 'none' | string[]
+  ungroupedBehavior: 'all',  // 'all' (default) | 'none' | string[]
 })
 ```
 
@@ -533,12 +533,12 @@ log.withGroup('database').error('Connection lost')    // sent to datadog
 
 ### Ungrouped Logs
 
-The `ungrouped` config controls what happens to logs with no group tag:
+The `ungroupedBehavior` config controls what happens to logs with no group tag:
 
 ```typescript
-{ ungrouped: 'all' }          // default: go to ALL transports (backward compatible)
-{ ungrouped: 'none' }         // drop ungrouped logs
-{ ungrouped: ['console'] }    // only to listed transports
+{ ungroupedBehavior: 'all' }          // default: go to ALL transports (backward compatible)
+{ ungroupedBehavior: 'none' }         // drop ungrouped logs
+{ ungroupedBehavior: ['console'] }    // only to listed transports
 ```
 
 ### Active Groups Filter

@@ -155,7 +155,7 @@ const log: ILogLayer = new LogLayer({
     database: { transports: ['datadog'], level: 'error' },
     auth: { transports: ['datadog', 'console'], level: 'warn' },
   },
-  ungrouped: 'all',  // 'all' (default) | 'none' | string[]
+  ungroupedBehavior: 'all',  // 'all' (default) | 'none' | string[]
 })
 
 // Per-log tagging

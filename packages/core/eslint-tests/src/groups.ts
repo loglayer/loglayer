@@ -67,7 +67,7 @@ function testGroupRuntimeManagement() {
       auth: { transports: ["other"], level: "warn" },
     },
     activeGroups: ["database"],
-    ungrouped: "all",
+    ungroupedBehavior: "all",
   });
 
   log.info("ungrouped");
@@ -87,14 +87,14 @@ function testGroupRuntimeManagement() {
   const noneLog = new LogLayer({
     transport: new ConsoleTransport({ id: "c", logger: console }),
     groups: { db: { transports: ["c"] } },
-    ungrouped: "none",
+    ungroupedBehavior: "none",
   });
   noneLog.info("dropped");
 
   const arrayLog = new LogLayer({
     transport: new ConsoleTransport({ id: "c", logger: console }),
     groups: { db: { transports: ["c"] } },
-    ungrouped: ["c"],
+    ungroupedBehavior: ["c"],
   });
   arrayLog.info("to specific transports");
 }

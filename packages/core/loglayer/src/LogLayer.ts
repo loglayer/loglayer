@@ -59,7 +59,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
   private _assignedGroups: string[] | null = null;
   private _groupsConfig: LogGroupsConfig | null = null;
   private _activeGroups: Set<string> | null = null;
-  private _ungrouped: "all" | "none" | string[] = "all";
+  private _ungroupedBehavior: "all" | "none" | string[] = "all";
 
   /**
    * The configuration object used to initialize the logger.
@@ -94,7 +94,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
 
     // Initialize groups
     this._groupsConfig = config.groups ? { ...config.groups } : null;
-    this._ungrouped = config.ungrouped ?? "all";
+    this._ungroupedBehavior = config.ungroupedBehavior ?? "all";
     this._activeGroups = config.activeGroups ? new Set(config.activeGroups) : null;
     this._parseEnvGroups();
 
@@ -480,7 +480,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
     // _groupsConfig and _activeGroups are shared by reference so runtime changes propagate
     childLogger._groupsConfig = this._groupsConfig;
     childLogger._activeGroups = this._activeGroups;
-    childLogger._ungrouped = this._ungrouped;
+    childLogger._ungroupedBehavior = this._ungroupedBehavior;
     // _assignedGroups is copied so children can have different persistent group tags
     childLogger._assignedGroups = this._assignedGroups ? [...this._assignedGroups] : null;
 
@@ -989,9 +989,9 @@ export class LogLayer implements ILogLayer<LogLayer> {
    * Applies ungrouped routing rules for a transport.
    */
   private _applyUngroupedRules(transportId: string): boolean {
-    if (this._ungrouped === "all") return true;
-    if (this._ungrouped === "none") return false;
-    return this._ungrouped.includes(transportId);
+    if (this._ungroupedBehavior === "all") return true;
+    if (this._ungroupedBehavior === "none") return false;
+    return this._ungroupedBehavior.includes(transportId);
   }
 
   /**

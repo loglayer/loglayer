@@ -207,7 +207,7 @@ Groups let you route logs to specific transports based on named categories, with
   activeGroups: ['database', 'auth'],
 
   // What happens to ungrouped logs (default: 'all')
-  ungrouped: 'all',  // 'all' | 'none' | string[]
+  ungroupedBehavior: 'all',  // 'all' | 'none' | string[]
 }
 ```
 
@@ -280,6 +280,6 @@ const log = new LogLayer({
     database: { transports: ['my-transport-id'], level: 'error' },
   },
   activeGroups: null,  // null = all groups active
-  ungrouped: 'all',    // ungrouped logs go to all transports
+  ungroupedBehavior: 'all',    // ungrouped logs go to all transports
 })
 ``` 
