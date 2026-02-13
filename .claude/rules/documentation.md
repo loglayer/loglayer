@@ -22,10 +22,16 @@ Required elements:
 
 ### Adding New Packages
 
-Add package to the appropriate list file:
-- `context-manager-list.md`, `plugin-list.md`, `transport-list.md`, `mixin-list.md`
+When adding a new package, you must:
 
-Add to sidebar config: `docs/.vitepress/config.mts`
+1. Add to the appropriate list partial in `docs/src/`:
+   - `context-managers/_partials/context-manager-list.md`
+   - `plugins/_partials/plugin-list.md`
+   - `transports/_partials/transport-list.md`
+   - `mixins/_partials/mixin-list.md`
+   - `integrations/_partials/integration-list.md`
+2. Add to sidebar config: `docs/.vitepress/config.mts`
+3. Create a changelog file in the appropriate `changelogs/` directory
 
 ### Configuration Tables
 
