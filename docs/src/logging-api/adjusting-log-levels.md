@@ -1,16 +1,57 @@
 ---
-title: Adjusting Log Levels Globally
-description: Learn how to adjust and control log levels in LogLayer.
+title: Adjusting Log Levels
+description: Learn how to adjust and control log levels in LogLayer across global, group, and transport tiers.
 ---
 
-# Adjusting Log Levels Globally
+# Adjusting Log Levels
 
-While certain transports and logging libraries may allow you to adjust log levels at an individual level, you can adjust log levels in LogLayer globally across all transports.
+LogLayer supports log level filtering at three tiers: globally, per-group, and per-transport.
 
-::: warning Global vs Transport Log Levels
-The log level methods described here set the global log level for LogLayer. However, individual transports and logging libraries may have their own log level settings that also apply. When both are set, the most restrictive level takes effect.
+## Log Level Evaluation Order
 
-For example, if LogLayer's global level is set to `debug`, but a transport or logging library has its level set to `error`, the transport will only send out `error` and `fatal` messages, even though the global level allows `debug` messages.
+Log levels can be configured at three independent tiers. A log entry must pass **all** applicable tiers to reach a transport:
+
+| Order | Tier | Configured via | Scope |
+|-------|------|----------------|-------|
+| 1 | **LogLayer (global)** | `setLevel()`, `enableLogging()` | All logs, checked first |
+| 2 | **Group** | `groups: { database: { level: 'error' } }` | Only grouped logs |
+| 3 | **Transport** | `new ConsoleTransport({ level: 'warn' })` | Per-transport, checked at dispatch |
+
+Each tier acts as an independent gate. If a log is blocked at any tier, it never reaches the next.
+
+::: tip
+When no groups are configured, only tiers 1 (global) and 3 (transport) apply. This is the default behavior.
+:::
+
+### Example
+
+```typescript
+import { LogLayer, ConsoleTransport, LogLevel } from 'loglayer'
+
+const log = new LogLayer({
+  transport: [
+    new ConsoleTransport({ id: 'console', logger: console, level: 'info' }),
+    new ConsoleTransport({ id: 'debug-file', logger: console, level: 'debug' }),
+  ],
+  groups: {
+    database: { transports: ['console', 'debug-file'], level: 'warn' },
+  },
+})
+
+log.setLevel(LogLevel.debug)
+```
+
+With this configuration:
+
+| Log call | Global (debug) | Group (warn) | Transport | Result |
+|----------|---------------|--------------|-----------|--------|
+| `log.info('hello')` | Pass | N/A (ungrouped) | console: Pass, debug-file: Pass | Both transports |
+| `log.withGroup('database').debug('query')` | Pass | Fail (debug < warn) | — | Dropped at group tier |
+| `log.withGroup('database').warn('slow query')` | Pass | Pass | console: Pass (warn >= info), debug-file: Pass | Both transports |
+| `log.trace('verbose')` | Fail (trace < debug) | — | — | Dropped at global tier |
+
+::: warning
+When multiple tiers are set, the most restrictive combination takes effect. A log must pass the global level, then the group level (if grouped), then the transport level.
 :::
 
 ## Log Level Hierarchy
