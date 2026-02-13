@@ -37,10 +37,13 @@ export interface ResolveLazyResult<T> {
  *
  * Created by the {@link lazy} function.
  *
+ * When the type parameter `T` is a `Promise`, log methods that receive this
+ * lazy value in metadata will return `Promise<void>` instead of `void`.
+ *
  * @see {@link https://loglayer.dev/logging-api/lazy-evaluation | Lazy Evaluation Docs}
  */
-export interface LazyLogValue {
-  [LAZY_SYMBOL]: () => any;
+export interface LazyLogValue<T = any> {
+  [LAZY_SYMBOL]: () => T;
 }
 
 /**
@@ -50,6 +53,10 @@ export interface LazyLogValue {
  * avoiding unnecessary computation for disabled log levels.
  *
  * Can be used in both `withContext()` and `withMetadata()` at the root level.
+ *
+ * When the callback returns a `Promise` (i.e., is an async function), the
+ * log method will return `Promise<void>` so TypeScript can track that the
+ * operation is asynchronous.
  *
  * Adapted from [LogTape's lazy evaluation](https://logtape.org/manual/lazy).
  *
@@ -72,7 +79,7 @@ export interface LazyLogValue {
  *
  * @see {@link https://loglayer.dev/logging-api/lazy-evaluation | Lazy Evaluation Docs}
  */
-export function lazy(fn: () => any): LazyLogValue {
+export function lazy<T>(fn: () => T): LazyLogValue<T> {
   return {
     [LAZY_SYMBOL]: fn,
   };

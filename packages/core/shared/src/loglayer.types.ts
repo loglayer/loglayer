@@ -1,9 +1,11 @@
 import type {
+  ContainsAsyncLazy,
   ErrorOnlyOpts,
   LogLayerCommonDataParams,
   LogLayerContext,
   LogLayerMetadata,
   LogLevelType,
+  LogReturnType,
   MessageDataType,
 } from "./common.types.js";
 import type { LogLayerPlugin } from "./plugin.types.js";
@@ -250,63 +252,72 @@ export interface LogLayerTransport<LogLibrary = any> {
 
 /**
  * Interface for implementing a LogLayer builder instance.
+ *
+ * @typeParam This - The concrete builder type for polymorphic chaining.
+ * @typeParam IsAsync - Whether the builder contains async lazy metadata.
+ *   When `true`, log methods return `Promise<void>`. When `false`, they return `void`.
+ *   When `boolean` (indeterminate), they return `void | Promise<void>`.
+ *
  * @see {@link https://loglayer.dev | LogLayer Documentation}
  */
-export interface ILogBuilder<This = ILogBuilder<any>> {
+export interface ILogBuilder<This = ILogBuilder<any, any>, IsAsync extends boolean = false> {
   /**
    * Sends a log message to the logging library under an info log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
+   * Returns a Promise when async lazy values are present in metadata.
    */
-  info(...messages: MessageDataType[]): void | Promise<void>;
+  info(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
    * Sends a log message to the logging library under the warn log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
+   * Returns a Promise when async lazy values are present in metadata.
    */
-  warn(...messages: MessageDataType[]): void | Promise<void>;
+  warn(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
    * Sends a log message to the logging library under the error log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
+   * Returns a Promise when async lazy values are present in metadata.
    */
-  error(...messages: MessageDataType[]): void | Promise<void>;
+  error(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
    * Sends a log message to the logging library under the debug log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
+   * Returns a Promise when async lazy values are present in metadata.
    */
-  debug(...messages: MessageDataType[]): void | Promise<void>;
+  debug(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
    * Sends a log message to the logging library under the trace log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
+   * Returns a Promise when async lazy values are present in metadata.
    */
-  trace(...messages: MessageDataType[]): void | Promise<void>;
+  trace(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
    * Sends a log message to the logging library under the fatal log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
+   * Returns a Promise when async lazy values are present in metadata.
    */
-  fatal(...messages: MessageDataType[]): void | Promise<void>;
+  fatal(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
-   * Specifies metadata to include with the log message
+   * Specifies metadata to include with the log message.
+   * If the metadata contains async lazy values, subsequent log methods will return `Promise<void>`.
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata?: LogLayerMetadata): This;
+  withMetadata<M extends LogLayerMetadata>(
+    metadata?: M,
+  ): ILogBuilder<This, ContainsAsyncLazy<NonNullable<M>> extends true ? true : IsAsync>;
   /**
    * Specifies an Error to include with the log message
    *
    * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
-  withError(error: any): This;
+  withError(error: any): ILogBuilder<This, IsAsync>;
   /**
    * Enable sending logs to the logging library.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  enableLogging(): This;
+  enableLogging(): ILogBuilder<This, IsAsync>;
   /**
    * All logging inputs are dropped and stops sending logs to the logging library.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  disableLogging(): This;
+  disableLogging(): ILogBuilder<This, IsAsync>;
 }
 
 /**
@@ -316,46 +327,41 @@ export interface ILogBuilder<This = ILogBuilder<any>> {
 export interface ILogLayer<This = ILogLayer<any>> {
   /**
    * Sends a log message to the logging library under an info log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  info(...messages: MessageDataType[]): void | Promise<void>;
+  info(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the warn log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  warn(...messages: MessageDataType[]): void | Promise<void>;
+  warn(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the error log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  error(...messages: MessageDataType[]): void | Promise<void>;
+  error(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the debug log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  debug(...messages: MessageDataType[]): void | Promise<void>;
+  debug(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the trace log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  trace(...messages: MessageDataType[]): void | Promise<void>;
+  trace(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the fatal log level.
-   * Returns a Promise when async lazy values are present in context or metadata.
    */
-  fatal(...messages: MessageDataType[]): void | Promise<void>;
+  fatal(...messages: MessageDataType[]): void;
   /**
-   * Specifies metadata to include with the log message
+   * Specifies metadata to include with the log message.
+   * If the metadata contains async lazy values, the builder's log methods will return `Promise<void>`.
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata?: LogLayerMetadata): ILogBuilder<any>;
+  withMetadata<M extends LogLayerMetadata>(metadata?: M): ILogBuilder<any, ContainsAsyncLazy<NonNullable<M>>>;
   /**
    * Specifies an Error to include with the log message
    *
    * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
-  withError(error: any): ILogBuilder<any>;
+  withError(error: any): ILogBuilder<any, false>;
   /**
    * Enable sending logs to the logging library.
    *
@@ -397,13 +403,17 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
-  errorOnly(error: any, opts?: ErrorOnlyOpts): void | Promise<void>;
+  errorOnly(error: any, opts?: ErrorOnlyOpts): void;
   /**
-   * Logs only metadata without a log message
+   * Logs only metadata without a log message.
+   * Returns a Promise when async lazy values are present in metadata.
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  metadataOnly(metadata?: LogLayerMetadata, logLevel?: LogLevelType): void | Promise<void>;
+  metadataOnly<M extends LogLayerMetadata>(
+    metadata?: M,
+    logLevel?: LogLevelType,
+  ): LogReturnType<ContainsAsyncLazy<NonNullable<M>>>;
 
   /**
    * Returns the context used.
@@ -599,8 +609,9 @@ export interface ILogLayer<This = ILogLayer<any>> {
    * systems that provide pre-formatted log entries.
    *
    * The raw entry will still go through all LogLayer processing.
+   * Returns a Promise when async lazy values are present in the entry's metadata.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  raw(rawEntry: RawLogEntry): void | Promise<void>;
+  raw<R extends RawLogEntry>(rawEntry: R): LogReturnType<ContainsAsyncLazy<NonNullable<R["metadata"]>>>;
 }

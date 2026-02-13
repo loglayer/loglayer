@@ -2,29 +2,30 @@ import { DefaultContextManager } from "@loglayer/context-manager";
 import { DefaultLogLevelManager } from "@loglayer/log-level-manager";
 import { type LogLayerPlugin, PluginCallbackType } from "@loglayer/plugin";
 import {
+  type ContainsAsyncLazy,
+  countLazyValues,
   type ErrorOnlyOpts,
+  hasPromiseValues,
   type IContextManager,
+  type ILogBuilder,
   type ILogLayer,
   type ILogLevelManager,
+  isLazy,
+  type LazyEvalFailure,
   type LogLayerContext,
   type LogLayerData,
   type LogLayerMetadata,
   LogLevel,
   type LogLevelType,
+  type LogReturnType,
   type MessageDataType,
   type RawLogEntry,
-} from "@loglayer/shared";
-import type { LogLayerTransport } from "@loglayer/transport";
-import { LogBuilder } from "./LogBuilder.js";
-import {
-  countLazyValues,
-  hasPromiseValues,
-  isLazy,
-  type LazyEvalFailure,
   replacePromiseValues,
   resolveLazyValues,
   resolvePromiseValues,
-} from "./lazy.js";
+} from "@loglayer/shared";
+import type { LogLayerTransport } from "@loglayer/transport";
+import { LogBuilder } from "./LogBuilder.js";
 import { mixinRegistry } from "./mixins.js";
 import { PluginManager } from "./PluginManager.js";
 import type { LogLayerConfig } from "./types/index.js";
@@ -306,8 +307,8 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  withMetadata(metadata?: LogLayerMetadata) {
-    return new LogBuilder(this).withMetadata(metadata);
+  withMetadata<M extends LogLayerMetadata>(metadata?: M): ILogBuilder<any, ContainsAsyncLazy<NonNullable<M>>> {
+    return new LogBuilder(this).withMetadata(metadata) as any;
   }
 
   /**
@@ -315,8 +316,8 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
-  withError(error: any) {
-    return new LogBuilder(this).withError(error);
+  withError(error: any): ILogBuilder<any, false> {
+    return new LogBuilder(this).withError(error) as any;
   }
 
   /**
@@ -484,7 +485,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
-  errorOnly(error: any, opts?: ErrorOnlyOpts): void | Promise<void> {
+  errorOnly(error: any, opts?: ErrorOnlyOpts): void {
     const logLevel = opts?.logLevel || LogLevel.error;
     if (!this.isLevelEnabled(logLevel)) return;
 
@@ -500,7 +501,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
       formatLogConf.params = [error.message];
     }
 
-    return this._formatLog(formatLogConf);
+    this._formatLog(formatLogConf);
   }
 
   /**
@@ -508,13 +509,16 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  metadataOnly(metadata?: LogLayerMetadata, logLevel: LogLevelType = LogLevel.info): void | Promise<void> {
-    if (!this.isLevelEnabled(logLevel)) return;
+  metadataOnly<M extends LogLayerMetadata>(
+    metadata?: M,
+    logLevel: LogLevelType = LogLevel.info,
+  ): LogReturnType<ContainsAsyncLazy<NonNullable<M>>> {
+    if (!this.isLevelEnabled(logLevel)) return undefined as any;
 
     const { muteMetadata, consoleDebug } = this._config;
 
     if (muteMetadata) {
-      return;
+      return undefined as any;
     }
 
     if (!metadata) {
@@ -522,7 +526,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
         console.debug("[LogLayer] metadataOnly was called with no metadata; dropping.");
       }
 
-      return;
+      return undefined as any;
     }
 
     let data: LogLayerMetadata | null = metadata;
@@ -535,7 +539,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
           console.debug("[LogLayer] Metadata was dropped due to plugin returning falsy value.");
         }
 
-        return;
+        return undefined as any;
       }
     }
 
@@ -544,7 +548,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
       metadata: data,
     };
 
-    return this._formatLog(config);
+    return this._formatLog(config) as any;
   }
 
   /**
@@ -555,10 +559,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  info(...messages: MessageDataType[]): void | Promise<void> {
+  info(...messages: MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.info)) return;
     this._formatMessage(messages);
-    return this._formatLog({ logLevel: LogLevel.info, params: messages });
+    this._formatLog({ logLevel: LogLevel.info, params: messages });
   }
 
   /**
@@ -566,10 +570,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  warn(...messages: MessageDataType[]): void | Promise<void> {
+  warn(...messages: MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.warn)) return;
     this._formatMessage(messages);
-    return this._formatLog({ logLevel: LogLevel.warn, params: messages });
+    this._formatLog({ logLevel: LogLevel.warn, params: messages });
   }
 
   /**
@@ -577,10 +581,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  error(...messages: MessageDataType[]): void | Promise<void> {
+  error(...messages: MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.error)) return;
     this._formatMessage(messages);
-    return this._formatLog({ logLevel: LogLevel.error, params: messages });
+    this._formatLog({ logLevel: LogLevel.error, params: messages });
   }
 
   /**
@@ -588,10 +592,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  debug(...messages: MessageDataType[]): void | Promise<void> {
+  debug(...messages: MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.debug)) return;
     this._formatMessage(messages);
-    return this._formatLog({ logLevel: LogLevel.debug, params: messages });
+    this._formatLog({ logLevel: LogLevel.debug, params: messages });
   }
 
   /**
@@ -599,10 +603,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  trace(...messages: MessageDataType[]): void | Promise<void> {
+  trace(...messages: MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.trace)) return;
     this._formatMessage(messages);
-    return this._formatLog({ logLevel: LogLevel.trace, params: messages });
+    this._formatLog({ logLevel: LogLevel.trace, params: messages });
   }
 
   /**
@@ -610,10 +614,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  fatal(...messages: MessageDataType[]): void | Promise<void> {
+  fatal(...messages: MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.fatal)) return;
     this._formatMessage(messages);
-    return this._formatLog({ logLevel: LogLevel.fatal, params: messages });
+    this._formatLog({ logLevel: LogLevel.fatal, params: messages });
   }
 
   /**
@@ -629,8 +633,8 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  raw(logEntry: RawLogEntry): void | Promise<void> {
-    if (!this.isLevelEnabled(logEntry.logLevel)) return;
+  raw<R extends RawLogEntry>(logEntry: R): LogReturnType<ContainsAsyncLazy<NonNullable<R["metadata"]>>> {
+    if (!this.isLevelEnabled(logEntry.logLevel)) return undefined as any;
 
     const formatLogConf: FormatLogParams = {
       logLevel: logEntry.logLevel,
@@ -642,7 +646,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
 
     this._formatMessage(logEntry.messages);
 
-    return this._formatLog(formatLogConf);
+    return this._formatLog(formatLogConf) as any;
   }
 
   /**

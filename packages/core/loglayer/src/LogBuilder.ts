@@ -9,7 +9,7 @@ import type { PluginManager } from "./PluginManager.js";
  * A class that contains methods to specify log metadata and an error and assembles
  * it to form a data object that can be passed into the transport.
  */
-export class LogBuilder implements ILogBuilder<LogBuilder> {
+export class LogBuilder implements ILogBuilder<LogBuilder, boolean> {
   private err: any;
   private metadata: LogLayerMetadata;
   private structuredLogger: LogLayer;
@@ -74,7 +74,7 @@ export class LogBuilder implements ILogBuilder<LogBuilder> {
 
     this.hasMetadata = true;
 
-    return this;
+    return this as any;
   }
 
   /**
@@ -84,7 +84,7 @@ export class LogBuilder implements ILogBuilder<LogBuilder> {
    */
   withError(error: any) {
     this.err = error;
-    return this;
+    return this as any;
   }
 
   /**
@@ -155,7 +155,7 @@ export class LogBuilder implements ILogBuilder<LogBuilder> {
    */
   disableLogging() {
     this.structuredLogger.disableLogging();
-    return this;
+    return this as any;
   }
 
   /**
@@ -163,7 +163,7 @@ export class LogBuilder implements ILogBuilder<LogBuilder> {
    */
   enableLogging() {
     this.structuredLogger.enableLogging();
-    return this;
+    return this as any;
   }
 
   private formatLog(logLevel: LogLevelType, params: any[]): void | Promise<void> {

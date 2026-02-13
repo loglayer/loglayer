@@ -49,7 +49,8 @@
       },
       "suspicious": {
         "noImplicitAnyLet": "off",
-        "noExplicitAny": "off"
+        "noExplicitAny": "off",
+        "noConfusingVoidType": "off"
       },
       "recommended": true
     }

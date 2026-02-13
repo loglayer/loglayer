@@ -104,7 +104,7 @@ log.withMetadata({
   data: lazy(() => JSON.stringify(largeObject)),
 }).debug('Processing result')
 
-// Async lazy (metadata only)
+// Async lazy (metadata only) — must be awaited
 await log.withMetadata({
   result: lazy(async () => await fetchResult()),
 }).info('Done')

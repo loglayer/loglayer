@@ -1,0 +1,28 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": [
+    "//"
+  ],
+  "tasks": {
+    "test": {
+      "dependsOn": [
+        "loglayer#build"
+      ],
+      "inputs": [
+        "*.ts",
+        "src/**",
+        "*.json"
+      ]
+    },
+    "verify-types": {
+      "dependsOn": [
+        "loglayer#build"
+      ],
+      "inputs": [
+        "*.ts",
+        "src/**",
+        "*.json"
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@internal/eslint-tests",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "verify-types": "tsc --noEmit",
+    "test": "eslint src/"
+  },
+  "dependencies": {
+    "loglayer": "workspace:*"
+  },
+  "devDependencies": {
+    "@internal/tsconfig": "workspace:*",
+    "@typescript-eslint/eslint-plugin": "8.55.0",
+    "@typescript-eslint/parser": "8.55.0",
+    "eslint": "10.0.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.55.0"
+  }
+}

@@ -9,7 +9,11 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Feb 13, 2026
 
-`loglayer` and `@loglayer/shared`:
+`v9.0.1`:
+
+- Log methods now return `void` by default instead of `void | Promise<void>`. Only when async lazy values are present in metadata do log methods return `Promise<void>`. This fixes [`@typescript-eslint/no-floating-promises`](https://typescript-eslint.io/rules/no-floating-promises/) lint errors for users not using async lazy.
+
+`v9`:
 
 - Added [`lazy()` function](/logging-api/lazy-evaluation) for dynamic context and metadata evaluation. Wrap any callback with `lazy()` to defer its evaluation until log time — the callback is only invoked when the log level is enabled, avoiding unnecessary computation for disabled log levels. This is useful for expensive operations (like serializing large objects) and for values that change between log calls (like request IDs or memory usage). Adapted from [LogTape's lazy evaluation](https://logtape.org/manual/lazy). Thank you to the LogTape team for answering questions around its implementation!
 - `lazy()` supports [async callbacks](/logging-api/lazy-evaluation#async-lazy-evaluation) in metadata for values that require asynchronous operations (database queries, API calls, async storage). When async lazy values are present in metadata, log methods return `Promise<void>` so you can `await` the log call to ensure values are resolved before dispatch. Async lazy is not supported in context.

@@ -27,9 +27,36 @@ Use `workspace:*` for internal package references:
 
 Run `pnpm install` after adding workspace dependencies.
 
+When installing a **new external package**, use the `/npm` skill to look up the latest version first, then pin that exact version in `package.json` (e.g. `"eslint": "10.0.0"`, not `"^10.0.0"`).
+
 ## New Package Versioning
 
 Set initial version to `0.0.1` in `package.json`. Changesets will handle bumping to `1.0.0` on first release.
+
+## Turbo Configuration
+
+Every package **must** have a `turbo.json` file. It extends the root config and declares task inputs, outputs, and dependencies.
+
+```json
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "clean": {},
+    "test": { "inputs": ["*.ts", "src/**", "*.json"] },
+    "lint": { "inputs": ["*.ts", "src/**", "*.json"] },
+    "verify-types": { "inputs": ["*.ts", "src/**", "*.json"] },
+    "build": {
+      "dependsOn": ["@internal/tsconfig#build", "loglayer#build"],
+      "inputs": ["src/**", "*.json"],
+      "outputs": ["dist/**"]
+    }
+  }
+}
+```
+
+- Add `dependsOn` entries in `build` for each `workspace:*` dependency (e.g. `@loglayer/shared#build`)
+- Packages without a build step (like test-only packages) can omit the `build` task
 
 ## Verification
 

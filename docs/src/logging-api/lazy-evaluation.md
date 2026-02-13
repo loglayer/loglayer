@@ -48,7 +48,7 @@ When using a [context manager](/context-managers/) that copies parent context to
 
 ### Async callbacks
 
-`lazy()` also accepts async callbacks in **metadata** for values that require asynchronous operations like database queries, API calls, or async storage lookups. When any metadata lazy callback returns a Promise, the log method returns a `Promise<void>` that you can `await` to ensure the async values are resolved before the log is dispatched.
+`lazy()` also accepts async callbacks in **metadata** for values that require asynchronous operations like database queries, API calls, or async storage lookups. When any metadata lazy callback returns a Promise, the log method returns a `Promise<void>` that you must `await` to ensure the async values are resolved before the log is dispatched.
 
 ```typescript
 await log.withMetadata({
