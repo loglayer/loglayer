@@ -338,7 +338,7 @@ importers:
         specifier: 25.2.0
         version: 25.2.0
       hono:
-        specifier: ^4.0.0
+        specifier: '>=4.0.0'
         version: 4.11.9
       loglayer:
         specifier: workspace:*
