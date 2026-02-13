@@ -13,6 +13,7 @@ import {
   type LogLevelType,
   type MessageDataType,
   type RawLogEntry,
+  resolveAsyncLazyValues,
   resolveLazyValues,
 } from "@loglayer/shared";
 import type { LogLayerTransport } from "@loglayer/transport";
@@ -435,7 +436,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/error-handling.html | Error Handling Docs}
    */
-  errorOnly(error: any, opts?: ErrorOnlyOpts) {
+  errorOnly(error: any, opts?: ErrorOnlyOpts): void | Promise<void> {
     const logLevel = opts?.logLevel || LogLevel.error;
     if (!this.isLevelEnabled(logLevel)) return;
 
@@ -451,7 +452,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
       formatLogConf.params = [error.message];
     }
 
-    this._formatLog(formatLogConf);
+    return this._formatLog(formatLogConf);
   }
 
   /**
@@ -459,7 +460,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html | Metadata Docs}
    */
-  metadataOnly(metadata?: LogLayerMetadata, logLevel: LogLevelType = LogLevel.info) {
+  metadataOnly(metadata?: LogLayerMetadata, logLevel: LogLevelType = LogLevel.info): void | Promise<void> {
     if (!this.isLevelEnabled(logLevel)) return;
 
     const { muteMetadata, consoleDebug } = this._config;
@@ -495,7 +496,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
       metadata: data,
     };
 
-    this._formatLog(config);
+    return this._formatLog(config);
   }
 
   /**
@@ -506,10 +507,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  info(...messages: MessageDataType[]) {
+  info(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.isLevelEnabled(LogLevel.info)) return;
     this._formatMessage(messages);
-    this._formatLog({ logLevel: LogLevel.info, params: messages });
+    return this._formatLog({ logLevel: LogLevel.info, params: messages });
   }
 
   /**
@@ -517,10 +518,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  warn(...messages: MessageDataType[]) {
+  warn(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.isLevelEnabled(LogLevel.warn)) return;
     this._formatMessage(messages);
-    this._formatLog({ logLevel: LogLevel.warn, params: messages });
+    return this._formatLog({ logLevel: LogLevel.warn, params: messages });
   }
 
   /**
@@ -528,10 +529,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  error(...messages: MessageDataType[]) {
+  error(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.isLevelEnabled(LogLevel.error)) return;
     this._formatMessage(messages);
-    this._formatLog({ logLevel: LogLevel.error, params: messages });
+    return this._formatLog({ logLevel: LogLevel.error, params: messages });
   }
 
   /**
@@ -539,10 +540,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  debug(...messages: MessageDataType[]) {
+  debug(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.isLevelEnabled(LogLevel.debug)) return;
     this._formatMessage(messages);
-    this._formatLog({ logLevel: LogLevel.debug, params: messages });
+    return this._formatLog({ logLevel: LogLevel.debug, params: messages });
   }
 
   /**
@@ -550,10 +551,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  trace(...messages: MessageDataType[]) {
+  trace(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.isLevelEnabled(LogLevel.trace)) return;
     this._formatMessage(messages);
-    this._formatLog({ logLevel: LogLevel.trace, params: messages });
+    return this._formatLog({ logLevel: LogLevel.trace, params: messages });
   }
 
   /**
@@ -561,10 +562,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  fatal(...messages: MessageDataType[]) {
+  fatal(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.isLevelEnabled(LogLevel.fatal)) return;
     this._formatMessage(messages);
-    this._formatLog({ logLevel: LogLevel.fatal, params: messages });
+    return this._formatLog({ logLevel: LogLevel.fatal, params: messages });
   }
 
   /**
@@ -580,7 +581,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  raw(logEntry: RawLogEntry) {
+  raw(logEntry: RawLogEntry): void | Promise<void> {
     if (!this.isLevelEnabled(logEntry.logLevel)) return;
 
     const formatLogConf: FormatLogParams = {
@@ -593,7 +594,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
 
     this._formatMessage(logEntry.messages);
 
-    this._formatLog(formatLogConf);
+    return this._formatLog(formatLogConf);
   }
 
   /**
@@ -769,10 +770,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
     }
   }
 
-  _formatLog({ logLevel, params = [], metadata = null, err, context = null }: FormatLogParams) {
-    const { errorSerializer, errorFieldInMetadata, muteContext, contextFieldName, metadataFieldName, errorFieldName } =
-      this._config;
-
+  _formatLog({ logLevel, params = [], metadata = null, err, context = null }: FormatLogParams): void | Promise<void> {
     // Use provided context or fall back to context manager
     // Resolve any lazy values at the root level
     const contextData = resolveLazyValues(context !== null ? context : this.contextManager.getContext());
@@ -781,6 +779,55 @@ export class LogLayer implements ILogLayer<LogLayer> {
     if (metadata) {
       metadata = resolveLazyValues(metadata) as LogLayerMetadata;
     }
+
+    // Check if any resolved values are Promises (from async lazy callbacks)
+    const contextHasPromises = hasPromiseValues(contextData);
+    const metadataHasPromises = metadata ? hasPromiseValues(metadata) : false;
+
+    if (contextHasPromises || metadataHasPromises) {
+      return this._resolveAsyncAndProcess(logLevel, params, contextData, metadata, err, context);
+    }
+
+    this._processLog(logLevel, params, contextData, metadata, err, context);
+  }
+
+  /**
+   * Resolves any Promise values in context/metadata (from async lazy callbacks)
+   * and then processes the log entry.
+   */
+  private async _resolveAsyncAndProcess(
+    logLevel: LogLevelType,
+    params: any[],
+    contextData: LogLayerContext,
+    metadata: LogLayerMetadata | null,
+    err: any,
+    context: LogLayerContext | null,
+  ): Promise<void> {
+    try {
+      const resolvedContext = await resolvePromiseValues(contextData);
+      const resolvedMetadata = metadata ? ((await resolvePromiseValues(metadata)) as LogLayerMetadata) : null;
+      this._processLog(logLevel, params, resolvedContext, resolvedMetadata, err, context);
+    } catch (error) {
+      if (this._config.consoleDebug) {
+        console.error("[LogLayer] Error resolving async lazy values:", error);
+      }
+    }
+  }
+
+  /**
+   * Processes a log entry after lazy values have been fully resolved.
+   * Handles data assembly, plugins, and transport dispatch.
+   */
+  private _processLog(
+    logLevel: LogLevelType,
+    params: any[],
+    contextData: LogLayerContext,
+    metadata: LogLayerMetadata | null,
+    err: any,
+    context: LogLayerContext | null,
+  ) {
+    const { errorSerializer, errorFieldInMetadata, muteContext, contextFieldName, metadataFieldName, errorFieldName } =
+      this._config;
 
     let hasObjData =
       !!metadata ||
@@ -965,4 +1012,43 @@ export class LogLayer implements ILogLayer<LogLayer> {
       });
     }
   }
+
+  async getContextAsync(options?: { evalLazy?: boolean }): Promise<LogLayerContext> {
+    const context = this.contextManager.getContext();
+    if (options?.evalLazy) {
+      return resolveAsyncLazyValues(context);
+    }
+    return context;
+  }
+}
+
+/**
+ * Checks if any values in a record are Promises.
+ * @internal
+ */
+function hasPromiseValues(obj: Record<string, any>): boolean {
+  for (const key of Object.keys(obj)) {
+    if (obj[key] instanceof Promise) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Resolves any Promise values in a record.
+ * Returns the original object if no Promises are found.
+ * @internal
+ */
+async function resolvePromiseValues<T extends Record<string, any>>(obj: T): Promise<T> {
+  const keys = Object.keys(obj);
+  const values = keys.map((key) => Promise.resolve(obj[key]));
+  const resolved = await Promise.all(values);
+
+  const result: Record<string, any> = {};
+  for (let i = 0; i < keys.length; i++) {
+    result[keys[i]] = resolved[i];
+  }
+
+  return result as T;
 }

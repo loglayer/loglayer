@@ -90,28 +90,28 @@ export class LogBuilder implements ILogBuilder<LogBuilder> {
   /**
    * Sends a log message to the logging library under an info log level.
    */
-  info(...messages: MessageDataType[]) {
+  info(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.info)) return;
     this.structuredLogger._formatMessage(messages);
-    this.formatLog(LogLevel.info, messages);
+    return this.formatLog(LogLevel.info, messages);
   }
 
   /**
    * Sends a log message to the logging library under the warn log level
    */
-  warn(...messages: MessageDataType[]) {
+  warn(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.warn)) return;
     this.structuredLogger._formatMessage(messages);
-    this.formatLog(LogLevel.warn, messages);
+    return this.formatLog(LogLevel.warn, messages);
   }
 
   /**
    * Sends a log message to the logging library under the error log level
    */
-  error(...messages: MessageDataType[]) {
+  error(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.error)) return;
     this.structuredLogger._formatMessage(messages);
-    this.formatLog(LogLevel.error, messages);
+    return this.formatLog(LogLevel.error, messages);
   }
 
   /**
@@ -120,10 +120,10 @@ export class LogBuilder implements ILogBuilder<LogBuilder> {
    * The logging library may or may not support multiple message parameters and only
    * the first parameter would be used.
    */
-  debug(...messages: MessageDataType[]) {
+  debug(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.debug)) return;
     this.structuredLogger._formatMessage(messages);
-    this.formatLog(LogLevel.debug, messages);
+    return this.formatLog(LogLevel.debug, messages);
   }
 
   /**
@@ -132,10 +132,10 @@ export class LogBuilder implements ILogBuilder<LogBuilder> {
    * The logging library may or may not support multiple message parameters and only
    * the first parameter would be used.
    */
-  trace(...messages: MessageDataType[]) {
+  trace(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.trace)) return;
     this.structuredLogger._formatMessage(messages);
-    this.formatLog(LogLevel.trace, messages);
+    return this.formatLog(LogLevel.trace, messages);
   }
 
   /**
@@ -144,10 +144,10 @@ export class LogBuilder implements ILogBuilder<LogBuilder> {
    * The logging library may or may not support multiple message parameters and only
    * the first parameter would be used.
    */
-  fatal(...messages: MessageDataType[]) {
+  fatal(...messages: MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.fatal)) return;
     this.structuredLogger._formatMessage(messages);
-    this.formatLog(LogLevel.fatal, messages);
+    return this.formatLog(LogLevel.fatal, messages);
   }
 
   /**
@@ -166,11 +166,16 @@ export class LogBuilder implements ILogBuilder<LogBuilder> {
     return this;
   }
 
-  private formatLog(logLevel: LogLevelType, params: any[]) {
+  private formatLog(logLevel: LogLevelType, params: any[]): void | Promise<void> {
     const { muteMetadata } = this.structuredLogger._config;
 
     const hasData = muteMetadata ? false : this.hasMetadata;
 
-    this.structuredLogger._formatLog({ logLevel, params, metadata: hasData ? this.metadata : null, err: this.err });
+    return this.structuredLogger._formatLog({
+      logLevel,
+      params,
+      metadata: hasData ? this.metadata : null,
+      err: this.err,
+    });
   }
 }

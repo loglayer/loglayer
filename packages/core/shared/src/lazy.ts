@@ -84,3 +84,48 @@ export function resolveLazyValues<T extends Record<string, any>>(obj: T): T {
 
   return result as T;
 }
+
+/**
+ * Resolves any lazy values in a record at the root level, supporting both
+ * synchronous and asynchronous lazy callbacks.
+ *
+ * All lazy callbacks are invoked and their results are normalized via
+ * `Promise.resolve()`, then resolved in parallel with `Promise.all()`.
+ *
+ * Returns a Promise that resolves to the original object if no lazy values
+ * are found (optimization).
+ * @internal
+ */
+export async function resolveAsyncLazyValues<T extends Record<string, any>>(obj: T): Promise<T> {
+  let hasLazy = false;
+
+  for (const key of Object.keys(obj)) {
+    if (isLazy(obj[key])) {
+      hasLazy = true;
+      break;
+    }
+  }
+
+  if (!hasLazy) return obj;
+
+  const keys = Object.keys(obj);
+  const entries: Array<{ key: string; value: Promise<any> }> = [];
+
+  for (const key of keys) {
+    const value = obj[key];
+    if (isLazy(value)) {
+      entries.push({ key, value: Promise.resolve(value[LAZY_SYMBOL]()) });
+    } else {
+      entries.push({ key, value: Promise.resolve(value) });
+    }
+  }
+
+  const resolved = await Promise.all(entries.map((e) => e.value));
+  const result: Record<string, any> = {};
+
+  for (let i = 0; i < keys.length; i++) {
+    result[entries[i].key] = resolved[i];
+  }
+
+  return result as T;
+}
