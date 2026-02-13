@@ -11,7 +11,6 @@ export type {
   ErrorOnlyOpts,
   ILogBuilder,
   ILogLayer,
-  LazyLogValue,
   LogLayerContext,
   LogLayerData,
   LogLayerMetadata,
@@ -26,9 +25,11 @@ export type {
   PluginShouldSendToLoggerParams,
   PluginTransformLogLevelParams,
 } from "@loglayer/shared";
-export { LogLevel, lazy } from "@loglayer/shared";
+export { LogLevel } from "@loglayer/shared";
 export { LogBuilder } from "./LogBuilder.js";
 export { LogLayer } from "./LogLayer.js";
+export type { LazyLogValue } from "./lazy.js";
+export { lazy } from "./lazy.js";
 export { MockLogBuilder } from "./MockLogBuilder.js";
 export { MockLogLayer } from "./MockLogLayer.js";
 export { useLogLayerMixin } from "./mixins.js";

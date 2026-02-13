@@ -13,11 +13,10 @@ import {
   type LogLevelType,
   type MessageDataType,
   type RawLogEntry,
-  resolveAsyncLazyValues,
-  resolveLazyValues,
 } from "@loglayer/shared";
 import type { LogLayerTransport } from "@loglayer/transport";
 import { LogBuilder } from "./LogBuilder.js";
+import { resolveAsyncLazyValues, resolveLazyValues } from "./lazy.js";
 import { mixinRegistry } from "./mixins.js";
 import { PluginManager } from "./PluginManager.js";
 import type { LogLayerConfig } from "./types/index.js";

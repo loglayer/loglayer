@@ -1,6 +1,7 @@
-import { LogLevel, lazy } from "@loglayer/shared";
+import { LogLevel } from "@loglayer/shared";
 import { describe, expect, it, vi } from "vitest";
 import { LogLayer } from "../LogLayer.js";
+import { lazy } from "../lazy.js";
 import { TestLoggingLibrary } from "../TestLoggingLibrary.js";
 import { ConsoleTransport } from "../transports/ConsoleTransport.js";
 import type { LogLayerConfig } from "../types/index.js";
