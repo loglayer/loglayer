@@ -6,7 +6,6 @@ on:
     branches:
       - master
     paths:
-      - 'docs/**'
       - 'packages/**'
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
