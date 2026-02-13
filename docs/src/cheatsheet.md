@@ -104,6 +104,31 @@ log
 
 See [Error Handling](/logging-api/error-handling) for serialization and configuration options.
 
+## Lazy Evaluation
+
+Defer expensive computations until log time. Callbacks are skipped when the log level is disabled.
+
+```typescript
+import { lazy } from 'loglayer'
+
+// Context: re-evaluated on every log call
+log.withContext({
+  memoryUsage: lazy(() => process.memoryUsage().heapUsed),
+})
+
+// Metadata: evaluated once for that log entry
+log.withMetadata({
+  data: lazy(() => JSON.stringify(largeObject)),
+}).debug('Processing result')
+
+// Async lazy (metadata only)
+await log.withMetadata({
+  result: lazy(async () => await fetchResult()),
+}).info('Done')
+```
+
+See [Lazy Evaluation](/logging-api/lazy-evaluation) for error handling, async details, and notes.
+
 ## Chaining
 
 ```typescript
@@ -297,6 +322,7 @@ See [Basic Logging](/logging-api/basic-logging#raw-logging) for context behavior
 | Create child | `log.child()` | New instance |
 | Set log level | `log.setLevel(LogLevel.warn)` | Persistent |
 | Add prefix | `log.withPrefix('[Tag]')` | New instance |
+| Lazy value | `lazy(() => expensiveCall())` | Per evaluation |
 | Log error only | `log.errorOnly(err)` | Single entry |
 | Log metadata only | `log.metadataOnly({...})` | Single entry |
 | Mock for tests | `new MockLogLayer()` | - |

@@ -34,6 +34,14 @@ When adding a new package, you must:
 3. Create a changelog file in the appropriate `changelogs/` directory
 4. Update `docs/src/public/llms.txt` and `docs/src/public/llms-full.txt` — these are manually maintained LLM-facing indexes of all documentation pages and must include any new package links
 
+### Adding New Features or API Changes
+
+When adding new features or changing existing APIs, you must also update:
+
+1. `docs/src/public/llms.txt` — concise LLM-facing reference; add a section and/or doc link for the feature
+2. `docs/src/public/llms-full.txt` — comprehensive LLM-facing reference; add a detailed section and/or doc link
+3. `docs/src/cheatsheet.md` — quick reference cheat sheet; add a section and a row to the quick reference table
+
 ### Configuration Tables
 
 | Name | Type | Default | Description |

@@ -256,6 +256,71 @@ log.withContext({ requestId: '123' })
    .error('Resource not found')
 ```
 
+## Lazy Evaluation
+
+The `lazy()` function defers evaluation of a value until log time. The callback is only invoked when the log level is enabled, and is re-evaluated on each log call. It works with both `withContext()` and `withMetadata()`.
+
+```typescript
+import { LogLayer, lazy } from 'loglayer'
+
+let currentUser = null
+
+// Context: evaluated fresh on each log call
+log.withContext({
+  memoryUsage: lazy(() => process.memoryUsage().heapUsed),
+  user: lazy(() => currentUser?.id ?? null),
+})
+
+log.info('Server status check')
+// Output: { memoryUsage: 52428800, user: null, msg: "Server status check" }
+
+currentUser = { id: 'user_123' }
+log.info('User action')
+// Output: { memoryUsage: 52432000, user: "user_123", msg: "User action" }
+
+// Metadata: same behavior
+log.withMetadata({
+  data: lazy(() => JSON.stringify(largeObject)),
+}).debug('Processing result')
+
+// Callbacks are NOT invoked when the log level is disabled
+log.setLevel('warn')
+log.debug('This will not trigger any lazy callbacks')
+```
+
+### Async Lazy (metadata only)
+
+`lazy()` also accepts async callbacks in metadata:
+
+```typescript
+await log.withMetadata({
+  result: lazy(async () => await fetchResult()),
+  dbStatus: lazy(async () => await db.ping()),
+}).info('Processing complete')
+```
+
+Async lazy callbacks are **not supported in context**. If you need async data in context, resolve it before calling `withContext()`.
+
+### Error Handling
+
+If a lazy callback throws or rejects, LogLayer replaces the value with `"[LazyEvalError]"`, still sends the log entry, and emits a separate error-level log.
+
+```typescript
+import { LAZY_EVAL_ERROR } from 'loglayer'
+
+// Check for failed lazy values
+if (someValue === LAZY_EVAL_ERROR) {
+  // Handle the error
+}
+```
+
+### Notes
+
+- `lazy()` can only be used at the root level of context and metadata objects
+- Async lazy callbacks are only supported in `withMetadata()`, not `withContext()`
+- `getContext()` resolves lazy values by default; use `getContext({ raw: true })` for raw wrappers
+- Child loggers inherit the lazy wrapper, not the resolved value
+
 ## Configuration
 
 ### Full Configuration Example
@@ -1085,6 +1150,7 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 - [Context](https://loglayer.dev/logging-api/context): Persistent context data
 - [Metadata](https://loglayer.dev/logging-api/metadata): Per-message structured data
 - [Error Handling](https://loglayer.dev/logging-api/error-handling): Error logging and serialization
+- [Lazy Evaluation](https://loglayer.dev/logging-api/lazy-evaluation): Deferred computation for context and metadata
 - [Child Loggers](https://loglayer.dev/logging-api/child-loggers): Creating inherited logger instances
 - [Log Level Control](https://loglayer.dev/logging-api/adjusting-log-levels): Managing log levels
 - [Transport Management](https://loglayer.dev/logging-api/transport-management): Dynamic transport control

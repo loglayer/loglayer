@@ -89,6 +89,29 @@ const log: ILogLayer = new LogLayer({
 })
 ```
 
+## Lazy Evaluation
+
+```typescript
+import { LogLayer, lazy } from 'loglayer'
+
+// Context: re-evaluated on every log call
+log.withContext({
+  memoryUsage: lazy(() => process.memoryUsage().heapUsed),
+})
+
+// Metadata: evaluated once for that log entry
+log.withMetadata({
+  data: lazy(() => JSON.stringify(largeObject)),
+}).debug('Processing result')
+
+// Async lazy (metadata only)
+await log.withMetadata({
+  result: lazy(async () => await fetchResult()),
+}).info('Done')
+
+// Callbacks are NOT invoked when the log level is disabled
+```
+
 ## Configuration
 
 ```typescript
@@ -199,6 +222,7 @@ Other: HTTP, Log File Rotation, OpenTelemetry
 - [Context](https://loglayer.dev/logging-api/context): Persistent context data
 - [Metadata](https://loglayer.dev/logging-api/metadata): Per-message structured data
 - [Error Handling](https://loglayer.dev/logging-api/error-handling): Error logging and serialization
+- [Lazy Evaluation](https://loglayer.dev/logging-api/lazy-evaluation): Deferred computation for context and metadata
 - [Child Loggers](https://loglayer.dev/logging-api/child-loggers): Creating inherited logger instances
 - [Log Level Control](https://loglayer.dev/logging-api/adjusting-log-levels): Managing log levels
 - [Transport Overview](https://loglayer.dev/transports/): All supported transports
