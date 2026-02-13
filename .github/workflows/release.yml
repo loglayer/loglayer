@@ -23,6 +23,8 @@ jobs:
   release:
     name: Releasing
     runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -59,6 +61,7 @@ jobs:
         run: turbo lint
 
       - name: Create Release Pull Request / Publish Packages
+        id: changesets
         uses: changesets/action@v1
         with:
           publish: pnpm run release
@@ -71,6 +74,7 @@ jobs:
 
   deploy-docs:
     needs: release
+    if: needs.release.outputs.published == 'true'
     name: Deploy Docs
     uses: ./.github/workflows/deploy-docs.yml
     permissions:

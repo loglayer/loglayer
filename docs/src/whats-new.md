@@ -9,6 +9,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Feb 12, 2026
 
+`@loglayer/fastify`:
+
+- Added new [Fastify Integration](/integrations/fastify) package. A Fastify plugin that provides request-scoped logging via `request.log` with automatic request/response logging, error handling, and request ID generation. Includes a `createLogLayerFastifyLogger` adapter for use with Fastify's `loggerInstance` option.
+
 `@loglayer/mixin-datadog-http-metrics`:
 
 - Added new [Datadog Metrics (HTTP) Mixin](/mixins/datadog-http-metrics) package. Sends metrics directly to Datadog's HTTP API using the [`datadog-metrics`](https://github.com/dbader/node-datadog-metrics) library. Provides a fluent builder API via `log.ddStats` for counters, gauges, histograms, and distributions. Unlike the [Hot-Shots mixin](/mixins/hot-shots) which uses StatsD/UDP, this mixin doesn't require a local StatsD agent.
@@ -20,6 +24,7 @@ description: Learn about the latest features and improvements in LogLayer
 `@loglayer/elysia`:
 
 - Added new [ElysiaJS integration](/integrations/elysia) package for request-scoped logging in [ElysiaJS](https://elysiajs.com) applications. Features automatic request/response logging following [pino-http](https://github.com/pinojs/pino-http) conventions, per-request child loggers with requestId context, configurable auto-logging with ignore patterns and custom log levels, and error handling. Supports both Bun and Node.js via `@elysiajs/node` adapter.
+- Updated README example to use correct `StructuredTransport` import.
 
 ## Feb 11, 2026
 
