@@ -21,7 +21,8 @@ pre-push:
         - lint
     "[docs] build":
       run: pnpm run docs:build
-      glob: "docs/**"
+      only:
+        - ref: "docs/**"
       tags:
         - docs
 
