@@ -32,6 +32,7 @@ When adding a new package, you must:
    - `integrations/_partials/integration-list.md`
 2. Add to sidebar config: `docs/.vitepress/config.mts`
 3. Create a changelog file in the appropriate `changelogs/` directory
+4. Update `docs/src/public/llms.txt` and `docs/src/public/llms-full.txt` — these are manually maintained LLM-facing indexes of all documentation pages and must include any new package links
 
 ### Configuration Tables
 
