@@ -44,6 +44,10 @@
 "@loglayer/transport-victoria-logs": major
 "@loglayer/transport-winston": major
 "@loglayer/mixin-hot-shots": major
+"@loglayer/mixin-datadog-http-metrics": major
+"@loglayer/elysia": major
+"@loglayer/fastify": major
+"@loglayer/hono": major
 ---
 
 Major version bump to align all packages with loglayer v9. No breaking changes in these packages; update your loglayer dependency to v9 for lazy evaluation support.

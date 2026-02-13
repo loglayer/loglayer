@@ -642,8 +642,8 @@ describe("async lazy evaluation", () => {
     });
   });
 
-  describe("async lazy with getContextAsync", () => {
-    it("should resolve async lazy values via getContextAsync", async () => {
+  describe("async lazy with getContext", () => {
+    it("should resolve async lazy values via getContext", async () => {
       const log = getLogger();
 
       log.withContext({
@@ -652,7 +652,7 @@ describe("async lazy evaluation", () => {
         plain: "static",
       });
 
-      const ctx = await log.getContextAsync({ evalLazy: true });
+      const ctx = await log.getContext({ evalLazy: true });
       expect(ctx).toStrictEqual({
         asyncVal: "resolved",
         syncVal: "also-resolved",
@@ -667,7 +667,7 @@ describe("async lazy evaluation", () => {
         plain: "static",
       });
 
-      const ctx = await log.getContextAsync();
+      const ctx = await log.getContext();
       expect(ctx).toStrictEqual({
         plain: "static",
       });

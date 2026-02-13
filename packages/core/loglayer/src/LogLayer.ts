@@ -16,7 +16,7 @@ import {
 } from "@loglayer/shared";
 import type { LogLayerTransport } from "@loglayer/transport";
 import { LogBuilder } from "./LogBuilder.js";
-import { resolveAsyncLazyValues, resolveLazyValues } from "./lazy.js";
+import { hasPromiseValues, resolveLazyValues, resolvePromiseValues } from "./lazy.js";
 import { mixinRegistry } from "./mixins.js";
 import { PluginManager } from "./PluginManager.js";
 import type { LogLayerConfig } from "./types/index.js";
@@ -213,10 +213,16 @@ export class LogLayer implements ILogLayer<LogLayer> {
     return this;
   }
 
-  getContext(options?: { evalLazy?: boolean }): LogLayerContext {
+  getContext(): LogLayerContext;
+  getContext(options: { evalLazy?: boolean }): LogLayerContext | Promise<LogLayerContext>;
+  getContext(options?: { evalLazy?: boolean }): LogLayerContext | Promise<LogLayerContext> {
     const context = this.contextManager.getContext();
     if (options?.evalLazy) {
-      return resolveLazyValues(context);
+      const resolved = resolveLazyValues(context);
+      if (hasPromiseValues(resolved)) {
+        return resolvePromiseValues(resolved);
+      }
+      return resolved;
     }
     return context;
   }
@@ -1011,43 +1017,4 @@ export class LogLayer implements ILogLayer<LogLayer> {
       });
     }
   }
-
-  async getContextAsync(options?: { evalLazy?: boolean }): Promise<LogLayerContext> {
-    const context = this.contextManager.getContext();
-    if (options?.evalLazy) {
-      return resolveAsyncLazyValues(context);
-    }
-    return context;
-  }
-}
-
-/**
- * Checks if any values in a record are Promises.
- * @internal
- */
-function hasPromiseValues(obj: Record<string, any>): boolean {
-  for (const key of Object.keys(obj)) {
-    if (obj[key] instanceof Promise) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
- * Resolves any Promise values in a record.
- * Returns the original object if no Promises are found.
- * @internal
- */
-async function resolvePromiseValues<T extends Record<string, any>>(obj: T): Promise<T> {
-  const keys = Object.keys(obj);
-  const values = keys.map((key) => Promise.resolve(obj[key]));
-  const resolved = await Promise.all(values);
-
-  const result: Record<string, any> = {};
-  for (let i = 0; i < keys.length; i++) {
-    result[keys[i]] = resolved[i];
-  }
-
-  return result as T;
 }

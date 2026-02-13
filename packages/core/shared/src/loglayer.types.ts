@@ -406,11 +406,19 @@ export interface ILogLayer<This = ILogLayer<any>> {
   metadataOnly(metadata?: LogLayerMetadata, logLevel?: LogLevelType): void | Promise<void>;
 
   /**
-   * Returns the context used
+   * Returns the context used.
+   * Without options, returns the raw context (including lazy wrappers).
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  getContext(options?: { evalLazy?: boolean }): LogLayerContext;
+  getContext(): LogLayerContext;
+  /**
+   * Returns the context used.
+   * With `evalLazy: true`, resolves lazy values. Returns a Promise when async lazy values are present.
+   *
+   * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
+   */
+  getContext(options: { evalLazy?: boolean }): LogLayerContext | Promise<LogLayerContext>;
 
   /**
    * Creates a new instance of LogLayer but with the initialization
@@ -600,11 +608,4 @@ export interface ILogLayer<This = ILogLayer<any>> {
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
   raw(rawEntry: RawLogEntry): void | Promise<void>;
-
-  /**
-   * Returns the context used, resolving any async lazy values.
-   *
-   * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
-   */
-  getContextAsync(options?: { evalLazy?: boolean }): Promise<LogLayerContext>;
 }

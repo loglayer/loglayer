@@ -13,8 +13,7 @@ description: Learn about the latest features and improvements in LogLayer
 
 - Added [`lazy()` function](/logging-api/lazy-evaluation) for dynamic context and metadata evaluation. Wrap any callback with `lazy()` to defer its evaluation until log time — the callback is only invoked when the log level is enabled, avoiding unnecessary computation for disabled log levels. This is useful for expensive operations (like serializing large objects) and for values that change between log calls (like request IDs or memory usage). Comes from [LogTape's lazy evaluation](https://logtape.org/manual/lazy). Thank you to the LogTape team for answering questions around its implementation!
 - `lazy()` now supports [async callbacks](/logging-api/lazy-evaluation#async-lazy-evaluation) for values that require asynchronous operations (database queries, API calls, async storage). When async lazy values are present, log methods return `Promise<void>` so you can `await log.info(...)` to ensure values are resolved before dispatch. When all lazy values are synchronous, there is zero overhead.
-- Added `getContextAsync({ evalLazy: true })` to resolve both sync and async lazy values in context.
-- `getContext()` now accepts an optional `{ evalLazy: true }` parameter to resolve any synchronous `lazy()` values in the returned context.
+- `getContext()` now accepts an optional `{ evalLazy: true }` parameter to resolve any `lazy()` values in the returned context. Returns a `Promise` when async lazy values are present.
 - Added `LogLevelPriority` and `LogLevelPriorityToNames` exports for mapping between log levels and their numeric priority values.
 
 ## Feb 12, 2026

@@ -90,9 +90,9 @@ log.info("test");
 await log.info("test");
 ```
 
-### Retrieving async context
+### Retrieving context with async lazy values
 
-Use `getContextAsync()` to resolve async lazy values in the current context:
+`getContext({ evalLazy: true })` resolves both sync and async lazy values. When async lazy values are present, it returns a `Promise`:
 
 ```typescript
 log.withContext({
@@ -100,7 +100,7 @@ log.withContext({
   static: "value",
 });
 
-const ctx = await log.getContextAsync({ evalLazy: true });
+const ctx = await log.getContext({ evalLazy: true });
 // { userId: "user_123", static: "value" }
 ```
 
@@ -125,5 +125,4 @@ await log.info("test");
 ## Notes
 
 - `lazy()` can only be used at the **root level** of context and metadata objects.
-- `getContext()` returns raw lazy wrappers by default. Use `getContext({ evalLazy: true })` to get synchronously resolved values.
-- Use `getContextAsync({ evalLazy: true })` to resolve both sync and async lazy values.
+- `getContext()` returns raw lazy wrappers by default. Use `getContext({ evalLazy: true })` to get resolved values — returns a `Promise` when async lazy values are present.
