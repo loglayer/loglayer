@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/transport-dynatrace",
   "description": "Dynatrace transport for the LogLayer logging library.",
-  "version": "2.1.16",
+  "version": "3.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",

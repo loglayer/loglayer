@@ -1,5 +1,17 @@
 # `@loglayer/plugin-filter` Changelog
 
+## 4.0.0
+
+### Major Changes
+
+- [`fc56d4b`](https://github.com/loglayer/loglayer/commit/fc56d4b0a989d464f4e727b27ee53cfe22835ddd) Thanks [@theogravity](https://github.com/theogravity)! - Major version bump to align all packages with loglayer v9. No breaking changes in these packages; update your loglayer dependency to v9 for lazy evaluation support.
+
+### Patch Changes
+
+- Updated dependencies [[`fc56d4b`](https://github.com/loglayer/loglayer/commit/fc56d4b0a989d464f4e727b27ee53cfe22835ddd), [`fc56d4b`](https://github.com/loglayer/loglayer/commit/fc56d4b0a989d464f4e727b27ee53cfe22835ddd)]:
+  - @loglayer/shared@4.0.0
+  - @loglayer/plugin@3.0.0
+
 ## 3.1.0
 
 ### Minor Changes
