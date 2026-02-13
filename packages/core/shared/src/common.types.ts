@@ -104,7 +104,7 @@ export type ContainsAsyncLazy<M> = M extends undefined | null
 export type LogReturnType<IsAsync extends boolean> = IsAsync extends true
   ? Promise<void>
   : IsAsync extends false
-    ? undefined
+    ? void
     : void | Promise<void>;
 
 export interface LogLayerCommonDataParams {
