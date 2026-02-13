@@ -44,7 +44,7 @@ log.setLevel("warn");
 log.debug("This won't trigger any lazy callbacks");
 ```
 
-Child loggers inherit the lazy wrapper, not the resolved value, so they always see the latest value.
+When using a [context manager](/context-managers/) that copies parent context to children (such as the default or linked context managers), child loggers inherit the lazy wrapper — not the resolved value — so they always see the latest value.
 
 ### Async callbacks
 
