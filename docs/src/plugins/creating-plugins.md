@@ -358,6 +358,10 @@ const metadataEnrichmentPlugin = {
 }
 ```
 
+::: tip Lazy values
+This hook runs at `withMetadata()` time, before lazy values are resolved. If metadata contains [`lazy()` values](/logging-api/lazy-evaluation), they will appear as wrapper objects rather than their evaluated values. Use [`onBeforeDataOut`](#onbeforedataout) if you need to inspect resolved values.
+:::
+
 ### onContextCalled
 
 Intercepts and modifies context when `withContext()` is called. This is useful for transforming or enriching context data before it's used in logs.
@@ -389,6 +393,10 @@ const contextEnrichmentPlugin = {
   }
 }
 ```
+
+::: tip Lazy values
+This hook runs at `withContext()` time, before lazy values are resolved. If context contains [`lazy()` values](/logging-api/lazy-evaluation), they will appear as wrapper objects rather than their evaluated values. Use [`onBeforeDataOut`](#onbeforedataout) if you need to inspect resolved values.
+:::
 
 ## Boilerplate / Template Code
 
