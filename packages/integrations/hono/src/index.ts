@@ -2,7 +2,7 @@ export { honoLogLayer } from "./plugin.js";
 export type {
   HonoAutoLoggingConfig,
   HonoLogLayerConfig,
-  HonoLogLayerEnv,
+  HonoLogLayerVariables,
   HonoRequestLoggingConfig,
   HonoResponseLoggingConfig,
 } from "./types.js";

@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { LogLayer, TestLoggingLibrary, TestTransport } from "loglayer";
 import { describe, expect, it } from "vitest";
-import { type HonoLogLayerEnv, honoLogLayer } from "../index.js";
+import { type HonoLogLayerVariables, honoLogLayer } from "../index.js";
 
 function createTestLogger() {
   const testLib = new TestLoggingLibrary();
@@ -25,7 +25,7 @@ describe("honoLogLayer", () => {
       const { logger } = createTestLogger();
       let logAvailable = false;
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger }));
       app.get("/test", (c) => {
         logAvailable = !!c.var.logger;
@@ -40,7 +40,7 @@ describe("honoLogLayer", () => {
     it("should log messages from route handlers", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: false }));
       app.get("/test", (c) => {
         c.var.logger.info("hello from route");
@@ -57,7 +57,7 @@ describe("honoLogLayer", () => {
     it("should support LogLayer withMetadata chaining", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: false }));
       app.get("/test", (c) => {
         c.var.logger.withMetadata({ userId: "42" }).info("fetching user");
@@ -76,7 +76,7 @@ describe("honoLogLayer", () => {
       const { logger } = createTestLogger();
       const contexts: Record<string, any>[] = [];
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: false }));
       app.get("/test", (c) => {
         contexts.push(c.var.logger.getContext());
@@ -94,7 +94,7 @@ describe("honoLogLayer", () => {
       const { logger } = createTestLogger();
       let capturedContext: Record<string, any> | undefined;
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: false }));
       app.post("/api/users", (c) => {
         capturedContext = c.var.logger.getContext();
@@ -110,7 +110,7 @@ describe("honoLogLayer", () => {
     it("should make logger available in app.onError for error logging", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: false }));
       app.onError((err, c) => {
         c.var.logger.withError(err).withMetadata({ url: c.req.path }).error("Request error");
@@ -132,7 +132,7 @@ describe("honoLogLayer", () => {
       const { logger } = createTestLogger();
       let capturedContext: Record<string, any> | undefined;
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: false }));
       app.get("/test", (c) => {
         capturedContext = c.var.logger.getContext();
@@ -149,7 +149,7 @@ describe("honoLogLayer", () => {
       const { logger } = createTestLogger();
       let capturedContext: Record<string, any> | undefined;
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, requestId: false, autoLogging: false }));
       app.get("/test", (c) => {
         capturedContext = c.var.logger.getContext();
@@ -164,7 +164,7 @@ describe("honoLogLayer", () => {
       const { logger } = createTestLogger();
       let capturedContext: Record<string, any> | undefined;
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(
         honoLogLayer({
           instance: logger,
@@ -185,7 +185,7 @@ describe("honoLogLayer", () => {
       const { logger } = createTestLogger();
       let capturedContext: Record<string, any> | undefined;
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(
         honoLogLayer({
           instance: logger,
@@ -210,7 +210,7 @@ describe("honoLogLayer", () => {
       const { logger } = createTestLogger();
       let capturedContext: Record<string, any> | undefined;
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(
         honoLogLayer({
           instance: logger,
@@ -236,7 +236,7 @@ describe("honoLogLayer", () => {
     it("should log incoming requests by default", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger }));
       app.get("/test", (c) => {
         return c.text("ok");
@@ -252,7 +252,7 @@ describe("honoLogLayer", () => {
     it("should include req metadata with method, url, and remoteAddress", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: { response: false } }));
       app.post("/api/users", (c) => {
         return c.text("ok");
@@ -271,7 +271,7 @@ describe("honoLogLayer", () => {
     it("should not include res or responseTime in request metadata", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: { response: false } }));
       app.get("/test", (c) => {
         return c.text("ok");
@@ -287,7 +287,7 @@ describe("honoLogLayer", () => {
     it("should disable request logging when request is false", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: { request: false, response: false } }));
       app.get("/test", (c) => {
         return c.text("ok");
@@ -300,7 +300,7 @@ describe("honoLogLayer", () => {
     it("should support custom request log level", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(
         honoLogLayer({
           instance: logger,
@@ -322,7 +322,7 @@ describe("honoLogLayer", () => {
     it("should log request completed by default", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger }));
       app.get("/test", (c) => {
         return c.text("ok");
@@ -338,7 +338,7 @@ describe("honoLogLayer", () => {
     it("should include req, res, and responseTime in response metadata", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: { request: false } }));
       app.get("/api/data", (c) => {
         return c.text("ok");
@@ -360,7 +360,7 @@ describe("honoLogLayer", () => {
     it("should disable response logging when response is false", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: { request: false, response: false } }));
       app.get("/test", (c) => {
         return c.text("ok");
@@ -373,7 +373,7 @@ describe("honoLogLayer", () => {
     it("should support custom response log level", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(
         honoLogLayer({
           instance: logger,
@@ -394,7 +394,7 @@ describe("honoLogLayer", () => {
     it("should use top-level logLevel as default for response", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(
         honoLogLayer({
           instance: logger,
@@ -417,7 +417,7 @@ describe("honoLogLayer", () => {
     it("should log both request and response by default", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger }));
       app.get("/test", (c) => {
         return c.text("ok");
@@ -439,7 +439,7 @@ describe("honoLogLayer", () => {
     it("should disable all auto-logging when autoLogging is false", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(honoLogLayer({ instance: logger, autoLogging: false }));
       app.get("/test", (c) => {
         return c.text("ok");
@@ -452,7 +452,7 @@ describe("honoLogLayer", () => {
     it("should respect ignore patterns for both request and response", async () => {
       const { logger, testLib } = createTestLogger();
 
-      const app = new Hono<HonoLogLayerEnv>();
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
       app.use(
         honoLogLayer({
           instance: logger,

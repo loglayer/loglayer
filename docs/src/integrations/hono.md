@@ -3,7 +3,7 @@ title: Hono Integration
 description: Integrate LogLayer with Hono for request-scoped logging
 ---
 
-# Hono Integration <Badge type="tip" text="Server" />
+# Hono Integration <Badge type="tip" text="Server" /> <Badge type="info" text="Bun" /> <Badge type="info" text="Deno" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fhono)](https://www.npmjs.com/package/@loglayer/hono)
 
@@ -39,7 +39,7 @@ import { serve } from "@hono/node-server";
 import { LogLayer } from "loglayer";
 import { serializeError } from "serialize-error";
 import { getSimplePrettyTerminal, moonlight } from "@loglayer/transport-simple-pretty-terminal";
-import { honoLogLayer, type HonoLogLayerEnv } from "@loglayer/hono";
+import { honoLogLayer, type HonoLogLayerVariables } from "@loglayer/hono";
 
 const log = new LogLayer({
   errorSerializer: serializeError,
@@ -49,7 +49,7 @@ const log = new LogLayer({
   }),
 });
 
-const app = new Hono<HonoLogLayerEnv>();
+const app = new Hono<{ Variables: HonoLogLayerVariables }>();
 app.use(honoLogLayer({ instance: log }));
 
 app.get("/", (c) => {
@@ -73,7 +73,12 @@ Each request automatically gets:
 The middleware sets a LogLayer child logger on `c.var.logger`, so you can use it directly in your route handlers with full access to LogLayer's API.
 
 ::: tip TypeScript Support
-The package exports a `HonoLogLayerEnv` type. Pass it as a generic to `new Hono<HonoLogLayerEnv>()` for full type safety with `c.var.logger`. This follows the idiomatic Hono Env generic pattern.
+The package exports a `HonoLogLayerVariables` type. Pass it as a generic to `new Hono<{ Variables: HonoLogLayerVariables }>()` for full type safety with `c.var.logger`. This composes with your own variables:
+
+```typescript
+type AppEnv = { Variables: HonoLogLayerVariables & { user: User } };
+const app = new Hono<AppEnv>();
+```
 :::
 
 ## Configuration

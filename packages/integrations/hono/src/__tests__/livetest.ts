@@ -3,7 +3,7 @@ import { getSimplePrettyTerminal, moonlight } from "@loglayer/transport-simple-p
 import { Hono } from "hono";
 import { LogLayer } from "loglayer";
 import { serializeError } from "serialize-error";
-import { type HonoLogLayerEnv, honoLogLayer } from "../index.js";
+import { type HonoLogLayerVariables, honoLogLayer } from "../index.js";
 
 const log = new LogLayer({
   errorSerializer: serializeError,
@@ -13,7 +13,7 @@ const log = new LogLayer({
   }),
 });
 
-const app = new Hono<HonoLogLayerEnv>();
+const app = new Hono<{ Variables: HonoLogLayerVariables }>();
 
 app.use(
   honoLogLayer({

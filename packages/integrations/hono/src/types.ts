@@ -1,23 +1,24 @@
-import type { Env } from "hono";
 import type { ILogLayer, LogLevelType } from "loglayer";
 
 /**
- * Hono Env type that includes the LogLayer logger variable.
- * Use this when creating your Hono app for full type safety with `c.var.logger`.
+ * Context variables added by the honoLogLayer middleware.
+ * Merge this into your Hono Env type for type safety with `c.var.logger`.
  *
  * @example
  * ```typescript
  * import { Hono } from "hono";
- * import { honoLogLayer, type HonoLogLayerEnv } from "@loglayer/hono";
+ * import { honoLogLayer, type HonoLogLayerVariables } from "@loglayer/hono";
  *
- * const app = new Hono<HonoLogLayerEnv>();
+ * const app = new Hono<{ Variables: HonoLogLayerVariables }>();
  * app.use(honoLogLayer({ instance: log }));
+ *
+ * // With other variables:
+ * type AppEnv = { Variables: HonoLogLayerVariables & { user: User } };
+ * const app = new Hono<AppEnv>();
  * ```
  */
-export type HonoLogLayerEnv = Env & {
-  Variables: {
-    logger: ILogLayer;
-  };
+export type HonoLogLayerVariables = {
+  logger: ILogLayer;
 };
 
 /**

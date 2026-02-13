@@ -17,13 +17,13 @@ npm install @loglayer/hono
 ```typescript
 import { Hono } from "hono";
 import { LogLayer, StructuredTransport } from "loglayer";
-import { honoLogLayer, type HonoLogLayerEnv } from "@loglayer/hono";
+import { honoLogLayer, type HonoLogLayerVariables } from "@loglayer/hono";
 
 const log = new LogLayer({
   transport: new StructuredTransport({ logger: console }),
 });
 
-const app = new Hono<HonoLogLayerEnv>();
+const app = new Hono<{ Variables: HonoLogLayerVariables }>();
 app.use(honoLogLayer({ instance: log }));
 
 app.get("/", (c) => {

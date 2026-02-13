@@ -3,6 +3,7 @@ import type { ILogLayer } from "loglayer";
 import type {
   HonoAutoLoggingConfig,
   HonoLogLayerConfig,
+  HonoLogLayerVariables,
   HonoRequestLoggingConfig,
   HonoResponseLoggingConfig,
 } from "./types.js";
@@ -83,9 +84,7 @@ export function honoLogLayer(config: HonoLogLayerConfig) {
   const responseLogLevel = responseConfig ? (responseConfig.logLevel ?? defaultLogLevel) : defaultLogLevel;
 
   return createMiddleware<{
-    Variables: {
-      logger: ILogLayer;
-    };
+    Variables: HonoLogLayerVariables;
   }>(async (c, next) => {
     const path = c.req.path;
     const context: Record<string, any> = {};
