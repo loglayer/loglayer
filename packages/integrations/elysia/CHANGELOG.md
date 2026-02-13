@@ -1,5 +1,11 @@
 # @loglayer/elysia
 
+## 1.0.2
+
+### Patch Changes
+
+- [#347](https://github.com/loglayer/loglayer/pull/347) [`f6b615c`](https://github.com/loglayer/loglayer/commit/f6b615cfe80a2766a448bee03a9dfdc1b97a70db) Thanks [@theogravity](https://github.com/theogravity)! - Updated README example to use correct `StructuredTransport` import from `loglayer`.
+
 ## 1.0.1
 
 ### Patch Changes
