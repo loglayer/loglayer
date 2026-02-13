@@ -5,11 +5,10 @@ description: Learn how to create a custom context manager for LogLayer
 
 # Creating Context Managers
 
-::: warning Using async libraries
-LogLayer is a synchronous library, so context managers must perform synchronous operations only. 
+::: warning Context managers must be synchronous
+All context manager methods (`setContext`, `appendContext`, `getContext`, etc.) must be synchronous. Context is resolved on every log call, so async operations in a context manager would force every log statement to be awaited.
 
-Integrations that use promises, callbacks, or other asynchronous patterns to set and fetch context data
-is not supported / recommended unless you are making those calls out-of-band for other reasons.
+If you need async data in context, resolve it first and then pass the result to `withContext()`. For deferred async values, use [`lazy()` in metadata](/logging-api/lazy-evaluation#async-callbacks) instead.
 :::
 
 ## The IContextManager Interface
