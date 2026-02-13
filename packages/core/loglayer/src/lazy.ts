@@ -49,7 +49,7 @@ export interface LazyLogValue {
  *
  * Can be used in both `withContext()` and `withMetadata()` at the root level.
  *
- * Comes from [LogTape's lazy evaluation](https://logtape.org/manual/lazy).
+ * Adapted from [LogTape's lazy evaluation](https://logtape.org/manual/lazy).
  *
  * @example
  * ```typescript

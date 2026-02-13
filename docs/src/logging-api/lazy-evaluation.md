@@ -8,7 +8,7 @@ description: Defer expensive computations and create dynamic context/metadata va
 The `lazy()` function defers evaluation of a value until log time. The callback is only invoked when the log level is enabled, and is re-evaluated on each log call. It works with both `withContext()` and `withMetadata()`.
 
 ::: tip Credit
-This feature comes from [LogTape's lazy evaluation](https://logtape.org/manual/lazy). Thank you to the LogTape team for answering questions around its implementation!
+This feature is adapted from [LogTape's lazy evaluation](https://logtape.org/manual/lazy). Thank you to the LogTape team for answering questions around its implementation!
 :::
 
 ## Usage
