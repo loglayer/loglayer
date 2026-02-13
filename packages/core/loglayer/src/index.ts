@@ -29,7 +29,7 @@ export { LogLevel } from "@loglayer/shared";
 export { LogBuilder } from "./LogBuilder.js";
 export { LogLayer } from "./LogLayer.js";
 export type { LazyLogValue } from "./lazy.js";
-export { LAZY_EVAL_ERROR, lazy } from "./lazy.js";
+export { LAZY_EVAL_ERROR, LAZY_SYMBOL, lazy } from "./lazy.js";
 export { MockLogBuilder } from "./MockLogBuilder.js";
 export { MockLogLayer } from "./MockLogLayer.js";
 export { useLogLayerMixin } from "./mixins.js";
