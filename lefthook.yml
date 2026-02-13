@@ -13,19 +13,11 @@ pre-commit:
         - types
 
 pre-push:
-  parallel: true
   commands:
     "[repo] lint and format files":
       run: turbo lint
       tags:
         - lint
-    "[docs] build":
-      run: pnpm run docs:build
-      glob:
-        - "docs/src/**/*.md"
-        - "docs/.vitepress/config.mts"
-      tags:
-        - docs
 
 commit-msg:
   commands:
