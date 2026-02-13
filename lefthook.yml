@@ -21,8 +21,9 @@ pre-push:
         - lint
     "[docs] build":
       run: pnpm run docs:build
-      only:
-        - ref: "docs/**"
+      glob:
+        - "docs/src/**/*.md"
+        - "docs/.vitepress/config.mts"
       tags:
         - docs
 

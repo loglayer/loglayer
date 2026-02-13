@@ -1108,9 +1108,9 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 - [Testing Plugins](https://loglayer.dev/plugins/testing-plugins): Test custom plugins
 - [Testing Mixins](https://loglayer.dev/mixins/testing-mixins): Test custom mixins
 - [Express Integration](https://loglayer.dev/example-integrations/express): Express.js example
-- [Fastify Integration](https://loglayer.dev/example-integrations/fastify): Fastify example
+- [Fastify Integration](https://loglayer.dev/integrations/fastify): Fastify integration with request-scoped logging
 - [Next.js Integration](https://loglayer.dev/example-integrations/nextjs): Next.js example
-- [Hono Integration](https://loglayer.dev/example-integrations/hono): Hono example
+- [Hono Integration](https://loglayer.dev/integrations/hono): Hono integration with request-scoped logging
 - [Async Context Tracking](https://loglayer.dev/example-integrations/async-context): AsyncLocalStorage example
 - [Bun Integration](https://loglayer.dev/example-integrations/bun): Bun example
 - [Deno Integration](https://loglayer.dev/example-integrations/deno): Deno example
