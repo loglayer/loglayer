@@ -85,6 +85,20 @@ export function isLazy(value: unknown): value is LazyLogValue {
 }
 
 /**
+ * Counts the number of lazy values in a record.
+ * @internal
+ */
+export function countLazyValues(obj: Record<string, any>): number {
+  let count = 0;
+  for (const key of Object.keys(obj)) {
+    if (isLazy(obj[key])) {
+      count++;
+    }
+  }
+  return count;
+}
+
+/**
  * Resolves any lazy values in a record at the root level.
  * Returns the original object if no lazy values are found (optimization).
  * If a lazy callback throws, the value is replaced with LAZY_EVAL_ERROR

@@ -418,7 +418,7 @@ describe("lazy evaluation", () => {
       );
     });
 
-    it("should resolve lazy values in getContext with evalLazy option", () => {
+    it("should resolve lazy values in getContext by default", () => {
       const log = getLogger();
 
       log.withContext({
@@ -426,17 +426,17 @@ describe("lazy evaluation", () => {
         static: "value",
       });
 
-      // Without evalLazy, returns raw lazy wrappers
-      const rawContext = log.getContext();
-      expect(rawContext.static).toBe("value");
-      expect(typeof rawContext.dynamic).toBe("object");
-
-      // With evalLazy, returns resolved values
-      const resolvedContext = log.getContext({ evalLazy: true });
+      // By default, returns resolved values
+      const resolvedContext = log.getContext();
       expect(resolvedContext).toStrictEqual({
         dynamic: "resolved",
         static: "value",
       });
+
+      // With raw: true, returns raw lazy wrappers
+      const rawContext = log.getContext({ raw: true });
+      expect(rawContext.static).toBe("value");
+      expect(typeof rawContext.dynamic).toBe("object");
     });
 
     it("should handle context with no lazy values efficiently (no copy)", () => {
@@ -759,8 +759,8 @@ describe("lazy evaluation error handling", () => {
     });
   });
 
-  describe("getContext with evalLazy error handling", () => {
-    it("should replace failed sync lazy value in getContext({ evalLazy: true }) with error indicator", () => {
+  describe("getContext error handling", () => {
+    it("should replace failed sync lazy value in getContext with error indicator", () => {
       const log = getLogger();
       const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
 
@@ -771,7 +771,7 @@ describe("lazy evaluation error handling", () => {
         ok: "static",
       });
 
-      const ctx = log.getContext({ evalLazy: true });
+      const ctx = log.getContext();
       expect(ctx).toStrictEqual({
         failing: LAZY_EVAL_ERROR,
         ok: "static",
@@ -813,7 +813,7 @@ describe("lazy evaluation error handling", () => {
       );
     });
 
-    it("should replace async lazy context values in getContext({ evalLazy: true })", () => {
+    it("should replace async lazy context values in getContext", () => {
       const log = getLogger();
       const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
 
@@ -822,7 +822,7 @@ describe("lazy evaluation error handling", () => {
         ok: "static",
       });
 
-      const ctx = log.getContext({ evalLazy: true });
+      const ctx = log.getContext();
       expect(ctx).toStrictEqual({
         asyncVal: LAZY_EVAL_ERROR,
         ok: "static",

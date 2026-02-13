@@ -17,7 +17,9 @@ import {
 import type { LogLayerTransport } from "@loglayer/transport";
 import { LogBuilder } from "./LogBuilder.js";
 import {
+  countLazyValues,
   hasPromiseValues,
+  isLazy,
   type LazyEvalFailure,
   replacePromiseValues,
   resolveLazyValues,
@@ -48,6 +50,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
   private contextManager: IContextManager;
   private logLevelManager: ILogLevelManager;
   private _isLoggingLazyError = false;
+  private _lazyContextCount = 0;
 
   /**
    * The configuration object used to initialize the logger.
@@ -99,6 +102,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
     }
 
     this.contextManager = contextManager;
+    this._lazyContextCount = contextManager.hasContextData() ? countLazyValues(contextManager.getContext()) : 0;
     return this;
   }
 
@@ -206,6 +210,15 @@ export class LogLayer implements ILogLayer<LogLayer> {
       }
     }
 
+    // Update lazy context count: account for new lazy values and overwritten lazy values
+    const currentContext = this.contextManager.getContext();
+    for (const key of Object.keys(updatedContext)) {
+      const wasLazy = key in currentContext && isLazy(currentContext[key]);
+      const nowLazy = isLazy(updatedContext[key]);
+      if (!wasLazy && nowLazy) this._lazyContextCount++;
+      else if (wasLazy && !nowLazy) this._lazyContextCount--;
+    }
+
     this.contextManager.appendContext(updatedContext);
     return this;
   }
@@ -215,29 +228,41 @@ export class LogLayer implements ILogLayer<LogLayer> {
    * If no keys are provided, all context data will be cleared.
    */
   clearContext(keys?: string | string[]) {
-    this.contextManager.clearContext(keys);
+    if (keys !== undefined && this._lazyContextCount > 0) {
+      const context = this.contextManager.getContext();
+      const keysToRemove = Array.isArray(keys) ? keys : [keys];
+      for (const key of keysToRemove) {
+        if (key in context && isLazy(context[key])) {
+          this._lazyContextCount--;
+        }
+      }
+    } else if (keys === undefined) {
+      this._lazyContextCount = 0;
+    }
 
+    this.contextManager.clearContext(keys);
     return this;
   }
 
-  getContext(options?: { evalLazy?: boolean }): LogLayerContext {
+  getContext(options?: { raw?: boolean }): LogLayerContext {
     const context = this.contextManager.getContext();
-    if (options?.evalLazy) {
-      const { resolved, errors } = resolveLazyValues(context);
-
-      if (errors) {
-        this._logLazyEvalErrors(errors, "context");
-      }
-
-      // Async lazy values are not supported in context — replace with error indicators
-      const { resolved: finalResolved, asyncKeys } = replacePromiseValues(resolved);
-      if (asyncKeys) {
-        this._logAsyncLazyContextErrors(asyncKeys);
-      }
-
-      return finalResolved;
+    if (options?.raw || this._lazyContextCount === 0) {
+      return context;
     }
-    return context;
+
+    const { resolved, errors } = resolveLazyValues(context);
+
+    if (errors) {
+      this._logLazyEvalErrors(errors, "context");
+    }
+
+    // Async lazy values are not supported in context — replace with error indicators
+    const { resolved: finalResolved, asyncKeys } = replacePromiseValues(resolved);
+    if (asyncKeys) {
+      this._logAsyncLazyContextErrors(asyncKeys);
+    }
+
+    return finalResolved;
   }
 
   /**
@@ -326,6 +351,11 @@ export class LogLayer implements ILogLayer<LogLayer> {
       parentLogger: this,
       childLogger,
     });
+
+    // Set lazy context count based on what the context manager actually gave the child
+    childLogger._lazyContextCount = childLogger.contextManager.hasContextData()
+      ? countLazyValues(childLogger.contextManager.getContext())
+      : 0;
 
     return childLogger;
   }
@@ -790,9 +820,29 @@ export class LogLayer implements ILogLayer<LogLayer> {
 
   _formatLog({ logLevel, params = [], metadata = null, err, context = null }: FormatLogParams): void | Promise<void> {
     // Use provided context or fall back to context manager
-    // Resolve any lazy values at the root level
-    const contextResult = resolveLazyValues(context !== null ? context : this.contextManager.getContext());
-    const contextData = contextResult.resolved;
+    const rawContext = context !== null ? context : this.contextManager.getContext();
+
+    // Resolve lazy values in context only if we know lazy values exist
+    // When context is provided directly (e.g. from raw()), always check since
+    // _lazyContextCount only tracks the context manager's context
+    let finalContextData: LogLayerContext;
+    if (this._lazyContextCount > 0 || context !== null) {
+      const contextResult = resolveLazyValues(rawContext);
+
+      if (contextResult.errors) {
+        this._logLazyEvalErrors(contextResult.errors, "context");
+      }
+
+      // Async lazy values are not supported in context — replace with error indicators
+      const { resolved, asyncKeys } = replacePromiseValues(contextResult.resolved);
+      if (asyncKeys) {
+        this._logAsyncLazyContextErrors(asyncKeys);
+      }
+
+      finalContextData = resolved;
+    } else {
+      finalContextData = rawContext;
+    }
 
     // Resolve any lazy values in metadata at the root level
     let metadataErrors: LazyEvalFailure[] | null = null;
@@ -802,18 +852,8 @@ export class LogLayer implements ILogLayer<LogLayer> {
       metadataErrors = metadataResult.errors;
     }
 
-    // Report any lazy evaluation errors
-    if (contextResult.errors) {
-      this._logLazyEvalErrors(contextResult.errors, "context");
-    }
     if (metadataErrors) {
       this._logLazyEvalErrors(metadataErrors, "metadata");
-    }
-
-    // Async lazy values are not supported in context — replace with error indicators
-    const { resolved: finalContextData, asyncKeys } = replacePromiseValues(contextData);
-    if (asyncKeys) {
-      this._logAsyncLazyContextErrors(asyncKeys);
     }
 
     // Check if any metadata values are Promises (from async lazy callbacks)

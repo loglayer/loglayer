@@ -108,4 +108,4 @@ This applies to both sync and async lazy callbacks.
 
 - `lazy()` can only be used at the **root level** of context and metadata objects.
 - Async lazy callbacks are only supported in `withMetadata()`, not `withContext()`.
-- `getContext()` returns raw lazy wrappers by default. Use `getContext({ evalLazy: true })` to get resolved values.
+- `getContext()` resolves lazy values by default. Use `getContext({ raw: true })` to get the raw lazy wrappers.

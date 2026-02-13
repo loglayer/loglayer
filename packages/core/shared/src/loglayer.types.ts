@@ -407,12 +407,13 @@ export interface ILogLayer<This = ILogLayer<any>> {
 
   /**
    * Returns the context used.
-   * With `evalLazy: true`, resolves synchronous lazy values.
+   * By default, lazy values are resolved before returning.
+   * Pass `{ raw: true }` to return the raw lazy wrappers without resolving them.
    * Async lazy values in context are not supported and will be replaced with `"[LazyEvalError]"`.
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  getContext(options?: { evalLazy?: boolean }): LogLayerContext;
+  getContext(options?: { raw?: boolean }): LogLayerContext;
 
   /**
    * Creates a new instance of LogLayer but with the initialization

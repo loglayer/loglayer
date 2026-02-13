@@ -115,10 +115,10 @@ const context = log.getContext()
 // Returns: { requestId: '123' }
 ```
 
-If your context contains [`lazy()` values](/logging-api/lazy-evaluation), pass `{ evalLazy: true }` to resolve them:
+If your context contains [`lazy()` values](/logging-api/lazy-evaluation), they are resolved by default. Pass `{ raw: true }` to get the raw lazy wrappers:
 
 ```typescript
-const context = log.getContext({ evalLazy: true })
+const rawContext = log.getContext({ raw: true })
 ```
 
 ### Clearing Context
