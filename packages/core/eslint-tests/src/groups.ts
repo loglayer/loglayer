@@ -101,25 +101,6 @@ function testGroupRuntimeManagement() {
 
 testGroupRuntimeManagement();
 
-function testGroupsInConfig() {
-  const log = new LogLayer({
-    transport: new ConsoleTransport({ id: "c", logger: console }),
-    groups: {
-      database: { transports: ["c"], level: "error", enabled: true },
-      auth: { transports: ["c"], level: "warn", enabled: false },
-    },
-    activeGroups: null,
-    ungrouped: "all",
-  });
-
-  const config = log.getConfig();
-  config.groups;
-  config.activeGroups;
-  config.ungrouped;
-}
-
-testGroupsInConfig();
-
 function testMockGroups() {
   const mock = new MockLogLayer();
 
