@@ -9,6 +9,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Feb 12, 2026
 
+`@loglayer/hono`:
+
+- Added new [Hono Integration](/integrations/hono) package. A Hono middleware that provides request-scoped logging via `c.var.logger` with automatic request/response logging, error handling, and request ID generation.
+
 `@loglayer/fastify`:
 
 - Added new [Fastify Integration](/integrations/fastify) package. A Fastify plugin that provides request-scoped logging via `request.log` with automatic request/response logging, error handling, and request ID generation. Includes a `createLogLayerFastifyLogger` adapter for use with Fastify's `loggerInstance` option.

@@ -13,7 +13,7 @@ module.exports = {
     {
       "label": "allow flexible peer dependency ranges",
       "dependencyTypes": ["peer"],
-      "packages": ["@loglayer/elysia", "@loglayer/fastify", "@loglayer/mixin-hot-shots"],
+      "packages": ["@loglayer/elysia", "@loglayer/fastify", "@loglayer/hono", "@loglayer/mixin-hot-shots"],
       "isIgnored": true
     },
     {

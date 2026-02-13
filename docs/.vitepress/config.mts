@@ -212,6 +212,7 @@ export default defineConfig({
         items: [
           { text: 'ElysiaJS', link: '/integrations/elysia' },
           { text: 'Fastify', link: '/integrations/fastify' },
+          { text: 'Hono', link: '/integrations/hono' },
         ]
       },
       {
@@ -221,7 +222,6 @@ export default defineConfig({
           { text: 'Bun', link: '/example-integrations/bun' },
           { text: 'Deno', link: '/example-integrations/deno' },
           { text: 'Express', link: '/example-integrations/express' },
-          { text: 'Hono', link: '/example-integrations/hono' },
           { text: 'Next.js', link: '/example-integrations/nextjs' },
         ]
       }
