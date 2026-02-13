@@ -19,6 +19,12 @@ pre-push:
       run: turbo lint
       tags:
         - lint
+    "[docs] build":
+      run: pnpm run docs:build
+      only:
+        - ref: "docs/**"
+      tags:
+        - docs
 
 commit-msg:
   commands:
