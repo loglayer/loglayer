@@ -290,22 +290,14 @@ log.debug('This will not trigger any lazy callbacks')
 
 ### Async Lazy (metadata only)
 
-`lazy()` also accepts async callbacks in metadata. TypeScript automatically infers `Promise<void>` return type when async lazy values are present:
+`lazy()` also accepts async callbacks in metadata. When async lazy values are present, the log method returns `Promise<void>` that must be awaited:
 
 ```typescript
-// Returns Promise<void> — must be awaited
 await log.withMetadata({
   result: lazy(async () => await fetchResult()),
   dbStatus: lazy(async () => await db.ping()),
 }).info('Processing complete')
-
-// Returns void — no await needed
-log.withMetadata({
-  data: lazy(() => JSON.stringify(obj)),
-}).info('sync')
 ```
-
-This automatic inference uses the `ContainsAsyncLazy` and `LogReturnType` type helpers (exported from `loglayer`), fixing `@typescript-eslint/no-floating-promises` lint errors for sync usage.
 
 Async lazy callbacks are **not supported in context**. If you need async data in context, resolve it before calling `withContext()`.
 

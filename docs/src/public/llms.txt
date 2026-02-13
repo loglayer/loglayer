@@ -104,13 +104,10 @@ log.withMetadata({
   data: lazy(() => JSON.stringify(largeObject)),
 }).debug('Processing result')
 
-// Async lazy (metadata only) — TypeScript infers Promise<void>
+// Async lazy (metadata only) — must be awaited
 await log.withMetadata({
   result: lazy(async () => await fetchResult()),
 }).info('Done')
-
-// Sync usage returns void — no await needed, no lint issues
-log.withMetadata({ data: lazy(() => 'sync') }).info('test')
 
 // Callbacks are NOT invoked when the log level is disabled
 ```

@@ -11,7 +11,7 @@ description: Learn about the latest features and improvements in LogLayer
 
 `v9.0.1`:
 
-- Log methods now return `void` by default instead of `void | Promise<void>`. Only when async lazy values are detected in metadata (via `lazy(async () => ...)`) do log methods return `Promise<void>`. This is inferred automatically by TypeScript using the new `ContainsAsyncLazy` and `LogReturnType` type helpers, fixing [`@typescript-eslint/no-floating-promises`](https://typescript-eslint.io/rules/no-floating-promises/) lint errors for users not using async lazy. See [TypeScript Tips](/logging-api/typescript#conditional-return-types-for-async-lazy) for details.
+- Log methods now return `void` by default instead of `void | Promise<void>`. Only when async lazy values are present in metadata do log methods return `Promise<void>`. This fixes [`@typescript-eslint/no-floating-promises`](https://typescript-eslint.io/rules/no-floating-promises/) lint errors for users not using async lazy.
 
 `v9`:
 

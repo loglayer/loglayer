@@ -48,30 +48,15 @@ When using a [context manager](/context-managers/) that copies parent context to
 
 ### Async callbacks
 
-`lazy()` also accepts async callbacks in **metadata** for values that require asynchronous operations like database queries, API calls, or async storage lookups. When any metadata lazy callback returns a Promise, TypeScript automatically infers that the log method returns `Promise<void>` instead of `void`, so you must `await` it.
+`lazy()` also accepts async callbacks in **metadata** for values that require asynchronous operations like database queries, API calls, or async storage lookups. When any metadata lazy callback returns a Promise, the log method returns a `Promise<void>` that you must `await` to ensure the async values are resolved before the log is dispatched.
 
 ```typescript
-// TypeScript infers Promise<void> — must be awaited
 await log.withMetadata({
   result: lazy(async () => await fetchResult()),
   dbStatus: lazy(async () => await db.ping()),
 }).info("Processing complete");
 // Output: { result: "...", dbStatus: "ok", msg: "Processing complete" }
-
-// Sync lazy — returns void, no await needed
-log.withMetadata({
-  data: lazy(() => JSON.stringify(largeObject)),
-}).info("Processing");
 ```
-
-::: tip Automatic return type inference
-TypeScript automatically determines the return type based on whether your metadata contains async lazy values:
-- `lazy(() => "sync")` in metadata → log methods return `void`
-- `lazy(async () => "async")` in metadata → log methods return `Promise<void>`
-- No lazy values → log methods return `void`
-
-This means `@typescript-eslint/no-floating-promises` only triggers when you actually use async lazy values — no lint noise for sync usage.
-:::
 
 ::: warning Async lazy is only supported in metadata
 Async lazy callbacks are **not supported in context**. Because context is evaluated on every log call, using async lazy in context would force every `log.info()`, `log.warn()`, etc. to return a Promise — requiring `await` on every log statement throughout your codebase.

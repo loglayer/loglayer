@@ -65,30 +65,6 @@ LogLevelPriorityToNames[10] // "trace"
 LogLevelPriorityToNames[50] // "error"
 ```
 
-## Conditional return types for async lazy
-
-When using [`lazy()`](/logging-api/lazy-evaluation) with async callbacks in metadata, TypeScript automatically narrows log method return types:
-
-```typescript
-import { LogLayer, lazy, ConsoleTransport } from 'loglayer'
-
-const log = new LogLayer({
-  transport: new ConsoleTransport({ logger: console }),
-})
-
-// Returns void — no await needed
-log.info('hello')
-log.withMetadata({ x: lazy(() => 1) }).info('sync lazy')
-log.errorOnly(new Error('test'))
-log.metadataOnly({ key: 'value' })
-
-// Returns Promise<void> — must be awaited
-await log.withMetadata({ x: lazy(async () => fetchValue()) }).info('async lazy')
-await log.metadataOnly({ x: lazy(async () => fetchValue()) })
-```
-
-This uses the `ContainsAsyncLazy<M>` and `LogReturnType<IsAsync>` type helpers (exported from `loglayer`) to infer whether metadata contains async lazy values. If it does, the return type is `Promise<void>`; otherwise it's `void`.
-
 ## Override types for custom IntelliSense
 
 You can extend LogLayer's base types to provide custom IntelliSense for your specific use case. This is particularly useful when you have consistent fields across your application.
