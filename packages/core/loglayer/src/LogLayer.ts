@@ -16,7 +16,13 @@ import {
 } from "@loglayer/shared";
 import type { LogLayerTransport } from "@loglayer/transport";
 import { LogBuilder } from "./LogBuilder.js";
-import { hasPromiseValues, resolveLazyValues, resolvePromiseValues } from "./lazy.js";
+import {
+  hasPromiseValues,
+  type LazyEvalFailure,
+  replacePromiseValues,
+  resolveLazyValues,
+  resolvePromiseValues,
+} from "./lazy.js";
 import { mixinRegistry } from "./mixins.js";
 import { PluginManager } from "./PluginManager.js";
 import type { LogLayerConfig } from "./types/index.js";
@@ -41,6 +47,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
   private singleTransport: LogLayerTransport | null;
   private contextManager: IContextManager;
   private logLevelManager: ILogLevelManager;
+  private _isLoggingLazyError = false;
 
   /**
    * The configuration object used to initialize the logger.
@@ -213,16 +220,22 @@ export class LogLayer implements ILogLayer<LogLayer> {
     return this;
   }
 
-  getContext(): LogLayerContext;
-  getContext(options: { evalLazy?: boolean }): LogLayerContext | Promise<LogLayerContext>;
-  getContext(options?: { evalLazy?: boolean }): LogLayerContext | Promise<LogLayerContext> {
+  getContext(options?: { evalLazy?: boolean }): LogLayerContext {
     const context = this.contextManager.getContext();
     if (options?.evalLazy) {
-      const resolved = resolveLazyValues(context);
-      if (hasPromiseValues(resolved)) {
-        return resolvePromiseValues(resolved);
+      const { resolved, errors } = resolveLazyValues(context);
+
+      if (errors) {
+        this._logLazyEvalErrors(errors, "context");
       }
-      return resolved;
+
+      // Async lazy values are not supported in context — replace with error indicators
+      const { resolved: finalResolved, asyncKeys } = replacePromiseValues(resolved);
+      if (asyncKeys) {
+        this._logAsyncLazyContextErrors(asyncKeys);
+      }
+
+      return finalResolved;
     }
     return context;
   }
@@ -778,27 +791,44 @@ export class LogLayer implements ILogLayer<LogLayer> {
   _formatLog({ logLevel, params = [], metadata = null, err, context = null }: FormatLogParams): void | Promise<void> {
     // Use provided context or fall back to context manager
     // Resolve any lazy values at the root level
-    const contextData = resolveLazyValues(context !== null ? context : this.contextManager.getContext());
+    const contextResult = resolveLazyValues(context !== null ? context : this.contextManager.getContext());
+    const contextData = contextResult.resolved;
 
     // Resolve any lazy values in metadata at the root level
+    let metadataErrors: LazyEvalFailure[] | null = null;
     if (metadata) {
-      metadata = resolveLazyValues(metadata) as LogLayerMetadata;
+      const metadataResult = resolveLazyValues(metadata);
+      metadata = metadataResult.resolved as LogLayerMetadata;
+      metadataErrors = metadataResult.errors;
     }
 
-    // Check if any resolved values are Promises (from async lazy callbacks)
-    const contextHasPromises = hasPromiseValues(contextData);
+    // Report any lazy evaluation errors
+    if (contextResult.errors) {
+      this._logLazyEvalErrors(contextResult.errors, "context");
+    }
+    if (metadataErrors) {
+      this._logLazyEvalErrors(metadataErrors, "metadata");
+    }
+
+    // Async lazy values are not supported in context — replace with error indicators
+    const { resolved: finalContextData, asyncKeys } = replacePromiseValues(contextData);
+    if (asyncKeys) {
+      this._logAsyncLazyContextErrors(asyncKeys);
+    }
+
+    // Check if any metadata values are Promises (from async lazy callbacks)
     const metadataHasPromises = metadata ? hasPromiseValues(metadata) : false;
 
-    if (contextHasPromises || metadataHasPromises) {
-      return this._resolveAsyncAndProcess(logLevel, params, contextData, metadata, err, context);
+    if (metadataHasPromises) {
+      return this._resolveAsyncAndProcess(logLevel, params, finalContextData, metadata, err, context);
     }
 
-    this._processLog(logLevel, params, contextData, metadata, err, context);
+    this._processLog(logLevel, params, finalContextData, metadata, err, context);
   }
 
   /**
-   * Resolves any Promise values in context/metadata (from async lazy callbacks)
-   * and then processes the log entry.
+   * Resolves any Promise values in metadata (from async lazy callbacks)
+   * and then processes the log entry. Context is already fully resolved.
    */
   private async _resolveAsyncAndProcess(
     logLevel: LogLevelType,
@@ -808,14 +838,81 @@ export class LogLayer implements ILogLayer<LogLayer> {
     err: any,
     context: LogLayerContext | null,
   ): Promise<void> {
-    try {
-      const resolvedContext = await resolvePromiseValues(contextData);
-      const resolvedMetadata = metadata ? ((await resolvePromiseValues(metadata)) as LogLayerMetadata) : null;
-      this._processLog(logLevel, params, resolvedContext, resolvedMetadata, err, context);
-    } catch (error) {
-      if (this._config.consoleDebug) {
-        console.error("[LogLayer] Error resolving async lazy values:", error);
+    let resolvedMetadata: LogLayerMetadata | null = null;
+    if (metadata) {
+      const metadataResult = await resolvePromiseValues(metadata);
+      resolvedMetadata = metadataResult.resolved as LogLayerMetadata;
+      if (metadataResult.errors) {
+        this._logLazyEvalErrors(metadataResult.errors, "metadata");
       }
+    }
+
+    this._processLog(logLevel, params, contextData, resolvedMetadata, err, context);
+  }
+
+  /**
+   * Logs error entries for lazy evaluation failures.
+   * Calls _processLog directly to bypass lazy evaluation and prevent recursion.
+   */
+  private _logLazyEvalErrors(failures: LazyEvalFailure[], source: "context" | "metadata") {
+    if (this._isLoggingLazyError) {
+      for (const f of failures) {
+        console.error(`[LogLayer] Lazy evaluation error in ${source} key "${f.key}":`, f.error);
+      }
+      return;
+    }
+
+    this._isLoggingLazyError = true;
+
+    try {
+      for (const failure of failures) {
+        const errorMessage = failure.error instanceof Error ? failure.error.message : String(failure.error);
+
+        this._processLog(
+          LogLevel.error,
+          [`[LogLayer] Lazy evaluation failed for ${source} key "${failure.key}": ${errorMessage}`],
+          {},
+          null,
+          failure.error instanceof Error ? failure.error : undefined,
+          {},
+        );
+      }
+    } finally {
+      this._isLoggingLazyError = false;
+    }
+  }
+
+  /**
+   * Logs error entries for async lazy values found in context.
+   * Async lazy values are only supported in metadata, not context.
+   */
+  private _logAsyncLazyContextErrors(keys: string[]) {
+    if (this._isLoggingLazyError) {
+      for (const key of keys) {
+        console.error(
+          `[LogLayer] Async lazy values are not supported in context (key "${key}"). Use async lazy only in metadata.`,
+        );
+      }
+      return;
+    }
+
+    this._isLoggingLazyError = true;
+
+    try {
+      for (const key of keys) {
+        this._processLog(
+          LogLevel.error,
+          [
+            `[LogLayer] Async lazy values are not supported in context (key "${key}"). Use async lazy only in metadata.`,
+          ],
+          {},
+          null,
+          undefined,
+          {},
+        );
+      }
+    } finally {
+      this._isLoggingLazyError = false;
     }
   }
 

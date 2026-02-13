@@ -1,7 +1,7 @@
 import { LogLevel } from "@loglayer/shared";
 import { describe, expect, it, vi } from "vitest";
 import { LogLayer } from "../LogLayer.js";
-import { lazy } from "../lazy.js";
+import { LAZY_EVAL_ERROR, lazy } from "../lazy.js";
 import { TestLoggingLibrary } from "../TestLoggingLibrary.js";
 import { ConsoleTransport } from "../transports/ConsoleTransport.js";
 import type { LogLayerConfig } from "../types/index.js";
@@ -460,90 +460,6 @@ describe("lazy evaluation", () => {
 });
 
 describe("async lazy evaluation", () => {
-  describe("async lazy context", () => {
-    it("should resolve async lazy values in context when awaited", async () => {
-      const log = getLogger();
-      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
-
-      log.withContext({
-        userId: lazy(async () => "user-123"),
-        static: "value",
-      });
-
-      await log.info("test");
-      expect(genericLogger.popLine()).toStrictEqual(
-        expect.objectContaining({
-          level: LogLevel.info,
-          data: [{ userId: "user-123", static: "value" }, "test"],
-        }),
-      );
-    });
-
-    it("should resolve async lazy values that perform actual async work", async () => {
-      const log = getLogger();
-      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
-
-      log.withContext({
-        data: lazy(async () => {
-          return new Promise((resolve) => setTimeout(() => resolve("delayed-value"), 10));
-        }),
-      });
-
-      await log.info("test");
-      expect(genericLogger.popLine()).toStrictEqual(
-        expect.objectContaining({
-          level: LogLevel.info,
-          data: [{ data: "delayed-value" }, "test"],
-        }),
-      );
-    });
-
-    it("should not evaluate async lazy context values when log level is disabled", async () => {
-      const log = getLogger({ enabled: false });
-      const fn = vi.fn(async () => "should-not-run");
-
-      log.withContext({
-        value: lazy(fn),
-      });
-
-      await log.info("test");
-      expect(fn).not.toHaveBeenCalled();
-    });
-
-    it("should not evaluate async lazy context when individual level is disabled", async () => {
-      const log = getLogger();
-      log.disableIndividualLevel(LogLevel.debug);
-      const fn = vi.fn(async () => "should-not-run");
-
-      log.withContext({
-        value: lazy(fn),
-      });
-
-      await log.debug("test");
-      expect(fn).not.toHaveBeenCalled();
-    });
-
-    it("should inherit async lazy context in child loggers", async () => {
-      const log = getLogger();
-      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
-
-      let counter = 0;
-      log.withContext({
-        count: lazy(async () => ++counter),
-      });
-
-      const child = log.child();
-
-      await child.info("from child");
-      expect(genericLogger.popLine()).toStrictEqual(
-        expect.objectContaining({
-          level: LogLevel.info,
-          data: [{ count: 1 }, "from child"],
-        }),
-      );
-    });
-  });
-
   describe("async lazy metadata", () => {
     it("should resolve async lazy metadata when awaited", async () => {
       const log = getLogger();
@@ -577,105 +493,41 @@ describe("async lazy evaluation", () => {
     });
   });
 
-  describe("mixed sync and async lazy", () => {
-    it("should resolve both sync and async lazy values together", async () => {
+  describe("async lazy error handling", () => {
+    it("should replace failed async lazy metadata value with error indicator and still log", async () => {
       const log = getLogger();
       const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
-
-      log.withContext({
-        syncValue: lazy(() => "sync"),
-        asyncValue: lazy(async () => "async"),
-        static: "plain",
-      });
-
-      await log.info("test");
-      expect(genericLogger.popLine()).toStrictEqual(
-        expect.objectContaining({
-          level: LogLevel.info,
-          data: [{ syncValue: "sync", asyncValue: "async", static: "plain" }, "test"],
-        }),
-      );
-    });
-
-    it("should handle async context with sync metadata", async () => {
-      const log = getLogger();
-      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
-
-      log.withContext({
-        ctxValue: lazy(async () => "async-ctx"),
-      });
 
       await log
         .withMetadata({
-          metaValue: lazy(() => "sync-meta"),
+          failing: lazy(async () => {
+            throw new Error("async failure");
+          }),
+          ok: lazy(async () => "fine"),
         })
         .info("test");
 
-      expect(genericLogger.popLine()).toStrictEqual(
+      // Error log should be emitted first
+      const errorLine = genericLogger.lines[0];
+      expect(errorLine.level).toBe(LogLevel.error);
+      expect(errorLine.data).toEqual(
+        expect.arrayContaining([expect.stringContaining('Lazy evaluation failed for metadata key "failing"')]),
+      );
+
+      // Original log should still be sent with error indicator
+      const originalLine = genericLogger.lines[1];
+      expect(originalLine.level).toBe(LogLevel.info);
+      expect(originalLine.data[0]).toStrictEqual(
         expect.objectContaining({
-          level: LogLevel.info,
-          data: [{ ctxValue: "async-ctx", metaValue: "sync-meta" }, "test"],
+          failing: LAZY_EVAL_ERROR,
+          ok: "fine",
         }),
       );
-    });
-  });
-
-  describe("async lazy error handling", () => {
-    it("should handle async lazy callback that rejects", async () => {
-      const log = getLogger({ consoleDebug: true });
-      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
-      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
-      log.withContext({
-        failing: lazy(async () => {
-          throw new Error("async failure");
-        }),
-      });
-
-      await log.info("test");
-
-      // The log should not have been sent due to the error
-      expect(genericLogger.popLine()).toBeUndefined();
-      expect(consoleSpy).toHaveBeenCalledWith("[LogLayer] Error resolving async lazy values:", expect.any(Error));
-
-      consoleSpy.mockRestore();
-    });
-  });
-
-  describe("async lazy with getContext", () => {
-    it("should resolve async lazy values via getContext", async () => {
-      const log = getLogger();
-
-      log.withContext({
-        asyncVal: lazy(async () => "resolved"),
-        syncVal: lazy(() => "also-resolved"),
-        plain: "static",
-      });
-
-      const ctx = await log.getContext({ evalLazy: true });
-      expect(ctx).toStrictEqual({
-        asyncVal: "resolved",
-        syncVal: "also-resolved",
-        plain: "static",
-      });
-    });
-
-    it("should return raw context when evalLazy is false", async () => {
-      const log = getLogger();
-
-      log.withContext({
-        plain: "static",
-      });
-
-      const ctx = await log.getContext();
-      expect(ctx).toStrictEqual({
-        plain: "static",
-      });
     });
   });
 
   describe("async lazy with plugins", () => {
-    it("should pass resolved values to plugins, not Promises", async () => {
+    it("should pass resolved async metadata values to plugins, not Promises", async () => {
       const onBeforeDataOutSpy = vi.fn((params) => params.data);
 
       const log = getLogger({
@@ -685,17 +537,16 @@ describe("async lazy evaluation", () => {
           },
         ],
       });
-      const _genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
 
-      log.withContext({
-        asyncVal: lazy(async () => "resolved-for-plugin"),
-      });
-
-      await log.info("test");
+      await log
+        .withMetadata({
+          asyncVal: lazy(async () => "resolved-for-plugin"),
+        })
+        .info("test");
 
       expect(onBeforeDataOutSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          context: expect.objectContaining({
+          metadata: expect.objectContaining({
             asyncVal: "resolved-for-plugin",
           }),
         }),
@@ -704,30 +555,7 @@ describe("async lazy evaluation", () => {
     });
   });
 
-  describe("async lazy with errorOnly and metadataOnly", () => {
-    it("should resolve async lazy context in errorOnly", async () => {
-      const log = getLogger();
-      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
-
-      log.withContext({
-        reqId: lazy(async () => "req-456"),
-      });
-
-      await log.errorOnly(new Error("test error"));
-      const line = genericLogger.popLine();
-      expect(line).toStrictEqual(
-        expect.objectContaining({
-          level: LogLevel.error,
-        }),
-      );
-      // Context should contain the resolved async value
-      expect(line?.data?.[0]).toStrictEqual(
-        expect.objectContaining({
-          reqId: "req-456",
-        }),
-      );
-    });
-
+  describe("async lazy with metadataOnly", () => {
     it("should resolve async lazy metadata in metadataOnly", async () => {
       const log = getLogger();
       const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
@@ -746,14 +574,14 @@ describe("async lazy evaluation", () => {
   });
 
   describe("async lazy with raw", () => {
-    it("should resolve async lazy values in raw entries", async () => {
+    it("should resolve async lazy values in raw entry metadata", async () => {
       const log = getLogger();
       const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
 
       await log.raw({
         logLevel: LogLevel.info,
         messages: ["raw test"],
-        context: {
+        metadata: {
           rawAsync: lazy(async () => "raw-resolved"),
         },
       });
@@ -797,15 +625,235 @@ describe("async lazy evaluation", () => {
       expect(result).toBeUndefined();
     });
 
-    it("should return a Promise for async lazy values", () => {
+    it("should return a Promise for async lazy metadata values", () => {
       const log = getLogger();
 
+      const result = log
+        .withMetadata({
+          asyncVal: lazy(async () => "async"),
+        })
+        .info("test");
+      expect(result).toBeInstanceOf(Promise);
+    });
+  });
+});
+
+describe("lazy evaluation error handling", () => {
+  describe("sync lazy failures", () => {
+    it("should replace failed sync lazy context value with error indicator and still log", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
       log.withContext({
-        asyncVal: lazy(async () => "async"),
+        failing: lazy(() => {
+          throw new Error("sync boom");
+        }),
+        working: lazy(() => "ok"),
+        static: "value",
       });
 
-      const result = log.info("test");
-      expect(result).toBeInstanceOf(Promise);
+      log.info("test message");
+
+      // Error log should be emitted for the failing key
+      const errorLine = genericLogger.lines[0];
+      expect(errorLine.level).toBe(LogLevel.error);
+      expect(errorLine.data).toEqual(
+        expect.arrayContaining([expect.stringContaining('Lazy evaluation failed for context key "failing"')]),
+      );
+      expect(errorLine.data).toEqual(expect.arrayContaining([expect.stringContaining("sync boom")]));
+
+      // Original log should contain error indicator for failing key, resolved value for working key
+      const originalLine = genericLogger.lines[1];
+      expect(originalLine.level).toBe(LogLevel.info);
+      expect(originalLine.data[0]).toStrictEqual(
+        expect.objectContaining({
+          failing: LAZY_EVAL_ERROR,
+          working: "ok",
+          static: "value",
+        }),
+      );
+    });
+
+    it("should replace failed sync lazy metadata value with error indicator and still log", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log
+        .withMetadata({
+          bad: lazy(() => {
+            throw new Error("meta boom");
+          }),
+          good: lazy(() => 42),
+        })
+        .info("test");
+
+      // Error log for the failing metadata key
+      const errorLine = genericLogger.lines[0];
+      expect(errorLine.level).toBe(LogLevel.error);
+      expect(errorLine.data).toEqual(
+        expect.arrayContaining([expect.stringContaining('Lazy evaluation failed for metadata key "bad"')]),
+      );
+
+      // Original log with error indicator
+      const originalLine = genericLogger.lines[1];
+      expect(originalLine.level).toBe(LogLevel.info);
+      expect(originalLine.data[0]).toStrictEqual(
+        expect.objectContaining({
+          bad: LAZY_EVAL_ERROR,
+          good: 42,
+        }),
+      );
+    });
+
+    it("should handle multiple failing lazy values in one log call", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.withContext({
+        fail1: lazy(() => {
+          throw new Error("error1");
+        }),
+        fail2: lazy(() => {
+          throw new Error("error2");
+        }),
+        ok: "static",
+      });
+
+      log.info("multi-fail");
+
+      // Two error logs + one original log = 3 lines total
+      expect(genericLogger.lines).toHaveLength(3);
+      expect(genericLogger.lines[0].level).toBe(LogLevel.error);
+      expect(genericLogger.lines[1].level).toBe(LogLevel.error);
+      expect(genericLogger.lines[2].level).toBe(LogLevel.info);
+      expect(genericLogger.lines[2].data[0]).toStrictEqual(
+        expect.objectContaining({
+          fail1: LAZY_EVAL_ERROR,
+          fail2: LAZY_EVAL_ERROR,
+          ok: "static",
+        }),
+      );
+    });
+  });
+
+  describe("async lazy metadata failures", () => {
+    it("should handle rejected promise in async lazy metadata", async () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      await log
+        .withMetadata({
+          asyncBad: lazy(async () => {
+            throw new Error("rejected");
+          }),
+        })
+        .info("test");
+
+      expect(genericLogger.lines).toHaveLength(2);
+      expect(genericLogger.lines[0].level).toBe(LogLevel.error);
+      expect(genericLogger.lines[1].data[0]).toStrictEqual(
+        expect.objectContaining({
+          asyncBad: LAZY_EVAL_ERROR,
+        }),
+      );
+    });
+  });
+
+  describe("getContext with evalLazy error handling", () => {
+    it("should replace failed sync lazy value in getContext({ evalLazy: true }) with error indicator", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.withContext({
+        failing: lazy(() => {
+          throw new Error("getContext boom");
+        }),
+        ok: "static",
+      });
+
+      const ctx = log.getContext({ evalLazy: true });
+      expect(ctx).toStrictEqual({
+        failing: LAZY_EVAL_ERROR,
+        ok: "static",
+      });
+
+      // Error should have been logged
+      expect(genericLogger.lines).toHaveLength(1);
+      expect(genericLogger.lines[0].level).toBe(LogLevel.error);
+    });
+  });
+
+  describe("async lazy in context not supported", () => {
+    it("should replace async lazy context values with error indicator and log warning", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.withContext({
+        asyncVal: lazy(async () => "should-not-resolve"),
+        syncVal: lazy(() => "ok"),
+      });
+
+      log.info("test");
+
+      // Error log about unsupported async lazy in context
+      const errorLine = genericLogger.lines[0];
+      expect(errorLine.level).toBe(LogLevel.error);
+      expect(errorLine.data).toEqual(
+        expect.arrayContaining([expect.stringContaining("Async lazy values are not supported in context")]),
+      );
+
+      // Original log should contain error indicator for async key, resolved sync value
+      const originalLine = genericLogger.lines[1];
+      expect(originalLine.level).toBe(LogLevel.info);
+      expect(originalLine.data[0]).toStrictEqual(
+        expect.objectContaining({
+          asyncVal: LAZY_EVAL_ERROR,
+          syncVal: "ok",
+        }),
+      );
+    });
+
+    it("should replace async lazy context values in getContext({ evalLazy: true })", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.withContext({
+        asyncVal: lazy(async () => "nope"),
+        ok: "static",
+      });
+
+      const ctx = log.getContext({ evalLazy: true });
+      expect(ctx).toStrictEqual({
+        asyncVal: LAZY_EVAL_ERROR,
+        ok: "static",
+      });
+
+      expect(genericLogger.lines).toHaveLength(1);
+      expect(genericLogger.lines[0].level).toBe(LogLevel.error);
+    });
+  });
+
+  describe("error log recursion prevention", () => {
+    it("should not recurse when error logging itself would trigger lazy eval", () => {
+      const log = getLogger();
+      const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+
+      log.withContext({
+        failing: lazy(() => {
+          throw new Error("boom");
+        }),
+      });
+
+      // Should not throw or hang
+      log.info("test");
+
+      expect(genericLogger.lines.length).toBeGreaterThanOrEqual(2);
+    });
+  });
+
+  describe("LAZY_EVAL_ERROR constant", () => {
+    it("should be importable and have the expected value", () => {
+      expect(LAZY_EVAL_ERROR).toBe("[LazyEvalError]");
     });
   });
 });

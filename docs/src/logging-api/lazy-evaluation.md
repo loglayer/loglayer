@@ -48,81 +48,71 @@ Child loggers inherit the lazy wrapper, not the resolved value, so they always s
 
 ## Async Lazy Evaluation
 
-`lazy()` also supports async callbacks for values that require asynchronous operations like database queries, API calls, or async storage lookups.
+`lazy()` supports async callbacks in **metadata** for values that require asynchronous operations like database queries, API calls, or async storage lookups.
 
-When any lazy callback returns a Promise, the log method returns a `Promise<void>` that you can `await` to ensure the async values are resolved before the log is dispatched.
+When any metadata lazy callback returns a Promise, the log method returns a `Promise<void>` that you can `await` to ensure the async values are resolved before the log is dispatched.
 
 ```typescript
 import { LogLayer, lazy } from "loglayer";
 
 const log = new LogLayer({ ... });
 
-// Async context values
-log.withContext({
-  userId: lazy(async () => await getUserIdFromSession()),
-  dbStatus: lazy(async () => await db.ping()),
-  memoryUsage: lazy(() => process.memoryUsage().heapUsed), // sync still works
-});
-
-// Await to ensure async values are resolved
-await log.info("Request received");
-// Output: { userId: "user_123", dbStatus: "ok", memoryUsage: 52428800, msg: "Request received" }
-
-// Works with metadata chaining too
+// Async metadata values
 await log.withMetadata({
   result: lazy(async () => await fetchResult()),
+  dbStatus: lazy(async () => await db.ping()),
 }).info("Processing complete");
+// Output: { result: "...", dbStatus: "ok", msg: "Processing complete" }
 ```
 
-::: warning Fire-and-forget behavior
-If you don't `await` the log call, async lazy values will not be resolved before the log is dispatched. The unresolved Promise objects will end up in your log data. Always `await` log calls when using async lazy values.
+::: warning Async lazy is only supported in metadata
+Async lazy callbacks are **not supported in context**. Because context is evaluated on every log call, using async lazy in context would force every `log.info()`, `log.warn()`, etc. to return a Promise — requiring `await` on every log statement throughout your codebase.
+
+If you need async data in context, resolve it before calling `withContext()`:
+
+```typescript
+const userId = await getUserId();
+log.withContext({ userId });
+```
+
+If you accidentally use an async lazy callback in context, the value will be replaced with `"[LazyEvalError]"` and an error-level log will be emitted.
 :::
 
-### When no async lazy values are present
+## Error Handling
 
-When all lazy callbacks are synchronous, log methods return `void` as before — there is zero overhead. The `Promise<void>` return only occurs when an async lazy callback is detected.
+If a lazy callback throws or rejects, LogLayer:
+
+1. **Replaces** the failed value with `"[LazyEvalError]"` in the log data
+2. **Still sends** the original log entry (with the error indicator in place of the failed value)
+3. **Logs a separate error-level entry** describing which key failed and why
 
 ```typescript
-// Sync lazy — returns void, no Promise
+import { LogLayer, lazy } from "loglayer";
+
+log.withContext({
+  failing: lazy(() => { throw new Error("oops"); }),
+  working: lazy(() => "ok"),
+});
+
 log.info("test");
-
-// Async lazy — returns Promise<void>
-await log.info("test");
+// Error log:  [LogLayer] Lazy evaluation failed for context key "failing": oops
+// Original log: { failing: "[LazyEvalError]", working: "ok", msg: "test" }
 ```
 
-### Retrieving context with async lazy values
-
-`getContext({ evalLazy: true })` resolves both sync and async lazy values. When async lazy values are present, it returns a `Promise`:
+You can import the `LAZY_EVAL_ERROR` constant to programmatically check for failed lazy values:
 
 ```typescript
-log.withContext({
-  userId: lazy(async () => await getUserId()),
-  static: "value",
-});
+import { LAZY_EVAL_ERROR } from "loglayer";
 
-const ctx = await log.getContext({ evalLazy: true });
-// { userId: "user_123", static: "value" }
+if (someValue === LAZY_EVAL_ERROR) {
+  // Handle the failed lazy evaluation
+}
 ```
 
-### Error handling
-
-If an async lazy callback throws or rejects, the log entry is silently dropped. Enable `consoleDebug` to see error details:
-
-```typescript
-const log = new LogLayer({
-  transport: new ConsoleTransport({ logger: console }),
-  consoleDebug: true,
-});
-
-log.withContext({
-  failing: lazy(async () => { throw new Error("oops"); }),
-});
-
-await log.info("test");
-// Console: [LogLayer] Error resolving async lazy values: Error: oops
-```
+This applies to both sync and async lazy callbacks.
 
 ## Notes
 
 - `lazy()` can only be used at the **root level** of context and metadata objects.
-- `getContext()` returns raw lazy wrappers by default. Use `getContext({ evalLazy: true })` to get resolved values — returns a `Promise` when async lazy values are present.
+- Async lazy callbacks are only supported in `withMetadata()`, not `withContext()`.
+- `getContext()` returns raw lazy wrappers by default. Use `getContext({ evalLazy: true })` to get resolved values.

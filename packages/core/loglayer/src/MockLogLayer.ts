@@ -68,9 +68,7 @@ export class MockLogLayer implements ILogLayer<MockLogLayer>, ILogBuilder<MockLo
     return this.mockLogBuilder.withMetadata(_metadata) as any;
   }
 
-  getContext(): Record<string, any>;
-  getContext(_options: { evalLazy?: boolean }): Record<string, any> | Promise<Record<string, any>>;
-  getContext(_options?: { evalLazy?: boolean }): Record<string, any> | Promise<Record<string, any>> {
+  getContext(_options?: { evalLazy?: boolean }): Record<string, any> {
     return {};
   }
 
