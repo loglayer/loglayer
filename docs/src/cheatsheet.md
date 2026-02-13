@@ -121,13 +121,13 @@ log.withMetadata({
   data: lazy(() => JSON.stringify(largeObject)),
 }).debug('Processing result')
 
-// Async lazy (metadata only)
+// Async lazy (metadata only) — TypeScript infers Promise<void>
 await log.withMetadata({
   result: lazy(async () => await fetchResult()),
 }).info('Done')
 ```
 
-See [Lazy Evaluation](/logging-api/lazy-evaluation) for error handling, async details, and notes.
+TypeScript automatically infers `void` vs `Promise<void>` based on whether metadata contains async lazy values. See [Lazy Evaluation](/logging-api/lazy-evaluation) for error handling, async details, and notes.
 
 ## Chaining
 

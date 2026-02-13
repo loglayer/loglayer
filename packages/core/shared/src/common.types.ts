@@ -1,3 +1,5 @@
+import type { LazyLogValue } from "./lazy.js";
+
 export enum LogLevel {
   info = "info",
   warn = "warn",
@@ -46,7 +48,7 @@ export interface ErrorOnlyOpts {
   /**
    * Sets the log level of the error
    */
-  logLevel?: LogLevel;
+  logLevel?: LogLevelType;
   /**
    * If `true`, copies the `error.message` if available to the transport library's
    * message property.
@@ -73,6 +75,37 @@ export interface LogLayerMetadata extends Record<string, any> {}
  * Used internally by LogLayer when assembling the final data object (metadata / context / error) sent to transports.
  */
 export interface LogLayerData extends Record<string, any> {}
+
+/**
+ * Type-level helper that checks whether a metadata/context record type
+ * contains any {@link LazyLogValue} whose callback returns a `Promise`.
+ *
+ * Evaluates to `true` if any property is `LazyLogValue<Promise<any>>`,
+ * `false` otherwise. Returns `false` for `undefined` or `null` inputs.
+ *
+ * @see {@link https://loglayer.dev/logging-api/lazy-evaluation | Lazy Evaluation Docs}
+ */
+export type ContainsAsyncLazy<M> = M extends undefined | null
+  ? false
+  : true extends {
+        [K in keyof M]: M[K] extends LazyLogValue<infer T> ? (T extends Promise<any> ? true : false) : false;
+      }[keyof M]
+    ? true
+    : false;
+
+/**
+ * Helper type that resolves the return type of log methods based on whether
+ * async lazy values are present.
+ *
+ * - `true` → `Promise<void>` (async lazy values detected)
+ * - `false` → `void` (no async lazy values)
+ * - `boolean` → `void | Promise<void>` (indeterminate, used by implementation classes)
+ */
+export type LogReturnType<IsAsync extends boolean> = IsAsync extends true
+  ? Promise<void>
+  : IsAsync extends false
+    ? undefined
+    : void | Promise<void>;
 
 export interface LogLayerCommonDataParams {
   /**

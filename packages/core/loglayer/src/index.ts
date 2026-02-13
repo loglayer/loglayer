@@ -8,9 +8,11 @@ export type {
 } from "@loglayer/plugin";
 export { PluginCallbackType } from "@loglayer/plugin";
 export type {
+  ContainsAsyncLazy,
   ErrorOnlyOpts,
   ILogBuilder,
   ILogLayer,
+  LazyLogValue,
   LogLayerContext,
   LogLayerData,
   LogLayerMetadata,
@@ -20,16 +22,15 @@ export type {
   LogLevelPriority,
   LogLevelPriorityToNames,
   LogLevelType,
+  LogReturnType,
   PluginBeforeDataOutParams,
   PluginBeforeMessageOutParams,
   PluginShouldSendToLoggerParams,
   PluginTransformLogLevelParams,
 } from "@loglayer/shared";
-export { LogLevel } from "@loglayer/shared";
+export { LAZY_EVAL_ERROR, LAZY_SYMBOL, LogLevel, lazy } from "@loglayer/shared";
 export { LogBuilder } from "./LogBuilder.js";
 export { LogLayer } from "./LogLayer.js";
-export type { LazyLogValue } from "./lazy.js";
-export { LAZY_EVAL_ERROR, LAZY_SYMBOL, lazy } from "./lazy.js";
 export { MockLogBuilder } from "./MockLogBuilder.js";
 export { MockLogLayer } from "./MockLogLayer.js";
 export { useLogLayerMixin } from "./mixins.js";

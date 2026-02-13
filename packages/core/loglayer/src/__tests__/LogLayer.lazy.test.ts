@@ -1,7 +1,6 @@
-import { LogLevel } from "@loglayer/shared";
-import { describe, expect, it, vi } from "vitest";
+import { LAZY_EVAL_ERROR, LogLevel, lazy } from "@loglayer/shared";
+import { describe, expect, expectTypeOf, it, vi } from "vitest";
 import { LogLayer } from "../LogLayer.js";
-import { LAZY_EVAL_ERROR, lazy } from "../lazy.js";
 import { TestLoggingLibrary } from "../TestLoggingLibrary.js";
 import { ConsoleTransport } from "../transports/ConsoleTransport.js";
 import type { LogLayerConfig } from "../types/index.js";
@@ -855,5 +854,64 @@ describe("lazy evaluation error handling", () => {
     it("should be importable and have the expected value", () => {
       expect(LAZY_EVAL_ERROR).toBe("[LazyEvalError]");
     });
+  });
+});
+
+describe("conditional return type inference", () => {
+  it("should type direct log methods as void", () => {
+    const log = getLogger();
+    const result = log.info("test");
+    expectTypeOf(result).toEqualTypeOf<void>();
+  });
+
+  it("should type sync lazy metadata log as void", () => {
+    const log = getLogger();
+    const result = log.withMetadata({ x: lazy(() => 1) }).info("test");
+    expectTypeOf(result).toEqualTypeOf<void>();
+  });
+
+  it("should type async lazy metadata log as Promise<void>", () => {
+    const log = getLogger();
+    const result = log.withMetadata({ x: lazy(async () => 1) }).info("test");
+    expectTypeOf(result).toEqualTypeOf<Promise<void>>();
+  });
+
+  it("should type non-lazy metadata log as void", () => {
+    const log = getLogger();
+    const result = log.withMetadata({ x: "hello" }).info("test");
+    expectTypeOf(result).toEqualTypeOf<void>();
+  });
+
+  it("should type errorOnly as void", () => {
+    const log = getLogger();
+    const result = log.errorOnly(new Error("test"));
+    expectTypeOf(result).toEqualTypeOf<void>();
+  });
+
+  it("should type metadataOnly with sync values as void", () => {
+    const log = getLogger();
+    const result = log.metadataOnly({ x: "hello" });
+    expectTypeOf(result).toEqualTypeOf<void>();
+  });
+
+  it("should type metadataOnly with async lazy as Promise<void>", () => {
+    const log = getLogger();
+    const result = log.metadataOnly({ x: lazy(async () => 1) });
+    expectTypeOf(result).toEqualTypeOf<Promise<void>>();
+  });
+
+  it("should type withError builder log as void", () => {
+    const log = getLogger();
+    const result = log.withError(new Error("test")).info("test");
+    expectTypeOf(result).toEqualTypeOf<void>();
+  });
+
+  it("should type chained withError + async lazy withMetadata as Promise<void>", () => {
+    const log = getLogger();
+    const result = log
+      .withError(new Error("test"))
+      .withMetadata({ x: lazy(async () => 1) })
+      .info("test");
+    expectTypeOf(result).toEqualTypeOf<Promise<void>>();
   });
 });
