@@ -1,5 +1,12 @@
 # `@loglayer/transport-loglevel` Changelog
 
+## 3.0.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/transport@3.0.1
+
 ## 3.0.0
 
 ### Major Changes

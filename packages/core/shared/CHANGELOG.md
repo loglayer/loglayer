@@ -1,5 +1,11 @@
 # `@loglayer/shared` Changelog
 
+## 4.0.1
+
+### Patch Changes
+
+- [#353](https://github.com/loglayer/loglayer/pull/353) [`f9b32cd`](https://github.com/loglayer/loglayer/commit/f9b32cd3573b5f04fee8f0394b24c5ad02ea4c75) Thanks [@theogravity](https://github.com/theogravity)! - Log methods now return `void` by default instead of `void | Promise<void>`. Only when async lazy values are present in metadata do log methods return `Promise<void>`. This fixes `@typescript-eslint/no-floating-promises` lint errors for users not using async lazy.
+
 ## 4.0.0
 
 ### Major Changes
