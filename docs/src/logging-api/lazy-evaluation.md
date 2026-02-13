@@ -5,7 +5,7 @@ description: Defer expensive computations and create dynamic context/metadata va
 
 # Lazy Evaluation
 
-The `lazy()` function defers evaluation of a value until log time. The callback is only invoked when the log level is enabled, and is re-evaluated on each log call. It works with both `withContext()` and `withMetadata()`.
+The `lazy()` function defers evaluation of a value until log time. The callback is only invoked when the log level is enabled, and is re-evaluated on each log call. It works with `withContext()`, `withMetadata()`, and `metadataOnly()`.
 
 ::: tip Credit
 This feature is adapted from [LogTape's lazy evaluation](https://logtape.org/manual/lazy). Thank you to the LogTape team for answering questions around its implementation!
@@ -39,6 +39,17 @@ log.withMetadata({
 }).debug("Processing result");
 // Output: { memoryUsage: 52432000, user: "user_123", data: "{...}", msg: "Processing result" }
 
+// metadataOnly: same behavior
+log.metadataOnly({
+  status: lazy(() => getHealthStatus()),
+  uptime: lazy(() => process.uptime()),
+})
+
+// Async lazy with metadataOnly — must be awaited
+await log.metadataOnly({
+  dbStatus: lazy(async () => await db.ping()),
+})
+
 // Callbacks are NOT invoked when the log level is disabled
 log.setLevel("warn");
 log.debug("This won't trigger any lazy callbacks");
@@ -50,12 +61,18 @@ When using a [context manager](/context-managers/) that copies parent context to
 
 `lazy()` also accepts async callbacks in **metadata** for values that require asynchronous operations like database queries, API calls, or async storage lookups. When any metadata lazy callback returns a Promise, the log method returns a `Promise<void>` that you must `await` to ensure the async values are resolved before the log is dispatched.
 
+This works with both `withMetadata()` and `metadataOnly()`:
+
 ```typescript
 await log.withMetadata({
   result: lazy(async () => await fetchResult()),
   dbStatus: lazy(async () => await db.ping()),
 }).info("Processing complete");
 // Output: { result: "...", dbStatus: "ok", msg: "Processing complete" }
+
+await log.metadataOnly({
+  result: lazy(async () => await fetchResult()),
+});
 ```
 
 ::: warning Async lazy is only supported in metadata
@@ -107,5 +124,5 @@ This applies to both sync and async lazy callbacks.
 ## Notes
 
 - `lazy()` can only be used at the **root level** of context and metadata objects.
-- Async lazy callbacks are only supported in `withMetadata()`, not `withContext()`.
+- Async lazy callbacks are only supported in `withMetadata()` and `metadataOnly()`, not `withContext()`.
 - `getContext()` resolves lazy values by default. Use `getContext({ raw: true })` to get the raw lazy wrappers.

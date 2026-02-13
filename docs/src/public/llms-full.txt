@@ -258,7 +258,7 @@ log.withContext({ requestId: '123' })
 
 ## Lazy Evaluation
 
-The `lazy()` function defers evaluation of a value until log time. The callback is only invoked when the log level is enabled, and is re-evaluated on each log call. It works with both `withContext()` and `withMetadata()`.
+The `lazy()` function defers evaluation of a value until log time. The callback is only invoked when the log level is enabled, and is re-evaluated on each log call. It works with `withContext()`, `withMetadata()`, and `metadataOnly()`.
 
 ```typescript
 import { LogLayer, lazy } from 'loglayer'
@@ -283,6 +283,12 @@ log.withMetadata({
   data: lazy(() => JSON.stringify(largeObject)),
 }).debug('Processing result')
 
+// metadataOnly: same behavior
+log.metadataOnly({
+  status: lazy(() => getHealthStatus()),
+  uptime: lazy(() => process.uptime()),
+})
+
 // Callbacks are NOT invoked when the log level is disabled
 log.setLevel('warn')
 log.debug('This will not trigger any lazy callbacks')
@@ -290,13 +296,17 @@ log.debug('This will not trigger any lazy callbacks')
 
 ### Async Lazy (metadata only)
 
-`lazy()` also accepts async callbacks in metadata. When async lazy values are present, the log method returns `Promise<void>` that must be awaited:
+`lazy()` also accepts async callbacks in metadata. When async lazy values are present, the log method returns `Promise<void>` that must be awaited. This works with both `withMetadata()` and `metadataOnly()`:
 
 ```typescript
 await log.withMetadata({
   result: lazy(async () => await fetchResult()),
   dbStatus: lazy(async () => await db.ping()),
 }).info('Processing complete')
+
+await log.metadataOnly({
+  result: lazy(async () => await fetchResult()),
+})
 ```
 
 Async lazy callbacks are **not supported in context**. If you need async data in context, resolve it before calling `withContext()`.
@@ -317,7 +327,7 @@ if (someValue === LAZY_EVAL_ERROR) {
 ### Notes
 
 - `lazy()` can only be used at the root level of context and metadata objects
-- Async lazy callbacks are only supported in `withMetadata()`, not `withContext()`
+- Async lazy callbacks are only supported in `withMetadata()` and `metadataOnly()`, not `withContext()`
 - `getContext()` resolves lazy values by default; use `getContext({ raw: true })` for raw wrappers
 - Child loggers inherit the lazy wrapper, not the resolved value
 

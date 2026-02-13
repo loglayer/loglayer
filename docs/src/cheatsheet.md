@@ -121,10 +121,19 @@ log.withMetadata({
   data: lazy(() => JSON.stringify(largeObject)),
 }).debug('Processing result')
 
+// metadataOnly: same behavior
+log.metadataOnly({
+  status: lazy(() => getHealthStatus()),
+})
+
 // Async lazy (metadata only) — must be awaited
 await log.withMetadata({
   result: lazy(async () => await fetchResult()),
 }).info('Done')
+
+await log.metadataOnly({
+  result: lazy(async () => await fetchResult()),
+})
 ```
 
 See [Lazy Evaluation](/logging-api/lazy-evaluation) for error handling, async details, and notes.
