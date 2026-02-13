@@ -73,7 +73,7 @@ jobs:
 
   deploy-docs:
     needs: release
-    if: needs.release.outputs.published == 'true' && startsWith(github.event.head_commit.message, 'chore: release package(s)')
+    if: "${{ needs.release.outputs.published == 'true' && startsWith(github.event.head_commit.message, 'chore: release package(s)') }}"
     name: Deploy Docs
     uses: ./.github/workflows/deploy-docs.yml
     permissions:
