@@ -216,7 +216,7 @@ Other: HTTP, Log File Rotation, OpenTelemetry
 - [Mixins](https://loglayer.dev/mixins/): Extend LogLayer with custom methods
 - [ElysiaJS Integration](https://loglayer.dev/integrations/elysia): ElysiaJS plugin with request-scoped logging
 - [Express Integration](https://loglayer.dev/example-integrations/express): Express.js example
-- [Fastify Integration](https://loglayer.dev/example-integrations/fastify): Fastify example
+- [Fastify Integration](https://loglayer.dev/integrations/fastify): Fastify integration with request-scoped logging
 - [Next.js Integration](https://loglayer.dev/example-integrations/nextjs): Next.js example
-- [Hono Integration](https://loglayer.dev/example-integrations/hono): Hono example
+- [Hono Integration](https://loglayer.dev/integrations/hono): Hono integration with request-scoped logging
 - [Async Context Tracking](https://loglayer.dev/example-integrations/async-context): AsyncLocalStorage example

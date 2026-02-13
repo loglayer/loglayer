@@ -454,7 +454,7 @@ filtering by level.
 
 ## June 22, 2025
 
-Added a new [Hono integration guide](/example-integrations/hono).
+Added a new [Hono integration guide](/integrations/hono).
 
 ## June 21, 2025
 
