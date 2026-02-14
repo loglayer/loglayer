@@ -63,7 +63,7 @@ citing that it has "usability issues, safety risks, and performance implications
 
 ## Integration with `AsyncLocalStorage`
 
-The following example has been tested to work. It uses the [`express`](./express) framework, but you can use the `async-local-storage.ts` and `logger.ts` code for any other framework.
+The following example has been tested to work. It uses the [`express`](/integrations/express) framework, but you can use the `async-local-storage.ts` and `logger.ts` code for any other framework.
 
 ### Create a file for the `AsyncLocalStorage` instance
 
