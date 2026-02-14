@@ -1,5 +1,11 @@
 # @loglayer/express
 
+## 1.0.0
+
+### Major Changes
+
+- [`34e4a0e`](https://github.com/loglayer/loglayer/commit/34e4a0ed0391e7e2a3b9857a66d3f39b44355620) Thanks [@theogravity](https://github.com/theogravity)! - Version bump to 1.0.0 for initial release.
+
 ## 0.1.0
 
 ### Minor Changes
