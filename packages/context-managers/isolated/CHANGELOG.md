@@ -1,5 +1,12 @@
 # @loglayer/context-manager-isolated
 
+## 3.0.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @loglayer/context-manager@2.0.2
+
 ## 3.0.1
 
 ### Patch Changes

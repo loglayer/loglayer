@@ -1,5 +1,11 @@
 # @loglayer/hono
 
+## 2.1.0
+
+### Minor Changes
+
+- [#357](https://github.com/loglayer/loglayer/pull/357) [`90d879e`](https://github.com/loglayer/loglayer/commit/90d879e449229ef92eb6c928f3051a433fa9d71d) Thanks [@theogravity](https://github.com/theogravity)! - feat: add group config for tagging auto-logged messages (request, response, errors) with groups for transport routing/filtering
+
 ## 2.0.0
 
 ### Major Changes
