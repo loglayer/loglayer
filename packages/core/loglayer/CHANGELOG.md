@@ -1,5 +1,20 @@
 # `loglayer` Changelog
 
+## 9.1.0
+
+### Minor Changes
+
+- [#355](https://github.com/loglayer/loglayer/pull/355) [`c022bb1`](https://github.com/loglayer/loglayer/commit/c022bb1051c7c4f4831d7674869426d088eb3e52) Thanks [@theogravity](https://github.com/theogravity)! - feat: add groups for routing logs to specific transports by named category. Inspired by categories in LogTape.
+
+### Patch Changes
+
+- Updated dependencies [[`c022bb1`](https://github.com/loglayer/loglayer/commit/c022bb1051c7c4f4831d7674869426d088eb3e52)]:
+  - @loglayer/shared@4.1.0
+  - @loglayer/context-manager@2.0.2
+  - @loglayer/log-level-manager@2.0.2
+  - @loglayer/plugin@3.0.2
+  - @loglayer/transport@3.0.2
+
 ## 9.0.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # `@loglayer/shared` Changelog
 
+## 4.1.0
+
+### Minor Changes
+
+- [#355](https://github.com/loglayer/loglayer/pull/355) [`c022bb1`](https://github.com/loglayer/loglayer/commit/c022bb1051c7c4f4831d7674869426d088eb3e52) Thanks [@theogravity](https://github.com/theogravity)! - feat: add groups for routing logs to specific transports by named category. Inspired by categories in LogTape.
+
 ## 4.0.1
 
 ### Patch Changes
