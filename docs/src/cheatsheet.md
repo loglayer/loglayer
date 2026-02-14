@@ -153,7 +153,7 @@ log
 ```typescript
 const childLog = log.child()
 
-// Child inherits config, context, and plugins from parent
+// Child inherits config, context, plugins, and groups from parent
 childLog.withContext({ module: 'auth' })
 childLog.info('Token verified')  // has parent context + module
 ```

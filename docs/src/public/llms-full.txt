@@ -399,7 +399,7 @@ prefixed.info('Login')  // "[Auth] Login"
 
 ## Child Loggers
 
-Child loggers inherit configuration, context, and plugins from their parent.
+Child loggers inherit configuration, context, plugins, and groups from their parent.
 
 ```typescript
 const parentLog: ILogLayer = new LogLayer({
@@ -413,6 +413,10 @@ childLog.info('Request received')  // has both service and handler context
 ```
 
 Context inheritance behavior depends on the Context Manager being used (default: shallow copy, independent).
+
+### Group Inheritance
+
+Group configuration and active groups are shared by reference between parent and child. Runtime changes (e.g., `addGroup()`, `setGroupLevel()`, `setActiveGroups()`) on either logger affect both. Persistent group tags (assigned via `withGroup()`) are copied independently — a child's tags don't affect the parent.
 
 ## Log Level Control
 

@@ -184,10 +184,13 @@ const parentLog: ILogLayer = new LogLayer({
 
 parentLog.withContext({ service: 'api' })
 
-// Child inherits config, context, and plugins
+// Child inherits config, context, plugins, and groups
 const childLog = parentLog.child()
 childLog.withContext({ handler: 'users' })
 childLog.info('Request received')  // has both service and handler context
+
+// Group config is shared by reference — runtime changes propagate both ways
+// Persistent group tags (via withGroup()) are copied independently
 ```
 
 ## Message Prefixing
