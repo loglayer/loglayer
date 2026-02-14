@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/koa",
   "description": "Koa integration for LogLayer with request-scoped logging, auto request logging, and error handling.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
