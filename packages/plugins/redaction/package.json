@@ -49,9 +49,9 @@
     "@internal/tsconfig": "workspace:*",
     "@types/bunyan": "1.8.11",
     "@types/fast-redact": "3.0.4",
-    "@types/node": "25.2.0",
+    "@types/node": "25.2.3",
     "loglayer": "workspace:*",
-    "tsdown": "0.20.1",
+    "tsdown": "0.20.3",
     "typescript": "5.9.3",
     "vitest": "4.0.18"
   },

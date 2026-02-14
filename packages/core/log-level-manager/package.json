@@ -47,7 +47,7 @@
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
     "serialize-error": "13.0.1",
-    "tsdown": "0.20.1",
+    "tsdown": "0.20.3",
     "typescript": "5.9.3",
     "vitest": "4.0.18"
   },

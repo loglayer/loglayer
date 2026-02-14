@@ -47,12 +47,12 @@
   "devDependencies": {
     "@elysiajs/node": "1.4.4",
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "25.2.0",
-    "elysia": "1.4.24",
+    "@types/node": "25.2.3",
+    "elysia": "1.4.25",
     "loglayer": "workspace:*",
     "@loglayer/transport-simple-pretty-terminal": "workspace:*",
     "serialize-error": "13.0.1",
-    "tsdown": "0.20.1",
+    "tsdown": "0.20.3",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
     "vitest": "4.0.18"

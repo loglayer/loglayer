@@ -42,8 +42,8 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "25.2.0",
-    "tsdown": "0.20.1",
+    "@types/node": "25.2.3",
+    "tsdown": "0.20.3",
     "typescript": "5.9.3",
     "vitest": "4.0.18"
   },

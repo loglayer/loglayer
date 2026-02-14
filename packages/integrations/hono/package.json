@@ -45,11 +45,11 @@
     "@hono/node-server": "^1.14.0",
     "@internal/tsconfig": "workspace:*",
     "@loglayer/transport-simple-pretty-terminal": "workspace:*",
-    "@types/node": "25.2.0",
+    "@types/node": "25.2.3",
     "hono": ">=4.0.0",
     "loglayer": "workspace:*",
     "serialize-error": "13.0.1",
-    "tsdown": "0.20.1",
+    "tsdown": "0.20.3",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
     "vitest": "4.0.18"

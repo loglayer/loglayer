@@ -14,7 +14,7 @@
     "asciinema-player": "3.14.0"
   },
   "devDependencies": {
-    "glob": "13.0.1",
+    "glob": "13.0.3",
     "vitepress": "1.6.4"
   },
   "engineStrict": true,

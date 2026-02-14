@@ -9,17 +9,17 @@ importers:
   .:
     devDependencies:
       '@biomejs/biome':
-        specifier: 2.3.14
-        version: 2.3.14
+        specifier: 2.3.15
+        version: 2.3.15
       '@changesets/changelog-github':
         specifier: 0.5.2
         version: 0.5.2
       '@changesets/cli':
         specifier: 2.29.8
-        version: 2.29.8(@types/node@25.2.0)
+        version: 2.29.8(@types/node@25.2.3)
       '@commitlint/cli':
         specifier: 20.4.1
-        version: 20.4.1(@types/node@25.2.0)(typescript@5.9.3)
+        version: 20.4.1(@types/node@25.2.3)(typescript@5.9.3)
       '@commitlint/config-conventional':
         specifier: 20.4.1
         version: 20.4.1
@@ -27,17 +27,17 @@ importers:
         specifier: workspace:*
         version: link:packages/core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       lefthook:
-        specifier: 2.1.0
-        version: 2.1.0
+        specifier: 2.1.1
+        version: 2.1.1
       syncpack:
         specifier: 13.0.4
         version: 13.0.4(typescript@5.9.3)
       turbo:
-        specifier: 2.8.3
-        version: 2.8.3
+        specifier: 2.8.8
+        version: 2.8.8
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -46,17 +46,17 @@ importers:
     dependencies:
       '@nolebase/ui-asciinema':
         specifier: 2.18.2
-        version: 2.18.2(asciinema-player@3.14.0)(vitepress@1.6.4(@algolia/client-search@5.40.0)(@types/node@25.2.0)(less@4.4.2)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.3))(vue@3.5.22(typescript@5.9.3))
+        version: 2.18.2(asciinema-player@3.14.0)(vitepress@1.6.4(@algolia/client-search@5.40.0)(@types/node@25.2.3)(less@4.4.2)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.3))(vue@3.5.22(typescript@5.9.3))
       asciinema-player:
         specifier: 3.14.0
         version: 3.14.0
     devDependencies:
       glob:
-        specifier: 13.0.1
-        version: 13.0.1
+        specifier: 13.0.3
+        version: 13.0.3
       vitepress:
         specifier: 1.6.4
-        version: 1.6.4(@algolia/client-search@5.40.0)(@types/node@25.2.0)(less@4.4.2)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.3)
+        version: 1.6.4(@algolia/client-search@5.40.0)(@types/node@25.2.3)(less@4.4.2)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.3)
 
   packages/context-managers/isolated:
     dependencies:
@@ -68,20 +68,20 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/context-managers/linked:
     dependencies:
@@ -93,20 +93,20 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/core/context-manager:
     dependencies:
@@ -121,14 +121,14 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/core/eslint-tests:
     dependencies:
@@ -168,14 +168,14 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/core/loglayer:
     dependencies:
@@ -202,14 +202,14 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/core/plugin:
     dependencies:
@@ -221,17 +221,17 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/core/shared:
     devDependencies:
@@ -239,17 +239,17 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/core/transport:
     dependencies:
@@ -261,17 +261,17 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/core/tsconfig: {}
 
@@ -279,7 +279,7 @@ importers:
     devDependencies:
       '@elysiajs/node':
         specifier: 1.4.4
-        version: 1.4.4(elysia@1.4.24(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3))
+        version: 1.4.4(elysia@1.4.25(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3))
       '@internal/tsconfig':
         specifier: workspace:*
         version: link:../../core/tsconfig
@@ -287,11 +287,11 @@ importers:
         specifier: workspace:*
         version: link:../../transports/simple-pretty-terminal
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       elysia:
-        specifier: 1.4.24
-        version: 1.4.24(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3)
+        specifier: 1.4.25
+        version: 1.4.25(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3)
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -299,8 +299,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -309,7 +309,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/integrations/express:
     devDependencies:
@@ -323,8 +323,8 @@ importers:
         specifier: 5.0.6
         version: 5.0.6
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       '@types/supertest':
         specifier: 6.0.3
         version: 6.0.3
@@ -341,8 +341,8 @@ importers:
         specifier: 7.2.2
         version: 7.2.2
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -351,7 +351,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/integrations/fastify:
     dependencies:
@@ -366,8 +366,8 @@ importers:
         specifier: workspace:*
         version: link:../../transports/simple-pretty-terminal
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       fastify:
         specifier: ^5.0.0
         version: 5.7.4
@@ -378,8 +378,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -388,7 +388,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/integrations/hono:
     devDependencies:
@@ -402,8 +402,8 @@ importers:
         specifier: workspace:*
         version: link:../../transports/simple-pretty-terminal
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       hono:
         specifier: '>=4.0.0'
         version: 4.11.9
@@ -414,8 +414,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -424,7 +424,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/integrations/koa:
     devDependencies:
@@ -438,8 +438,8 @@ importers:
         specifier: 3.0.1
         version: 3.0.1
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       '@types/supertest':
         specifier: 6.0.3
         version: 6.0.3
@@ -456,8 +456,8 @@ importers:
         specifier: 7.2.2
         version: 7.2.2
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -466,7 +466,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/log-level-managers/global:
     dependencies:
@@ -478,20 +478,20 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/log-level-managers/linked:
     dependencies:
@@ -503,20 +503,20 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/log-level-managers/one-way:
     dependencies:
@@ -528,20 +528,20 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/mixins/datadog-http-metrics:
     dependencies:
@@ -556,20 +556,20 @@ importers:
         specifier: workspace:*
         version: link:../../core/shared
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/mixins/hot-shots:
     dependencies:
@@ -584,14 +584,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/shared
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -600,7 +600,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/plugins/datadog-apm-trace-injector:
     dependencies:
@@ -615,8 +615,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       dd-trace:
         specifier: 5.71.0
         version: 5.71.0
@@ -627,8 +627,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -637,7 +637,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/plugins/filter:
     dependencies:
@@ -655,20 +655,20 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/plugins/opentelemetry:
     dependencies:
@@ -704,8 +704,8 @@ importers:
         specifier: 1.37.0
         version: 1.37.0
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       express:
         specifier: 5.2.1
         version: 5.2.1
@@ -716,8 +716,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -726,7 +726,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/plugins/redaction:
     dependencies:
@@ -747,20 +747,20 @@ importers:
         specifier: 3.0.4
         version: 3.0.4
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/plugins/sprintf:
     dependencies:
@@ -778,8 +778,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       '@types/sprintf-js':
         specifier: 1.1.4
         version: 1.1.4
@@ -787,14 +787,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/aws-cloudwatch-logs:
     dependencies:
@@ -809,8 +809,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -818,8 +818,8 @@ importers:
         specifier: 1.0.0-beta.43
         version: 1.0.0-beta.43
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -828,7 +828,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/aws-lambda-powertools:
     dependencies:
@@ -843,14 +843,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -859,7 +859,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/axiom:
     dependencies:
@@ -874,14 +874,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -890,7 +890,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/betterstack:
     dependencies:
@@ -905,11 +905,11 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       dotenv:
-        specifier: 17.2.3
-        version: 17.2.3
+        specifier: 17.3.1
+        version: 17.3.1
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -917,8 +917,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -927,7 +927,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/bunyan:
     dependencies:
@@ -945,14 +945,14 @@ importers:
         specifier: 1.8.11
         version: 1.8.11
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -961,7 +961,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/consola:
     dependencies:
@@ -976,14 +976,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -992,13 +992,13 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/datadog:
     dependencies:
       '@datadog/datadog-api-client':
-        specifier: 1.45.0
-        version: 1.45.0
+        specifier: 1.51.0
+        version: 1.51.0
       '@loglayer/transport':
         specifier: workspace:*
         version: link:../../core/transport
@@ -1010,20 +1010,20 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/datadog-browser-logs:
     dependencies:
@@ -1038,8 +1038,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       global-jsdom:
         specifier: 28.0.0
         version: 28.0.0(jsdom@27.0.0(postcss@8.5.6))
@@ -1047,14 +1047,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/dynatrace:
     dependencies:
@@ -1066,8 +1066,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -1075,8 +1075,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1085,7 +1085,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/electron-log:
     dependencies:
@@ -1100,20 +1100,20 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/google-cloud-logging:
     dependencies:
@@ -1128,8 +1128,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -1137,8 +1137,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1147,7 +1147,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/http:
     dependencies:
@@ -1159,11 +1159,11 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       dotenv:
-        specifier: 17.2.3
-        version: 17.2.3
+        specifier: 17.3.1
+        version: 17.3.1
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -1171,8 +1171,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1181,7 +1181,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/log-file-rotation:
     dependencies:
@@ -1196,14 +1196,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1212,7 +1212,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/log4js-node:
     dependencies:
@@ -1227,14 +1227,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1243,7 +1243,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/logflare:
     dependencies:
@@ -1258,11 +1258,11 @@ importers:
         specifier: workspace:*
         version: link:../../core/transport
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       dotenv:
-        specifier: 17.2.3
-        version: 17.2.3
+        specifier: 17.3.1
+        version: 17.3.1
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -1270,8 +1270,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1280,7 +1280,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/loglevel:
     dependencies:
@@ -1295,14 +1295,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1311,7 +1311,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/logtape:
     dependencies:
@@ -1326,14 +1326,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1342,7 +1342,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/new-relic:
     dependencies:
@@ -1354,11 +1354,11 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       dotenv:
-        specifier: 17.2.3
-        version: 17.2.3
+        specifier: 17.3.1
+        version: 17.3.1
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -1366,8 +1366,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1376,7 +1376,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/opentelemetry:
     dependencies:
@@ -1415,8 +1415,8 @@ importers:
         specifier: 5.0.6
         version: 5.0.6
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       express:
         specifier: 5.2.1
         version: 5.2.1
@@ -1427,8 +1427,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1437,7 +1437,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/pino:
     dependencies:
@@ -1452,14 +1452,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1468,7 +1468,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/pretty-terminal:
     dependencies:
@@ -1507,8 +1507,8 @@ importers:
         specifier: 2.0.30
         version: 2.0.30
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       express:
         specifier: 5.2.1
         version: 5.2.1
@@ -1519,8 +1519,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1541,8 +1541,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -1550,8 +1550,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1560,7 +1560,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/sentry:
     dependencies:
@@ -1575,11 +1575,11 @@ importers:
         specifier: 10.19.0
         version: 10.19.0
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       dotenv:
-        specifier: 17.2.3
-        version: 17.2.3
+        specifier: 17.3.1
+        version: 17.3.1
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -1587,8 +1587,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1597,7 +1597,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/signale:
     dependencies:
@@ -1612,8 +1612,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       '@types/signale':
         specifier: 1.4.7
         version: 1.4.7
@@ -1621,8 +1621,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1631,7 +1631,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/simple-pretty-terminal:
     dependencies:
@@ -1658,8 +1658,8 @@ importers:
         specifier: 5.0.6
         version: 5.0.6
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       '@types/sprintf-js':
         specifier: 1.1.4
         version: 1.1.4
@@ -1673,8 +1673,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1683,7 +1683,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/sumo-logic:
     dependencies:
@@ -1695,8 +1695,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -1704,8 +1704,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1714,7 +1714,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/tracer:
     dependencies:
@@ -1729,14 +1729,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1745,7 +1745,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/tslog:
     dependencies:
@@ -1760,14 +1760,14 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1776,7 +1776,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/victoria-logs:
     dependencies:
@@ -1791,11 +1791,11 @@ importers:
         specifier: workspace:*
         version: link:../../core/transport
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       dotenv:
-        specifier: 17.2.3
-        version: 17.2.3
+        specifier: 17.3.1
+        version: 17.3.1
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -1803,8 +1803,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1813,7 +1813,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
   packages/transports/winston:
     dependencies:
@@ -1828,8 +1828,8 @@ importers:
         specifier: workspace:*
         version: link:../../core/tsconfig
       '@types/node':
-        specifier: 25.2.0
-        version: 25.2.0
+        specifier: 25.2.3
+        version: 25.2.3
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -1837,8 +1837,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1
       tsdown:
-        specifier: 0.20.1
-        version: 0.20.1(typescript@5.9.3)
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1847,7 +1847,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
 packages:
 
@@ -2123,55 +2123,55 @@ packages:
     resolution: {integrity: sha512-ubmJ6TShyaD69VE9DQrlXcdkvJbmwWPB8qYj0H2kaJi29O7vJT9ajSdBd2W8CG34pwL9pYA74fi7RHC1qbLoVQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
-  '@biomejs/biome@2.3.14':
-    resolution: {integrity: sha512-QMT6QviX0WqXJCaiqVMiBUCr5WRQ1iFSjvOLoTk6auKukJMvnMzWucXpwZB0e8F00/1/BsS9DzcKgWH+CLqVuA==}
+  '@biomejs/biome@2.3.15':
+    resolution: {integrity: sha512-u+jlPBAU2B45LDkjjNNYpc1PvqrM/co4loNommS9/sl9oSxsAQKsNZejYuUztvToB5oXi1tN/e62iNd6ESiY3g==}
     engines: {node: '>=14.21.3'}
     hasBin: true
 
-  '@biomejs/cli-darwin-arm64@2.3.14':
-    resolution: {integrity: sha512-UJGPpvWJMkLxSRtpCAKfKh41Q4JJXisvxZL8ChN1eNW3m/WlPFJ6EFDCE7YfUb4XS8ZFi3C1dFpxUJ0Ety5n+A==}
+  '@biomejs/cli-darwin-arm64@2.3.15':
+    resolution: {integrity: sha512-SDCdrJ4COim1r8SNHg19oqT50JfkI/xGZHSyC6mGzMfKrpNe/217Eq6y98XhNTc0vGWDjznSDNXdUc6Kg24jbw==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [darwin]
 
-  '@biomejs/cli-darwin-x64@2.3.14':
-    resolution: {integrity: sha512-PNkLNQG6RLo8lG7QoWe/hhnMxJIt1tEimoXpGQjwS/dkdNiKBLPv4RpeQl8o3s1OKI3ZOR5XPiYtmbGGHAOnLA==}
+  '@biomejs/cli-darwin-x64@2.3.15':
+    resolution: {integrity: sha512-RkyeSosBtn3C3Un8zQnl9upX0Qbq4E3QmBa0qjpOh1MebRbHhNlRC16jk8HdTe/9ym5zlfnpbb8cKXzW+vlTxw==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [darwin]
 
-  '@biomejs/cli-linux-arm64-musl@2.3.14':
-    resolution: {integrity: sha512-LInRbXhYujtL3sH2TMCH/UBwJZsoGwfQjBrMfl84CD4hL/41C/EU5mldqf1yoFpsI0iPWuU83U+nB2TUUypWeg==}
+  '@biomejs/cli-linux-arm64-musl@2.3.15':
+    resolution: {integrity: sha512-SSSIj2yMkFdSkXqASzIBdjySBXOe65RJlhKEDlri7MN19RC4cpez+C0kEwPrhXOTgJbwQR9QH1F4+VnHkC35pg==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-arm64@2.3.14':
-    resolution: {integrity: sha512-KT67FKfzIw6DNnUNdYlBg+eU24Go3n75GWK6NwU4+yJmDYFe9i/MjiI+U/iEzKvo0g7G7MZqoyrhIYuND2w8QQ==}
+  '@biomejs/cli-linux-arm64@2.3.15':
+    resolution: {integrity: sha512-FN83KxrdVWANOn5tDmW6UBC0grojchbGmcEz6JkRs2YY6DY63sTZhwkQ56x6YtKhDVV1Unz7FJexy8o7KwuIhg==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64-musl@2.3.14':
-    resolution: {integrity: sha512-KQU7EkbBBuHPW3/rAcoiVmhlPtDSGOGRPv9js7qJVpYTzjQmVR+C9Rfcz+ti8YCH+zT1J52tuBybtP4IodjxZQ==}
+  '@biomejs/cli-linux-x64-musl@2.3.15':
+    resolution: {integrity: sha512-dbjPzTh+ijmmNwojFYbQNMFp332019ZDioBYAMMJj5Ux9d8MkM+u+J68SBJGVwVeSHMYj+T9504CoxEzQxrdNw==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64@2.3.14':
-    resolution: {integrity: sha512-ZsZzQsl9U+wxFrGGS4f6UxREUlgHwmEfu1IrXlgNFrNnd5Th6lIJr8KmSzu/+meSa9f4rzFrbEW9LBBA6ScoMA==}
+  '@biomejs/cli-linux-x64@2.3.15':
+    resolution: {integrity: sha512-T8n9p8aiIKOrAD7SwC7opiBM1LYGrE5G3OQRXWgbeo/merBk8m+uxJ1nOXMPzfYyFLfPlKF92QS06KN1UW+Zbg==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-win32-arm64@2.3.14':
-    resolution: {integrity: sha512-+IKYkj/pUBbnRf1G1+RlyA3LWiDgra1xpS7H2g4BuOzzRbRB+hmlw0yFsLprHhbbt7jUzbzAbAjK/Pn0FDnh1A==}
+  '@biomejs/cli-win32-arm64@2.3.15':
+    resolution: {integrity: sha512-puMuenu/2brQdgqtQ7geNwQlNVxiABKEZJhMRX6AGWcmrMO8EObMXniFQywy2b81qmC+q+SDvlOpspNwz0WiOA==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [win32]
 
-  '@biomejs/cli-win32-x64@2.3.14':
-    resolution: {integrity: sha512-oizCjdyQ3WJEswpb3Chdngeat56rIdSYK12JI3iI11Mt5T5EXcZ7WLuowzEaFPNJ3zmOQFliMN8QY1Pi+qsfdQ==}
+  '@biomejs/cli-win32-x64@2.3.15':
+    resolution: {integrity: sha512-kDZr/hgg+igo5Emi0LcjlgfkoGZtgIpJKhnvKTRmMBv6FF/3SDyEV4khBwqNebZIyMZTzvpca9sQNSXJ39pI2A==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
@@ -2363,6 +2363,10 @@ packages:
 
   '@datadog/datadog-api-client@1.45.0':
     resolution: {integrity: sha512-eOvc5fag+fFNoLwkItxJ6ZoNSRF7qm1/dbLmLesm4GYwdy7qOcFzxONXebXmx5y+UA6OoDl7hKun/wBnJFtDbQ==}
+    engines: {node: '>=12.0.0'}
+
+  '@datadog/datadog-api-client@1.51.0':
+    resolution: {integrity: sha512-y8Qh9TJCj1KFXqc/E7379LBAdybUqDlYA5+O+/CmR5RTi+5Ct5orX2QWwVZYlSsnUrFTbcJd31e1UDurkvlfIQ==}
     engines: {node: '>=12.0.0'}
 
   '@datadog/libdatadog@0.7.0':
@@ -3010,6 +3014,10 @@ packages:
     resolution: {integrity: sha512-WMz71T1JS624nWj2n2fnYAuPovhv7EUhk69R6i9dsVyzxt5eM3bjwvgk9L+APE1TRscGysAVMANkB0jh0LQZrQ==}
     engines: {node: 20 || >=22}
 
+  '@isaacs/cliui@9.0.0':
+    resolution: {integrity: sha512-AokJm4tuBHillT+FpMtxQ60n8ObyXBatq7jD2/JA9dxbDDokKQm8KMht5ibGzLVU9IJDIKK4TPKgMHEYMn3lMg==}
+    engines: {node: '>=18'}
+
   '@isaacs/ttlcache@1.4.1':
     resolution: {integrity: sha512-RQgQ4uQ+pLbqXfOmieB91ejmLwvSgv9nLx6sT6sD83s7umBypgg+OIBOBbEUiJXrfpnp9j0mRhYYdzp9uqq3lA==}
     engines: {node: '>=12'}
@@ -3424,8 +3432,8 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
 
-  '@oxc-project/types@0.110.0':
-    resolution: {integrity: sha512-6Ct21OIlrEnFEJk5LT4e63pk3btsI6/TusD/GStLi7wYlGJNOl1GI9qvXAnRAxQU9zqA2Oz+UwhfTOU2rPZVow==}
+  '@oxc-project/types@0.112.0':
+    resolution: {integrity: sha512-m6RebKHIRsax2iCwVpYW2ErQwa4ywHJrE4sCK3/8JK8ZZAWOKXaRJFl/uP51gaVyyXlaS4+chU1nSCdzYf6QqQ==}
 
   '@oxc-project/types@0.94.0':
     resolution: {integrity: sha512-+UgQT/4o59cZfH6Cp7G0hwmqEQ0wE+AdIwhikdwnhWI9Dp8CgSY081+Q3O67/wq3VJu8mgUEB93J9EHHn70fOw==}
@@ -3480,8 +3488,8 @@ packages:
     cpu: [arm64]
     os: [android]
 
-  '@rolldown/binding-android-arm64@1.0.0-rc.1':
-    resolution: {integrity: sha512-He6ZoCfv5D7dlRbrhNBkuMVIHd0GDnjJwbICE1OWpG7G3S2gmJ+eXkcNLJjzjNDpeI2aRy56ou39AJM9AD8YFA==}
+  '@rolldown/binding-android-arm64@1.0.0-rc.3':
+    resolution: {integrity: sha512-0T1k9FinuBZ/t7rZ8jN6OpUKPnUjNdYHoj/cESWrQ3ZraAJ4OMm6z7QjSfCxqj8mOp9kTKc1zHK3kGz5vMu+nQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [android]
@@ -3492,8 +3500,8 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
-  '@rolldown/binding-darwin-arm64@1.0.0-rc.1':
-    resolution: {integrity: sha512-YzJdn08kSOXnj85ghHauH2iHpOJ6eSmstdRTLyaziDcUxe9SyQJgGyx/5jDIhDvtOcNvMm2Ju7m19+S/Rm1jFg==}
+  '@rolldown/binding-darwin-arm64@1.0.0-rc.3':
+    resolution: {integrity: sha512-JWWLzvcmc/3pe7qdJqPpuPk91SoE/N+f3PcWx/6ZwuyDVyungAEJPvKm/eEldiDdwTmaEzWfIR+HORxYWrCi1A==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [darwin]
@@ -3504,8 +3512,8 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@rolldown/binding-darwin-x64@1.0.0-rc.1':
-    resolution: {integrity: sha512-cIvAbqM+ZVV6lBSKSBtlNqH5iCiW933t1q8j0H66B3sjbe8AxIRetVqfGgcHcJtMzBIkIALlL9fcDrElWLJQcQ==}
+  '@rolldown/binding-darwin-x64@1.0.0-rc.3':
+    resolution: {integrity: sha512-MTakBxfx3tde5WSmbHxuqlDsIW0EzQym+PJYGF4P6lG2NmKzi128OGynoFUqoD5ryCySEY85dug4v+LWGBElIw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [darwin]
@@ -3516,8 +3524,8 @@ packages:
     cpu: [x64]
     os: [freebsd]
 
-  '@rolldown/binding-freebsd-x64@1.0.0-rc.1':
-    resolution: {integrity: sha512-rVt+B1B/qmKwCl1XD02wKfgh3vQPXRXdB/TicV2w6g7RVAM1+cZcpigwhLarqiVCxDObFZ7UgXCxPC7tpDoRog==}
+  '@rolldown/binding-freebsd-x64@1.0.0-rc.3':
+    resolution: {integrity: sha512-jje3oopyOLs7IwfvXoS6Lxnmie5JJO7vW29fdGFu5YGY1EDbVDhD+P9vDihqS5X6fFiqL3ZQZCMBg6jyHkSVww==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [freebsd]
@@ -3528,8 +3536,8 @@ packages:
     cpu: [arm]
     os: [linux]
 
-  '@rolldown/binding-linux-arm-gnueabihf@1.0.0-rc.1':
-    resolution: {integrity: sha512-69YKwJJBOFprQa1GktPgbuBOfnn+EGxu8sBJ1TjPER+zhSpYeaU4N07uqmyBiksOLGXsMegymuecLobfz03h8Q==}
+  '@rolldown/binding-linux-arm-gnueabihf@1.0.0-rc.3':
+    resolution: {integrity: sha512-A0n8P3hdLAaqzSFrQoA42p23ZKBYQOw+8EH5r15Sa9X1kD9/JXe0YT2gph2QTWvdr0CVK2BOXiK6ENfy6DXOag==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm]
     os: [linux]
@@ -3540,8 +3548,8 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  '@rolldown/binding-linux-arm64-gnu@1.0.0-rc.1':
-    resolution: {integrity: sha512-9JDhHUf3WcLfnViFWm+TyorqUtnSAHaCzlSNmMOq824prVuuzDOK91K0Hl8DUcEb9M5x2O+d2/jmBMsetRIn3g==}
+  '@rolldown/binding-linux-arm64-gnu@1.0.0-rc.3':
+    resolution: {integrity: sha512-kWXkoxxarYISBJ4bLNf5vFkEbb4JvccOwxWDxuK9yee8lg5XA7OpvlTptfRuwEvYcOZf+7VS69Uenpmpyo5Bjw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [linux]
@@ -3552,8 +3560,8 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  '@rolldown/binding-linux-arm64-musl@1.0.0-rc.1':
-    resolution: {integrity: sha512-UvApLEGholmxw/HIwmUnLq3CwdydbhaHHllvWiCTNbyGom7wTwOtz5OAQbAKZYyiEOeIXZNPkM7nA4Dtng7CLw==}
+  '@rolldown/binding-linux-arm64-musl@1.0.0-rc.3':
+    resolution: {integrity: sha512-Z03/wrqau9Bicfgb3Dbs6SYTHliELk2PM2LpG2nFd+cGupTMF5kanLEcj2vuuJLLhptNyS61rtk7SOZ+lPsTUA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [linux]
@@ -3564,8 +3572,8 @@ packages:
     cpu: [x64]
     os: [linux]
 
-  '@rolldown/binding-linux-x64-gnu@1.0.0-rc.1':
-    resolution: {integrity: sha512-uVctNgZHiGnJx5Fij7wHLhgw4uyZBVi6mykeWKOqE7bVy9Hcxn0fM/IuqdMwk6hXlaf9fFShDTFz2+YejP+x0A==}
+  '@rolldown/binding-linux-x64-gnu@1.0.0-rc.3':
+    resolution: {integrity: sha512-iSXXZsQp08CSilff/DCTFZHSVEpEwdicV3W8idHyrByrcsRDVh9sGC3sev6d8BygSGj3vt8GvUKBPCoyMA4tgQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [linux]
@@ -3576,8 +3584,8 @@ packages:
     cpu: [x64]
     os: [linux]
 
-  '@rolldown/binding-linux-x64-musl@1.0.0-rc.1':
-    resolution: {integrity: sha512-T6Eg0xWwcxd/MzBcuv4Z37YVbUbJxy5cMNnbIt/Yr99wFwli30O4BPlY8hKeGyn6lWNtU0QioBS46lVzDN38bg==}
+  '@rolldown/binding-linux-x64-musl@1.0.0-rc.3':
+    resolution: {integrity: sha512-qaj+MFudtdCv9xZo9znFvkgoajLdc+vwf0Kz5N44g+LU5XMe+IsACgn3UG7uTRlCCvhMAGXm1XlpEA5bZBrOcw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [linux]
@@ -3588,8 +3596,8 @@ packages:
     cpu: [arm64]
     os: [openharmony]
 
-  '@rolldown/binding-openharmony-arm64@1.0.0-rc.1':
-    resolution: {integrity: sha512-PuGZVS2xNJyLADeh2F04b+Cz4NwvpglbtWACgrDOa5YDTEHKwmiTDjoD5eZ9/ptXtcpeFrMqD2H4Zn33KAh1Eg==}
+  '@rolldown/binding-openharmony-arm64@1.0.0-rc.3':
+    resolution: {integrity: sha512-U662UnMETyjT65gFmG9ma+XziENrs7BBnENi/27swZPYagubfHRirXHG2oMl+pEax2WvO7Kb9gHZmMakpYqBHQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [openharmony]
@@ -3599,8 +3607,8 @@ packages:
     engines: {node: '>=14.0.0'}
     cpu: [wasm32]
 
-  '@rolldown/binding-wasm32-wasi@1.0.0-rc.1':
-    resolution: {integrity: sha512-2mOxY562ihHlz9lEXuaGEIDCZ1vI+zyFdtsoa3M62xsEunDXQE+DVPO4S4x5MPK9tKulG/aFcA/IH5eVN257Cw==}
+  '@rolldown/binding-wasm32-wasi@1.0.0-rc.3':
+    resolution: {integrity: sha512-gekrQ3Q2HiC1T5njGyuUJoGpK/l6B/TNXKed3fZXNf9YRTJn3L5MOZsFBn4bN2+UX+8+7hgdlTcEsexX988G4g==}
     engines: {node: '>=14.0.0'}
     cpu: [wasm32]
 
@@ -3610,8 +3618,8 @@ packages:
     cpu: [arm64]
     os: [win32]
 
-  '@rolldown/binding-win32-arm64-msvc@1.0.0-rc.1':
-    resolution: {integrity: sha512-oQVOP5cfAWZwRD0Q3nGn/cA9FW3KhMMuQ0NIndALAe6obqjLhqYVYDiGGRGrxvnjJsVbpLwR14gIUYnpIcHR1g==}
+  '@rolldown/binding-win32-arm64-msvc@1.0.0-rc.3':
+    resolution: {integrity: sha512-85y5JifyMgs8m5K2XzR/VDsapKbiFiohl7s5lEj7nmNGO0pkTXE7q6TQScei96BNAsoK7JC3pA7ukA8WRHVJpg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [win32]
@@ -3628,8 +3636,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rolldown/binding-win32-x64-msvc@1.0.0-rc.1':
-    resolution: {integrity: sha512-Ydsxxx++FNOuov3wCBPaYjZrEvKOOGq3k+BF4BPridhg2pENfitSRD2TEuQ8i33bp5VptuNdC9IzxRKU031z5A==}
+  '@rolldown/binding-win32-x64-msvc@1.0.0-rc.3':
+    resolution: {integrity: sha512-a4VUQZH7LxGbUJ3qJ/TzQG8HxdHvf+jOnqf7B7oFx1TEBm+j2KNL2zr5SQ7wHkNAcaPevF6gf9tQnVBnC4mD+A==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [win32]
@@ -3637,8 +3645,8 @@ packages:
   '@rolldown/pluginutils@1.0.0-beta.43':
     resolution: {integrity: sha512-5Uxg7fQUCmfhax7FJke2+8B6cqgeUJUD9o2uXIKXhD+mG0mL6NObmVoi9wXEU1tY89mZKgAYA6fTbftx3q2ZPQ==}
 
-  '@rolldown/pluginutils@1.0.0-rc.1':
-    resolution: {integrity: sha512-UTBjtTxVOhodhzFVp/ayITaTETRHPUPYZPXQe0WU0wOgxghMojXxYjOiPOauKIYNWJAWS2fd7gJgGQK8GU8vDA==}
+  '@rolldown/pluginutils@1.0.0-rc.3':
+    resolution: {integrity: sha512-eybk3TjzzzV97Dlj5c+XrBFW57eTNhzod66y9HrBlzJ6NsCrWCp/2kaPS3K9wJmurBC0Tdw4yPjXKZqlznim3Q==}
 
   '@rollup/rollup-android-arm-eabi@4.52.4':
     resolution: {integrity: sha512-BTm2qKNnWIQ5auf4deoetINJm2JzvihvGb9R6K/ETwKLql/Bb3Eg2H1FBp1gUb4YGbydMA3jcmQTR73q7J+GAA==}
@@ -4145,8 +4153,8 @@ packages:
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
 
-  '@types/node@25.2.0':
-    resolution: {integrity: sha512-DZ8VwRFUNzuqJ5khrvwMXHmvPe+zGayJhr2CDNiKB1WBE1ST8Djl00D0IC4vvNmHMdj6DlbYRIaFE7WHjlDl5w==}
+  '@types/node@25.2.3':
+    resolution: {integrity: sha512-m0jEgYlYz+mDJZ2+F4v8D1AyQb+QzsNqRuI7xg1VQX/KlKS0qT9r1Mo16yo5F/MtifXFgaofIFsdFMox2SxIbQ==}
 
   '@types/pako@1.0.7':
     resolution: {integrity: sha512-YBtzT2ztNF6R/9+UXj2wTGFnC9NklAnASt3sC0h2m1bbH7G6FyBIkt4AN8ThZpNfxUo1b2iMVO0UawiJymEt8A==}
@@ -4515,6 +4523,10 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
+  balanced-match@4.0.2:
+    resolution: {integrity: sha512-x0K50QvKQ97fdEz2kPehIerj+YTeptKF9hyYkKf6egnwmMWAkADiO0QCzSp0R5xN8FTZgYaBfSaue46Ej62nMg==}
+    engines: {node: 20 || >=22}
+
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
@@ -4556,6 +4568,10 @@ packages:
 
   brace-expansion@2.0.2:
     resolution: {integrity: sha512-Jt0vHyM+jmUBqojB7E1NIYadt0vI0Qxjxd2TErW94wDz+E2LAm5vKMXXwg6ZZBTHPuUlDgQHKXvjGBdfcF1ZDQ==}
+
+  brace-expansion@5.0.2:
+    resolution: {integrity: sha512-Pdk8c9poy+YhOgVWw1JNN22/HcivgKWwpxKq04M/jTmHyCZn12WPJebZxdjSa5TmBqISrUSgNYU3eRORljfCCw==}
+    engines: {node: 20 || >=22}
 
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
@@ -4925,8 +4941,8 @@ packages:
     resolution: {integrity: sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==}
     engines: {node: '>=10'}
 
-  dotenv@17.2.3:
-    resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
+  dotenv@17.3.1:
+    resolution: {integrity: sha512-IO8C/dzEb6O3F9/twg6ZLXz164a2fhTnEWb95H23Dm4OuN+92NmEAlTrupP9VW6Jm3sO26tQlqyvyi4CsnY9GA==}
     engines: {node: '>=12'}
 
   dotenv@8.6.0:
@@ -4966,8 +4982,8 @@ packages:
     resolution: {integrity: sha512-sOUsM3LjZdugatazSQ/XTyNcw8dfvH1SYhXWiJyfYodAAKOZdHs0txPiLDXFzOZbhXgAgshQkshH2ccq0feyLQ==}
     engines: {node: '>= 14'}
 
-  elysia@1.4.24:
-    resolution: {integrity: sha512-cgMUPXzZYZGafj2VePFnckVPZ8xJKbZNOgv4hlM2nW96cPSG1BL3y2KNRrKmmA2hKEuUw0tvHVwG//pMqSZ5Jw==}
+  elysia@1.4.25:
+    resolution: {integrity: sha512-liKjavH99Gpzrv9cDil6uYWmPuqESfPFV1FIaFSd3iNqo3y7e29sN43VxFIK8tWWnyi6eDAmi2SZk8hNAMQMyg==}
     peerDependencies:
       '@sinclair/typebox': '>= 0.34.0 < 1'
       '@types/bun': '>= 1.2.0'
@@ -5393,8 +5409,8 @@ packages:
     resolution: {integrity: sha512-XxwI8EOhVQgWp6iDL+3b0r86f4d6AX6zSU55HfB4ydCEuXLXc5FcYeOu+nnGftS4TEju/11rt4KJPTMgbfmv4A==}
     engines: {node: '>=10.13.0'}
 
-  glob@13.0.1:
-    resolution: {integrity: sha512-B7U/vJpE3DkJ5WXTgTpTRN63uV42DseiXXKMwG14LQBXmsdeIoHAPbU/MEo6II0k5ED74uc2ZGTC6MwHFQhF6w==}
+  glob@13.0.3:
+    resolution: {integrity: sha512-/g3B0mC+4x724v1TgtBlBtt2hPi/EWptsIAmXUx9Z2rvBYleQcsrmaOzd5LyL50jf/Soi83ZDJmw2+XqvH/EeA==}
     engines: {node: 20 || >=22}
 
   glob@6.0.4:
@@ -5667,6 +5683,10 @@ packages:
     resolution: {integrity: sha512-O8dpsF+r0WV/8MNRKfnmrtCWhuKjxrq2w+jpzBL5UZKTi2LeVWnWOmWRxFlesJONmc+wLAGvKQZEOanko0LFTg==}
     engines: {node: '>=8'}
 
+  jackspeak@4.2.3:
+    resolution: {integrity: sha512-ykkVRwrYvFm1nb2AJfKKYPr0emF6IiXDYUaFx4Zn9ZuIH7MrzEZ3sD5RlqGXNRpHtvUHJyOnCEFxOlNDtGo7wg==}
+    engines: {node: 20 || >=22}
+
   jest-docblock@29.7.0:
     resolution: {integrity: sha512-q617Auw3A612guyaFgsbFeYpNP5t2aoUNLwBUbc/0kD1R4t9ixDbyFTHd1nok4epoVFpr7PmeWHrhvuV3XaJ4g==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -5773,58 +5793,58 @@ packages:
   kuler@2.0.0:
     resolution: {integrity: sha512-Xq9nH7KlWZmXAtodXDDRE7vs6DU1gTU8zYDHDiWLSip45Egwq3plLHzPn27NgvzL2r1LMPC1vdqh98sQxtqj4A==}
 
-  lefthook-darwin-arm64@2.1.0:
-    resolution: {integrity: sha512-u2hjHLQXWSFfzO7ln2n/uEydSzfC9sc5cDC7tvKSuOdhvBwaJ0AQ7ZeuqqCQ4YfVIJfYOom1SVE9CBd10FVyig==}
+  lefthook-darwin-arm64@2.1.1:
+    resolution: {integrity: sha512-O/RS1j03/Fnq5zCzEb2r7UOBsqPeBuf1C5pMkIJcO4TSE6hf3rhLUkcorKc2M5ni/n5zLGtzQUXHV08/fSAT3Q==}
     cpu: [arm64]
     os: [darwin]
 
-  lefthook-darwin-x64@2.1.0:
-    resolution: {integrity: sha512-zz5rcyrtOZpxon7uE+c0KC/o2ypJeLZql5CL0Y9oaTuECbmhfokm8glsGnyWstW/++PuMpZYYr/qsCJA5elxkQ==}
+  lefthook-darwin-x64@2.1.1:
+    resolution: {integrity: sha512-mm/kdKl81ROPoYnj9XYk5JDqj+/6Al8w/SSPDfhItkLJyl4pqS+hWUOP6gDGrnuRk8S0DvJ2+hzhnDsQnZohWQ==}
     cpu: [x64]
     os: [darwin]
 
-  lefthook-freebsd-arm64@2.1.0:
-    resolution: {integrity: sha512-+mXNCNuFHNGYLrDqYWDeHH7kWCLCJFPpspx5PAAm+PD37PRMZJrTqDbaNK9qCghC1tdmT4/Lvilf/ewXHPlaKw==}
+  lefthook-freebsd-arm64@2.1.1:
+    resolution: {integrity: sha512-F7JXlKmjxGqGbCWPLND0bVB4DMQezIe48pEwTlUQZbxh450c2gP5Q8FdttMZKOT163kBGGTqJAJSEC6zW+QSxA==}
     cpu: [arm64]
     os: [freebsd]
 
-  lefthook-freebsd-x64@2.1.0:
-    resolution: {integrity: sha512-+AU2HD7szuDsUdHue/E3OnF84B2ae/h7CGKpuIUHJntgoJ4kxf89oDvq2/xl8kDCn9cT76UUjgeZUgFYLRj+6Q==}
+  lefthook-freebsd-x64@2.1.1:
+    resolution: {integrity: sha512-Po8/lJMqNzKSZPuEI46dLuWoBoXtAxCuRpeOh6DAV/M4RhBynaCu8rLMZ9BqF7cVbZEWoplOmYo6HdOuiYpCkQ==}
     cpu: [x64]
     os: [freebsd]
 
-  lefthook-linux-arm64@2.1.0:
-    resolution: {integrity: sha512-KM70eV1tsEib1/tk+3TFxIdH84EaYlIg5KTQWAg+LB1N23nTQ7lL4Dnh1je6f6KW4tf21nmoMUqsh0xvMkQk8Q==}
+  lefthook-linux-arm64@2.1.1:
+    resolution: {integrity: sha512-mI2ljFgPEqHxI8vrN9nKgnVu63Rz1KisDbPwlvs7BTYNwq3sncdK5ukpGR4zzWdh6saNJ5tCtHEtep5GQI11nw==}
     cpu: [arm64]
     os: [linux]
 
-  lefthook-linux-x64@2.1.0:
-    resolution: {integrity: sha512-6Bxmv+l7LiYq9W0IE6v2lmlRtBp6pisnlzhcouMGvH3rDwEGw11NAyRJZA3IPGEMAkIuhnlnVTUwAUzKomfJLg==}
+  lefthook-linux-x64@2.1.1:
+    resolution: {integrity: sha512-m3G/FaxC+crxeg9XeaUuHfEoL+i9gbkg2Hp2KD2IcVVIxprqlyqf0Hb8zbLV2NMXuo5RSGokJu44oAoTO3Ou2g==}
     cpu: [x64]
     os: [linux]
 
-  lefthook-openbsd-arm64@2.1.0:
-    resolution: {integrity: sha512-ppJNK0bBSPLC8gqksRw5zI/0uLeMA5cK+hmZ4ofcuGNmdrN1dfl2Tx84fdeef0NcQY0ii9Y3j3icIKngIoid/g==}
+  lefthook-openbsd-arm64@2.1.1:
+    resolution: {integrity: sha512-gz/8FJPvhjOdOFt1GmFvuvDOe+W+BBRjoeAT1/mTgkN7HCXMXgqNjjvakQKQeGz1I1v08wXG1ZNf5y+T9XBCDQ==}
     cpu: [arm64]
     os: [openbsd]
 
-  lefthook-openbsd-x64@2.1.0:
-    resolution: {integrity: sha512-8k9lQsMYqQGu4spaQ8RNSOJidxIcOyfaoF2FPZhthtBfRV3cgVFGrsQ0hbIi5pvQRGUlCqYuCN79qauXHmnL3Q==}
+  lefthook-openbsd-x64@2.1.1:
+    resolution: {integrity: sha512-ch3lyMUtbmtWUufaQVn4IoEs/2hjK51XqaCdY1mh5ca//VctR1peknIwQ5feHu+vATCDviWQ7HsdNDewm3HMPg==}
     cpu: [x64]
     os: [openbsd]
 
-  lefthook-windows-arm64@2.1.0:
-    resolution: {integrity: sha512-0WN+grrxt9zP9NGRcztoPXcz25tteem91rfLWgQFab+50csJ47zldlsB7/eOS/eHG5mUg5g5NPR4XefnXtjOcQ==}
+  lefthook-windows-arm64@2.1.1:
+    resolution: {integrity: sha512-mm3PZhKDs9FE/jQDimkfWxtoj9xQ2k8uw2MdhtC825bhvIh+MEi0WFj/MOW+ug0RBg0I55tGYzZ5aVuozAWpTQ==}
     cpu: [arm64]
     os: [win32]
 
-  lefthook-windows-x64@2.1.0:
-    resolution: {integrity: sha512-XbO/5nAZQLpUn0tPpgCYfFBFJHnymSglQ73jD6wymNrR1j8I5EcXGlP6YcLhnZ83yzsdLC+gup+N6IqUeiyRdw==}
+  lefthook-windows-x64@2.1.1:
+    resolution: {integrity: sha512-1L2oGIzmhfOTxfwbe5mpSQ+m3ilpvGNymwIhn4UHq6hwHsUL6HEhODqx02GfBn6OXpVIr56bvdBAusjL/SVYGQ==}
     cpu: [x64]
     os: [win32]
 
-  lefthook@2.1.0:
-    resolution: {integrity: sha512-+vS+yywGQW6CN1J1hbGkez//6ixGHIQqfxDN/d3JDm531w9GfGt2lAWTDfZTw/CEl80XsN0raFcnEraR3ldw9g==}
+  lefthook@2.1.1:
+    resolution: {integrity: sha512-Tl9h9c+sG3ShzTHKuR3LAIblnnh+Mgxnm2Ul7yu9cu260Z27LEbO3V6Zw4YZFP59/2rlD42pt/llYsQCkkCFzw==}
     hasBin: true
 
   less@4.4.2:
@@ -6017,6 +6037,10 @@ packages:
 
   minimatch@10.1.2:
     resolution: {integrity: sha512-fu656aJ0n2kcXwsnwnv9g24tkU5uSmOlTjd6WyyaKm2Z+h1qmY6bAjrcaIxF/BslFqbZ8UBtbJi7KgQOZD2PTw==}
+    engines: {node: 20 || >=22}
+
+  minimatch@10.2.0:
+    resolution: {integrity: sha512-ugkC31VaVg9cF0DFVoADH12k6061zNZkZON+aX8AWsR9GhPcErkcMBceb6znR8wLERM2AkkOxy2nWRLpT9Jq5w==}
     engines: {node: 20 || >=22}
 
   minimatch@3.1.2:
@@ -6552,13 +6576,13 @@ packages:
     resolution: {integrity: sha512-3niqt5bXFY1InKU8HKWqqYTYjtrBaxBMnXELXCXUYgtNYGUtZM5rB46HIC430AyacL95iEniGf7RgqsesykLmQ==}
     engines: {node: '>=18.0'}
 
-  rolldown-plugin-dts@0.21.9:
-    resolution: {integrity: sha512-macIh4TtSv84N33YcI8SbULUPbMOgwPHDLweUKgzb+LV2OrVzrXihb2pC33xR0Hoh+hz07Un9/EuUeqMiPsePw==}
+  rolldown-plugin-dts@0.22.1:
+    resolution: {integrity: sha512-5E0AiM5RSQhU6cjtkDFWH6laW4IrMu0j1Mo8x04Xo1ALHmaRMs9/7zej7P3RrryVHW/DdZAp85MA7Be55p0iUw==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       '@ts-macro/tsc': ^0.3.6
       '@typescript/native-preview': '>=7.0.0-dev.20250601.1'
-      rolldown: ^1.0.0-beta.57
+      rolldown: ^1.0.0-rc.3
       typescript: ^5.0.0
       vue-tsc: ~3.2.0
     peerDependenciesMeta:
@@ -6576,8 +6600,8 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
-  rolldown@1.0.0-rc.1:
-    resolution: {integrity: sha512-M3AeZjYE6UclblEf531Hch0WfVC/NOL43Cc+WdF3J50kk5/fvouHhDumSGTh0oRjbZ8C4faaVr5r6Nx1xMqDGg==}
+  rolldown@1.0.0-rc.3:
+    resolution: {integrity: sha512-Po/YZECDOqVXjIXrtC5h++a5NLvKAQNrd9ggrIG3sbDfGO5BqTUsrI6l8zdniKRp3r5Tp/2JTrXqx4GIguFCMw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
@@ -7013,8 +7037,8 @@ packages:
   ts-toolbelt@9.6.0:
     resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
 
-  tsdown@0.20.1:
-    resolution: {integrity: sha512-Wo1BzqNQVZ6SFQV8rjQBwMmNubO+yV3F+vp2WNTjEaS4S5CT1C1dHtUbeFMrCEasZpGy5w6TshpehNnfTe8QBQ==}
+  tsdown@0.20.3:
+    resolution: {integrity: sha512-qWOUXSbe4jN8JZEgrkc/uhJpC8VN2QpNu3eZkBWwNuTEjc/Ik1kcc54ycfcQ5QPRHeu9OQXaLfCI3o7pEJgB2w==}
     engines: {node: '>=20.19.0'}
     hasBin: true
     peerDependencies:
@@ -7060,38 +7084,38 @@ packages:
   tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
 
-  turbo-darwin-64@2.8.3:
-    resolution: {integrity: sha512-4kXRLfcygLOeNcP6JquqRLmGB/ATjjfehiojL2dJkL7GFm3SPSXbq7oNj8UbD8XriYQ5hPaSuz59iF1ijPHkTw==}
+  turbo-darwin-64@2.8.8:
+    resolution: {integrity: sha512-7R/XRAleyNB8nIJuenRpS7EnmCM/kYFgcG1rW3F5DF57Nl4WyBO3DzxqwooRheuoXDD1UsJvDse0yRufgxjClA==}
     cpu: [x64]
     os: [darwin]
 
-  turbo-darwin-arm64@2.8.3:
-    resolution: {integrity: sha512-xF7uCeC0UY0Hrv/tqax0BMbFlVP1J/aRyeGQPZT4NjvIPj8gSPDgFhfkfz06DhUwDg5NgMo04uiSkAWE8WB/QQ==}
+  turbo-darwin-arm64@2.8.8:
+    resolution: {integrity: sha512-whpveO0w/dMcgQ0zFrzqK76mG2W+RBQ/pKIpW+sEvNr+T4UcYd2gZpfV2euehJLvdeFErWgW74dIt/MFfkG1bA==}
     cpu: [arm64]
     os: [darwin]
 
-  turbo-linux-64@2.8.3:
-    resolution: {integrity: sha512-vxMDXwaOjweW/4etY7BxrXCSkvtwh0PbwVafyfT1Ww659SedUxd5rM3V2ZCmbwG8NiCfY7d6VtxyHx3Wh1GoZA==}
+  turbo-linux-64@2.8.8:
+    resolution: {integrity: sha512-BISkcKk+5/Dh11q+YhdQIGONXmdlQ6LY0iQ+GBIK7QOBAJyJFKmKvUeAeMdWGXOa3sImz2oZ6u2StyR+0Y/VVA==}
     cpu: [x64]
     os: [linux]
 
-  turbo-linux-arm64@2.8.3:
-    resolution: {integrity: sha512-mQX7uYBZFkuPLLlKaNe9IjR1JIef4YvY8f21xFocvttXvdPebnq3PK1Zjzl9A1zun2BEuWNUwQIL8lgvN9Pm3Q==}
+  turbo-linux-arm64@2.8.8:
+    resolution: {integrity: sha512-B+DQWWtM3O+AexFF4aYucT0MvvnQOW4n5y9LA5h3Zc3Lpj10yl9K4dEBzJvMVQ2jTkCRNAvA8q9G3EjqmGmGGA==}
     cpu: [arm64]
     os: [linux]
 
-  turbo-windows-64@2.8.3:
-    resolution: {integrity: sha512-YLGEfppGxZj3VWcNOVa08h6ISsVKiG85aCAWosOKNUjb6yErWEuydv6/qImRJUI+tDLvDvW7BxopAkujRnWCrw==}
+  turbo-windows-64@2.8.8:
+    resolution: {integrity: sha512-KP5TRVrmVnrxDyvERvQq7VXu+h5AiEiBwyr90YsRuYy/Z5zLz8hrNZXejTyUR17xmnuI+RbUSxrQlfmPnxiW1A==}
     cpu: [x64]
     os: [win32]
 
-  turbo-windows-arm64@2.8.3:
-    resolution: {integrity: sha512-afTUGKBRmOJU1smQSBnFGcbq0iabAPwh1uXu2BVk7BREg30/1gMnJh9DFEQTah+UD3n3ru8V55J83RQNFfqoyw==}
+  turbo-windows-arm64@2.8.8:
+    resolution: {integrity: sha512-X45sTOksR8iidk+PZUXpNcfEkOhGCTS2p2J8nSUExr1v7u3T4FixwplzliuWmG7QTPGJapAwItzHbi+d/9ckNQ==}
     cpu: [arm64]
     os: [win32]
 
-  turbo@2.8.3:
-    resolution: {integrity: sha512-8Osxz5Tu/Dw2kb31EAY+nhq/YZ3wzmQSmYa1nIArqxgCAldxv9TPlrAiaBUDVnKA4aiPn0OFBD1ACcpc5VFOAQ==}
+  turbo@2.8.8:
+    resolution: {integrity: sha512-wP+axjWAKzYfZ7bghuggVST9bX4j5cn3NPMU9NPQqtwaUKL9n9JOnWWBIc9gdrEma1aViYR73EoPjDEpVq+liQ==}
     hasBin: true
 
   type-check@0.4.0:
@@ -7159,8 +7183,8 @@ packages:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
 
-  unrun@0.2.26:
-    resolution: {integrity: sha512-A3DQLBcDyTui4Hlaoojkldg+8x+CIR+tcSHY0wzW+CgB4X/DNyH58jJpXp1B/EkE+yG6tU8iH1mWsLtwFU3IQg==}
+  unrun@0.2.27:
+    resolution: {integrity: sha512-Mmur1UJpIbfxasLOhPRvox/QS4xBiDii71hMP7smfRthGcwFL2OAmYRgduLANOAU4LUkvVamuP+02U+c90jlrw==}
     engines: {node: '>=20.19.0'}
     hasBin: true
     peerDependencies:
@@ -7989,39 +8013,39 @@ snapshots:
       '@babel/helper-string-parser': 8.0.0-rc.1
       '@babel/helper-validator-identifier': 8.0.0-rc.1
 
-  '@biomejs/biome@2.3.14':
+  '@biomejs/biome@2.3.15':
     optionalDependencies:
-      '@biomejs/cli-darwin-arm64': 2.3.14
-      '@biomejs/cli-darwin-x64': 2.3.14
-      '@biomejs/cli-linux-arm64': 2.3.14
-      '@biomejs/cli-linux-arm64-musl': 2.3.14
-      '@biomejs/cli-linux-x64': 2.3.14
-      '@biomejs/cli-linux-x64-musl': 2.3.14
-      '@biomejs/cli-win32-arm64': 2.3.14
-      '@biomejs/cli-win32-x64': 2.3.14
+      '@biomejs/cli-darwin-arm64': 2.3.15
+      '@biomejs/cli-darwin-x64': 2.3.15
+      '@biomejs/cli-linux-arm64': 2.3.15
+      '@biomejs/cli-linux-arm64-musl': 2.3.15
+      '@biomejs/cli-linux-x64': 2.3.15
+      '@biomejs/cli-linux-x64-musl': 2.3.15
+      '@biomejs/cli-win32-arm64': 2.3.15
+      '@biomejs/cli-win32-x64': 2.3.15
 
-  '@biomejs/cli-darwin-arm64@2.3.14':
+  '@biomejs/cli-darwin-arm64@2.3.15':
     optional: true
 
-  '@biomejs/cli-darwin-x64@2.3.14':
+  '@biomejs/cli-darwin-x64@2.3.15':
     optional: true
 
-  '@biomejs/cli-linux-arm64-musl@2.3.14':
+  '@biomejs/cli-linux-arm64-musl@2.3.15':
     optional: true
 
-  '@biomejs/cli-linux-arm64@2.3.14':
+  '@biomejs/cli-linux-arm64@2.3.15':
     optional: true
 
-  '@biomejs/cli-linux-x64-musl@2.3.14':
+  '@biomejs/cli-linux-x64-musl@2.3.15':
     optional: true
 
-  '@biomejs/cli-linux-x64@2.3.14':
+  '@biomejs/cli-linux-x64@2.3.15':
     optional: true
 
-  '@biomejs/cli-win32-arm64@2.3.14':
+  '@biomejs/cli-win32-arm64@2.3.15':
     optional: true
 
-  '@biomejs/cli-win32-x64@2.3.14':
+  '@biomejs/cli-win32-x64@2.3.15':
     optional: true
 
   '@borewit/text-codec@0.2.1': {}
@@ -8063,7 +8087,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@changesets/cli@2.29.8(@types/node@25.2.0)':
+  '@changesets/cli@2.29.8(@types/node@25.2.3)':
     dependencies:
       '@changesets/apply-release-plan': 7.0.14
       '@changesets/assemble-release-plan': 6.0.9
@@ -8079,7 +8103,7 @@ snapshots:
       '@changesets/should-skip-package': 0.1.2
       '@changesets/types': 6.1.0
       '@changesets/write': 0.4.0
-      '@inquirer/external-editor': 1.0.2(@types/node@25.2.0)
+      '@inquirer/external-editor': 1.0.2(@types/node@25.2.3)
       '@manypkg/get-packages': 1.1.3
       ansi-colors: 4.1.3
       ci-info: 3.9.0
@@ -8187,11 +8211,11 @@ snapshots:
 
   '@colors/colors@1.6.0': {}
 
-  '@commitlint/cli@20.4.1(@types/node@25.2.0)(typescript@5.9.3)':
+  '@commitlint/cli@20.4.1(@types/node@25.2.3)(typescript@5.9.3)':
     dependencies:
       '@commitlint/format': 20.4.0
       '@commitlint/lint': 20.4.1
-      '@commitlint/load': 20.4.0(@types/node@25.2.0)(typescript@5.9.3)
+      '@commitlint/load': 20.4.0(@types/node@25.2.3)(typescript@5.9.3)
       '@commitlint/read': 20.4.0
       '@commitlint/types': 20.4.0
       tinyexec: 1.0.2
@@ -8238,14 +8262,14 @@ snapshots:
       '@commitlint/rules': 20.4.1
       '@commitlint/types': 20.4.0
 
-  '@commitlint/load@20.4.0(@types/node@25.2.0)(typescript@5.9.3)':
+  '@commitlint/load@20.4.0(@types/node@25.2.3)(typescript@5.9.3)':
     dependencies:
       '@commitlint/config-validator': 20.4.0
       '@commitlint/execute-rule': 20.0.0
       '@commitlint/resolve-extends': 20.4.0
       '@commitlint/types': 20.4.0
       cosmiconfig: 9.0.0(typescript@5.9.3)
-      cosmiconfig-typescript-loader: 6.2.0(@types/node@25.2.0)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3)
+      cosmiconfig-typescript-loader: 6.2.0(@types/node@25.2.3)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3)
       is-plain-obj: 4.1.0
       lodash.mergewith: 4.6.2
       picocolors: 1.1.1
@@ -8335,12 +8359,26 @@ snapshots:
   '@datadog/datadog-api-client@1.45.0':
     dependencies:
       '@types/buffer-from': 1.1.3
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
       '@types/pako': 1.0.7
       buffer-from: 1.1.2
       cross-fetch: 3.2.0
       es6-promise: 4.2.8
       form-data: 4.0.4
+      loglevel: 1.9.2
+      pako: 2.1.0
+    transitivePeerDependencies:
+      - encoding
+
+  '@datadog/datadog-api-client@1.51.0':
+    dependencies:
+      '@types/buffer-from': 1.1.3
+      '@types/node': 25.2.3
+      '@types/pako': 1.0.7
+      buffer-from: 1.1.2
+      cross-fetch: 3.2.0
+      es6-promise: 4.2.8
+      form-data: 4.0.5
       loglevel: 1.9.2
       pako: 2.1.0
     transitivePeerDependencies:
@@ -8402,10 +8440,10 @@ snapshots:
     transitivePeerDependencies:
       - '@algolia/client-search'
 
-  '@elysiajs/node@1.4.4(elysia@1.4.24(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3))':
+  '@elysiajs/node@1.4.4(elysia@1.4.25(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3))':
     dependencies:
       crossws: 0.4.4(srvx@0.11.4)
-      elysia: 1.4.24(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3)
+      elysia: 1.4.25(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3)
       srvx: 0.11.4
 
   '@emnapi/core@1.5.0':
@@ -8799,18 +8837,20 @@ snapshots:
 
   '@iconify/types@2.0.0': {}
 
-  '@inquirer/external-editor@1.0.2(@types/node@25.2.0)':
+  '@inquirer/external-editor@1.0.2(@types/node@25.2.3)':
     dependencies:
       chardet: 2.1.0
       iconv-lite: 0.7.0
     optionalDependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@isaacs/balanced-match@4.0.1': {}
 
   '@isaacs/brace-expansion@5.0.1':
     dependencies:
       '@isaacs/balanced-match': 4.0.1
+
+  '@isaacs/cliui@9.0.0': {}
 
   '@isaacs/ttlcache@1.4.1': {}
 
@@ -8886,11 +8926,11 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@nolebase/ui-asciinema@2.18.2(asciinema-player@3.14.0)(vitepress@1.6.4(@algolia/client-search@5.40.0)(@types/node@25.2.0)(less@4.4.2)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.3))(vue@3.5.22(typescript@5.9.3))':
+  '@nolebase/ui-asciinema@2.18.2(asciinema-player@3.14.0)(vitepress@1.6.4(@algolia/client-search@5.40.0)(@types/node@25.2.3)(less@4.4.2)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.3))(vue@3.5.22(typescript@5.9.3))':
     dependencies:
       asciinema-player: 3.14.0
       less: 4.4.2
-      vitepress: 1.6.4(@algolia/client-search@5.40.0)(@types/node@25.2.0)(less@4.4.2)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.3)
+      vitepress: 1.6.4(@algolia/client-search@5.40.0)(@types/node@25.2.3)(less@4.4.2)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.3)
       vue: 3.5.22(typescript@5.9.3)
 
   '@opentelemetry/api-logs@0.203.0':
@@ -9362,7 +9402,7 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.1.0(@opentelemetry/api@1.9.0)
 
-  '@oxc-project/types@0.110.0': {}
+  '@oxc-project/types@0.112.0': {}
 
   '@oxc-project/types@0.94.0': {}
 
@@ -9409,61 +9449,61 @@ snapshots:
   '@rolldown/binding-android-arm64@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-android-arm64@1.0.0-rc.1':
+  '@rolldown/binding-android-arm64@1.0.0-rc.3':
     optional: true
 
   '@rolldown/binding-darwin-arm64@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-darwin-arm64@1.0.0-rc.1':
+  '@rolldown/binding-darwin-arm64@1.0.0-rc.3':
     optional: true
 
   '@rolldown/binding-darwin-x64@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-darwin-x64@1.0.0-rc.1':
+  '@rolldown/binding-darwin-x64@1.0.0-rc.3':
     optional: true
 
   '@rolldown/binding-freebsd-x64@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-freebsd-x64@1.0.0-rc.1':
+  '@rolldown/binding-freebsd-x64@1.0.0-rc.3':
     optional: true
 
   '@rolldown/binding-linux-arm-gnueabihf@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-linux-arm-gnueabihf@1.0.0-rc.1':
+  '@rolldown/binding-linux-arm-gnueabihf@1.0.0-rc.3':
     optional: true
 
   '@rolldown/binding-linux-arm64-gnu@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-linux-arm64-gnu@1.0.0-rc.1':
+  '@rolldown/binding-linux-arm64-gnu@1.0.0-rc.3':
     optional: true
 
   '@rolldown/binding-linux-arm64-musl@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-linux-arm64-musl@1.0.0-rc.1':
+  '@rolldown/binding-linux-arm64-musl@1.0.0-rc.3':
     optional: true
 
   '@rolldown/binding-linux-x64-gnu@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-linux-x64-gnu@1.0.0-rc.1':
+  '@rolldown/binding-linux-x64-gnu@1.0.0-rc.3':
     optional: true
 
   '@rolldown/binding-linux-x64-musl@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-linux-x64-musl@1.0.0-rc.1':
+  '@rolldown/binding-linux-x64-musl@1.0.0-rc.3':
     optional: true
 
   '@rolldown/binding-openharmony-arm64@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-openharmony-arm64@1.0.0-rc.1':
+  '@rolldown/binding-openharmony-arm64@1.0.0-rc.3':
     optional: true
 
   '@rolldown/binding-wasm32-wasi@1.0.0-beta.43':
@@ -9471,7 +9511,7 @@ snapshots:
       '@napi-rs/wasm-runtime': 1.0.7
     optional: true
 
-  '@rolldown/binding-wasm32-wasi@1.0.0-rc.1':
+  '@rolldown/binding-wasm32-wasi@1.0.0-rc.3':
     dependencies:
       '@napi-rs/wasm-runtime': 1.1.1
     optional: true
@@ -9479,7 +9519,7 @@ snapshots:
   '@rolldown/binding-win32-arm64-msvc@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-win32-arm64-msvc@1.0.0-rc.1':
+  '@rolldown/binding-win32-arm64-msvc@1.0.0-rc.3':
     optional: true
 
   '@rolldown/binding-win32-ia32-msvc@1.0.0-beta.43':
@@ -9488,12 +9528,12 @@ snapshots:
   '@rolldown/binding-win32-x64-msvc@1.0.0-beta.43':
     optional: true
 
-  '@rolldown/binding-win32-x64-msvc@1.0.0-rc.1':
+  '@rolldown/binding-win32-x64-msvc@1.0.0-rc.3':
     optional: true
 
   '@rolldown/pluginutils@1.0.0-beta.43': {}
 
-  '@rolldown/pluginutils@1.0.0-rc.1': {}
+  '@rolldown/pluginutils@1.0.0-rc.3': {}
 
   '@rollup/rollup-android-arm-eabi@4.52.4':
     optional: true
@@ -10013,24 +10053,24 @@ snapshots:
 
   '@types/accepts@1.3.7':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/better-sqlite3@7.6.13':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/buffer-from@1.1.3':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/bunyan@1.8.11':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/caseless@0.12.5': {}
 
@@ -10044,7 +10084,7 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/content-disposition@0.5.9': {}
 
@@ -10055,7 +10095,7 @@ snapshots:
       '@types/connect': 3.4.38
       '@types/express': 5.0.6
       '@types/keygrip': 1.0.6
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/deep-eql@4.0.2': {}
 
@@ -10065,7 +10105,7 @@ snapshots:
 
   '@types/express-serve-static-core@5.1.0':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
       '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
       '@types/send': 1.2.0
@@ -10107,7 +10147,7 @@ snapshots:
       '@types/http-errors': 2.0.5
       '@types/keygrip': 1.0.6
       '@types/koa-compose': 3.2.9
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/linkify-it@5.0.0': {}
 
@@ -10128,11 +10168,11 @@ snapshots:
 
   '@types/mysql@2.15.27':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/node@12.20.55': {}
 
-  '@types/node@25.2.0':
+  '@types/node@25.2.3':
     dependencies:
       undici-types: 7.16.0
 
@@ -10144,7 +10184,7 @@ snapshots:
 
   '@types/pg@8.15.5':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
       pg-protocol: 1.10.3
       pg-types: 2.2.0
 
@@ -10155,24 +10195,24 @@ snapshots:
   '@types/request@2.48.13':
     dependencies:
       '@types/caseless': 0.12.5
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
       '@types/tough-cookie': 4.0.5
       form-data: 2.5.5
 
   '@types/send@1.2.0':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/serve-static@2.2.0':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/shimmer@1.2.0': {}
 
   '@types/signale@1.4.7':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/sprintf-js@1.1.4': {}
 
@@ -10180,7 +10220,7 @@ snapshots:
     dependencies:
       '@types/cookiejar': 2.1.5
       '@types/methods': 1.1.4
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
       form-data: 4.0.4
 
   '@types/supertest@6.0.3':
@@ -10190,7 +10230,7 @@ snapshots:
 
   '@types/tedious@4.0.14':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
 
   '@types/tough-cookie@4.0.5': {}
 
@@ -10293,9 +10333,9 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@vitejs/plugin-vue@5.2.4(vite@5.4.20(@types/node@25.2.0)(less@4.4.2))(vue@3.5.22(typescript@5.9.3))':
+  '@vitejs/plugin-vue@5.2.4(vite@5.4.20(@types/node@25.2.3)(less@4.4.2))(vue@3.5.22(typescript@5.9.3))':
     dependencies:
-      vite: 5.4.20(@types/node@25.2.0)(less@4.4.2)
+      vite: 5.4.20(@types/node@25.2.3)(less@4.4.2)
       vue: 3.5.22(typescript@5.9.3)
 
   '@vitest/expect@4.0.18':
@@ -10307,13 +10347,13 @@ snapshots:
       chai: 6.2.1
       tinyrainbow: 3.0.3
 
-  '@vitest/mocker@4.0.18(vite@7.1.9(@types/node@25.2.0)(jiti@2.6.1)(less@4.4.2)(tsx@4.21.0))':
+  '@vitest/mocker@4.0.18(vite@7.1.9(@types/node@25.2.3)(jiti@2.6.1)(less@4.4.2)(tsx@4.21.0))':
     dependencies:
       '@vitest/spy': 4.0.18
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 7.1.9(@types/node@25.2.0)(jiti@2.6.1)(less@4.4.2)(tsx@4.21.0)
+      vite: 7.1.9(@types/node@25.2.3)(jiti@2.6.1)(less@4.4.2)(tsx@4.21.0)
 
   '@vitest/pretty-format@4.0.18':
     dependencies:
@@ -10562,6 +10602,10 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
+  balanced-match@4.0.2:
+    dependencies:
+      jackspeak: 4.2.3
+
   base64-js@1.5.1: {}
 
   better-path-resolve@1.0.0:
@@ -10618,6 +10662,10 @@ snapshots:
   brace-expansion@2.0.2:
     dependencies:
       balanced-match: 1.0.2
+
+  brace-expansion@5.0.2:
+    dependencies:
+      balanced-match: 4.0.2
 
   braces@3.0.3:
     dependencies:
@@ -10792,9 +10840,9 @@ snapshots:
     dependencies:
       is-what: 4.1.16
 
-  cosmiconfig-typescript-loader@6.2.0(@types/node@25.2.0)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3):
+  cosmiconfig-typescript-loader@6.2.0(@types/node@25.2.3)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3):
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
       cosmiconfig: 9.0.0(typescript@5.9.3)
       jiti: 2.6.1
       typescript: 5.9.3
@@ -10858,7 +10906,7 @@ snapshots:
 
   datadog-transport-common@3.0.2:
     dependencies:
-      '@datadog/datadog-api-client': 1.45.0
+      '@datadog/datadog-api-client': 1.51.0
       retry: 0.13.1
     transitivePeerDependencies:
       - encoding
@@ -10968,7 +11016,7 @@ snapshots:
     dependencies:
       is-obj: 2.0.0
 
-  dotenv@17.2.3: {}
+  dotenv@17.3.1: {}
 
   dotenv@8.6.0: {}
 
@@ -11005,7 +11053,7 @@ snapshots:
 
   electron-log@5.4.3: {}
 
-  elysia@1.4.24(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3):
+  elysia@1.4.25(@sinclair/typebox@0.34.48)(exact-mirror@0.2.7(@sinclair/typebox@0.34.48))(file-type@21.3.0)(openapi-types@12.1.3)(typescript@5.9.3):
     dependencies:
       '@sinclair/typebox': 0.34.48
       cookie: 1.1.1
@@ -11561,9 +11609,9 @@ snapshots:
     dependencies:
       is-glob: 4.0.3
 
-  glob@13.0.1:
+  glob@13.0.3:
     dependencies:
-      minimatch: 10.1.2
+      minimatch: 10.2.0
       minipass: 7.1.2
       path-scurry: 2.0.0
 
@@ -11851,6 +11899,10 @@ snapshots:
 
   istanbul-lib-coverage@3.2.2: {}
 
+  jackspeak@4.2.3:
+    dependencies:
+      '@isaacs/cliui': 9.0.0
+
   jest-docblock@29.7.0:
     dependencies:
       detect-newline: 3.1.0
@@ -11984,48 +12036,48 @@ snapshots:
 
   kuler@2.0.0: {}
 
-  lefthook-darwin-arm64@2.1.0:
+  lefthook-darwin-arm64@2.1.1:
     optional: true
 
-  lefthook-darwin-x64@2.1.0:
+  lefthook-darwin-x64@2.1.1:
     optional: true
 
-  lefthook-freebsd-arm64@2.1.0:
+  lefthook-freebsd-arm64@2.1.1:
     optional: true
 
-  lefthook-freebsd-x64@2.1.0:
+  lefthook-freebsd-x64@2.1.1:
     optional: true
 
-  lefthook-linux-arm64@2.1.0:
+  lefthook-linux-arm64@2.1.1:
     optional: true
 
-  lefthook-linux-x64@2.1.0:
+  lefthook-linux-x64@2.1.1:
     optional: true
 
-  lefthook-openbsd-arm64@2.1.0:
+  lefthook-openbsd-arm64@2.1.1:
     optional: true
 
-  lefthook-openbsd-x64@2.1.0:
+  lefthook-openbsd-x64@2.1.1:
     optional: true
 
-  lefthook-windows-arm64@2.1.0:
+  lefthook-windows-arm64@2.1.1:
     optional: true
 
-  lefthook-windows-x64@2.1.0:
+  lefthook-windows-x64@2.1.1:
     optional: true
 
-  lefthook@2.1.0:
+  lefthook@2.1.1:
     optionalDependencies:
-      lefthook-darwin-arm64: 2.1.0
-      lefthook-darwin-x64: 2.1.0
-      lefthook-freebsd-arm64: 2.1.0
-      lefthook-freebsd-x64: 2.1.0
-      lefthook-linux-arm64: 2.1.0
-      lefthook-linux-x64: 2.1.0
-      lefthook-openbsd-arm64: 2.1.0
-      lefthook-openbsd-x64: 2.1.0
-      lefthook-windows-arm64: 2.1.0
-      lefthook-windows-x64: 2.1.0
+      lefthook-darwin-arm64: 2.1.1
+      lefthook-darwin-x64: 2.1.1
+      lefthook-freebsd-arm64: 2.1.1
+      lefthook-freebsd-x64: 2.1.1
+      lefthook-linux-arm64: 2.1.1
+      lefthook-linux-x64: 2.1.1
+      lefthook-openbsd-arm64: 2.1.1
+      lefthook-openbsd-x64: 2.1.1
+      lefthook-windows-arm64: 2.1.1
+      lefthook-windows-x64: 2.1.1
 
   less@4.4.2:
     dependencies:
@@ -12214,6 +12266,10 @@ snapshots:
   minimatch@10.1.2:
     dependencies:
       '@isaacs/brace-expansion': 5.0.1
+
+  minimatch@10.2.0:
+    dependencies:
+      brace-expansion: 5.0.2
 
   minimatch@3.1.2:
     dependencies:
@@ -12588,7 +12644,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
       long: 5.3.2
 
   proxy-addr@2.0.7:
@@ -12735,9 +12791,10 @@ snapshots:
       safe-stable-stringify: 2.5.0
       semver-compare: 1.0.0
 
-  rolldown-plugin-dts@0.21.9(rolldown@1.0.0-rc.1)(typescript@5.9.3):
+  rolldown-plugin-dts@0.22.1(rolldown@1.0.0-rc.3)(typescript@5.9.3):
     dependencies:
       '@babel/generator': 8.0.0-rc.1
+      '@babel/helper-validator-identifier': 8.0.0-rc.1
       '@babel/parser': 8.0.0-rc.1
       '@babel/types': 8.0.0-rc.1
       ast-kit: 3.0.0-beta.1
@@ -12745,7 +12802,7 @@ snapshots:
       dts-resolver: 2.1.3
       get-tsconfig: 4.13.1
       obug: 2.1.1
-      rolldown: 1.0.0-rc.1
+      rolldown: 1.0.0-rc.3
     optionalDependencies:
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -12772,24 +12829,24 @@ snapshots:
       '@rolldown/binding-win32-ia32-msvc': 1.0.0-beta.43
       '@rolldown/binding-win32-x64-msvc': 1.0.0-beta.43
 
-  rolldown@1.0.0-rc.1:
+  rolldown@1.0.0-rc.3:
     dependencies:
-      '@oxc-project/types': 0.110.0
-      '@rolldown/pluginutils': 1.0.0-rc.1
+      '@oxc-project/types': 0.112.0
+      '@rolldown/pluginutils': 1.0.0-rc.3
     optionalDependencies:
-      '@rolldown/binding-android-arm64': 1.0.0-rc.1
-      '@rolldown/binding-darwin-arm64': 1.0.0-rc.1
-      '@rolldown/binding-darwin-x64': 1.0.0-rc.1
-      '@rolldown/binding-freebsd-x64': 1.0.0-rc.1
-      '@rolldown/binding-linux-arm-gnueabihf': 1.0.0-rc.1
-      '@rolldown/binding-linux-arm64-gnu': 1.0.0-rc.1
-      '@rolldown/binding-linux-arm64-musl': 1.0.0-rc.1
-      '@rolldown/binding-linux-x64-gnu': 1.0.0-rc.1
-      '@rolldown/binding-linux-x64-musl': 1.0.0-rc.1
-      '@rolldown/binding-openharmony-arm64': 1.0.0-rc.1
-      '@rolldown/binding-wasm32-wasi': 1.0.0-rc.1
-      '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.1
-      '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.1
+      '@rolldown/binding-android-arm64': 1.0.0-rc.3
+      '@rolldown/binding-darwin-arm64': 1.0.0-rc.3
+      '@rolldown/binding-darwin-x64': 1.0.0-rc.3
+      '@rolldown/binding-freebsd-x64': 1.0.0-rc.3
+      '@rolldown/binding-linux-arm-gnueabihf': 1.0.0-rc.3
+      '@rolldown/binding-linux-arm64-gnu': 1.0.0-rc.3
+      '@rolldown/binding-linux-arm64-musl': 1.0.0-rc.3
+      '@rolldown/binding-linux-x64-gnu': 1.0.0-rc.3
+      '@rolldown/binding-linux-x64-musl': 1.0.0-rc.3
+      '@rolldown/binding-openharmony-arm64': 1.0.0-rc.3
+      '@rolldown/binding-wasm32-wasi': 1.0.0-rc.3
+      '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.3
+      '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.3
 
   rollup@4.52.4:
     dependencies:
@@ -13268,7 +13325,7 @@ snapshots:
 
   ts-toolbelt@9.6.0: {}
 
-  tsdown@0.20.1(typescript@5.9.3):
+  tsdown@0.20.3(typescript@5.9.3):
     dependencies:
       ansis: 4.2.0
       cac: 6.7.14
@@ -13278,14 +13335,14 @@ snapshots:
       import-without-cache: 0.2.5
       obug: 2.1.1
       picomatch: 4.0.3
-      rolldown: 1.0.0-rc.1
-      rolldown-plugin-dts: 0.21.9(rolldown@1.0.0-rc.1)(typescript@5.9.3)
+      rolldown: 1.0.0-rc.3
+      rolldown-plugin-dts: 0.22.1(rolldown@1.0.0-rc.3)(typescript@5.9.3)
       semver: 7.7.3
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
       tree-kill: 1.2.2
       unconfig-core: 7.4.2
-      unrun: 0.2.26
+      unrun: 0.2.27
     optionalDependencies:
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -13316,32 +13373,32 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  turbo-darwin-64@2.8.3:
+  turbo-darwin-64@2.8.8:
     optional: true
 
-  turbo-darwin-arm64@2.8.3:
+  turbo-darwin-arm64@2.8.8:
     optional: true
 
-  turbo-linux-64@2.8.3:
+  turbo-linux-64@2.8.8:
     optional: true
 
-  turbo-linux-arm64@2.8.3:
+  turbo-linux-arm64@2.8.8:
     optional: true
 
-  turbo-windows-64@2.8.3:
+  turbo-windows-64@2.8.8:
     optional: true
 
-  turbo-windows-arm64@2.8.3:
+  turbo-windows-arm64@2.8.8:
     optional: true
 
-  turbo@2.8.3:
+  turbo@2.8.8:
     optionalDependencies:
-      turbo-darwin-64: 2.8.3
-      turbo-darwin-arm64: 2.8.3
-      turbo-linux-64: 2.8.3
-      turbo-linux-arm64: 2.8.3
-      turbo-windows-64: 2.8.3
-      turbo-windows-arm64: 2.8.3
+      turbo-darwin-64: 2.8.8
+      turbo-darwin-arm64: 2.8.8
+      turbo-linux-64: 2.8.8
+      turbo-linux-arm64: 2.8.8
+      turbo-windows-64: 2.8.8
+      turbo-windows-arm64: 2.8.8
 
   type-check@0.4.0:
     dependencies:
@@ -13414,9 +13471,9 @@ snapshots:
 
   unpipe@1.0.0: {}
 
-  unrun@0.2.26:
+  unrun@0.2.27:
     dependencies:
-      rolldown: 1.0.0-rc.1
+      rolldown: 1.0.0-rc.3
 
   uri-js@4.4.1:
     dependencies:
@@ -13444,17 +13501,17 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite@5.4.20(@types/node@25.2.0)(less@4.4.2):
+  vite@5.4.20(@types/node@25.2.3)(less@4.4.2):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.5.6
       rollup: 4.52.4
     optionalDependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
       fsevents: 2.3.3
       less: 4.4.2
 
-  vite@7.1.9(@types/node@25.2.0)(jiti@2.6.1)(less@4.4.2)(tsx@4.21.0):
+  vite@7.1.9(@types/node@25.2.3)(jiti@2.6.1)(less@4.4.2)(tsx@4.21.0):
     dependencies:
       esbuild: 0.25.10
       fdir: 6.5.0(picomatch@4.0.3)
@@ -13463,13 +13520,13 @@ snapshots:
       rollup: 4.52.4
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
       fsevents: 2.3.3
       jiti: 2.6.1
       less: 4.4.2
       tsx: 4.21.0
 
-  vitepress@1.6.4(@algolia/client-search@5.40.0)(@types/node@25.2.0)(less@4.4.2)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.3):
+  vitepress@1.6.4(@algolia/client-search@5.40.0)(@types/node@25.2.3)(less@4.4.2)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.3):
     dependencies:
       '@docsearch/css': 3.8.2
       '@docsearch/js': 3.8.2(@algolia/client-search@5.40.0)(search-insights@2.17.3)
@@ -13478,7 +13535,7 @@ snapshots:
       '@shikijs/transformers': 2.5.0
       '@shikijs/types': 2.5.0
       '@types/markdown-it': 14.1.2
-      '@vitejs/plugin-vue': 5.2.4(vite@5.4.20(@types/node@25.2.0)(less@4.4.2))(vue@3.5.22(typescript@5.9.3))
+      '@vitejs/plugin-vue': 5.2.4(vite@5.4.20(@types/node@25.2.3)(less@4.4.2))(vue@3.5.22(typescript@5.9.3))
       '@vue/devtools-api': 7.7.7
       '@vue/shared': 3.5.22
       '@vueuse/core': 12.8.2(typescript@5.9.3)
@@ -13487,7 +13544,7 @@ snapshots:
       mark.js: 8.11.1
       minisearch: 7.2.0
       shiki: 2.5.0
-      vite: 5.4.20(@types/node@25.2.0)(less@4.4.2)
+      vite: 5.4.20(@types/node@25.2.3)(less@4.4.2)
       vue: 3.5.22(typescript@5.9.3)
     optionalDependencies:
       postcss: 8.5.6
@@ -13518,10 +13575,10 @@ snapshots:
       - typescript
       - universal-cookie
 
-  vitest@4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.0)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0):
+  vitest@4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0):
     dependencies:
       '@vitest/expect': 4.0.18
-      '@vitest/mocker': 4.0.18(vite@7.1.9(@types/node@25.2.0)(jiti@2.6.1)(less@4.4.2)(tsx@4.21.0))
+      '@vitest/mocker': 4.0.18(vite@7.1.9(@types/node@25.2.3)(jiti@2.6.1)(less@4.4.2)(tsx@4.21.0))
       '@vitest/pretty-format': 4.0.18
       '@vitest/runner': 4.0.18
       '@vitest/snapshot': 4.0.18
@@ -13538,11 +13595,11 @@ snapshots:
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vite: 7.1.9(@types/node@25.2.0)(jiti@2.6.1)(less@4.4.2)(tsx@4.21.0)
+      vite: 7.1.9(@types/node@25.2.3)(jiti@2.6.1)(less@4.4.2)(tsx@4.21.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
-      '@types/node': 25.2.0
+      '@types/node': 25.2.3
       jsdom: 27.0.0(postcss@8.5.6)
     transitivePeerDependencies:
       - jiti

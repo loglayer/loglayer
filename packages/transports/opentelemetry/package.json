@@ -55,11 +55,11 @@
     "@opentelemetry/sdk-trace-node": "2.1.0",
     "@opentelemetry/semantic-conventions": "1.37.0",
     "@types/express": "5.0.6",
-    "@types/node": "25.2.0",
+    "@types/node": "25.2.3",
     "express": "5.2.1",
     "loglayer": "workspace:*",
     "serialize-error": "13.0.1",
-    "tsdown": "0.20.1",
+    "tsdown": "0.20.3",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
     "vitest": "4.0.18"
