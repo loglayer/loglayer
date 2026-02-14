@@ -213,8 +213,10 @@ export default defineConfig({
         text: 'Integrations',
         items: [
           { text: 'ElysiaJS', link: '/integrations/elysia' },
+          { text: 'Express', link: '/integrations/express' },
           { text: 'Fastify', link: '/integrations/fastify' },
           { text: 'Hono', link: '/integrations/hono' },
+          { text: 'Koa', link: '/integrations/koa' },
         ]
       },
       {

@@ -9,6 +9,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Feb 13, 2026
 
+`@loglayer/express`, `@loglayer/koa`:
+
+- New first-party integration packages for [Express](/integrations/express) and [Koa](/integrations/koa) with request-scoped logging, auto request/response logging, error handling, and group routing support.
+
 `@loglayer/elysia`, `@loglayer/hono`, `@loglayer/fastify`:
 
 - Added `group` config option to all three integrations. When set (`group: true` or custom config), auto-logged messages (request, response, errors) are tagged with [groups](/logging-api/groups) for transport routing/filtering. User logs from route handlers are not tagged. Default group names use dotted notation (e.g. `"elysia.request"`, `"elysia.response"`).

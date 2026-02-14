@@ -1,0 +1,72 @@
+{
+  "name": "@loglayer/express",
+  "description": "Express integration for LogLayer with request-scoped logging, auto request logging, and error handling.",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loglayer/loglayer.git",
+    "directory": "packages/integrations/express"
+  },
+  "author": "Theo Gravity <theo@suteki.nu>",
+  "keywords": [
+    "logging",
+    "log",
+    "loglayer",
+    "express",
+    "integration",
+    "middleware"
+  ],
+  "scripts": {
+    "build": "tsdown src/index.ts",
+    "test": "vitest --run",
+    "livetest": "tsx src/__tests__/livetest.ts",
+    "clean": "rm -rf .turbo node_modules dist",
+    "lint": "biome check --no-errors-on-unmatched --write --unsafe src",
+    "lint:staged": "biome check --no-errors-on-unmatched --write --unsafe --staged src",
+    "verify-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@internal/tsconfig": "workspace:*",
+    "@loglayer/transport-simple-pretty-terminal": "workspace:*",
+    "@types/express": "5.0.6",
+    "@types/node": "25.2.0",
+    "@types/supertest": "6.0.3",
+    "express": "5.2.1",
+    "loglayer": "workspace:*",
+    "serialize-error": "13.0.1",
+    "supertest": "7.2.2",
+    "tsdown": "0.20.1",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "vitest": "4.0.18"
+  },
+  "peerDependencies": {
+    "express": ">=4.0.0",
+    "loglayer": "*"
+  },
+  "bugs": "https://github.com/loglayer/loglayer/issues",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://loglayer.dev",
+  "packageManager": "pnpm@10.20.0"
+}
