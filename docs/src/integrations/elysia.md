@@ -74,6 +74,7 @@ Each request automatically gets:
 | `requestId` | `boolean \| (request: Request) => string` | `true` | Controls request ID generation |
 | `autoLogging` | `boolean \| ElysiaAutoLoggingConfig` | `true` | Controls automatic request/response logging |
 | `contextFn` | `(ctx) => Record<string, any>` | - | Extract additional context from requests |
+| `group` | `boolean \| ElysiaGroupConfig` | - | Tag auto-logged messages with [groups](/logging-api/groups) for transport routing |
 
 ### Auto-Logging Configuration
 
@@ -203,6 +204,44 @@ const app = new Elysia()
     // Automatically logged with the error object
   });
 ```
+
+### Group Routing
+
+Tag auto-logged messages (request, response, errors) with [groups](/logging-api/groups) so you can route or filter them. User logs from route handlers are **not** tagged.
+
+```typescript
+const log = new LogLayer({
+  transport: [
+    new ConsoleTransport({ id: 'console', logger: console }),
+    new DatadogTransport({ id: 'datadog', logger: datadog }),
+  ],
+  groups: {
+    elysia: { transports: ['datadog'] },
+    'elysia.request': { transports: ['datadog'] },
+    'elysia.response': { transports: ['console', 'datadog'] },
+  },
+})
+
+// Use default group names: name="elysia", request="elysia.request", response="elysia.response"
+elysiaLogLayer({ instance: log, group: true })
+
+// Or use custom group names
+elysiaLogLayer({
+  instance: log,
+  group: {
+    name: 'api',             // error logs
+    request: 'api.request',  // auto-logged requests
+    response: 'api.response', // auto-logged responses
+  },
+})
+```
+
+When `group` is `true` or an object:
+| Group | Default | Applied to |
+|-------|---------|------------|
+| `name` | `"elysia"` | Error logs (via `onError` hook) |
+| `request` | `"elysia.request"` | Auto-logged incoming request messages |
+| `response` | `"elysia.response"` | Auto-logged response messages |
 
 ### Using with Other Elysia Plugins
 

@@ -63,6 +63,29 @@ export interface ElysiaAutoLoggingConfig {
 }
 
 /**
+ * Group names for auto-logged messages.
+ */
+export interface ElysiaGroupConfig {
+  /**
+   * Group name for internal auto-logs (errors, etc.).
+   * @default "elysia"
+   */
+  name?: string;
+
+  /**
+   * Group name for auto-logged incoming request messages.
+   * @default "elysia.request"
+   */
+  request?: string;
+
+  /**
+   * Group name for auto-logged response messages.
+   * @default "elysia.response"
+   */
+  response?: string;
+}
+
+/**
  * Configuration for the ElysiaJS LogLayer integration plugin.
  */
 export interface ElysiaLogLayerConfig {
@@ -95,4 +118,15 @@ export interface ElysiaLogLayerConfig {
    * The returned object will be merged into the per-request logger's context.
    */
   contextFn?: (ctx: { request: Request; path: string }) => Record<string, any>;
+
+  /**
+   * Tags auto-logged request/response/error messages with groups for filtering/routing.
+   * - `true`: tag with default group names (`"elysia"`, `"elysia.request"`, `"elysia.response"`)
+   * - `object`: tag with custom group names
+   *
+   * Only affects auto-logged messages. User logs from route handlers are not tagged.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  group?: boolean | ElysiaGroupConfig;
 }

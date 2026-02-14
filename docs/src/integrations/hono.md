@@ -89,6 +89,7 @@ const app = new Hono<AppEnv>();
 | `requestId` | `boolean \| (request: Request) => string` | `true` | Controls request ID generation |
 | `autoLogging` | `boolean \| HonoAutoLoggingConfig` | `true` | Controls automatic request/response logging |
 | `contextFn` | `(context: { request: Request, path: string }) => Record<string, any>` | - | Extract additional context from requests |
+| `group` | `boolean \| HonoGroupConfig` | - | Tag auto-logged messages with [groups](/logging-api/groups) for transport routing |
 
 ### Auto-Logging Configuration
 
@@ -229,6 +230,42 @@ app.get("/fail", () => {
 ::: tip
 Hono's error handler runs after the middleware chain, so `c.var.logger` is available with the full request context (requestId, custom context, etc.).
 :::
+
+### Group Routing
+
+Tag auto-logged messages (request, response) with [groups](/logging-api/groups) so you can route or filter them. User logs from route handlers are **not** tagged.
+
+```typescript
+const log = new LogLayer({
+  transport: [
+    new ConsoleTransport({ id: 'console', logger: console }),
+    new DatadogTransport({ id: 'datadog', logger: datadog }),
+  ],
+  groups: {
+    hono: { transports: ['datadog'] },
+    'hono.request': { transports: ['datadog'] },
+    'hono.response': { transports: ['console', 'datadog'] },
+  },
+})
+
+// Use default group names: request="hono.request", response="hono.response"
+app.use(honoLogLayer({ instance: log, group: true }))
+
+// Or use custom group names
+app.use(honoLogLayer({
+  instance: log,
+  group: {
+    request: 'api.request',  // auto-logged requests
+    response: 'api.response', // auto-logged responses
+  },
+}))
+```
+
+When `group` is `true` or an object:
+| Group | Default | Applied to |
+|-------|---------|------------|
+| `request` | `"hono.request"` | Auto-logged incoming request messages |
+| `response` | `"hono.response"` | Auto-logged response messages |
 
 ### Using with Other Hono Middleware
 

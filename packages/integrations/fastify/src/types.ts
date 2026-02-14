@@ -64,6 +64,29 @@ export interface FastifyAutoLoggingConfig {
 }
 
 /**
+ * Group names for auto-logged messages.
+ */
+export interface FastifyGroupConfig {
+  /**
+   * Group name for internal auto-logs (errors, etc.).
+   * @default "fastify"
+   */
+  name?: string;
+
+  /**
+   * Group name for auto-logged incoming request messages.
+   * @default "fastify.request"
+   */
+  request?: string;
+
+  /**
+   * Group name for auto-logged response messages.
+   * @default "fastify.response"
+   */
+  response?: string;
+}
+
+/**
  * Configuration for the Fastify LogLayer integration plugin.
  */
 export interface FastifyLogLayerConfig {
@@ -96,4 +119,15 @@ export interface FastifyLogLayerConfig {
    * The returned object will be merged into the per-request logger's context.
    */
   contextFn?: (request: FastifyRequest) => Record<string, any>;
+
+  /**
+   * Tags auto-logged request/response/error messages with groups for filtering/routing.
+   * - `true`: tag with default group names (`"fastify"`, `"fastify.request"`, `"fastify.response"`)
+   * - `object`: tag with custom group names
+   *
+   * Only affects auto-logged messages. User logs from route handlers are not tagged.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  group?: boolean | FastifyGroupConfig;
 }

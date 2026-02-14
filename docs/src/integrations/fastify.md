@@ -89,6 +89,7 @@ The plugin augments Fastify's `FastifyBaseLogger` interface with `ILogLayer`, so
 | `requestId` | `boolean \| (request: FastifyRequest) => string` | `true` | Controls request ID generation |
 | `autoLogging` | `boolean \| FastifyAutoLoggingConfig` | `true` | Controls automatic request/response logging |
 | `contextFn` | `(request: FastifyRequest) => Record<string, any>` | - | Extract additional context from requests |
+| `group` | `boolean \| FastifyGroupConfig` | - | Tag auto-logged messages with [groups](/logging-api/groups) for transport routing |
 
 ### Auto-Logging Configuration
 
@@ -244,6 +245,44 @@ await app.register(fastifyLogLayer, { instance: log });
 ::: tip
 Setting `disableRequestLogging: true` prevents Fastify's built-in request/response logging from conflicting with the plugin's auto-logging.
 :::
+
+### Group Routing
+
+Tag auto-logged messages (request, response, errors) with [groups](/logging-api/groups) so you can route or filter them. User logs from route handlers are **not** tagged.
+
+```typescript
+const log = new LogLayer({
+  transport: [
+    new ConsoleTransport({ id: 'console', logger: console }),
+    new DatadogTransport({ id: 'datadog', logger: datadog }),
+  ],
+  groups: {
+    fastify: { transports: ['datadog'] },
+    'fastify.request': { transports: ['datadog'] },
+    'fastify.response': { transports: ['console', 'datadog'] },
+  },
+})
+
+// Use default group names: name="fastify", request="fastify.request", response="fastify.response"
+await app.register(fastifyLogLayer, { instance: log, group: true })
+
+// Or use custom group names
+await app.register(fastifyLogLayer, {
+  instance: log,
+  group: {
+    name: 'api',             // error logs
+    request: 'api.request',  // auto-logged requests
+    response: 'api.response', // auto-logged responses
+  },
+})
+```
+
+When `group` is `true` or an object:
+| Group | Default | Applied to |
+|-------|---------|------------|
+| `name` | `"fastify"` | Error logs (via `onError` hook) |
+| `request` | `"fastify.request"` | Auto-logged incoming request messages |
+| `response` | `"fastify.response"` | Auto-logged response messages |
 
 ### Using with Other Fastify Plugins
 

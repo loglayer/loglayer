@@ -58,6 +58,16 @@ function resolveLoggingConfig<T>(value: boolean | T | undefined, defaultEnabled:
   return value;
 }
 
+function resolveGroupConfig(group: ElysiaLogLayerConfig["group"]) {
+  if (!group) return { nameGroup: undefined, requestGroup: undefined, responseGroup: undefined };
+  if (group === true) return { nameGroup: "elysia", requestGroup: "elysia.request", responseGroup: "elysia.response" };
+  return {
+    nameGroup: group.name ?? "elysia",
+    requestGroup: group.request ?? "elysia.request",
+    responseGroup: group.response ?? "elysia.response",
+  };
+}
+
 /**
  * Creates an ElysiaJS plugin that integrates LogLayer for request-scoped logging.
  *
@@ -79,7 +89,14 @@ function resolveLoggingConfig<T>(value: boolean | T | undefined, defaultEnabled:
  * ```
  */
 export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
-  const { instance, requestId: requestIdConfig = true, autoLogging: autoLoggingConfig = true, contextFn } = config;
+  const {
+    instance,
+    requestId: requestIdConfig = true,
+    autoLogging: autoLoggingConfig = true,
+    contextFn,
+    group: groupConfig,
+  } = config;
+  const { nameGroup, requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
 
   const autoLogging: ElysiaAutoLoggingConfig | false =
     autoLoggingConfig === true ? {} : autoLoggingConfig === false ? false : autoLoggingConfig;
@@ -91,7 +108,9 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
       })
       .onError({ as: "global" }, ({ log, error, path }) => {
         if (!log) return;
-        (log as ILogLayer).withError(error).withMetadata({ url: path }).error("Request error");
+        let builder = (log as ILogLayer).withError(error).withMetadata({ url: path });
+        if (nameGroup) builder = builder.withGroup(nameGroup);
+        builder.error("Request error");
       });
   }
 
@@ -112,22 +131,24 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
     })
     .onError({ as: "global" }, ({ log, error, path }) => {
       if (!log) return;
-      (log as ILogLayer).withError(error).withMetadata({ url: path }).error("Request error");
+      let builder = (log as ILogLayer).withError(error).withMetadata({ url: path });
+      if (nameGroup) builder = builder.withGroup(nameGroup);
+      builder.error("Request error");
     });
 
   if (requestConfig) {
     plugin.onBeforeHandle({ as: "global" }, ({ log, request, path, _remoteAddress }) => {
       if (shouldIgnorePath(path, autoLogging.ignore)) return;
 
-      (log as ILogLayer)
-        .withMetadata({
-          req: {
-            method: request.method,
-            url: path,
-            remoteAddress: _remoteAddress,
-          },
-        })
-        [requestLogLevel]("incoming request");
+      let builder = (log as ILogLayer).withMetadata({
+        req: {
+          method: request.method,
+          url: path,
+          remoteAddress: _remoteAddress,
+        },
+      });
+      if (requestGroup) builder = builder.withGroup(requestGroup);
+      builder[requestLogLevel]("incoming request");
     });
   }
 
@@ -138,19 +159,19 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
       const responseTime = Date.now() - (_requestStartTime as number);
       const statusCode = set.status ?? 200;
 
-      (log as ILogLayer)
-        .withMetadata({
-          req: {
-            method: request.method,
-            url: path,
-            remoteAddress: _remoteAddress,
-          },
-          res: {
-            statusCode,
-          },
-          responseTime,
-        })
-        [responseLogLevel]("request completed");
+      let builder = (log as ILogLayer).withMetadata({
+        req: {
+          method: request.method,
+          url: path,
+          remoteAddress: _remoteAddress,
+        },
+        res: {
+          statusCode,
+        },
+        responseTime,
+      });
+      if (responseGroup) builder = builder.withGroup(responseGroup);
+      builder[responseLogLevel]("request completed");
     });
   }
 

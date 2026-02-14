@@ -84,6 +84,29 @@ export interface HonoAutoLoggingConfig {
 }
 
 /**
+ * Group names for auto-logged messages.
+ */
+export interface HonoGroupConfig {
+  /**
+   * Group name for internal auto-logs (errors, etc.).
+   * @default "hono"
+   */
+  name?: string;
+
+  /**
+   * Group name for auto-logged incoming request messages.
+   * @default "hono.request"
+   */
+  request?: string;
+
+  /**
+   * Group name for auto-logged response messages.
+   * @default "hono.response"
+   */
+  response?: string;
+}
+
+/**
  * Configuration for the Hono LogLayer integration middleware.
  */
 export interface HonoLogLayerConfig {
@@ -116,4 +139,15 @@ export interface HonoLogLayerConfig {
    * The returned object will be merged into the per-request logger's context.
    */
   contextFn?: (context: { request: Request; path: string }) => Record<string, any>;
+
+  /**
+   * Tags auto-logged request/response messages with groups for filtering/routing.
+   * - `true`: tag with default group names (`"hono.request"`, `"hono.response"`)
+   * - `object`: tag with custom group names
+   *
+   * Only affects auto-logged messages. User logs from route handlers are not tagged.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  group?: boolean | HonoGroupConfig;
 }
