@@ -292,7 +292,6 @@ Other: HTTP, Log File Rotation, OpenTelemetry
 - [Mixins](https://loglayer.dev/mixins/): Extend LogLayer with custom methods
 - [ElysiaJS Integration](https://loglayer.dev/integrations/elysia): ElysiaJS plugin with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering
 - [Express Integration](https://loglayer.dev/integrations/express): Express middleware with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering
-- [Express Example Guide](https://loglayer.dev/example-integrations/express): Express.js manual integration example
 - [Fastify Integration](https://loglayer.dev/integrations/fastify): Fastify integration with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering
 - [Hono Integration](https://loglayer.dev/integrations/hono): Hono integration with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering
 - [Koa Integration](https://loglayer.dev/integrations/koa): Koa middleware with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering
