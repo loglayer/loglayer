@@ -79,7 +79,7 @@ export function honoLogLayer(config: HonoLogLayerConfig) {
     requestId: requestIdConfig = true,
     autoLogging: autoLoggingConfig = true,
     contextFn,
-    group: groupConfig = true,
+    group: groupConfig,
   } = config;
   const { requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
 

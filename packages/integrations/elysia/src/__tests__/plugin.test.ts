@@ -537,7 +537,7 @@ describe("elysiaLogLayer", () => {
       expect(t1Res).toBeFalsy();
     });
 
-    it("should not use groups when group is false", async () => {
+    it("should not use groups when group option is not set", async () => {
       const t1Lib = new TestLoggingLibrary();
       const t2Lib = new TestLoggingLibrary();
       const logger = new LogLayer({
@@ -547,12 +547,10 @@ describe("elysiaLogLayer", () => {
         },
       });
 
-      const app = new Elysia()
-        .use(elysiaLogLayer({ instance: logger, group: false, autoLogging: false }))
-        .get("/test", ({ log }) => {
-          log.info("no group log");
-          return "ok";
-        });
+      const app = new Elysia().use(elysiaLogLayer({ instance: logger, autoLogging: false })).get("/test", ({ log }) => {
+        log.info("no group log");
+        return "ok";
+      });
 
       await app.handle(new Request("http://localhost/test"));
 

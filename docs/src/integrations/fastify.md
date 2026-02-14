@@ -89,7 +89,7 @@ The plugin augments Fastify's `FastifyBaseLogger` interface with `ILogLayer`, so
 | `requestId` | `boolean \| (request: FastifyRequest) => string` | `true` | Controls request ID generation |
 | `autoLogging` | `boolean \| FastifyAutoLoggingConfig` | `true` | Controls automatic request/response logging |
 | `contextFn` | `(request: FastifyRequest) => Record<string, any>` | - | Extract additional context from requests |
-| `group` | `boolean \| FastifyGroupConfig` | `true` | Tag auto-logged messages with [groups](/logging-api/groups) for transport routing |
+| `group` | `boolean \| FastifyGroupConfig` | - | Tag auto-logged messages with [groups](/logging-api/groups) for transport routing |
 
 ### Auto-Logging Configuration
 
@@ -263,10 +263,10 @@ const log = new LogLayer({
   },
 })
 
-// Groups are enabled by default with: name="fastify", request="fastify.request", response="fastify.response"
-// To disable: group: false
+// Use default group names: name="fastify", request="fastify.request", response="fastify.response"
+await app.register(fastifyLogLayer, { instance: log, group: true })
 
-// With custom group names
+// Or use custom group names
 await app.register(fastifyLogLayer, {
   instance: log,
   group: {

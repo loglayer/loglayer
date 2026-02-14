@@ -536,7 +536,7 @@ describe("honoLogLayer", () => {
       expect(t1Res).toBeFalsy();
     });
 
-    it("should not use groups when group is false", async () => {
+    it("should not use groups when group option is not set", async () => {
       const t1Lib = new TestLoggingLibrary();
       const t2Lib = new TestLoggingLibrary();
       const logger = new LogLayer({
@@ -547,7 +547,7 @@ describe("honoLogLayer", () => {
       });
 
       const app = new Hono<{ Variables: HonoLogLayerVariables }>();
-      app.use(honoLogLayer({ instance: logger, group: false, autoLogging: false }));
+      app.use(honoLogLayer({ instance: logger, autoLogging: false }));
       app.get("/test", (c) => {
         c.var.logger.info("no group log");
         return c.text("ok");

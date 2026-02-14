@@ -94,7 +94,7 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
     requestId: requestIdConfig = true,
     autoLogging: autoLoggingConfig = true,
     contextFn,
-    group: groupConfig = true,
+    group: groupConfig,
   } = config;
   const { nameGroup, requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
 

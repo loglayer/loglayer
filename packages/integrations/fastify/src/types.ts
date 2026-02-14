@@ -122,13 +122,11 @@ export interface FastifyLogLayerConfig {
 
   /**
    * Tags auto-logged request/response/error messages with groups for filtering/routing.
-   * - `true`: tag with default group names (default)
-   * - `false`: disables group tagging
+   * - `true`: tag with default group names (`"fastify"`, `"fastify.request"`, `"fastify.response"`)
    * - `object`: tag with custom group names
    *
    * Only affects auto-logged messages. User logs from route handlers are not tagged.
    *
-   * @default true
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
   group?: boolean | FastifyGroupConfig;

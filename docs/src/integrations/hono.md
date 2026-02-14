@@ -89,7 +89,7 @@ const app = new Hono<AppEnv>();
 | `requestId` | `boolean \| (request: Request) => string` | `true` | Controls request ID generation |
 | `autoLogging` | `boolean \| HonoAutoLoggingConfig` | `true` | Controls automatic request/response logging |
 | `contextFn` | `(context: { request: Request, path: string }) => Record<string, any>` | - | Extract additional context from requests |
-| `group` | `boolean \| HonoGroupConfig` | `true` | Tag auto-logged messages with [groups](/logging-api/groups) for transport routing |
+| `group` | `boolean \| HonoGroupConfig` | - | Tag auto-logged messages with [groups](/logging-api/groups) for transport routing |
 
 ### Auto-Logging Configuration
 
@@ -248,10 +248,10 @@ const log = new LogLayer({
   },
 })
 
-// Groups are enabled by default with: request="hono.request", response="hono.response"
-// To disable: group: false
+// Use default group names: request="hono.request", response="hono.response"
+app.use(honoLogLayer({ instance: log, group: true }))
 
-// With custom group names
+// Or use custom group names
 app.use(honoLogLayer({
   instance: log,
   group: {

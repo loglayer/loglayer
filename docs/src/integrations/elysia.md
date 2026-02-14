@@ -74,7 +74,7 @@ Each request automatically gets:
 | `requestId` | `boolean \| (request: Request) => string` | `true` | Controls request ID generation |
 | `autoLogging` | `boolean \| ElysiaAutoLoggingConfig` | `true` | Controls automatic request/response logging |
 | `contextFn` | `(ctx) => Record<string, any>` | - | Extract additional context from requests |
-| `group` | `boolean \| ElysiaGroupConfig` | `true` | Tag auto-logged messages with [groups](/logging-api/groups) for transport routing |
+| `group` | `boolean \| ElysiaGroupConfig` | - | Tag auto-logged messages with [groups](/logging-api/groups) for transport routing |
 
 ### Auto-Logging Configuration
 
@@ -222,10 +222,10 @@ const log = new LogLayer({
   },
 })
 
-// Groups are enabled by default with: name="elysia", request="elysia.request", response="elysia.response"
-// To disable: group: false
+// Use default group names: name="elysia", request="elysia.request", response="elysia.response"
+elysiaLogLayer({ instance: log, group: true })
 
-// With custom group names
+// Or use custom group names
 elysiaLogLayer({
   instance: log,
   group: {

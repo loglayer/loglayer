@@ -542,7 +542,7 @@ describe("fastifyLogLayer", () => {
       expect(t1Res).toBeFalsy();
     });
 
-    it("should not use groups when group is false", async () => {
+    it("should not use groups when group option is not set", async () => {
       const t1Lib = new TestLoggingLibrary();
       const t2Lib = new TestLoggingLibrary();
       const logger = new LogLayer({
@@ -553,7 +553,7 @@ describe("fastifyLogLayer", () => {
       });
 
       const app = Fastify();
-      await app.register(fastifyLogLayer, { instance: logger, group: false, autoLogging: false });
+      await app.register(fastifyLogLayer, { instance: logger, autoLogging: false });
       app.get("/test", (request, reply) => {
         request.log.info("no group log");
         reply.send("ok");
