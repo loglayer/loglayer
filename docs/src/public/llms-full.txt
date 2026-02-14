@@ -416,6 +416,16 @@ Context inheritance behavior depends on the Context Manager being used (default:
 
 ## Log Level Control
 
+Log levels are checked at three independent tiers. A log must pass all applicable tiers to reach a transport:
+
+| Order | Tier | Configured via | Scope |
+|-------|------|----------------|-------|
+| 1 | **LogLayer (global)** | `setLevel()`, `enableLogging()` | All logs, checked first |
+| 2 | **Group** | `groups: { database: { level: 'error' } }` | Only grouped logs |
+| 3 | **Transport** | `new ConsoleTransport({ level: 'warn' })` | Per-transport, checked at dispatch |
+
+Each tier is an independent gate. When no groups are configured, only tiers 1 and 3 apply. Log level managers control tier 1 only.
+
 ```typescript
 import { LogLevel } from 'loglayer'
 

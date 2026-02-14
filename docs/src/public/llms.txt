@@ -206,6 +206,14 @@ prefixed.info('Login')  // "[Auth] Login"
 
 ## Log Level Control
 
+Log levels are checked at three independent tiers. A log must pass all applicable tiers:
+
+1. **LogLayer (global)** — `setLevel()`, `enableLogging()` — checked first, before any processing
+2. **Group** — `groups: { database: { level: 'error' } }` — only applies to grouped logs
+3. **Transport** — `new ConsoleTransport({ level: 'warn' })` — checked at dispatch time
+
+Log level managers control tier 1 only.
+
 ```typescript
 import { LogLevel } from 'loglayer'
 
