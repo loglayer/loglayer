@@ -74,7 +74,7 @@ Each request automatically gets:
 | `requestId` | `boolean \| (request: Request) => string` | `true` | Controls request ID generation |
 | `autoLogging` | `boolean \| ElysiaAutoLoggingConfig` | `true` | Controls automatic request/response logging |
 | `contextFn` | `(ctx) => Record<string, any>` | - | Extract additional context from requests |
-| `group` | `string \| string[] \| ElysiaGroupConfig` | - | Tag all logs with [group(s)](/logging-api/groups) for transport routing |
+| `group` | `boolean \| ElysiaGroupConfig` | `true` | Tag auto-logged messages with [groups](/logging-api/groups) for transport routing |
 
 ### Auto-Logging Configuration
 
@@ -207,7 +207,7 @@ const app = new Elysia()
 
 ### Group Routing
 
-Route all logs from the integration to specific transports using [groups](/logging-api/groups):
+Tag auto-logged messages (request, response, errors) with [groups](/logging-api/groups) so you can route or filter them. User logs from route handlers are **not** tagged.
 
 ```typescript
 const log = new LogLayer({
@@ -216,25 +216,32 @@ const log = new LogLayer({
     new DatadogTransport({ id: 'datadog', logger: datadog }),
   ],
   groups: {
-    api: { transports: ['datadog'] },
-    'api:request': { transports: ['datadog'] },
-    'api:response': { transports: ['console', 'datadog'] },
+    elysia: { transports: ['datadog'] },
+    'elysia.request': { transports: ['datadog'] },
+    'elysia.response': { transports: ['console', 'datadog'] },
   },
 })
 
-// Simple: tag all logs with 'api'
-elysiaLogLayer({ instance: log, group: 'api' })
+// Groups are enabled by default with: name="elysia", request="elysia.request", response="elysia.response"
+// To disable: group: false
 
-// With individual request/response groups (additive with main group)
+// With custom group names
 elysiaLogLayer({
   instance: log,
   group: {
-    name: 'api',
-    request: 'api:request',
-    response: 'api:response',
+    name: 'api',             // error logs
+    request: 'api.request',  // auto-logged requests
+    response: 'api.response', // auto-logged responses
   },
 })
 ```
+
+When `group` is `true` or an object:
+| Group | Default | Applied to |
+|-------|---------|------------|
+| `name` | `"elysia"` | Error logs (via `onError` hook) |
+| `request` | `"elysia.request"` | Auto-logged incoming request messages |
+| `response` | `"elysia.response"` | Auto-logged response messages |
 
 ### Using with Other Elysia Plugins
 

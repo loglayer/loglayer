@@ -10,16 +10,13 @@ import type {
 } from "./types.js";
 
 function resolveGroupConfig(group: FastifyLogLayerConfig["group"]) {
-  if (!group) return { mainGroup: undefined, requestGroup: undefined, responseGroup: undefined };
-
-  if (typeof group === "string" || Array.isArray(group)) {
-    return { mainGroup: group, requestGroup: undefined, responseGroup: undefined };
-  }
-
+  if (!group) return { nameGroup: undefined, requestGroup: undefined, responseGroup: undefined };
+  if (group === true)
+    return { nameGroup: "fastify", requestGroup: "fastify.request", responseGroup: "fastify.response" };
   return {
-    mainGroup: group.name,
-    requestGroup: group.request,
-    responseGroup: group.response,
+    nameGroup: group.name ?? "fastify",
+    requestGroup: group.request ?? "fastify.request",
+    responseGroup: group.response ?? "fastify.response",
   };
 }
 
@@ -62,9 +59,9 @@ const fastifyLogLayerPlugin: FastifyPluginAsync<FastifyLogLayerConfig> = async (
     requestId: requestIdConfig = true,
     autoLogging: autoLoggingConfig = true,
     contextFn,
-    group: groupConfig,
+    group: groupConfig = true,
   } = config;
-  const { mainGroup, requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
+  const { nameGroup, requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
 
   const autoLogging: FastifyAutoLoggingConfig | false =
     autoLoggingConfig === true ? {} : autoLoggingConfig === false ? false : autoLoggingConfig;
@@ -98,8 +95,7 @@ const fastifyLogLayerPlugin: FastifyPluginAsync<FastifyLogLayerConfig> = async (
     }
 
     // Create a child LogLayer, apply context, and wrap in the Fastify adapter
-    const base = mainGroup ? instance.withGroup(mainGroup) : instance.child();
-    const childLogger = base.withContext(context) as ILogLayer;
+    const childLogger = instance.child().withContext(context) as ILogLayer;
     (request as any).log = createLogLayerFastifyLogger(childLogger);
     requestStartTimes.set(request, Date.now());
 
@@ -144,7 +140,9 @@ const fastifyLogLayerPlugin: FastifyPluginAsync<FastifyLogLayerConfig> = async (
   // onError: log errors
   fastify.addHook("onError", async (request, _reply, error) => {
     if (!request.log) return;
-    request.log.withError(error).withMetadata({ url: request.url }).error("Request error");
+    let builder = request.log.withError(error).withMetadata({ url: request.url });
+    if (nameGroup) builder = builder.withGroup(nameGroup);
+    builder.error("Request error");
   });
 };
 

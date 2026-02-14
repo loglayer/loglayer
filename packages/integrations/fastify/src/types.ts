@@ -64,26 +64,26 @@ export interface FastifyAutoLoggingConfig {
 }
 
 /**
- * Group routing configuration for the integration.
- * Controls which groups are assigned to logs from this integration.
+ * Group names for auto-logged messages.
  */
 export interface FastifyGroupConfig {
   /**
-   * Group applied to all logs (user-generated and auto-logged) from this integration.
+   * Group name for internal auto-logs (errors, etc.).
+   * @default "fastify"
    */
-  name?: string | string[];
+  name?: string;
 
   /**
-   * Additional group applied to auto-logged incoming request messages.
-   * Additive with the main group.
+   * Group name for auto-logged incoming request messages.
+   * @default "fastify.request"
    */
-  request?: string | string[];
+  request?: string;
 
   /**
-   * Additional group applied to auto-logged response messages.
-   * Additive with the main group.
+   * Group name for auto-logged response messages.
+   * @default "fastify.response"
    */
-  response?: string | string[];
+  response?: string;
 }
 
 /**
@@ -121,12 +121,15 @@ export interface FastifyLogLayerConfig {
   contextFn?: (request: FastifyRequest) => Record<string, any>;
 
   /**
-   * Assigns groups to all logs from this integration for transport routing.
-   * - `string`: tag all logs with this group
-   * - `string[]`: tag all logs with multiple groups
-   * - `object`: configure main, request, and response groups individually
+   * Tags auto-logged request/response/error messages with groups for filtering/routing.
+   * - `true`: tag with default group names (default)
+   * - `false`: disables group tagging
+   * - `object`: tag with custom group names
    *
+   * Only affects auto-logged messages. User logs from route handlers are not tagged.
+   *
+   * @default true
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
-  group?: string | string[] | FastifyGroupConfig;
+  group?: boolean | FastifyGroupConfig;
 }

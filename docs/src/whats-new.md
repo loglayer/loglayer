@@ -11,7 +11,7 @@ description: Learn about the latest features and improvements in LogLayer
 
 `@loglayer/elysia`, `@loglayer/hono`, `@loglayer/fastify`:
 
-- Added `group` config option to all three integrations. When set, all logs (auto-logged and user-generated) from the integration are tagged with the specified [group(s)](/logging-api/groups) for transport routing. Supports individual request and response groups that are additive with the main group.
+- Added `group` config option (enabled by default) to all three integrations. Auto-logged messages (request, response, errors) are tagged with [groups](/logging-api/groups) for transport routing/filtering. User logs from route handlers are not tagged. Default group names use dotted notation (e.g. `"elysia.request"`, `"elysia.response"`). Set `group: false` to disable.
 
 `v9.1.0`:
 

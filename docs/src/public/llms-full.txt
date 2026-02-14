@@ -1344,11 +1344,11 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 - [Testing Transports](https://loglayer.dev/transports/testing-transports): Test custom transports
 - [Testing Plugins](https://loglayer.dev/plugins/testing-plugins): Test custom plugins
 - [Testing Mixins](https://loglayer.dev/mixins/testing-mixins): Test custom mixins
-- [ElysiaJS Integration](https://loglayer.dev/integrations/elysia): ElysiaJS plugin with request-scoped logging, supports `group` for transport routing
+- [ElysiaJS Integration](https://loglayer.dev/integrations/elysia): ElysiaJS plugin with request-scoped logging, auto-tags messages with groups (`elysia.request`, `elysia.response`) by default
 - [Express Integration](https://loglayer.dev/example-integrations/express): Express.js example
-- [Fastify Integration](https://loglayer.dev/integrations/fastify): Fastify integration with request-scoped logging, supports `group` for transport routing
+- [Fastify Integration](https://loglayer.dev/integrations/fastify): Fastify integration with request-scoped logging, auto-tags messages with groups (`fastify.request`, `fastify.response`) by default
 - [Next.js Integration](https://loglayer.dev/example-integrations/nextjs): Next.js example
-- [Hono Integration](https://loglayer.dev/integrations/hono): Hono integration with request-scoped logging, supports `group` for transport routing
+- [Hono Integration](https://loglayer.dev/integrations/hono): Hono integration with request-scoped logging, auto-tags messages with groups (`hono.request`, `hono.response`) by default
 - [Async Context Tracking](https://loglayer.dev/example-integrations/async-context): AsyncLocalStorage example
 - [Bun Integration](https://loglayer.dev/example-integrations/bun): Bun example
 - [Deno Integration](https://loglayer.dev/example-integrations/deno): Deno example

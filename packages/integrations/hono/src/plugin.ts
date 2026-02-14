@@ -9,17 +9,9 @@ import type {
 } from "./types.js";
 
 function resolveGroupConfig(group: HonoLogLayerConfig["group"]) {
-  if (!group) return { mainGroup: undefined, requestGroup: undefined, responseGroup: undefined };
-
-  if (typeof group === "string" || Array.isArray(group)) {
-    return { mainGroup: group, requestGroup: undefined, responseGroup: undefined };
-  }
-
-  return {
-    mainGroup: group.name,
-    requestGroup: group.request,
-    responseGroup: group.response,
-  };
+  if (!group) return { requestGroup: undefined, responseGroup: undefined };
+  if (group === true) return { requestGroup: "hono.request", responseGroup: "hono.response" };
+  return { requestGroup: group.request ?? "hono.request", responseGroup: group.response ?? "hono.response" };
 }
 
 function shouldIgnorePath(path: string, ignore?: Array<string | RegExp>): boolean {
@@ -87,9 +79,9 @@ export function honoLogLayer(config: HonoLogLayerConfig) {
     requestId: requestIdConfig = true,
     autoLogging: autoLoggingConfig = true,
     contextFn,
-    group: groupConfig,
+    group: groupConfig = true,
   } = config;
-  const { mainGroup, requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
+  const { requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
 
   const autoLogging: HonoAutoLoggingConfig | false =
     autoLoggingConfig === true ? {} : autoLoggingConfig === false ? false : autoLoggingConfig;
@@ -122,8 +114,7 @@ export function honoLogLayer(config: HonoLogLayerConfig) {
       }
     }
 
-    const base = mainGroup ? instance.withGroup(mainGroup) : instance.child();
-    const childLogger = base.withContext(context) as ILogLayer;
+    const childLogger = instance.child().withContext(context) as ILogLayer;
     c.set("logger", childLogger);
 
     const startTime = Date.now();

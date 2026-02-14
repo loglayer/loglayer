@@ -89,7 +89,7 @@ const app = new Hono<AppEnv>();
 | `requestId` | `boolean \| (request: Request) => string` | `true` | Controls request ID generation |
 | `autoLogging` | `boolean \| HonoAutoLoggingConfig` | `true` | Controls automatic request/response logging |
 | `contextFn` | `(context: { request: Request, path: string }) => Record<string, any>` | - | Extract additional context from requests |
-| `group` | `string \| string[] \| HonoGroupConfig` | - | Tag all logs with [group(s)](/logging-api/groups) for transport routing |
+| `group` | `boolean \| HonoGroupConfig` | `true` | Tag auto-logged messages with [groups](/logging-api/groups) for transport routing |
 
 ### Auto-Logging Configuration
 
@@ -233,7 +233,7 @@ Hono's error handler runs after the middleware chain, so `c.var.logger` is avail
 
 ### Group Routing
 
-Route all logs from the integration to specific transports using [groups](/logging-api/groups):
+Tag auto-logged messages (request, response) with [groups](/logging-api/groups) so you can route or filter them. User logs from route handlers are **not** tagged.
 
 ```typescript
 const log = new LogLayer({
@@ -242,25 +242,30 @@ const log = new LogLayer({
     new DatadogTransport({ id: 'datadog', logger: datadog }),
   ],
   groups: {
-    api: { transports: ['datadog'] },
-    'api:request': { transports: ['datadog'] },
-    'api:response': { transports: ['console', 'datadog'] },
+    hono: { transports: ['datadog'] },
+    'hono.request': { transports: ['datadog'] },
+    'hono.response': { transports: ['console', 'datadog'] },
   },
 })
 
-// Simple: tag all logs with 'api'
-app.use(honoLogLayer({ instance: log, group: 'api' }))
+// Groups are enabled by default with: request="hono.request", response="hono.response"
+// To disable: group: false
 
-// With individual request/response groups (additive with main group)
+// With custom group names
 app.use(honoLogLayer({
   instance: log,
   group: {
-    name: 'api',
-    request: 'api:request',
-    response: 'api:response',
+    request: 'api.request',  // auto-logged requests
+    response: 'api.response', // auto-logged responses
   },
 }))
 ```
+
+When `group` is `true` or an object:
+| Group | Default | Applied to |
+|-------|---------|------------|
+| `request` | `"hono.request"` | Auto-logged incoming request messages |
+| `response` | `"hono.response"` | Auto-logged response messages |
 
 ### Using with Other Hono Middleware
 

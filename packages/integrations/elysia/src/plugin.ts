@@ -58,6 +58,16 @@ function resolveLoggingConfig<T>(value: boolean | T | undefined, defaultEnabled:
   return value;
 }
 
+function resolveGroupConfig(group: ElysiaLogLayerConfig["group"]) {
+  if (!group) return { nameGroup: undefined, requestGroup: undefined, responseGroup: undefined };
+  if (group === true) return { nameGroup: "elysia", requestGroup: "elysia.request", responseGroup: "elysia.response" };
+  return {
+    nameGroup: group.name ?? "elysia",
+    requestGroup: group.request ?? "elysia.request",
+    responseGroup: group.response ?? "elysia.response",
+  };
+}
+
 /**
  * Creates an ElysiaJS plugin that integrates LogLayer for request-scoped logging.
  *
@@ -78,29 +88,15 @@ function resolveLoggingConfig<T>(value: boolean | T | undefined, defaultEnabled:
  *   .listen(3000);
  * ```
  */
-function resolveGroupConfig(group: ElysiaLogLayerConfig["group"]) {
-  if (!group) return { mainGroup: undefined, requestGroup: undefined, responseGroup: undefined };
-
-  if (typeof group === "string" || Array.isArray(group)) {
-    return { mainGroup: group, requestGroup: undefined, responseGroup: undefined };
-  }
-
-  return {
-    mainGroup: group.name,
-    requestGroup: group.request,
-    responseGroup: group.response,
-  };
-}
-
 export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
   const {
     instance,
     requestId: requestIdConfig = true,
     autoLogging: autoLoggingConfig = true,
     contextFn,
-    group: groupConfig,
+    group: groupConfig = true,
   } = config;
-  const { mainGroup, requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
+  const { nameGroup, requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
 
   const autoLogging: ElysiaAutoLoggingConfig | false =
     autoLoggingConfig === true ? {} : autoLoggingConfig === false ? false : autoLoggingConfig;
@@ -108,11 +104,13 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
   if (!autoLogging) {
     return new Elysia({ name: "@loglayer/elysia", seed: config })
       .derive({ as: "global" }, ({ request, path }) => {
-        return deriveLogger(instance, request, path, requestIdConfig, contextFn, mainGroup);
+        return deriveLogger(instance, request, path, requestIdConfig, contextFn);
       })
       .onError({ as: "global" }, ({ log, error, path }) => {
         if (!log) return;
-        (log as ILogLayer).withError(error).withMetadata({ url: path }).error("Request error");
+        let builder = (log as ILogLayer).withError(error).withMetadata({ url: path });
+        if (nameGroup) builder = builder.withGroup(nameGroup);
+        builder.error("Request error");
       });
   }
 
@@ -127,13 +125,15 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
   const plugin = new Elysia({ name: "@loglayer/elysia", seed: config })
     .derive({ as: "global" }, ({ request, path, server }) => {
       return {
-        ...deriveLogger(instance, request, path, requestIdConfig, contextFn, mainGroup),
+        ...deriveLogger(instance, request, path, requestIdConfig, contextFn),
         _remoteAddress: getRemoteAddress(request, server),
       };
     })
     .onError({ as: "global" }, ({ log, error, path }) => {
       if (!log) return;
-      (log as ILogLayer).withError(error).withMetadata({ url: path }).error("Request error");
+      let builder = (log as ILogLayer).withError(error).withMetadata({ url: path });
+      if (nameGroup) builder = builder.withGroup(nameGroup);
+      builder.error("Request error");
     });
 
   if (requestConfig) {
@@ -184,7 +184,6 @@ function deriveLogger(
   path: string,
   requestIdConfig: ElysiaLogLayerConfig["requestId"],
   contextFn: ElysiaLogLayerConfig["contextFn"],
-  mainGroup: string | string[] | undefined,
 ) {
   const context: Record<string, any> = {
     requestId: getRequestId(request, requestIdConfig),
@@ -202,8 +201,7 @@ function deriveLogger(
     }
   }
 
-  const base = mainGroup ? instance.withGroup(mainGroup) : instance.child();
-  const childLogger = base.withContext(context);
+  const childLogger = instance.child().withContext(context);
 
   return {
     log: childLogger as ILogLayer,

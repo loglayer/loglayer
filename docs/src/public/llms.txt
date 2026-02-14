@@ -290,9 +290,9 @@ Other: HTTP, Log File Rotation, OpenTelemetry
 - [Context Managers](https://loglayer.dev/context-managers/): Customize context inheritance behavior
 - [Log Level Managers](https://loglayer.dev/log-level-managers/): Customize log level behavior
 - [Mixins](https://loglayer.dev/mixins/): Extend LogLayer with custom methods
-- [ElysiaJS Integration](https://loglayer.dev/integrations/elysia): ElysiaJS plugin with request-scoped logging, supports `group` for transport routing
+- [ElysiaJS Integration](https://loglayer.dev/integrations/elysia): ElysiaJS plugin with request-scoped logging, auto-tags messages with groups (`elysia.request`, `elysia.response`) by default
 - [Express Integration](https://loglayer.dev/example-integrations/express): Express.js example
-- [Fastify Integration](https://loglayer.dev/integrations/fastify): Fastify integration with request-scoped logging, supports `group` for transport routing
+- [Fastify Integration](https://loglayer.dev/integrations/fastify): Fastify integration with request-scoped logging, auto-tags messages with groups (`fastify.request`, `fastify.response`) by default
 - [Next.js Integration](https://loglayer.dev/example-integrations/nextjs): Next.js example
-- [Hono Integration](https://loglayer.dev/integrations/hono): Hono integration with request-scoped logging, supports `group` for transport routing
+- [Hono Integration](https://loglayer.dev/integrations/hono): Hono integration with request-scoped logging, auto-tags messages with groups (`hono.request`, `hono.response`) by default
 - [Async Context Tracking](https://loglayer.dev/example-integrations/async-context): AsyncLocalStorage example
