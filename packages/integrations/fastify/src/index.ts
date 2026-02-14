@@ -10,6 +10,7 @@ export { createLogLayerFastifyLogger } from "./adapter.js";
 export { fastifyLogLayer } from "./plugin.js";
 export type {
   FastifyAutoLoggingConfig,
+  FastifyGroupConfig,
   FastifyLogLayerConfig,
   FastifyRequestLoggingConfig,
   FastifyResponseLoggingConfig,

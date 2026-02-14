@@ -84,6 +84,29 @@ export interface HonoAutoLoggingConfig {
 }
 
 /**
+ * Group routing configuration for the integration.
+ * Controls which groups are assigned to logs from this integration.
+ */
+export interface HonoGroupConfig {
+  /**
+   * Group applied to all logs (user-generated and auto-logged) from this integration.
+   */
+  name?: string | string[];
+
+  /**
+   * Additional group applied to auto-logged incoming request messages.
+   * Additive with the main group.
+   */
+  request?: string | string[];
+
+  /**
+   * Additional group applied to auto-logged response messages.
+   * Additive with the main group.
+   */
+  response?: string | string[];
+}
+
+/**
  * Configuration for the Hono LogLayer integration middleware.
  */
 export interface HonoLogLayerConfig {
@@ -116,4 +139,14 @@ export interface HonoLogLayerConfig {
    * The returned object will be merged into the per-request logger's context.
    */
   contextFn?: (context: { request: Request; path: string }) => Record<string, any>;
+
+  /**
+   * Assigns groups to all logs from this integration for transport routing.
+   * - `string`: tag all logs with this group
+   * - `string[]`: tag all logs with multiple groups
+   * - `object`: configure main, request, and response groups individually
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  group?: string | string[] | HonoGroupConfig;
 }

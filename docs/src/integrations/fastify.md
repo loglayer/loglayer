@@ -89,6 +89,7 @@ The plugin augments Fastify's `FastifyBaseLogger` interface with `ILogLayer`, so
 | `requestId` | `boolean \| (request: FastifyRequest) => string` | `true` | Controls request ID generation |
 | `autoLogging` | `boolean \| FastifyAutoLoggingConfig` | `true` | Controls automatic request/response logging |
 | `contextFn` | `(request: FastifyRequest) => Record<string, any>` | - | Extract additional context from requests |
+| `group` | `string \| string[] \| FastifyGroupConfig` | - | Tag all logs with [group(s)](/logging-api/groups) for transport routing |
 
 ### Auto-Logging Configuration
 
@@ -244,6 +245,37 @@ await app.register(fastifyLogLayer, { instance: log });
 ::: tip
 Setting `disableRequestLogging: true` prevents Fastify's built-in request/response logging from conflicting with the plugin's auto-logging.
 :::
+
+### Group Routing
+
+Route all logs from the integration to specific transports using [groups](/logging-api/groups):
+
+```typescript
+const log = new LogLayer({
+  transport: [
+    new ConsoleTransport({ id: 'console', logger: console }),
+    new DatadogTransport({ id: 'datadog', logger: datadog }),
+  ],
+  groups: {
+    api: { transports: ['datadog'] },
+    'api:request': { transports: ['datadog'] },
+    'api:response': { transports: ['console', 'datadog'] },
+  },
+})
+
+// Simple: tag all logs with 'api'
+await app.register(fastifyLogLayer, { instance: log, group: 'api' })
+
+// With individual request/response groups (additive with main group)
+await app.register(fastifyLogLayer, {
+  instance: log,
+  group: {
+    name: 'api',
+    request: 'api:request',
+    response: 'api:response',
+  },
+})
+```
 
 ### Using with Other Fastify Plugins
 

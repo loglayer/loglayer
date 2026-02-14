@@ -8,6 +8,20 @@ import type {
   HonoResponseLoggingConfig,
 } from "./types.js";
 
+function resolveGroupConfig(group: HonoLogLayerConfig["group"]) {
+  if (!group) return { mainGroup: undefined, requestGroup: undefined, responseGroup: undefined };
+
+  if (typeof group === "string" || Array.isArray(group)) {
+    return { mainGroup: group, requestGroup: undefined, responseGroup: undefined };
+  }
+
+  return {
+    mainGroup: group.name,
+    requestGroup: group.request,
+    responseGroup: group.response,
+  };
+}
+
 function shouldIgnorePath(path: string, ignore?: Array<string | RegExp>): boolean {
   if (!ignore || ignore.length === 0) return false;
 
@@ -68,7 +82,14 @@ function resolveLoggingConfig<T>(value: boolean | T | undefined, defaultEnabled:
  * ```
  */
 export function honoLogLayer(config: HonoLogLayerConfig) {
-  const { instance, requestId: requestIdConfig = true, autoLogging: autoLoggingConfig = true, contextFn } = config;
+  const {
+    instance,
+    requestId: requestIdConfig = true,
+    autoLogging: autoLoggingConfig = true,
+    contextFn,
+    group: groupConfig,
+  } = config;
+  const { mainGroup, requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
 
   const autoLogging: HonoAutoLoggingConfig | false =
     autoLoggingConfig === true ? {} : autoLoggingConfig === false ? false : autoLoggingConfig;
@@ -101,7 +122,8 @@ export function honoLogLayer(config: HonoLogLayerConfig) {
       }
     }
 
-    const childLogger = instance.child().withContext(context) as ILogLayer;
+    const base = mainGroup ? instance.withGroup(mainGroup) : instance.child();
+    const childLogger = base.withContext(context) as ILogLayer;
     c.set("logger", childLogger);
 
     const startTime = Date.now();
@@ -110,15 +132,15 @@ export function honoLogLayer(config: HonoLogLayerConfig) {
 
     // Log incoming request
     if (requestConfig && !ignorePath) {
-      childLogger
-        .withMetadata({
-          req: {
-            method: c.req.method,
-            url: path,
-            remoteAddress,
-          },
-        })
-        [requestLogLevel]("incoming request");
+      let builder = childLogger.withMetadata({
+        req: {
+          method: c.req.method,
+          url: path,
+          remoteAddress,
+        },
+      });
+      if (requestGroup) builder = builder.withGroup(requestGroup);
+      builder[requestLogLevel]("incoming request");
     }
 
     await next();
@@ -127,19 +149,19 @@ export function honoLogLayer(config: HonoLogLayerConfig) {
     if (responseConfig && !ignorePath) {
       const responseTime = Date.now() - startTime;
 
-      childLogger
-        .withMetadata({
-          req: {
-            method: c.req.method,
-            url: path,
-            remoteAddress,
-          },
-          res: {
-            statusCode: c.res.status,
-          },
-          responseTime,
-        })
-        [responseLogLevel]("request completed");
+      let builder = childLogger.withMetadata({
+        req: {
+          method: c.req.method,
+          url: path,
+          remoteAddress,
+        },
+        res: {
+          statusCode: c.res.status,
+        },
+        responseTime,
+      });
+      if (responseGroup) builder = builder.withGroup(responseGroup);
+      builder[responseLogLevel]("request completed");
     }
   });
 }

@@ -63,6 +63,29 @@ export interface ElysiaAutoLoggingConfig {
 }
 
 /**
+ * Group routing configuration for the integration.
+ * Controls which groups are assigned to logs from this integration.
+ */
+export interface ElysiaGroupConfig {
+  /**
+   * Group applied to all logs (user-generated and auto-logged) from this integration.
+   */
+  name?: string | string[];
+
+  /**
+   * Additional group applied to auto-logged incoming request messages.
+   * Additive with the main group.
+   */
+  request?: string | string[];
+
+  /**
+   * Additional group applied to auto-logged response messages.
+   * Additive with the main group.
+   */
+  response?: string | string[];
+}
+
+/**
  * Configuration for the ElysiaJS LogLayer integration plugin.
  */
 export interface ElysiaLogLayerConfig {
@@ -95,4 +118,14 @@ export interface ElysiaLogLayerConfig {
    * The returned object will be merged into the per-request logger's context.
    */
   contextFn?: (ctx: { request: Request; path: string }) => Record<string, any>;
+
+  /**
+   * Assigns groups to all logs from this integration for transport routing.
+   * - `string`: tag all logs with this group
+   * - `string[]`: tag all logs with multiple groups
+   * - `object`: configure main, request, and response groups individually
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  group?: string | string[] | ElysiaGroupConfig;
 }

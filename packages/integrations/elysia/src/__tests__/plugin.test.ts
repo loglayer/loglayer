@@ -413,6 +413,129 @@ describe("elysiaLogLayer", () => {
     });
   });
 
+  describe("group", () => {
+    function createGroupTestLogger() {
+      const t1Lib = new TestLoggingLibrary();
+      const t2Lib = new TestLoggingLibrary();
+      const logger = new LogLayer({
+        transport: [new TestTransport({ logger: t1Lib, id: "t1" }), new TestTransport({ logger: t2Lib, id: "t2" })],
+        groups: {
+          api: { transports: ["t1"] },
+          "api:request": { transports: ["t1"] },
+          "api:response": { transports: ["t2"] },
+        },
+        ungroupedBehavior: "none",
+      });
+      return { logger, t1Lib, t2Lib };
+    }
+
+    it("should tag all logs with the main group (string)", async () => {
+      const { logger, t1Lib, t2Lib } = createGroupTestLogger();
+
+      const app = new Elysia()
+        .use(elysiaLogLayer({ instance: logger, group: "api", autoLogging: false }))
+        .get("/test", ({ log }) => {
+          log.info("route log");
+          return "ok";
+        });
+
+      await app.handle(new Request("http://localhost/test"));
+
+      const t1Line = findLogWithMessage(t1Lib, "route log");
+      expect(t1Line).toBeTruthy();
+      const t2Line = findLogWithMessage(t2Lib, "route log");
+      expect(t2Line).toBeFalsy();
+    });
+
+    it("should tag auto-logged request messages with request group", async () => {
+      const { logger, t1Lib, t2Lib } = createGroupTestLogger();
+
+      const app = new Elysia()
+        .use(
+          elysiaLogLayer({
+            instance: logger,
+            group: { name: "api", request: "api:request" },
+            autoLogging: { response: false },
+          }),
+        )
+        .get("/test", () => "ok");
+
+      await app.handle(new Request("http://localhost/test"));
+
+      // Request auto-log goes to t1 (api + api:request both route to t1)
+      const t1Line = findLogWithMessage(t1Lib, "incoming request");
+      expect(t1Line).toBeTruthy();
+      // Should not go to t2
+      const t2Line = findLogWithMessage(t2Lib, "incoming request");
+      expect(t2Line).toBeFalsy();
+    });
+
+    it("should tag auto-logged response messages with response group", async () => {
+      const { logger, t1Lib, t2Lib } = createGroupTestLogger();
+
+      const app = new Elysia()
+        .use(
+          elysiaLogLayer({
+            instance: logger,
+            group: { name: "api", response: "api:response" },
+            autoLogging: { request: false },
+          }),
+        )
+        .get("/test", () => "ok");
+
+      await app.handle(new Request("http://localhost/test"));
+
+      // Response auto-log goes to both t1 (api group) and t2 (api:response group)
+      const t1Line = findLogWithMessage(t1Lib, "request completed");
+      expect(t1Line).toBeTruthy();
+      const t2Line = findLogWithMessage(t2Lib, "request completed");
+      expect(t2Line).toBeTruthy();
+    });
+
+    it("should support array of groups", async () => {
+      const { logger, t1Lib, t2Lib } = createGroupTestLogger();
+
+      const app = new Elysia()
+        .use(elysiaLogLayer({ instance: logger, group: ["api", "api:response"], autoLogging: false }))
+        .get("/test", ({ log }) => {
+          log.info("multi-group log");
+          return "ok";
+        });
+
+      await app.handle(new Request("http://localhost/test"));
+
+      // Should go to both t1 (api) and t2 (api:response)
+      const t1Line = findLogWithMessage(t1Lib, "multi-group log");
+      expect(t1Line).toBeTruthy();
+      const t2Line = findLogWithMessage(t2Lib, "multi-group log");
+      expect(t2Line).toBeTruthy();
+    });
+
+    it("should not use groups when group option is not set", async () => {
+      const t1Lib = new TestLoggingLibrary();
+      const t2Lib = new TestLoggingLibrary();
+      const logger = new LogLayer({
+        transport: [new TestTransport({ logger: t1Lib, id: "t1" }), new TestTransport({ logger: t2Lib, id: "t2" })],
+        groups: {
+          api: { transports: ["t1"] },
+        },
+      });
+
+      const app = new Elysia().use(elysiaLogLayer({ instance: logger, autoLogging: false })).get("/test", ({ log }) => {
+        log.info("no group log");
+        return "ok";
+      });
+
+      await app.handle(new Request("http://localhost/test"));
+
+      // Ungrouped logs go to all transports by default
+      const t1Line = findLogWithMessage(t1Lib, "no group log");
+      expect(t1Line).toBeTruthy();
+      const t2Line = findLogWithMessage(t2Lib, "no group log");
+      expect(t2Line).toBeTruthy();
+    });
+  });
+
   describe("auto-logging controls", () => {
     it("should disable all auto-logging when autoLogging is false", async () => {
       const { logger, testLib } = createTestLogger();

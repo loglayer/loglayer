@@ -9,6 +9,20 @@ import type {
   FastifyResponseLoggingConfig,
 } from "./types.js";
 
+function resolveGroupConfig(group: FastifyLogLayerConfig["group"]) {
+  if (!group) return { mainGroup: undefined, requestGroup: undefined, responseGroup: undefined };
+
+  if (typeof group === "string" || Array.isArray(group)) {
+    return { mainGroup: group, requestGroup: undefined, responseGroup: undefined };
+  }
+
+  return {
+    mainGroup: group.name,
+    requestGroup: group.request,
+    responseGroup: group.response,
+  };
+}
+
 // WeakMap to store per-request start times without decorating the request
 const requestStartTimes = new WeakMap<FastifyRequest, number>();
 
@@ -43,7 +57,14 @@ function resolveLoggingConfig<T>(value: boolean | T | undefined, defaultEnabled:
 }
 
 const fastifyLogLayerPlugin: FastifyPluginAsync<FastifyLogLayerConfig> = async (fastify, config) => {
-  const { instance, requestId: requestIdConfig = true, autoLogging: autoLoggingConfig = true, contextFn } = config;
+  const {
+    instance,
+    requestId: requestIdConfig = true,
+    autoLogging: autoLoggingConfig = true,
+    contextFn,
+    group: groupConfig,
+  } = config;
+  const { mainGroup, requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
 
   const autoLogging: FastifyAutoLoggingConfig | false =
     autoLoggingConfig === true ? {} : autoLoggingConfig === false ? false : autoLoggingConfig;
@@ -77,20 +98,21 @@ const fastifyLogLayerPlugin: FastifyPluginAsync<FastifyLogLayerConfig> = async (
     }
 
     // Create a child LogLayer, apply context, and wrap in the Fastify adapter
-    const childLogger = instance.child().withContext(context) as ILogLayer;
+    const base = mainGroup ? instance.withGroup(mainGroup) : instance.child();
+    const childLogger = base.withContext(context) as ILogLayer;
     (request as any).log = createLogLayerFastifyLogger(childLogger);
     requestStartTimes.set(request, Date.now());
 
     if (requestConfig && !shouldIgnorePath(request.url, autoLogging ? autoLogging.ignore : undefined)) {
-      request.log
-        .withMetadata({
-          req: {
-            method: request.method,
-            url: request.url,
-            remoteAddress: request.ip,
-          },
-        })
-        [requestLogLevel]("incoming request");
+      let builder = request.log.withMetadata({
+        req: {
+          method: request.method,
+          url: request.url,
+          remoteAddress: request.ip,
+        },
+      });
+      if (requestGroup) builder = builder.withGroup(requestGroup);
+      builder[requestLogLevel]("incoming request");
     }
   });
 
@@ -103,19 +125,19 @@ const fastifyLogLayerPlugin: FastifyPluginAsync<FastifyLogLayerConfig> = async (
       const startTime = requestStartTimes.get(request) ?? Date.now();
       const responseTime = Date.now() - startTime;
 
-      request.log
-        .withMetadata({
-          req: {
-            method: request.method,
-            url: request.url,
-            remoteAddress: request.ip,
-          },
-          res: {
-            statusCode: reply.statusCode,
-          },
-          responseTime,
-        })
-        [responseLogLevel]("request completed");
+      let builder = request.log.withMetadata({
+        req: {
+          method: request.method,
+          url: request.url,
+          remoteAddress: request.ip,
+        },
+        res: {
+          statusCode: reply.statusCode,
+        },
+        responseTime,
+      });
+      if (responseGroup) builder = builder.withGroup(responseGroup);
+      builder[responseLogLevel]("request completed");
     });
   }
 

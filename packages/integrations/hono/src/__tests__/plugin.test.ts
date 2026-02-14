@@ -435,6 +435,127 @@ describe("honoLogLayer", () => {
     });
   });
 
+  describe("group", () => {
+    function createGroupTestLogger() {
+      const t1Lib = new TestLoggingLibrary();
+      const t2Lib = new TestLoggingLibrary();
+      const logger = new LogLayer({
+        transport: [new TestTransport({ logger: t1Lib, id: "t1" }), new TestTransport({ logger: t2Lib, id: "t2" })],
+        groups: {
+          api: { transports: ["t1"] },
+          "api:request": { transports: ["t1"] },
+          "api:response": { transports: ["t2"] },
+        },
+        ungroupedBehavior: "none",
+      });
+      return { logger, t1Lib, t2Lib };
+    }
+
+    it("should tag all logs with the main group (string)", async () => {
+      const { logger, t1Lib, t2Lib } = createGroupTestLogger();
+
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
+      app.use(honoLogLayer({ instance: logger, group: "api", autoLogging: false }));
+      app.get("/test", (c) => {
+        c.var.logger.info("route log");
+        return c.text("ok");
+      });
+
+      await app.request("/test");
+
+      const t1Line = findLogWithMessage(t1Lib, "route log");
+      expect(t1Line).toBeTruthy();
+      const t2Line = findLogWithMessage(t2Lib, "route log");
+      expect(t2Line).toBeFalsy();
+    });
+
+    it("should tag auto-logged request messages with request group", async () => {
+      const { logger, t1Lib, t2Lib } = createGroupTestLogger();
+
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
+      app.use(
+        honoLogLayer({
+          instance: logger,
+          group: { name: "api", request: "api:request" },
+          autoLogging: { response: false },
+        }),
+      );
+      app.get("/test", (c) => c.text("ok"));
+
+      await app.request("/test");
+
+      const t1Line = findLogWithMessage(t1Lib, "incoming request");
+      expect(t1Line).toBeTruthy();
+      const t2Line = findLogWithMessage(t2Lib, "incoming request");
+      expect(t2Line).toBeFalsy();
+    });
+
+    it("should tag auto-logged response messages with response group", async () => {
+      const { logger, t1Lib, t2Lib } = createGroupTestLogger();
+
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
+      app.use(
+        honoLogLayer({
+          instance: logger,
+          group: { name: "api", response: "api:response" },
+          autoLogging: { request: false },
+        }),
+      );
+      app.get("/test", (c) => c.text("ok"));
+
+      await app.request("/test");
+
+      // Response auto-log goes to both t1 (api group) and t2 (api:response group)
+      const t1Line = findLogWithMessage(t1Lib, "request completed");
+      expect(t1Line).toBeTruthy();
+      const t2Line = findLogWithMessage(t2Lib, "request completed");
+      expect(t2Line).toBeTruthy();
+    });
+
+    it("should support array of groups", async () => {
+      const { logger, t1Lib, t2Lib } = createGroupTestLogger();
+
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
+      app.use(honoLogLayer({ instance: logger, group: ["api", "api:response"], autoLogging: false }));
+      app.get("/test", (c) => {
+        c.var.logger.info("multi-group log");
+        return c.text("ok");
+      });
+
+      await app.request("/test");
+
+      const t1Line = findLogWithMessage(t1Lib, "multi-group log");
+      expect(t1Line).toBeTruthy();
+      const t2Line = findLogWithMessage(t2Lib, "multi-group log");
+      expect(t2Line).toBeTruthy();
+    });
+
+    it("should not use groups when group option is not set", async () => {
+      const t1Lib = new TestLoggingLibrary();
+      const t2Lib = new TestLoggingLibrary();
+      const logger = new LogLayer({
+        transport: [new TestTransport({ logger: t1Lib, id: "t1" }), new TestTransport({ logger: t2Lib, id: "t2" })],
+        groups: {
+          api: { transports: ["t1"] },
+        },
+      });
+
+      const app = new Hono<{ Variables: HonoLogLayerVariables }>();
+      app.use(honoLogLayer({ instance: logger, autoLogging: false }));
+      app.get("/test", (c) => {
+        c.var.logger.info("no group log");
+        return c.text("ok");
+      });
+
+      await app.request("/test");
+
+      const t1Line = findLogWithMessage(t1Lib, "no group log");
+      expect(t1Line).toBeTruthy();
+      const t2Line = findLogWithMessage(t2Lib, "no group log");
+      expect(t2Line).toBeTruthy();
+    });
+  });
+
   describe("auto-logging controls", () => {
     it("should disable all auto-logging when autoLogging is false", async () => {
       const { logger, testLib } = createTestLogger();

@@ -78,8 +78,29 @@ function resolveLoggingConfig<T>(value: boolean | T | undefined, defaultEnabled:
  *   .listen(3000);
  * ```
  */
+function resolveGroupConfig(group: ElysiaLogLayerConfig["group"]) {
+  if (!group) return { mainGroup: undefined, requestGroup: undefined, responseGroup: undefined };
+
+  if (typeof group === "string" || Array.isArray(group)) {
+    return { mainGroup: group, requestGroup: undefined, responseGroup: undefined };
+  }
+
+  return {
+    mainGroup: group.name,
+    requestGroup: group.request,
+    responseGroup: group.response,
+  };
+}
+
 export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
-  const { instance, requestId: requestIdConfig = true, autoLogging: autoLoggingConfig = true, contextFn } = config;
+  const {
+    instance,
+    requestId: requestIdConfig = true,
+    autoLogging: autoLoggingConfig = true,
+    contextFn,
+    group: groupConfig,
+  } = config;
+  const { mainGroup, requestGroup, responseGroup } = resolveGroupConfig(groupConfig);
 
   const autoLogging: ElysiaAutoLoggingConfig | false =
     autoLoggingConfig === true ? {} : autoLoggingConfig === false ? false : autoLoggingConfig;
@@ -87,7 +108,7 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
   if (!autoLogging) {
     return new Elysia({ name: "@loglayer/elysia", seed: config })
       .derive({ as: "global" }, ({ request, path }) => {
-        return deriveLogger(instance, request, path, requestIdConfig, contextFn);
+        return deriveLogger(instance, request, path, requestIdConfig, contextFn, mainGroup);
       })
       .onError({ as: "global" }, ({ log, error, path }) => {
         if (!log) return;
@@ -106,7 +127,7 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
   const plugin = new Elysia({ name: "@loglayer/elysia", seed: config })
     .derive({ as: "global" }, ({ request, path, server }) => {
       return {
-        ...deriveLogger(instance, request, path, requestIdConfig, contextFn),
+        ...deriveLogger(instance, request, path, requestIdConfig, contextFn, mainGroup),
         _remoteAddress: getRemoteAddress(request, server),
       };
     })
@@ -119,15 +140,15 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
     plugin.onBeforeHandle({ as: "global" }, ({ log, request, path, _remoteAddress }) => {
       if (shouldIgnorePath(path, autoLogging.ignore)) return;
 
-      (log as ILogLayer)
-        .withMetadata({
-          req: {
-            method: request.method,
-            url: path,
-            remoteAddress: _remoteAddress,
-          },
-        })
-        [requestLogLevel]("incoming request");
+      let builder = (log as ILogLayer).withMetadata({
+        req: {
+          method: request.method,
+          url: path,
+          remoteAddress: _remoteAddress,
+        },
+      });
+      if (requestGroup) builder = builder.withGroup(requestGroup);
+      builder[requestLogLevel]("incoming request");
     });
   }
 
@@ -138,19 +159,19 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
       const responseTime = Date.now() - (_requestStartTime as number);
       const statusCode = set.status ?? 200;
 
-      (log as ILogLayer)
-        .withMetadata({
-          req: {
-            method: request.method,
-            url: path,
-            remoteAddress: _remoteAddress,
-          },
-          res: {
-            statusCode,
-          },
-          responseTime,
-        })
-        [responseLogLevel]("request completed");
+      let builder = (log as ILogLayer).withMetadata({
+        req: {
+          method: request.method,
+          url: path,
+          remoteAddress: _remoteAddress,
+        },
+        res: {
+          statusCode,
+        },
+        responseTime,
+      });
+      if (responseGroup) builder = builder.withGroup(responseGroup);
+      builder[responseLogLevel]("request completed");
     });
   }
 
@@ -163,6 +184,7 @@ function deriveLogger(
   path: string,
   requestIdConfig: ElysiaLogLayerConfig["requestId"],
   contextFn: ElysiaLogLayerConfig["contextFn"],
+  mainGroup: string | string[] | undefined,
 ) {
   const context: Record<string, any> = {
     requestId: getRequestId(request, requestIdConfig),
@@ -180,7 +202,8 @@ function deriveLogger(
     }
   }
 
-  const childLogger = instance.child().withContext(context);
+  const base = mainGroup ? instance.withGroup(mainGroup) : instance.child();
+  const childLogger = base.withContext(context);
 
   return {
     log: childLogger as ILogLayer,
