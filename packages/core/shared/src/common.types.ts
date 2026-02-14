@@ -107,6 +107,32 @@ export type LogReturnType<IsAsync extends boolean> = IsAsync extends true
     ? void
     : void | Promise<void>;
 
+/**
+ * Configuration for a single log group.
+ * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+ */
+export interface LogGroupConfig {
+  /**
+   * Array of transport IDs that this group routes to.
+   */
+  transports: string[];
+  /**
+   * Minimum log level for this group. Logs below this level are dropped
+   * for this group's transports. Default is "trace" (all levels pass).
+   */
+  level?: LogLevelType;
+  /**
+   * Whether this group is enabled. Default is true.
+   */
+  enabled?: boolean;
+}
+
+/**
+ * Map of group names to their configurations.
+ * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+ */
+export type LogGroupsConfig = Record<string, LogGroupConfig>;
+
 export interface LogLayerCommonDataParams {
   /**
    * Combined object data containing the metadata, context, and / or error data in a

@@ -166,6 +166,38 @@ log.info('User logged in successfully')
 
 See more about [multi-transport support](/transports/multiple-transports).
 
+## Targeted Log Routing with Groups
+
+In a large system with many subsystems, you often want certain logs to go to certain destinations. Groups let you tag logs by category and route them to specific transports with per-group log levels:
+
+```typescript
+const log = new LogLayer({
+  transport: [
+    new ConsoleTransport({ id: 'console', logger: console }),
+    new DatadogTransport({ id: 'datadog', logger: datadog }),
+  ],
+  groups: {
+    database: { transports: ['datadog'], level: 'error' },
+    auth: { transports: ['datadog', 'console'], level: 'warn' },
+  },
+})
+
+// Tag individual logs
+log.withGroup('database').error('Connection lost')
+
+// Or create a dedicated logger for a subsystem
+const dbLogger = log.withGroup('database')
+dbLogger.error('Pool exhausted')   // routed to datadog only
+```
+
+At runtime, narrow focus to a specific subsystem without code changes using an environment variable:
+
+```bash
+LOGLAYER_GROUPS=database:debug
+```
+
+See more about [groups](/logging-api/groups).
+
 ## HTTP Logging
 
 Send logs directly to any HTTP endpoint without a third-party logging library. Supports batching, retries, and custom headers.

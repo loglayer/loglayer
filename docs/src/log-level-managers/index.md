@@ -7,7 +7,9 @@ description: Learn how to create and use log level managers with LogLayer
 
 *New in LogLayer v8*.
 
-Log level managers in LogLayer are responsible for managing log level settings across logger instances. They provide a way to control how log levels are inherited and propagated between parent and child loggers.
+Log level managers in LogLayer are responsible for managing the **global log level** ([tier 1](/logging-api/adjusting-log-levels#log-level-evaluation-order)) across logger instances. They control how log levels set via `setLevel()`, `enableLogging()`, and `disableLogging()` are inherited and propagated between parent and child loggers.
+
+Log level managers do not affect [group-level](/logging-api/groups#group-level-filtering) or [transport-level](/transports/configuration) filtering. See [Log Level Evaluation Order](/logging-api/adjusting-log-levels#log-level-evaluation-order) for how all three tiers interact.
 
 ::: tip Do you need to specify a log level manager?
 Log level managers are an advanced feature of LogLayer. 

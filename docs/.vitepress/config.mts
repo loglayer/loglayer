@@ -95,6 +95,7 @@ export default defineConfig({
           { text: 'Lazy Evaluation (v9)', link: '/logging-api/lazy-evaluation' },
           { text: 'Error Handling', link: '/logging-api/error-handling' },
           { text: 'Child Loggers', link: '/logging-api/child-loggers' },
+          { text: 'Groups (v9)', link: '/logging-api/groups' },
           { text: 'Transport Management', link: '/logging-api/transport-management' },
           { text: 'Typescript Tips', link: '/logging-api/typescript' },
           { text: 'No-op / Mocking', link: '/logging-api/unit-testing' },

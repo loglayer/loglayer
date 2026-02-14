@@ -9,6 +9,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Feb 13, 2026
 
+`v9.1.0`:
+
+- Added [Groups](/logging-api/groups) for routing logs to specific transports by named category. Inspired by [categories in LogTape](https://logtape.org/manual/categories). Define groups with per-group log levels and transport lists, then tag individual logs with `withGroup('database').error('...')` or create persistent child loggers with `log.withGroup('database')`. Supports runtime management (`addGroup`, `removeGroup`, `enableGroup`, `disableGroup`, `setGroupLevel`, `setActiveGroups`), `ungroupedBehavior` config for backward compatibility, and a `LOGLAYER_GROUPS` environment variable for filtering active groups without code changes. Groups are passed through to transports and the `shouldSendToLogger` plugin hook.
+
 `v9.0.1`:
 
 - Log methods now return `void` by default instead of `void | Promise<void>`. Only when async lazy values are present in metadata do log methods return `Promise<void>`. This fixes [`@typescript-eslint/no-floating-promises`](https://typescript-eslint.io/rules/no-floating-promises/) lint errors for users not using async lazy.

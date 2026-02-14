@@ -1,4 +1,5 @@
 import type { LogLayerPlugin } from "@loglayer/plugin";
+import type { LogGroupsConfig } from "@loglayer/shared";
 import type { LogLayerTransport } from "@loglayer/transport";
 
 export * from "./mixin.types.js";
@@ -95,4 +96,30 @@ export interface LogLayerConfig {
    * If set to true, will not include metadata data in the log message.
    */
   muteMetadata?: boolean;
+  /**
+   * Named routing groups. Each group defines which transports it routes to
+   * and an optional minimum log level.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  groups?: LogGroupsConfig;
+  /**
+   * When set, only these group names are active. Logs tagged with inactive
+   * groups are dropped. The `LOGLAYER_GROUPS` env variable overrides this
+   * at construction time.
+   *
+   * Set to `null` to clear the filter (all defined groups are active).
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  activeGroups?: string[] | null;
+  /**
+   * Controls what happens to logs that have NO group tags.
+   * - `'all'` (default): ungrouped logs go to ALL transports (backward compatible).
+   * - `'none'`: ungrouped logs are dropped entirely.
+   * - `string[]`: ungrouped logs go only to the listed transport IDs.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  ungroupedBehavior?: "all" | "none" | string[];
 }

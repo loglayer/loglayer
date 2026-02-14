@@ -143,6 +143,38 @@ const log: ILogLayer = new LogLayer({
 })
 ```
 
+## Groups (route logs to specific transports)
+
+```typescript
+const log: ILogLayer = new LogLayer({
+  transport: [
+    new ConsoleTransport({ id: 'console', logger: console }),
+    new DatadogTransport({ id: 'datadog', logger: datadog }),
+  ],
+  groups: {
+    database: { transports: ['datadog'], level: 'error' },
+    auth: { transports: ['datadog', 'console'], level: 'warn' },
+  },
+  ungroupedBehavior: 'all',  // 'all' (default) | 'none' | string[]
+})
+
+// Per-log tagging
+log.withGroup('database').error('Connection lost')
+log.withGroup(['database', 'auth']).error('Auth DB failure')
+
+// Persistent tagging (child logger)
+const dbLogger = log.withGroup('database')
+dbLogger.error('Pool exhausted')
+
+// Runtime management
+log.disableGroup('database')
+log.setGroupLevel('database', 'debug')
+log.setActiveGroups(['database'])  // only this group active
+log.setActiveGroups(null)          // all groups active
+
+// Env variable: LOGLAYER_GROUPS=database:debug,auth:warn
+```
+
 ## Child Loggers
 
 ```typescript
@@ -152,10 +184,13 @@ const parentLog: ILogLayer = new LogLayer({
 
 parentLog.withContext({ service: 'api' })
 
-// Child inherits config, context, and plugins
+// Child inherits config, context, plugins, and groups
 const childLog = parentLog.child()
 childLog.withContext({ handler: 'users' })
 childLog.info('Request received')  // has both service and handler context
+
+// Group config is shared by reference — runtime changes propagate both ways
+// Persistent group tags (via withGroup()) are copied independently
 ```
 
 ## Message Prefixing
@@ -173,6 +208,14 @@ prefixed.info('Login')  // "[Auth] Login"
 ```
 
 ## Log Level Control
+
+Log levels are checked at three independent tiers. A log must pass all applicable tiers:
+
+1. **LogLayer (global)** — `setLevel()`, `enableLogging()` — checked first, before any processing
+2. **Group** — `groups: { database: { level: 'error' } }` — only applies to grouped logs
+3. **Transport** — `new ConsoleTransport({ level: 'warn' })` — checked at dispatch time
+
+Log level managers control tier 1 only.
 
 ```typescript
 import { LogLevel } from 'loglayer'

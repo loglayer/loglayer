@@ -295,6 +295,7 @@ shouldSendToLogger?(params: PluginShouldSendToLoggerParams, loglayer: ILogLayer)
 | `metadata` | `Record<string, any>` (optional) | Individual metadata object passed to the log message method |
 | `error` | `any` (optional) | Error passed to the log message method |
 | `context` | `Record<string, any>` (optional) | Context data that is included with each log entry |
+| `groups` | `string[]` (optional) | [Group](/logging-api/groups) tags assigned to this log entry |
 
 **Example:**
 ```typescript
@@ -321,11 +322,26 @@ const transportFilterPlugin = {
     if (transportId === 'console') {
       return false
     }
-    
+
     return true
   }
 }
 ```
+
+**Example (group-aware routing):**
+```typescript
+const groupRoutingPlugin = {
+  shouldSendToLogger: ({ groups, transportId }: PluginShouldSendToLoggerParams, loglayer: ILogLayer) => {
+    // Only allow sensitive logs to go to the encrypted transport
+    if (groups?.includes('sensitive')) {
+      return transportId === 'encrypted-transport'
+    }
+    return true
+  }
+}
+```
+
+See [Groups](/logging-api/groups) for more details on group-based log routing.
 
 ### onMetadataCalled
 
