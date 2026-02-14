@@ -7,7 +7,10 @@ description: Learn how to migrate different versions of LogLayer to the latest v
 
 ## Migrating from 8.x to 9.x
 
-New version 9 introduces [Lazy Evaluation](/logging-api/lazy-evaluation), a feature for deferring expensive computations in context and metadata using the `lazy()` function. Lazy values are only evaluated when the log level is enabled, avoiding unnecessary computation for disabled log levels.
+New version 9 introduces two features:
+
+- [Lazy Evaluation](/logging-api/lazy-evaluation) — Defer expensive computations in context and metadata using the `lazy()` function. Lazy values are only evaluated when the log level is enabled, avoiding unnecessary computation for disabled log levels.
+- [Groups](/logging-api/groups) — Named routing rules that give you fine-grained control over which logs go to which transports. Tag logs with `withGroup()` to route them to specific transports with per-group log levels, active group filtering, and runtime management.
 
 *v9 does not have any breaking changes; no migration steps are necessary aside from upgrading any external loglayer dependencies to their next major version.*
 

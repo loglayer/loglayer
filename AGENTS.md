@@ -35,28 +35,78 @@ LogLayer is a universal logging library for TypeScript/JavaScript that provides 
 loglayer/
 ├── docs/                         # Documentation site (VitePress)
 │   ├── .vitepress/               # VitePress configuration (including sidebar config)
-│   ├── src/                      # Documentation site doc files
-│   │   ├── context-managers/     # Context manager documentation
-│   │   ├── example-integrations/ # Example integrations
-│   │   ├── logging-api/          # LogLayer API documentation
-│   │   ├── log-level-managers/   # Log Level Manager documentation
-│   │   ├── plugins/              # Plugin documentation
-│   │   ├── transports/           # Transport documentation
-│   │   └── mixins/               # Mixin documentation
+│   └── src/                      # Documentation site doc files
+│       ├── context-managers/     # Context manager documentation
+│       ├── example-integrations/ # Example integrations
+│       ├── integrations/         # Framework integration documentation
+│       ├── logging-api/          # LogLayer API documentation
+│       ├── log-level-managers/   # Log Level Manager documentation
+│       ├── mixins/               # Mixin documentation
+│       ├── plugins/              # Plugin documentation
+│       └── transports/           # Transport documentation
 ├── packages/
 │   ├── core/                     # Core packages
 │   │   ├── context-manager/      # Context manager system core
+│   │   ├── eslint-tests/         # ESLint integration tests
 │   │   ├── log-level-manager/    # Log level manager system core
 │   │   ├── loglayer/             # Main LogLayer implementation
 │   │   ├── plugin/               # Plugin system core
-│   │   ├── transport/            # Transport system core
 │   │   ├── shared/               # Shared utilities and types
+│   │   ├── transport/            # Transport system core
 │   │   └── tsconfig/             # Shared TypeScript configurations
 │   ├── context-managers/         # Official context manager implementations
+│   │   ├── isolated/             # Isolated context manager
+│   │   └── linked/               # Linked context manager
+│   ├── integrations/             # Official framework integrations
+│   │   ├── elysia/               # Elysia integration
+│   │   ├── express/              # Express integration
+│   │   ├── fastify/              # Fastify integration
+│   │   ├── hono/                 # Hono integration
+│   │   └── koa/                  # Koa integration
 │   ├── log-level-managers/       # Official log level manager implementations
-│   ├── transports/               # Official transport implementations
+│   │   ├── global/               # Global log level manager
+│   │   ├── linked/               # Linked log level manager
+│   │   └── one-way/              # One-way log level manager
 │   ├── mixins/                   # Official mixin implementations
-│   └── plugins/                  # Official plugins
+│   │   ├── datadog-http-metrics/ # Datadog HTTP metrics mixin
+│   │   └── hot-shots/            # Hot-shots (StatsD) mixin
+│   ├── plugins/                  # Official plugins
+│   │   ├── datadog-apm-trace-injector/ # Datadog APM trace injection
+│   │   ├── filter/               # Log filtering plugin
+│   │   ├── opentelemetry/        # OpenTelemetry plugin
+│   │   ├── redaction/            # Data redaction plugin
+│   │   └── sprintf/              # sprintf formatting plugin
+│   └── transports/               # Official transport implementations
+│       ├── aws-cloudwatch-logs/  # AWS CloudWatch Logs
+│       ├── aws-lambda-powertools/# AWS Lambda Powertools
+│       ├── axiom/                # Axiom
+│       ├── betterstack/          # Better Stack
+│       ├── bunyan/               # Bunyan
+│       ├── consola/              # Consola
+│       ├── datadog/              # Datadog (server)
+│       ├── datadog-browser-logs/ # Datadog (browser)
+│       ├── dynatrace/            # Dynatrace
+│       ├── electron-log/         # Electron Log
+│       ├── google-cloud-logging/ # Google Cloud Logging
+│       ├── http/                 # Generic HTTP transport
+│       ├── log-file-rotation/    # Log file rotation
+│       ├── log4js-node/          # Log4js
+│       ├── logflare/             # Logflare
+│       ├── loglevel/             # loglevel
+│       ├── logtape/              # LogTape
+│       ├── new-relic/            # New Relic
+│       ├── opentelemetry/        # OpenTelemetry
+│       ├── pino/                 # Pino
+│       ├── pretty-terminal/      # Pretty terminal output
+│       ├── roarr/                # Roarr
+│       ├── sentry/               # Sentry
+│       ├── signale/              # Signale
+│       ├── simple-pretty-terminal/ # Simple pretty terminal output
+│       ├── sumo-logic/           # Sumo Logic
+│       ├── tracer/               # Tracer
+│       ├── tslog/                # tslog
+│       ├── victoria-logs/        # Victoria Logs
+│       └── winston/              # Winston
 ```
 
 ### Common Package Files
