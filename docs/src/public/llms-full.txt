@@ -1345,10 +1345,11 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 - [Testing Plugins](https://loglayer.dev/plugins/testing-plugins): Test custom plugins
 - [Testing Mixins](https://loglayer.dev/mixins/testing-mixins): Test custom mixins
 - [ElysiaJS Integration](https://loglayer.dev/integrations/elysia): ElysiaJS plugin with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering
-- [Express Integration](https://loglayer.dev/example-integrations/express): Express.js example
+- [Express Integration](https://loglayer.dev/integrations/express): Express middleware with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering
 - [Fastify Integration](https://loglayer.dev/integrations/fastify): Fastify integration with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering
-- [Next.js Integration](https://loglayer.dev/example-integrations/nextjs): Next.js example
 - [Hono Integration](https://loglayer.dev/integrations/hono): Hono integration with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering
+- [Koa Integration](https://loglayer.dev/integrations/koa): Koa middleware with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering
+- [Next.js Integration](https://loglayer.dev/example-integrations/nextjs): Next.js example
 - [Async Context Tracking](https://loglayer.dev/example-integrations/async-context): AsyncLocalStorage example
 - [Bun Integration](https://loglayer.dev/example-integrations/bun): Bun example
 - [Deno Integration](https://loglayer.dev/example-integrations/deno): Deno example

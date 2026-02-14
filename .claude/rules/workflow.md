@@ -89,6 +89,26 @@ Examples:
 - `feat: add datadog HTTP metrics mixin`
 - `fix(transport): handle null logger gracefully`
 
+## Changesets
+
+**ALWAYS** create a changeset for any code changes to packages. Changesets are used to track changes and generate changelogs/version bumps.
+
+Create a changeset file in `.changeset/` with the following format:
+
+```markdown
+---
+"package-name": patch | minor | major
+---
+
+Description of the change.
+```
+
+- Use `minor` for new features and new packages
+- Use `patch` for bug fixes and small improvements
+- Use `major` for breaking changes
+- Include all affected packages in the frontmatter
+- Look at existing changeset files in `.changeset/` for examples
+
 ## Rules
 
 - **ALWAYS** write tests for any code changes
@@ -97,6 +117,7 @@ Examples:
 - **ALWAYS** run `turbo build` after type changes before making further changes
 - **ALWAYS** use `workspace:*` for internal dependencies
 - **ALWAYS** preserve existing code patterns and conventions
+- **ALWAYS** create a changeset for code changes to packages
 - **Do NOT** modify changelog files (auto-generated)
 - **Do NOT** commit with `--no-verify` unless explicitly requested
 - **Do NOT** skip writing tests

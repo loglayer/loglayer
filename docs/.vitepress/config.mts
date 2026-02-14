@@ -213,8 +213,10 @@ export default defineConfig({
         text: 'Integrations',
         items: [
           { text: 'ElysiaJS', link: '/integrations/elysia' },
+          { text: 'Express', link: '/integrations/express' },
           { text: 'Fastify', link: '/integrations/fastify' },
           { text: 'Hono', link: '/integrations/hono' },
+          { text: 'Koa', link: '/integrations/koa' },
         ]
       },
       {
@@ -223,7 +225,7 @@ export default defineConfig({
           { text: 'Async context tracking', link: '/example-integrations/async-context' },
           { text: 'Bun', link: '/example-integrations/bun' },
           { text: 'Deno', link: '/example-integrations/deno' },
-          { text: 'Express', link: '/example-integrations/express' },
+
           { text: 'Next.js', link: '/example-integrations/nextjs' },
         ]
       }
