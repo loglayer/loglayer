@@ -4,6 +4,16 @@ import { LogSizeError } from "./errors.js";
 import { compressData, sendWithRetry } from "./utils.js";
 
 /**
+ * Parameters passed to the `payloadTemplate` function.
+ * Extends `LogLayerTransportParams` with a convenience `message` field
+ * (the `messages` array joined with a space).
+ */
+export type HttpPayloadTemplateParams = LogLayerTransportParams & {
+  /** Convenience: messages joined with a space */
+  message: string;
+};
+
+/**
  * Configuration options for the HTTP transport.
  */
 export interface HttpTransportConfig extends LoggerlessTransportConfig {
@@ -46,9 +56,11 @@ export interface HttpTransportConfig extends LoggerlessTransportConfig {
     res: { status: number; statusText: string; headers: Record<string, string>; body: string };
   }) => void;
   /**
-   * Function to transform log data into the payload format
+   * Function to transform log data into the payload format.
+   * Receives all `LogLayerTransportParams` fields plus a convenience `message`
+   * string (the `messages` array joined with a space).
    */
-  payloadTemplate: (data: { logLevel: string; message: string; data?: Record<string, any> }) => string;
+  payloadTemplate: (params: HttpPayloadTemplateParams) => string;
   /**
    * Whether to use gzip compression
    * @default false
@@ -147,7 +159,7 @@ export class HttpTransport extends LoggerlessTransport {
     req: { url: string; method: string; headers: Record<string, string>; body: string | Uint8Array };
     res: { status: number; statusText: string; headers: Record<string, string>; body: string };
   }) => void;
-  private payloadTemplate: (data: { logLevel: string; message: string; data?: Record<string, any> }) => string;
+  private payloadTemplate: (params: HttpPayloadTemplateParams) => string;
   private compression: boolean;
   private maxRetries: number;
   private retryDelay: number;
@@ -211,23 +223,15 @@ export class HttpTransport extends LoggerlessTransport {
    * @param params - Log parameters including level, messages, and metadata
    * @returns The original messages array
    */
-  shipToLogger({ logLevel, messages, data, hasData }: LogLayerTransportParams): any[] {
+  shipToLogger(params: LogLayerTransportParams): any[] {
+    const { messages } = params;
     try {
       const message = messages.join(" ");
 
-      const payloadTemplate = {
-        logLevel,
-        message,
-      };
-
-      if (hasData) {
-        payloadTemplate["data"] = data;
-      }
-
-      const payload = this.payloadTemplate(payloadTemplate);
+      const payload = this.payloadTemplate({ ...params, message });
 
       if (this.onDebug) {
-        this.onDebug({ logLevel, message, data });
+        this.onDebug({ logLevel: params.logLevel, message, data: params.data });
       }
 
       // Check log entry size
@@ -241,15 +245,15 @@ export class HttpTransport extends LoggerlessTransport {
       }
 
       if (logEntrySize > this.maxLogSize) {
-        const error = new LogSizeError(
+        const sizeError = new LogSizeError(
           `Log entry exceeds maximum size of ${this.maxLogSize} bytes. Size: ${logEntrySize} bytes`,
-          { logLevel, message, data },
+          { logLevel: params.logLevel, message, data: params.data },
           logEntrySize,
           this.maxLogSize,
         );
 
         if (this.onError) {
-          this.onError(error);
+          this.onError(sizeError);
         }
         return messages;
       }

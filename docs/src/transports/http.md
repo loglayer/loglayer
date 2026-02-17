@@ -110,7 +110,7 @@ log.withMetadata({ userId: "123" }).error("User not found");
 | Name | Type | Description |
 |------|------|-------------|
 | `url` | `string` | The URL to send logs to |
-| `payloadTemplate` | `(data: { logLevel: string; message: string; data?: Record<string, any> }) => string` | Function to transform log data into the payload format |
+| `payloadTemplate` | `(params: HttpPayloadTemplateParams) => string` | Function to transform log data into the payload format. See [Payload Template Parameters](#payload-template-parameters) for all available fields. |
 
 <!--@include: ./_partials/http-transport-options.md-->
 
@@ -118,11 +118,27 @@ log.withMetadata({ userId: "123" }).error("User not found");
 
 ### Custom Payload Templates
 
-The transport requires you to provide a `payloadTemplate` function that transforms your log data into a string format expected by your HTTP endpoint:
+The transport requires you to provide a `payloadTemplate` function that transforms your log data into a string format expected by your HTTP endpoint.
+
+#### Payload Template Parameters
+
+The function receives `HttpPayloadTemplateParams` — all fields from `LogLayerTransportParams` plus a convenience `message` field:
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `logLevel` | `LogLevelType` | Log level (`"trace"`, `"debug"`, `"info"`, `"warn"`, `"error"`, `"fatal"`) |
+| `messages` | `any[]` | Raw messages array as passed to the log method |
+| `message` | `string` | Convenience: `messages` joined with a space |
+| `data` | `Record<string, any> \| undefined` | Combined metadata/context/error object assembled by LogLayer. Only present when `hasData` is `true` |
+| `hasData` | `boolean \| undefined` | Whether `data` is included in this log entry |
+| `error` | `any` | Error attached to this log entry via `withError()`, if any. Type is `any` because LogLayer supports custom error serializers. |
+| `groups` | `string[] \| undefined` | Group names this log entry belongs to, if any |
+| `metadata` | `Record<string, any> \| undefined` | Individual metadata object passed via `withMetadata()` or `metadataOnly()` |
+| `context` | `Record<string, any> \| undefined` | Context data set via `withContext()` |
 
 ```typescript
 // Simple JSON format
-payloadTemplate: ({ logLevel, message, data }) => 
+payloadTemplate: ({ logLevel, message, data }) =>
   JSON.stringify({
     timestamp: new Date().toISOString(),
     level: logLevel,
@@ -130,8 +146,21 @@ payloadTemplate: ({ logLevel, message, data }) =>
     ...data,
   })
 
+// Including error and groups
+payloadTemplate: ({ logLevel, message, data, error, groups }) =>
+  JSON.stringify({
+    timestamp: new Date().toISOString(),
+    level: logLevel,
+    message,
+    metadata: data,
+    error: error
+      ? { name: error.name, message: error.message, stack: error.stack }
+      : undefined,
+    groups: groups && groups.length > 0 ? groups : undefined,
+  })
+
 // Custom format for specific APIs
-payloadTemplate: ({ logLevel, message, data }) => 
+payloadTemplate: ({ logLevel, message, data }) =>
   JSON.stringify({
     event_type: "log_entry",
     severity: logLevel.toUpperCase(),
@@ -142,11 +171,11 @@ payloadTemplate: ({ logLevel, message, data }) =>
   })
 
 // Plain text format
-payloadTemplate: ({ logLevel, message, data }) => 
+payloadTemplate: ({ logLevel, message, data }) =>
   `[${logLevel.toUpperCase()}] ${message} ${data ? JSON.stringify(data) : ''}`
 
 // XML format
-payloadTemplate: ({ logLevel, message, data }) => 
+payloadTemplate: ({ logLevel, message, data }) =>
   `<log level="${logLevel}" timestamp="${new Date().toISOString()}">
     <message>${message}</message>
     ${data ? `<metadata>${JSON.stringify(data)}</metadata>` : ''}
