@@ -90,15 +90,15 @@ export class LogLayerCentralTransport extends HttpTransport {
       url: `${baseUrl ?? DEFAULT_BASE_URL}/api/logs`,
       // Central's POST /api/logs accepts both a single object and a JSON array.
       batchMode: "array",
-      payloadTemplate: ({ logLevel, message, data, error, groups }) => {
+      payloadTemplate: ({ logLevel, message, data, hasData, error, groups }) => {
         return JSON.stringify({
           service,
           message,
           level: logLevel in LogLevelPriority ? logLevel : LogLevel.info,
           timestamp: new Date().toISOString(),
           instanceId,
-          metadata: data ? extractMetadata(data) : undefined,
-          context: data ? extractContext(data) : undefined,
+          metadata: hasData && data ? extractMetadata(data) : undefined,
+          context: hasData && data ? extractContext(data) : undefined,
           error: error ? { name: error.name, message: error.message, stack: error.stack } : undefined,
           groups: groups && groups.length > 0 ? groups : undefined,
           tags: tags && tags.length > 0 ? tags : undefined,
