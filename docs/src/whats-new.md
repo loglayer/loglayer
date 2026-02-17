@@ -7,6 +7,13 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Feb 16, 2026
+
+`@loglayer/transport-http`:
+
+- `payloadTemplate` now receives all `LogLayerTransportParams` fields (log level, messages, metadata, context, error) in addition to the existing `data` field, enabling richer dynamic payload construction.
+- Exported `HttpPayloadTemplateParams` type for use in custom `payloadTemplate` functions.
+
 ## Feb 13, 2026
 
 `@loglayer/express`, `@loglayer/koa`:
