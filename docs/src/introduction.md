@@ -106,7 +106,7 @@ multiple backend and frontend systems.
 
 ## Tiny and Tree-Shakable
 
-- `loglayer` standalone is less than 7kB gzipped.
+- `loglayer` standalone is less than 8kB gzipped.
 - Most logging-based LogLayer transports are < 1kB gzipped.
 - All LogLayer packages are tree-shakable.
 
