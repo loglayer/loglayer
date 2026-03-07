@@ -7,6 +7,20 @@ import type {
   ElysiaResponseLoggingConfig,
 } from "./types.js";
 
+// WeakMap to assign stable numeric IDs to LogLayer instances for use as Elysia
+// plugin seeds. This avoids passing the LogLayer instance directly as the seed,
+// which would cause JSON.stringify to fail on transports with circular references
+// (e.g. OpenTelemetry).
+const instanceIds = new WeakMap<ILogLayer, number>();
+let nextInstanceId = 0;
+
+function getInstanceSeed(instance: ILogLayer): number {
+  if (!instanceIds.has(instance)) {
+    instanceIds.set(instance, nextInstanceId++);
+  }
+  return instanceIds.get(instance)!;
+}
+
 function shouldIgnorePath(path: string, ignore?: Array<string | RegExp>): boolean {
   if (!ignore || ignore.length === 0) return false;
 
@@ -102,7 +116,7 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
     autoLoggingConfig === true ? {} : autoLoggingConfig === false ? false : autoLoggingConfig;
 
   if (!autoLogging) {
-    return new Elysia({ name: "@loglayer/elysia", seed: config })
+    return new Elysia({ name: "@loglayer/elysia", seed: getInstanceSeed(instance) })
       .derive({ as: "global" }, ({ request, path }) => {
         return deriveLogger(instance, request, path, requestIdConfig, contextFn);
       })
@@ -122,7 +136,7 @@ export function elysiaLogLayer(config: ElysiaLogLayerConfig) {
   const requestLogLevel = requestConfig ? (requestConfig.logLevel ?? defaultLogLevel) : defaultLogLevel;
   const responseLogLevel = responseConfig ? (responseConfig.logLevel ?? defaultLogLevel) : defaultLogLevel;
 
-  const plugin = new Elysia({ name: "@loglayer/elysia", seed: config })
+  const plugin = new Elysia({ name: "@loglayer/elysia", seed: getInstanceSeed(instance) })
     .derive({ as: "global" }, ({ request, path, server }) => {
       return {
         ...deriveLogger(instance, request, path, requestIdConfig, contextFn),
