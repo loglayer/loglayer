@@ -1,5 +1,11 @@
 # @loglayer/elysia
 
+## 2.1.1
+
+### Patch Changes
+
+- [#363](https://github.com/loglayer/loglayer/pull/363) [`a4286c4`](https://github.com/loglayer/loglayer/commit/a4286c4ca12ebf448a4421fedc3f070cda8a9327) Thanks [@theogravity](https://github.com/theogravity)! - Fix TypeError when using LogLayer instances with circular references (e.g. OpenTelemetry transport) as the Elysia plugin seed. The plugin now uses a stable numeric ID derived from the LogLayer instance instead of passing the instance directly as the seed, avoiding `JSON.stringify` failures on circular structures.
+
 ## 2.1.0
 
 ### Minor Changes
