@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Mar 7, 2026
+
+`@loglayer/elysia`:
+
+- Fixed a `TypeError` when using transports with circular references (e.g. OpenTelemetry) — the Elysia plugin no longer passes the LogLayer instance directly as the plugin seed.
+
 ## Feb 16, 2026
 
 `@loglayer/transport-http`:

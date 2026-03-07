@@ -20,6 +20,18 @@ function getMetadataFromLine(line: { data: any[] }) {
 }
 
 describe("elysiaLogLayer", () => {
+  describe("circular reference safety", () => {
+    it("should not throw when the LogLayer instance contains circular references (e.g. OpenTelemetry transport)", () => {
+      // Simulate a logger whose internal config has circular references
+      const { logger } = createTestLogger();
+      (logger as any).__circular = logger; // introduce a self-reference
+
+      expect(() => {
+        new Elysia().use(elysiaLogLayer({ instance: logger }));
+      }).not.toThrow();
+    });
+  });
+
   describe("core functionality", () => {
     it("should make log available on the route handler context", async () => {
       const { logger } = createTestLogger();
