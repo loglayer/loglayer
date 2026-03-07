@@ -17,9 +17,9 @@
     "glob": "13.0.3",
     "vitepress": "1.6.4"
   },
-  "engineStrict": true,
   "engines": {
     "node": ">=20.16.0"
   },
+  "engineStrict": true,
   "packageManager": "pnpm@10.20.0"
 }
