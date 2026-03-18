@@ -202,4 +202,4 @@ For detailed documentation, visit [https://loglayer.dev](https://loglayer.dev)
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-Made with ❤️ by Theo Gravity / [Disaresta](https://disaresta.com). Logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan).
+Made with ❤️ by [Theo Gravity](https://suteki.nu) / [Disaresta](https://disaresta.com). Logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan).
