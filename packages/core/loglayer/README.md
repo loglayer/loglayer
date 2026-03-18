@@ -145,4 +145,4 @@ log
 - See the [LogLayer configuration documentation](https://loglayer.dev/configuration.html) for more configuration options.
 - See the [Console Transport documentation](https://loglayer.dev/transports/console.html) for more configuration options.
 
-Made with ❤️ by [Theo Gravity](https://suteki.nu). Logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan).
+Made with ❤️ by Theo Gravity / [Disaresta](https://disaresta.com). Logo by [Akshaya Madhavan](https://www.linkedin.com/in/akshaya-madhavan).
