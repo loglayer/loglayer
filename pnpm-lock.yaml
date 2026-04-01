@@ -1022,6 +1022,43 @@ importers:
         specifier: 4.0.18
         version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
+  packages/transports/cribl-http:
+    dependencies:
+      '@loglayer/transport-http':
+        specifier: workspace:*
+        version: link:../http
+    devDependencies:
+      '@internal/tsconfig':
+        specifier: workspace:*
+        version: link:../../core/tsconfig
+      '@loglayer/transport':
+        specifier: workspace:*
+        version: link:../../core/transport
+      '@types/node':
+        specifier: 25.2.3
+        version: 25.2.3
+      dotenv:
+        specifier: 17.3.1
+        version: 17.3.1
+      loglayer:
+        specifier: workspace:*
+        version: link:../../core/loglayer
+      serialize-error:
+        specifier: 13.0.1
+        version: 13.0.1
+      tsdown:
+        specifier: 0.20.3
+        version: 0.20.3(typescript@5.9.3)
+      tsx:
+        specifier: 4.21.0
+        version: 4.21.0
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: 4.0.18
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
+
   packages/transports/datadog:
     dependencies:
       '@datadog/datadog-api-client':

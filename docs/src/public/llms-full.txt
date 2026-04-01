@@ -1274,6 +1274,7 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 - `@loglayer/transport-sentry` - Sentry
 - `@loglayer/transport-axiom` - Axiom
 - `@loglayer/transport-betterstack` - Better Stack
+- `@loglayer/transport-cribl-http` - Cribl Stream (via HTTP/S Bulk API)
 - `@loglayer/transport-logflare` - Logflare
 - `@loglayer/transport-sumo-logic` - Sumo Logic
 - `@loglayer/transport-victoria-logs` - VictoriaLogs

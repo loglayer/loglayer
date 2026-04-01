@@ -1,0 +1,4 @@
+{
+  "extends": "@internal/tsconfig/tsconfig.json",
+  "include": ["./src/**/*"]
+}
