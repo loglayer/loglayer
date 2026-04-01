@@ -1,5 +1,11 @@
 # @loglayer/transport-cribl-http
 
+## 1.0.0
+
+### Major Changes
+
+- [`3363020`](https://github.com/loglayer/loglayer/commit/336302007ef3336c9c2c38e7974138b34fbe9464) - Major version bump for initial release.
+
 ## 0.1.0
 
 ### Minor Changes
