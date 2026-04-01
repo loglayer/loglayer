@@ -103,9 +103,9 @@ Create a changeset file in `.changeset/` with the following format:
 Description of the change.
 ```
 
-- Use `minor` for new features and new packages
+- Use `major` for new packages (to publish as `1.0.0`) and breaking changes
+- Use `minor` for new features on existing packages
 - Use `patch` for bug fixes and small improvements
-- Use `major` for breaking changes
 - Include all affected packages in the frontmatter
 - Look at existing changeset files in `.changeset/` for examples
 
