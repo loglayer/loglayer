@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Mar 31, 2026
+
+`@loglayer/transport-cribl`:
+
+- New transport for sending logs to [Cribl Stream](https://cribl.io) via the HTTP/S Bulk API source. Built on top of the HTTP transport with Cribl-specific configuration.
+
 ## Mar 7, 2026
 
 `@loglayer/elysia`:
