@@ -1,15 +1,15 @@
 ---
-title: Cribl Transport for LogLayer
+title: Cribl HTTP/S Transport for LogLayer
 description: Send logs to Cribl Stream with the LogLayer logging library
 ---
 
-# Cribl Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
+# Cribl HTTP/S Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
-[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-cribl)](https://www.npmjs.com/package/@loglayer/transport-cribl)
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-cribl-http)](https://www.npmjs.com/package/@loglayer/transport-cribl-http)
 
 Ships logs to [Cribl Stream](https://cribl.io) via the [HTTP/S Bulk API source](https://docs.cribl.io/stream/sources-https/) (`/cribl/_bulk` endpoint). Features include:
 
-- Automatic Cribl HTTP Bulk API JSON format
+- Automatic Cribl HTTP/S Bulk API JSON format
 - Built on top of the robust HTTP transport
 - Retry logic with exponential backoff
 - Rate limiting support
@@ -17,21 +17,21 @@ Ships logs to [Cribl Stream](https://cribl.io) via the [HTTP/S Bulk API source](
 - Error and debug callbacks
 - Configurable event metadata (source, host)
 
-[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/cribl)
+[Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/cribl-http)
 
 ## Installation
 
 ::: code-group
 ```bash [npm]
-npm install loglayer @loglayer/transport-cribl serialize-error
+npm install loglayer @loglayer/transport-cribl-http serialize-error
 ```
 
 ```bash [pnpm]
-pnpm add loglayer @loglayer/transport-cribl serialize-error
+pnpm add loglayer @loglayer/transport-cribl-http serialize-error
 ```
 
 ```bash [yarn]
-yarn add loglayer @loglayer/transport-cribl serialize-error
+yarn add loglayer @loglayer/transport-cribl-http serialize-error
 ```
 :::
 
@@ -69,7 +69,7 @@ To avoid this, use port `443` (via internal port `10443`) or a port in the `2000
 
 ```typescript
 import { LogLayer } from 'loglayer'
-import { CriblTransport } from "@loglayer/transport-cribl"
+import { CriblTransport } from "@loglayer/transport-cribl-http"
 import { serializeError } from "serialize-error";
 
 const log = new LogLayer({

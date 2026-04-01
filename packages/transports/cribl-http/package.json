@@ -1,6 +1,6 @@
 {
-  "name": "@loglayer/transport-cribl",
-  "description": "Cribl transport for the LogLayer logging library.",
+  "name": "@loglayer/transport-cribl-http",
+  "description": "Cribl HTTP/S transport for the LogLayer logging library.",
   "version": "0.0.1",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -21,7 +21,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/loglayer/loglayer.git",
-    "directory": "packages/transports/cribl"
+    "directory": "packages/transports/cribl-http"
   },
   "author": "Theo Gravity <theo@suteki.nu>",
   "keywords": [
@@ -30,7 +30,7 @@
     "loglayer",
     "cribl",
     "transport",
-    "splunk-hec"
+    "http"
   ],
   "scripts": {
     "build": "tsdown src/index.ts",

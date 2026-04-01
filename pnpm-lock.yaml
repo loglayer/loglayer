@@ -1022,7 +1022,7 @@ importers:
         specifier: 4.0.18
         version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(jiti@2.6.1)(jsdom@27.0.0(postcss@8.5.6))(less@4.4.2)(tsx@4.21.0)
 
-  packages/transports/cribl:
+  packages/transports/cribl-http:
     dependencies:
       '@loglayer/transport-http':
         specifier: workspace:*

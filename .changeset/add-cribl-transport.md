@@ -1,5 +1,5 @@
 ---
-"@loglayer/transport-cribl": minor
+"@loglayer/transport-cribl-http": minor
 ---
 
-New transport for sending logs to Cribl Stream via the Splunk HEC (HTTP Event Collector) source.
+New transport for sending logs to Cribl Stream via the HTTP/S Bulk API source.

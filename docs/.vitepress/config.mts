@@ -138,7 +138,7 @@ export default defineConfig({
             { text: 'Better Stack', link: '/transports/betterstack' },
             { text: 'DataDog (server-side)', link: '/transports/datadog' },
             { text: 'DataDog Browser Logs', link: '/transports/datadog-browser-logs' },
-            { text: 'Cribl', link: '/transports/cribl' },
+            { text: 'Cribl HTTP/S', link: '/transports/cribl' },
             { text: 'Dynatrace', link: '/transports/dynatrace' },
             { text: 'Google Cloud Logging', link: '/transports/google-cloud-logging' },
             { text: 'Logflare', link: '/transports/logflare' },
