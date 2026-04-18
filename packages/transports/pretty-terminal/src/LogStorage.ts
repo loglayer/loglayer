@@ -4,8 +4,7 @@
  */
 
 import { resolve } from "node:path";
-import Database from "better-sqlite3";
-import type { LogEntry } from "./types.js";
+import type { LogEntry, SqliteDatabaseInstance } from "./types.js";
 
 /**
  * Handles storage and retrieval of log entries using SQLite.
@@ -20,20 +19,28 @@ import type { LogEntry } from "./types.js";
  */
 export class LogStorage {
   /** SQLite database instance */
-  private db: Database.Database;
+  private db: SqliteDatabaseInstance;
 
   /**
    * Creates a new LogStorage instance.
-   * Initializes a SQLite database and creates the logs table.
    *
-   * @param logFile - Optional path to SQLite file for persistent storage.
-   *                 If not provided, uses in-memory database.
-   *                 Relative paths are resolved from the current working directory.
+   * If a `database` instance is provided it will be used directly.
+   * Otherwise a better-sqlite3 database is created from `logFile` (or `:memory:`).
+   *
+   * @param logFile - Optional path to SQLite file. Ignored when `database` is provided.
+   * @param database - Optional pre-existing SQLite database instance.
    */
-  constructor(logFile?: string) {
-    // Use specified log file or fallback to in-memory database
-    const dbPath = logFile ? (logFile.startsWith("/") ? logFile : resolve(process.cwd(), logFile)) : ":memory:";
-    this.db = new Database(dbPath);
+  constructor(logFile?: string, database?: SqliteDatabaseInstance) {
+    if (database) {
+      this.db = database;
+    } else {
+      // Lazy require so that better-sqlite3 is only loaded when no external db is provided.
+      // This allows runtimes like Bun to skip the native addon entirely.
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const BetterSqlite3 = require("better-sqlite3");
+      const dbPath = logFile ? (logFile.startsWith("/") ? logFile : resolve(process.cwd(), logFile)) : ":memory:";
+      this.db = new BetterSqlite3(dbPath);
+    }
     this.initializeDatabase();
   }
 

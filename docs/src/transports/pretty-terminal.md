@@ -8,7 +8,7 @@ import { NuAsciinemaPlayer } from '@nolebase/ui-asciinema'
 import 'asciinema-player/dist/bundle/asciinema-player.css'
 </script>
 
-# Pretty Terminal Transport <Badge type="tip" text="Server" />
+# Pretty Terminal Transport <Badge type="tip" text="Server" /> <Badge type="info" text="Bun" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-pretty-terminal)](https://www.npmjs.com/package/@loglayer/transport-pretty-terminal)
 
@@ -54,6 +54,26 @@ Pretty Terminal has only been tested in MacOS with the native Terminal app and [
 It may not work as expected in other terminal emulators or operating systems.
 :::
 
+### Node.js
+
+::: code-group
+```bash [npm]
+npm install loglayer @loglayer/transport-pretty-terminal serialize-error better-sqlite3
+```
+
+```bash [pnpm]
+pnpm add loglayer @loglayer/transport-pretty-terminal serialize-error better-sqlite3
+```
+
+```bash [yarn]
+yarn add loglayer @loglayer/transport-pretty-terminal serialize-error better-sqlite3
+```
+:::
+
+### Bun
+
+Bun has a built-in SQLite module, so [`better-sqlite3`](https://github.com/WiseLibs/better-sqlite3) is not needed. Pass a `bun:sqlite` `Database` instance via the `database` option — see [Custom SQLite instance](#custom-sqlite-instance).
+
 ::: code-group
 ```bash [npm]
 npm install loglayer @loglayer/transport-pretty-terminal serialize-error
@@ -65,6 +85,9 @@ pnpm add loglayer @loglayer/transport-pretty-terminal serialize-error
 
 ```bash [yarn]
 yarn add loglayer @loglayer/transport-pretty-terminal serialize-error
+```
+```bash [bun]
+bun add loglayer @loglayer/transport-pretty-terminal serialize-error
 ```
 :::
 
@@ -229,9 +252,44 @@ None - all parameters are optional.
 | `maxInlineDepth` | `number` | `4` | Maximum depth for displaying nested data inline. Only applies in truncated view mode. Selection mode and detail view always show full depth |
 | `maxInlineLength` | `number` | `120` | Maximum length for inline data before truncating. Only applies in truncated view mode. Selection mode and detail view always show full content |
 | `theme` | `PrettyTerminalTheme` | `moonlight` | Theme configuration for colors and styling |
-| `logFile` | `string` | `:memory:` | Path to SQLite file for persistent storage. Relative paths are resolved from the current working directory. If not provided, uses in-memory database |
+| `logFile` | `string` | `:memory:` | Path to SQLite file for persistent storage. Relative paths are resolved from the current working directory. If not provided, uses in-memory database. Ignored when `database` is set |
+| `database` | `SqliteDatabaseInstance` | — | Pre-existing SQLite database instance to use for log storage. Accepts any synchronous SQLite binding that implements `exec`, `prepare`, and `close` (e.g. `better-sqlite3`, `bun:sqlite`). When provided, `logFile` is ignored and `better-sqlite3` is never loaded |
 | `enabled` | `boolean` | `true` | Whether the transport is enabled. If false, all operations will no-op |
 | `disableInteractiveMode` | `boolean` | `false` | Whether to disable interactive mode (keyboard input and navigation). Useful when multiple applications need to print to the same terminal |
+
+## Custom SQLite instance
+
+You can supply your own SQLite database instance via the `database` option. Any synchronous SQLite binding that exposes `exec`, `prepare`, and `close` is compatible. When this option is used, `logFile` is ignored and `better-sqlite3` is never loaded.
+
+### Using bun:sqlite
+
+Bun ships with a built-in SQLite module, so no extra package is needed:
+
+```typescript
+import { Database } from 'bun:sqlite';
+import { LogLayer } from 'loglayer';
+import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
+
+const db = new Database(':memory:');
+
+const log = new LogLayer({
+  transport: getPrettyTerminal({ database: db }),
+});
+```
+
+### Using better-sqlite3 explicitly
+
+```typescript
+import Database from 'better-sqlite3';
+import { LogLayer } from 'loglayer';
+import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
+
+const db = new Database(':memory:');
+
+const log = new LogLayer({
+  transport: getPrettyTerminal({ database: db }),
+});
+```
 
 ::: warning Security Note
 If using the `logFile` option, be aware that:
@@ -376,3 +434,27 @@ const transport = getPrettyTerminal({
   theme: myCustomTheme,
 });
 ```
+
+## Migration
+
+### v5 → v6
+
+**`better-sqlite3` is now an optional peer dependency.**
+
+Previously it was bundled as a direct dependency and installed automatically. Starting in v6 you must install it yourself if you are not providing your own `database` instance.
+
+::: code-group
+```bash [npm]
+npm install better-sqlite3
+```
+
+```bash [pnpm]
+pnpm add better-sqlite3
+```
+
+```bash [yarn]
+yarn add better-sqlite3
+```
+:::
+
+If you are on Bun, you can skip this step and use `bun:sqlite` instead — see [Custom SQLite instance](#custom-sqlite-instance).

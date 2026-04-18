@@ -7,6 +7,13 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Apr 18, 2026
+
+`@loglayer/transport-pretty-terminal`:
+
+- `better-sqlite3` is now an optional peer dependency. Install it manually if you rely on the default in-memory or file-based storage.
+- Added `database` config option — pass any synchronous SQLite instance (e.g. `bun:sqlite`) to skip `better-sqlite3` entirely.
+
 ## Mar 31, 2026
 
 `@loglayer/transport-cribl-http`:

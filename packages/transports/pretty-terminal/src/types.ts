@@ -2,6 +2,39 @@ import type { LoggerlessTransportConfig } from "@loglayer/transport";
 import type { ChalkInstance } from "chalk";
 
 /**
+ * Minimal interface for a prepared SQLite statement.
+ * Compatible with better-sqlite3, bun:sqlite, and other synchronous SQLite bindings.
+ */
+export interface SqliteStatement {
+  run(...params: unknown[]): unknown;
+  all(...params: unknown[]): unknown[];
+  get(...params: unknown[]): unknown;
+}
+
+/**
+ * Minimal interface for a SQLite database instance.
+ * Compatible with better-sqlite3, bun:sqlite, and other synchronous SQLite bindings.
+ * Pass an instance of this type via `PrettyTerminalConfig.database` to use a custom SQLite implementation.
+ *
+ * @example
+ * // Using bun:sqlite
+ * import { Database } from "bun:sqlite";
+ * const db = new Database(":memory:");
+ * getPrettyTerminal({ database: db });
+ *
+ * @example
+ * // Using better-sqlite3 (default behavior when no database is provided)
+ * import Database from "better-sqlite3";
+ * const db = new Database(":memory:");
+ * getPrettyTerminal({ database: db });
+ */
+export interface SqliteDatabaseInstance {
+  exec(sql: string): void;
+  prepare(sql: string): SqliteStatement;
+  close(): void;
+}
+
+/**
  * Represents a single log entry in the storage system.
  * Each entry contains metadata and the actual log content.
  */
@@ -114,6 +147,13 @@ export interface PrettyTerminalConfig extends LoggerlessTransportConfig {
   theme?: PrettyTerminalTheme;
   /** Path to SQLite file for persistent storage. If not provided, uses in-memory database */
   logFile?: string;
+  /**
+   * A pre-existing SQLite database instance to use for log storage.
+   * When provided, `logFile` is ignored and no internal database is created.
+   * The instance must implement `exec`, `prepare`, and `close`.
+   * Compatible with better-sqlite3, bun:sqlite, and other synchronous SQLite bindings.
+   */
+  database?: SqliteDatabaseInstance;
   /** Whether the transport is enabled. If false, all operations will no-op. Defaults to true */
   enabled?: boolean;
   /** Whether to disable interactive mode (keyboard input and navigation). Useful when multiple applications need to print to the same terminal. Defaults to false */

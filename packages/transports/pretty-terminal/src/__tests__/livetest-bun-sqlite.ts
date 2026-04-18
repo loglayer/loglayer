@@ -1,4 +1,4 @@
-import Database from "better-sqlite3";
+import { Database } from "bun:sqlite";
 import { LogLayer } from "loglayer";
 import { serializeError } from "serialize-error";
 import { getPrettyTerminal } from "../index.js";
@@ -12,7 +12,7 @@ const logger = new LogLayer({
   transport,
 });
 
-logger.info("Starting better-sqlite3 livetest");
+logger.info("Starting bun:sqlite livetest");
 logger.debug("This is a debug message");
 logger.warn("This is a warning message");
 logger

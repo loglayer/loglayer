@@ -85,7 +85,8 @@ export class PrettyTerminalTransport extends LoggerlessTransport {
     const maxInlineDepth = config.maxInlineDepth || 4;
     const maxInlineLength = config.maxInlineLength || 120;
     const theme = config.theme || moonlight;
-    const logFile = config.logFile; // Get optional log file path from config
+    const logFile = config.logFile;
+    const database = config.database;
 
     // Initialize view configurations with defaults
     // Simple view is used for real-time log output
@@ -140,7 +141,7 @@ export class PrettyTerminalTransport extends LoggerlessTransport {
     };
 
     // Initialize components in dependency order
-    this.storage = new LogStorage(logFile);
+    this.storage = new LogStorage(logFile, database);
     this.renderer = new LogRenderer(simpleViewConfig, detailedViewConfig, maxInlineDepth, maxInlineLength);
     this.uiManager = new UIManager(this.renderer, this.storage, config.disableInteractiveMode);
 
