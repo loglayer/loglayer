@@ -99,30 +99,6 @@ Pretty Terminal is designed to work in a terminal only for local development. It
 It is recommended that you disable other transports when using Pretty Terminal to avoid duplicate log output.
 :::
 
-```typescript
-import { LogLayer, ConsoleTransport } from 'loglayer';
-import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
-import { serializeError } from "serialize-error";
-
-// Create LogLayer instance with the transport
-const log = new LogLayer({
-  errorSerializer: serializeError,
-  transport: [
-    new ConsoleTransport({
-      // Example of how to enable a transport for non-development environments
-      enabled: process.env.NODE_ENV !== 'development',
-    }),
-    getPrettyTerminal({
-      // Only enable Pretty Terminal in development
-      enabled: process.env.NODE_ENV === 'development',
-    })
-  ],
-});
-
-// Start logging!
-log.withMetadata({ foo: 'bar' }).info('Hello from Pretty Terminal!');
-```
-
 ::: warning Single-Instance Only
 Because Pretty Terminal is an interactive transport, it may not work well if you run multiple applications in the same terminal window that share the same output stream.
 
@@ -138,22 +114,28 @@ The transport is designed to work as a single interactive instance. `getPrettyTe
 For long-running applications or large log volumes, pass a file-backed database instead of an in-memory one to avoid memory issues (e.g. `new Database('logs.sqlite')`).
 :::
 
-## Node.js / Bun
-
-The `database` option is required. Pass any synchronous SQLite instance whose library exposes `exec`, `prepare`, and `close` — `better-sqlite3` and `bun:sqlite` both qualify.
-
 ### Node.js
 
 ```typescript
 import Database from 'better-sqlite3';
-import { LogLayer } from 'loglayer';
+import { LogLayer, ConsoleTransport } from 'loglayer';
 import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
-
-const db = new Database(':memory:');
+import { serializeError } from 'serialize-error';
 
 const log = new LogLayer({
-  transport: getPrettyTerminal({ database: db }),
+  errorSerializer: serializeError,
+  transport: [
+    new ConsoleTransport({
+      enabled: process.env.NODE_ENV !== 'development',
+    }),
+    getPrettyTerminal({
+      database: new Database(':memory:'),
+      enabled: process.env.NODE_ENV === 'development',
+    }),
+  ],
 });
+
+log.withMetadata({ foo: 'bar' }).info('Hello from Pretty Terminal!');
 ```
 
 ### Bun
@@ -162,14 +144,24 @@ Bun ships with a built-in SQLite module, so no extra package is needed:
 
 ```typescript
 import { Database } from 'bun:sqlite';
-import { LogLayer } from 'loglayer';
+import { LogLayer, ConsoleTransport } from 'loglayer';
 import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
-
-const db = new Database(':memory:');
+import { serializeError } from 'serialize-error';
 
 const log = new LogLayer({
-  transport: getPrettyTerminal({ database: db }),
+  errorSerializer: serializeError,
+  transport: [
+    new ConsoleTransport({
+      enabled: process.env.NODE_ENV !== 'development',
+    }),
+    getPrettyTerminal({
+      database: new Database(':memory:'),
+      enabled: process.env.NODE_ENV === 'development',
+    }),
+  ],
 });
+
+log.withMetadata({ foo: 'bar' }).info('Hello from Pretty Terminal!');
 ```
 
 ::: warning Security Note
