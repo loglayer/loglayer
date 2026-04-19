@@ -11,8 +11,7 @@ description: Learn about the latest features and improvements in LogLayer
 
 `@loglayer/transport-pretty-terminal`:
 
-- **Breaking change (v6):** Added Bun support via `bun:sqlite` — pass a `Database` instance from `bun:sqlite` using the new required `database` config option. See the [migration guide](/transports/pretty-terminal#v5-v6).
-- `better-sqlite3` is no longer a dependency and the `logFile` option has been removed.
+- **Breaking change (v6):** The transport no longer manages SQLite internally. You must now create and pass a SQLite database instance via the new required `database` config option — use `better-sqlite3` on Node.js or the built-in `bun:sqlite` on Bun. The `logFile` option has been removed and `better-sqlite3` is no longer a dependency. See the [migration guide](/transports/pretty-terminal#v5-v6).
 
 ## Mar 31, 2026
 
