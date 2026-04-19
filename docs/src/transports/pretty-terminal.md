@@ -211,16 +211,14 @@ Features in Detail View:
 - Collapsible arrays for better readability
 - Raw JSON view for easy copying
 
-## Custom SQLite instance
+## Node.js / Bun
 
 The `database` option is required. Pass any synchronous SQLite instance whose library exposes `exec`, `prepare`, and `close` — `better-sqlite3` and `bun:sqlite` both qualify.
 
-### Using bun:sqlite
-
-Bun ships with a built-in SQLite module, so no extra package is needed:
+### Node.js
 
 ```typescript
-import { Database } from 'bun:sqlite';
+import Database from 'better-sqlite3';
 import { LogLayer } from 'loglayer';
 import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
 
@@ -231,10 +229,12 @@ const log = new LogLayer({
 });
 ```
 
-### Using better-sqlite3 explicitly
+### Bun
+
+Bun ships with a built-in SQLite module, so no extra package is needed:
 
 ```typescript
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import { LogLayer } from 'loglayer';
 import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
 
@@ -290,7 +290,7 @@ const transport = getPrettyTerminal({
 
 | Name | Type | Description |
 |------|------|-------------|
-| `database` | `SqliteDatabaseInstance` | SQLite database instance. See [Custom SQLite instance](#custom-sqlite-instance) for examples |
+| `database` | `SqliteDatabaseInstance` | SQLite database instance. See [Node.js / Bun](#node-js-bun) for examples |
 
 ### Optional Parameters
 
