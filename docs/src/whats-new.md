@@ -11,7 +11,7 @@ description: Learn about the latest features and improvements in LogLayer
 
 `@loglayer/transport-pretty-terminal`:
 
-- `database` is now a required config option — pass any synchronous SQLite instance (`better-sqlite3`, `bun:sqlite`, etc.).
+- Added Bun support via `bun:sqlite` — pass a `Database` instance from `bun:sqlite` using the new required `database` config option.
 - `better-sqlite3` is no longer a dependency of the package. The `logFile` option has been removed.
 
 ## Mar 31, 2026
