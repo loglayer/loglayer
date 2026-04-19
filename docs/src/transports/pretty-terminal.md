@@ -261,7 +261,7 @@ const transport = getPrettyTerminal({
 
 ## Custom SQLite instance
 
-You can supply your own SQLite database instance via the `database` option. Any synchronous SQLite binding that exposes `exec`, `prepare`, and `close` is compatible. When this option is used, `logFile` is ignored and `better-sqlite3` is never loaded.
+The `database` option is required. Pass any synchronous SQLite instance whose library exposes `exec`, `prepare`, and `close` — `better-sqlite3` and `bun:sqlite` both qualify.
 
 ### Using bun:sqlite
 

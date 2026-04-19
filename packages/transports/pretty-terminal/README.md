@@ -47,13 +47,14 @@ bun add loglayer @loglayer/transport-pretty-terminal serialize-error
 ### Node.js
 
 ```typescript
+import Database from 'better-sqlite3';
 import { LogLayer } from 'loglayer';
 import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
 import { serializeError } from 'serialize-error';
 
 const log = new LogLayer({
   errorSerializer: serializeError,
-  transport: getPrettyTerminal(),
+  transport: getPrettyTerminal({ database: new Database(':memory:') }),
 });
 ```
 
