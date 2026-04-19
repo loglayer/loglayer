@@ -126,10 +126,12 @@ const log = new LogLayer({
   errorSerializer: serializeError,
   transport: [
     new ConsoleTransport({
+      // Use console logging in non-development environments
       enabled: process.env.NODE_ENV !== 'development',
     }),
     getPrettyTerminal({
       database: new Database(':memory:'),
+      // Only enable Pretty Terminal in development
       enabled: process.env.NODE_ENV === 'development',
     }),
   ],
@@ -152,10 +154,12 @@ const log = new LogLayer({
   errorSerializer: serializeError,
   transport: [
     new ConsoleTransport({
+      // Use console logging in non-development environments
       enabled: process.env.NODE_ENV !== 'development',
     }),
     getPrettyTerminal({
       database: new Database(':memory:'),
+      // Only enable Pretty Terminal in development
       enabled: process.env.NODE_ENV === 'development',
     }),
   ],
