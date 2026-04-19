@@ -48,13 +48,23 @@ bun add loglayer @loglayer/transport-pretty-terminal serialize-error
 
 ```typescript
 import Database from 'better-sqlite3';
-import { LogLayer } from 'loglayer';
+import { LogLayer, ConsoleTransport } from 'loglayer';
 import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
 import { serializeError } from 'serialize-error';
 
 const log = new LogLayer({
   errorSerializer: serializeError,
-  transport: getPrettyTerminal({ database: new Database(':memory:') }),
+  transport: [
+    new ConsoleTransport({
+      // Use console logging in non-development environments
+      enabled: process.env.NODE_ENV !== 'development',
+    }),
+    getPrettyTerminal({
+      database: new Database(':memory:'),
+      // Only enable Pretty Terminal in development
+      enabled: process.env.NODE_ENV === 'development',
+    }),
+  ],
 });
 ```
 
@@ -62,13 +72,23 @@ const log = new LogLayer({
 
 ```typescript
 import { Database } from 'bun:sqlite';
-import { LogLayer } from 'loglayer';
+import { LogLayer, ConsoleTransport } from 'loglayer';
 import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
 import { serializeError } from 'serialize-error';
 
 const log = new LogLayer({
   errorSerializer: serializeError,
-  transport: getPrettyTerminal({ database: new Database(':memory:') }),
+  transport: [
+    new ConsoleTransport({
+      // Use console logging in non-development environments
+      enabled: process.env.NODE_ENV !== 'development',
+    }),
+    getPrettyTerminal({
+      database: new Database(':memory:'),
+      // Only enable Pretty Terminal in development
+      enabled: process.env.NODE_ENV === 'development',
+    }),
+  ],
 });
 ```
 
