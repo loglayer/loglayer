@@ -50,7 +50,7 @@ This transport has interactive features that are designed for a single app. If y
 ## Installation
 
 ::: warning Compatbility Note
-Pretty Terminal has only been tested in MacOS with the native Terminal app and [Warp](https://www.warp.dev/). 
+Pretty Terminal has only been tested in MacOS with the native Terminal app and [Warp](https://www.warp.dev/), and on Ubuntu with the native terminal.
 It may not work as expected in other terminal emulators or operating systems.
 :::
 
