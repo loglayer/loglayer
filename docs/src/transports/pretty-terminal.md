@@ -211,6 +211,50 @@ Features in Detail View:
 - Collapsible arrays for better readability
 - Raw JSON view for easy copying
 
+## Custom SQLite instance
+
+The `database` option is required. Pass any synchronous SQLite instance whose library exposes `exec`, `prepare`, and `close` — `better-sqlite3` and `bun:sqlite` both qualify.
+
+### Using bun:sqlite
+
+Bun ships with a built-in SQLite module, so no extra package is needed:
+
+```typescript
+import { Database } from 'bun:sqlite';
+import { LogLayer } from 'loglayer';
+import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
+
+const db = new Database(':memory:');
+
+const log = new LogLayer({
+  transport: getPrettyTerminal({ database: db }),
+});
+```
+
+### Using better-sqlite3 explicitly
+
+```typescript
+import Database from 'better-sqlite3';
+import { LogLayer } from 'loglayer';
+import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
+
+const db = new Database(':memory:');
+
+const log = new LogLayer({
+  transport: getPrettyTerminal({ database: db }),
+});
+```
+
+::: warning Security Note
+If using a file-backed database, be aware that:
+1. All logs will be stored in the specified SQLite database file.
+2. The table is purged and recreated when the transport initializes.
+3. It is recommended to add the database file path to your `.gitignore` to avoid committing sensitive log data.
+4. Do not point two separate applications at the same database file to avoid data corruption.
+
+If you have sensitive data that shouldn't be logged at all, use the [Redaction Plugin](/plugins/redaction) to filter it out before it reaches the transport.
+:::
+
 ## Configuration
 
 The Pretty Terminal Transport can be customized with various options:
@@ -258,50 +302,6 @@ const transport = getPrettyTerminal({
 | `database` | `SqliteDatabaseInstance` | — | **Required.** SQLite database instance to use for log storage. Accepts any synchronous SQLite binding that implements `exec`, `prepare`, and `close` (e.g. `better-sqlite3`, `bun:sqlite`) |
 | `enabled` | `boolean` | `true` | Whether the transport is enabled. If false, all operations will no-op |
 | `disableInteractiveMode` | `boolean` | `false` | Whether to disable interactive mode (keyboard input and navigation). Useful when multiple applications need to print to the same terminal |
-
-## Custom SQLite instance
-
-The `database` option is required. Pass any synchronous SQLite instance whose library exposes `exec`, `prepare`, and `close` — `better-sqlite3` and `bun:sqlite` both qualify.
-
-### Using bun:sqlite
-
-Bun ships with a built-in SQLite module, so no extra package is needed:
-
-```typescript
-import { Database } from 'bun:sqlite';
-import { LogLayer } from 'loglayer';
-import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
-
-const db = new Database(':memory:');
-
-const log = new LogLayer({
-  transport: getPrettyTerminal({ database: db }),
-});
-```
-
-### Using better-sqlite3 explicitly
-
-```typescript
-import Database from 'better-sqlite3';
-import { LogLayer } from 'loglayer';
-import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
-
-const db = new Database(':memory:');
-
-const log = new LogLayer({
-  transport: getPrettyTerminal({ database: db }),
-});
-```
-
-::: warning Security Note
-If using a file-backed database, be aware that:
-1. All logs will be stored in the specified SQLite database file.
-2. The table is purged and recreated when the transport initializes.
-3. It is recommended to add the database file path to your `.gitignore` to avoid committing sensitive log data.
-4. Do not point two separate applications at the same database file to avoid data corruption.
-
-If you have sensitive data that shouldn't be logged at all, use the [Redaction Plugin](/plugins/redaction) to filter it out before it reaches the transport.
-:::
 
 ## Themes
 
