@@ -7,6 +7,6 @@ export * from "./PrettyTerminalTransport.js";
 export * from "./themes.js";
 export * from "./types.js";
 
-export function getPrettyTerminal(config: PrettyTerminalConfig = {}) {
+export function getPrettyTerminal(config: PrettyTerminalConfig) {
   return PrettyTerminalTransport.getInstance(config);
 }

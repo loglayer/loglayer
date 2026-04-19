@@ -7,6 +7,15 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Apr 18, 2026
+
+`@loglayer/transport-pretty-terminal`:
+
+- **Breaking change (v6):** The transport no longer manages SQLite internally. You must now create and pass a SQLite database instance via the new required `database` config option. See the [migration guide](/transports/pretty-terminal#v5-v6).
+- On Node.js, use [`better-sqlite3`](https://github.com/WiseLibs/better-sqlite3). On Bun, use the built-in `bun:sqlite` module — no extra package needed.
+- `better-sqlite3` is no longer a dependency of the package.
+- The `logFile` option has been removed.
+
 ## Mar 31, 2026
 
 `@loglayer/transport-cribl-http`:

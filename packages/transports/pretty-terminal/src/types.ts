@@ -2,6 +2,36 @@ import type { LoggerlessTransportConfig } from "@loglayer/transport";
 import type { ChalkInstance } from "chalk";
 
 /**
+ * Minimal interface for a prepared SQLite statement.
+ * Compatible with better-sqlite3, bun:sqlite, and other synchronous SQLite bindings.
+ */
+export interface SqliteStatement {
+  run(...params: unknown[]): unknown;
+  all(...params: unknown[]): unknown[];
+  get(...params: unknown[]): unknown;
+}
+
+/**
+ * Minimal interface for a SQLite database instance.
+ * Compatible with better-sqlite3, bun:sqlite, and other synchronous SQLite bindings.
+ *
+ * @example
+ * // Using bun:sqlite
+ * import { Database } from "bun:sqlite";
+ * getPrettyTerminal({ database: new Database(":memory:") });
+ *
+ * @example
+ * // Using better-sqlite3
+ * import Database from "better-sqlite3";
+ * getPrettyTerminal({ database: new Database(":memory:") });
+ */
+export interface SqliteDatabaseInstance {
+  exec(sql: string): void;
+  prepare(sql: string): SqliteStatement;
+  close(): void;
+}
+
+/**
  * Represents a single log entry in the storage system.
  * Each entry contains metadata and the actual log content.
  */
@@ -112,8 +142,12 @@ export interface PrettyTerminalConfig extends LoggerlessTransportConfig {
   maxInlineLength?: number;
   /** Custom theme configuration for log display */
   theme?: PrettyTerminalTheme;
-  /** Path to SQLite file for persistent storage. If not provided, uses in-memory database */
-  logFile?: string;
+  /**
+   * SQLite database instance to use for log storage.
+   * The instance must implement `exec`, `prepare`, and `close`.
+   * Compatible with better-sqlite3, bun:sqlite, and other synchronous SQLite bindings.
+   */
+  database: SqliteDatabaseInstance;
   /** Whether the transport is enabled. If false, all operations will no-op. Defaults to true */
   enabled?: boolean;
   /** Whether to disable interactive mode (keyboard input and navigation). Useful when multiple applications need to print to the same terminal. Defaults to false */

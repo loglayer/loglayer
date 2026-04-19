@@ -1,15 +1,11 @@
 /**
  * LogStorage handles the persistence of log entries using SQLite.
- * Uses an in-memory database for fast access and temporary storage.
  */
 
-import { resolve } from "node:path";
-import Database from "better-sqlite3";
-import type { LogEntry } from "./types.js";
+import type { LogEntry, SqliteDatabaseInstance } from "./types.js";
 
 /**
  * Handles storage and retrieval of log entries using SQLite.
- * Uses an in-memory database for optimal performance and automatic cleanup.
  *
  * The database schema includes:
  * - id: Unique identifier for each log
@@ -19,21 +15,10 @@ import type { LogEntry } from "./types.js";
  * - data: Optional structured data as JSON string
  */
 export class LogStorage {
-  /** SQLite database instance */
-  private db: Database.Database;
+  private db: SqliteDatabaseInstance;
 
-  /**
-   * Creates a new LogStorage instance.
-   * Initializes a SQLite database and creates the logs table.
-   *
-   * @param logFile - Optional path to SQLite file for persistent storage.
-   *                 If not provided, uses in-memory database.
-   *                 Relative paths are resolved from the current working directory.
-   */
-  constructor(logFile?: string) {
-    // Use specified log file or fallback to in-memory database
-    const dbPath = logFile ? (logFile.startsWith("/") ? logFile : resolve(process.cwd(), logFile)) : ":memory:";
-    this.db = new Database(dbPath);
+  constructor(database: SqliteDatabaseInstance) {
+    this.db = database;
     this.initializeDatabase();
   }
 

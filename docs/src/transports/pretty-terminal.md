@@ -8,7 +8,7 @@ import { NuAsciinemaPlayer } from '@nolebase/ui-asciinema'
 import 'asciinema-player/dist/bundle/asciinema-player.css'
 </script>
 
-# Pretty Terminal Transport <Badge type="tip" text="Server" />
+# Pretty Terminal Transport <Badge type="tip" text="Server" /> <Badge type="info" text="Bun" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-pretty-terminal)](https://www.npmjs.com/package/@loglayer/transport-pretty-terminal)
 
@@ -50,9 +50,29 @@ This transport has interactive features that are designed for a single app. If y
 ## Installation
 
 ::: warning Compatbility Note
-Pretty Terminal has only been tested in MacOS with the native Terminal app and [Warp](https://www.warp.dev/). 
+Pretty Terminal has only been tested in MacOS with the native Terminal app and [Warp](https://www.warp.dev/), and on Ubuntu with the native terminal.
 It may not work as expected in other terminal emulators or operating systems.
 :::
+
+### Node.js
+
+::: code-group
+```bash [npm]
+npm install loglayer @loglayer/transport-pretty-terminal serialize-error better-sqlite3
+```
+
+```bash [pnpm]
+pnpm add loglayer @loglayer/transport-pretty-terminal serialize-error better-sqlite3
+```
+
+```bash [yarn]
+yarn add loglayer @loglayer/transport-pretty-terminal serialize-error better-sqlite3
+```
+:::
+
+### Bun
+
+Bun has a built-in SQLite module, so [`better-sqlite3`](https://github.com/WiseLibs/better-sqlite3) is not needed. Pass a `bun:sqlite` `Database` instance via the `database` option — see [Custom SQLite instance](#custom-sqlite-instance).
 
 ::: code-group
 ```bash [npm]
@@ -66,6 +86,9 @@ pnpm add loglayer @loglayer/transport-pretty-terminal serialize-error
 ```bash [yarn]
 yarn add loglayer @loglayer/transport-pretty-terminal serialize-error
 ```
+```bash [bun]
+bun add loglayer @loglayer/transport-pretty-terminal serialize-error
+```
 :::
 
 ## Basic Usage
@@ -75,30 +98,6 @@ Pretty Terminal is designed to work in a terminal only for local development. It
 
 It is recommended that you disable other transports when using Pretty Terminal to avoid duplicate log output.
 :::
-
-```typescript
-import { LogLayer, ConsoleTransport } from 'loglayer';
-import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
-import { serializeError } from "serialize-error";
-
-// Create LogLayer instance with the transport
-const log = new LogLayer({
-  errorSerializer: serializeError,
-  transport: [
-    new ConsoleTransport({
-      // Example of how to enable a transport for non-development environments
-      enabled: process.env.NODE_ENV !== 'development',
-    }),
-    getPrettyTerminal({
-      // Only enable Pretty Terminal in development
-      enabled: process.env.NODE_ENV === 'development',
-    })
-  ],
-});
-
-// Start logging!
-log.withMetadata({ foo: 'bar' }).info('Hello from Pretty Terminal!');
-```
 
 ::: warning Single-Instance Only
 Because Pretty Terminal is an interactive transport, it may not work well if you run multiple applications in the same terminal window that share the same output stream.
@@ -112,8 +111,72 @@ The transport is designed to work as a single interactive instance. `getPrettyTe
 :::
 
 ::: warning Performance Note
-Logs are stored using an in-memory SQLite database by default. For long-running applications or large log volumes, consider using a persistent storage file using the `logFile` option to avoid out of memory issues.
+For long-running applications or large log volumes, pass a file-backed database instead of an in-memory one to avoid memory issues (e.g. `new Database('logs.sqlite')`).
 :::
+
+::: warning Security Note
+If using a file-backed database, be aware that:
+1. All logs will be stored in the specified SQLite database file.
+2. The table is purged and recreated when the transport initializes.
+3. It is recommended to add the database file path to your `.gitignore` to avoid committing sensitive log data.
+4. Do not point two separate applications at the same database file to avoid data corruption.
+
+If you have sensitive data that shouldn't be logged at all, use the [Redaction Plugin](/plugins/redaction) to filter it out before it reaches the transport.
+:::
+
+### Node.js
+
+```typescript
+import Database from 'better-sqlite3';
+import { LogLayer, ConsoleTransport } from 'loglayer';
+import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
+import { serializeError } from 'serialize-error';
+
+const log = new LogLayer({
+  errorSerializer: serializeError,
+  transport: [
+    new ConsoleTransport({
+      // Use console logging in non-development environments
+      enabled: process.env.NODE_ENV !== 'development',
+    }),
+    getPrettyTerminal({
+      database: new Database(':memory:'),
+      // Only enable Pretty Terminal in development
+      enabled: process.env.NODE_ENV === 'development',
+    }),
+  ],
+});
+
+log.withMetadata({ foo: 'bar' }).info('Hello from Pretty Terminal!');
+```
+
+### Bun
+
+Bun ships with a built-in SQLite module, so no extra package is needed:
+
+```typescript
+import { Database } from 'bun:sqlite';
+import { LogLayer, ConsoleTransport } from 'loglayer';
+import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
+import { serializeError } from 'serialize-error';
+
+const log = new LogLayer({
+  errorSerializer: serializeError,
+  transport: [
+    new ConsoleTransport({
+      // Use console logging in non-development environments
+      enabled: process.env.NODE_ENV !== 'development',
+    }),
+    getPrettyTerminal({
+      database: new Database(':memory:'),
+      // Only enable Pretty Terminal in development
+      enabled: process.env.NODE_ENV === 'development',
+    }),
+  ],
+});
+
+log.withMetadata({ foo: 'bar' }).info('Hello from Pretty Terminal!');
+```
 
 ## Keyboard Controls
 
@@ -193,9 +256,13 @@ Features in Detail View:
 The Pretty Terminal Transport can be customized with various options:
 
 ```typescript
+import Database from 'better-sqlite3';
 import { getPrettyTerminal, moonlight } from '@loglayer/transport-pretty-terminal';
 
 const transport = getPrettyTerminal({
+  // Required: provide your own SQLite instance
+  database: new Database(':memory:'),
+
   // Maximum depth for inline data display in truncated mode
   maxInlineDepth: 4,
   
@@ -204,9 +271,6 @@ const transport = getPrettyTerminal({
   
   // Custom theme configuration (default is moonlight)
   theme: moonlight,
-
-  // Optional path to SQLite file for persistent storage
-  logFile: 'path/to/logs.sqlite',
 
   // Enable/disable the transport (defaults to true)
   enabled: process.env.NODE_ENV === 'development',
@@ -220,7 +284,9 @@ const transport = getPrettyTerminal({
 
 ### Required Parameters
 
-None - all parameters are optional.
+| Name | Type | Description |
+|------|------|-------------|
+| `database` | `SqliteDatabaseInstance` | SQLite database instance. See [Node.js / Bun](#node-js-bun) for examples |
 
 ### Optional Parameters
 
@@ -229,20 +295,9 @@ None - all parameters are optional.
 | `maxInlineDepth` | `number` | `4` | Maximum depth for displaying nested data inline. Only applies in truncated view mode. Selection mode and detail view always show full depth |
 | `maxInlineLength` | `number` | `120` | Maximum length for inline data before truncating. Only applies in truncated view mode. Selection mode and detail view always show full content |
 | `theme` | `PrettyTerminalTheme` | `moonlight` | Theme configuration for colors and styling |
-| `logFile` | `string` | `:memory:` | Path to SQLite file for persistent storage. Relative paths are resolved from the current working directory. If not provided, uses in-memory database |
+| `database` | `SqliteDatabaseInstance` | — | **Required.** SQLite database instance to use for log storage. Accepts any synchronous SQLite binding that implements `exec`, `prepare`, and `close` (e.g. `better-sqlite3`, `bun:sqlite`) |
 | `enabled` | `boolean` | `true` | Whether the transport is enabled. If false, all operations will no-op |
 | `disableInteractiveMode` | `boolean` | `false` | Whether to disable interactive mode (keyboard input and navigation). Useful when multiple applications need to print to the same terminal |
-
-::: warning Security Note
-If using the `logFile` option, be aware that:
-1. All logs will be stored in the specified SQLite database file.
-2. The file will be purged of any existing data when the transport initializes
-3. Relative paths (e.g., "logs/app.db") are resolved from the current working directory
-4. It is recommended to add the `logFile` path to your `.gitignore` file to avoid committing sensitive log data
-5. Do not use the same logfile path in another application (as in two separate applications running the transport against the same file) to avoid data corruption.
-
-If you do have sensitive data that shouldn't be logged in general, use the [Redaction Plugin](/plugins/redaction) to filter out sensitive information before logging.
-:::
 
 ## Themes
 
@@ -376,3 +431,33 @@ const transport = getPrettyTerminal({
   theme: myCustomTheme,
 });
 ```
+
+## Migration
+
+### v5 → v6
+
+**`database` is now a required config option. `logFile` has been removed.**
+
+Previously the transport managed its own SQLite database internally. Starting in v6 you must create and pass the database instance yourself. This removes `better-sqlite3` as a dependency entirely.
+
+::: code-group
+```ts [Node.js (better-sqlite3)]
+import Database from 'better-sqlite3';
+import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
+
+// Before
+const transport = getPrettyTerminal({ logFile: 'logs.sqlite' });
+
+// After
+const transport = getPrettyTerminal({ database: new Database('logs.sqlite') });
+```
+
+```ts [Bun]
+import { Database } from 'bun:sqlite';
+import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
+
+// Before (not supported)
+// After
+const transport = getPrettyTerminal({ database: new Database(':memory:') });
+```
+:::

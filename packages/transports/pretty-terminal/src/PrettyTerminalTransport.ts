@@ -67,7 +67,7 @@ export class PrettyTerminalTransport extends LoggerlessTransport {
    * @param config - Configuration options for the transport
    * @throws Error if attempting to create multiple instances
    */
-  constructor(config: PrettyTerminalConfig = {}) {
+  constructor(config: PrettyTerminalConfig) {
     if (PrettyTerminalTransport.instance) {
       throw new Error("PrettyTerminalTransport is a singleton. Use getPrettyTerminal() instead.");
     }
@@ -85,7 +85,7 @@ export class PrettyTerminalTransport extends LoggerlessTransport {
     const maxInlineDepth = config.maxInlineDepth || 4;
     const maxInlineLength = config.maxInlineLength || 120;
     const theme = config.theme || moonlight;
-    const logFile = config.logFile; // Get optional log file path from config
+    const database = config.database;
 
     // Initialize view configurations with defaults
     // Simple view is used for real-time log output
@@ -140,7 +140,7 @@ export class PrettyTerminalTransport extends LoggerlessTransport {
     };
 
     // Initialize components in dependency order
-    this.storage = new LogStorage(logFile);
+    this.storage = new LogStorage(database);
     this.renderer = new LogRenderer(simpleViewConfig, detailedViewConfig, maxInlineDepth, maxInlineLength);
     this.uiManager = new UIManager(this.renderer, this.storage, config.disableInteractiveMode);
 
@@ -154,7 +154,7 @@ export class PrettyTerminalTransport extends LoggerlessTransport {
    * @param config - Configuration options for the transport
    * @returns The singleton instance of PrettyTerminalTransport
    */
-  public static getInstance(config: PrettyTerminalConfig = {}): PrettyTerminalTransport {
+  public static getInstance(config: PrettyTerminalConfig): PrettyTerminalTransport {
     if (!PrettyTerminalTransport.instance) {
       PrettyTerminalTransport.instance = new PrettyTerminalTransport(config);
     }
