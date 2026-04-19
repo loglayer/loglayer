@@ -2,6 +2,6 @@
 "@loglayer/transport-pretty-terminal": major
 ---
 
-`better-sqlite3` is now an optional peer dependency instead of a bundled dependency. Users relying on the default in-memory or file-based storage must install it manually.
+The `database` config option is now required. Pass any synchronous SQLite instance that implements `exec`, `prepare`, and `close` (e.g. `better-sqlite3`, `bun:sqlite`).
 
-Added `database` config option to accept any synchronous SQLite instance (e.g. `bun:sqlite`), allowing runtimes like Bun to skip `better-sqlite3` entirely.
+`better-sqlite3` is no longer a dependency of the package — bring your own SQLite instance. The `logFile` option has been removed.

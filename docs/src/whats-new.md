@@ -11,8 +11,8 @@ description: Learn about the latest features and improvements in LogLayer
 
 `@loglayer/transport-pretty-terminal`:
 
-- `better-sqlite3` is now an optional peer dependency. Install it manually if you rely on the default in-memory or file-based storage.
-- Added `database` config option — pass any synchronous SQLite instance (e.g. `bun:sqlite`) to skip `better-sqlite3` entirely.
+- `database` is now a required config option — pass any synchronous SQLite instance (`better-sqlite3`, `bun:sqlite`, etc.).
+- `better-sqlite3` is no longer a dependency of the package. The `logFile` option has been removed.
 
 ## Mar 31, 2026
 

@@ -135,7 +135,7 @@ The transport is designed to work as a single interactive instance. `getPrettyTe
 :::
 
 ::: warning Performance Note
-Logs are stored using an in-memory SQLite database by default. For long-running applications or large log volumes, consider using a persistent storage file using the `logFile` option to avoid out of memory issues.
+For long-running applications or large log volumes, pass a file-backed database instead of an in-memory one to avoid memory issues (e.g. `new Database('logs.sqlite')`).
 :::
 
 ## Keyboard Controls
@@ -216,9 +216,13 @@ Features in Detail View:
 The Pretty Terminal Transport can be customized with various options:
 
 ```typescript
+import Database from 'better-sqlite3';
 import { getPrettyTerminal, moonlight } from '@loglayer/transport-pretty-terminal';
 
 const transport = getPrettyTerminal({
+  // Required: provide your own SQLite instance
+  database: new Database(':memory:'),
+
   // Maximum depth for inline data display in truncated mode
   maxInlineDepth: 4,
   
@@ -227,9 +231,6 @@ const transport = getPrettyTerminal({
   
   // Custom theme configuration (default is moonlight)
   theme: moonlight,
-
-  // Optional path to SQLite file for persistent storage
-  logFile: 'path/to/logs.sqlite',
 
   // Enable/disable the transport (defaults to true)
   enabled: process.env.NODE_ENV === 'development',
@@ -243,7 +244,9 @@ const transport = getPrettyTerminal({
 
 ### Required Parameters
 
-None - all parameters are optional.
+| Name | Type | Description |
+|------|------|-------------|
+| `database` | `SqliteDatabaseInstance` | SQLite database instance. See [Custom SQLite instance](#custom-sqlite-instance) for examples |
 
 ### Optional Parameters
 
@@ -252,8 +255,7 @@ None - all parameters are optional.
 | `maxInlineDepth` | `number` | `4` | Maximum depth for displaying nested data inline. Only applies in truncated view mode. Selection mode and detail view always show full depth |
 | `maxInlineLength` | `number` | `120` | Maximum length for inline data before truncating. Only applies in truncated view mode. Selection mode and detail view always show full content |
 | `theme` | `PrettyTerminalTheme` | `moonlight` | Theme configuration for colors and styling |
-| `logFile` | `string` | `:memory:` | Path to SQLite file for persistent storage. Relative paths are resolved from the current working directory. If not provided, uses in-memory database. Ignored when `database` is set |
-| `database` | `SqliteDatabaseInstance` | — | Pre-existing SQLite database instance to use for log storage. Accepts any synchronous SQLite binding that implements `exec`, `prepare`, and `close` (e.g. `better-sqlite3`, `bun:sqlite`). When provided, `logFile` is ignored and `better-sqlite3` is never loaded |
+| `database` | `SqliteDatabaseInstance` | — | **Required.** SQLite database instance to use for log storage. Accepts any synchronous SQLite binding that implements `exec`, `prepare`, and `close` (e.g. `better-sqlite3`, `bun:sqlite`) |
 | `enabled` | `boolean` | `true` | Whether the transport is enabled. If false, all operations will no-op |
 | `disableInteractiveMode` | `boolean` | `false` | Whether to disable interactive mode (keyboard input and navigation). Useful when multiple applications need to print to the same terminal |
 
@@ -292,14 +294,13 @@ const log = new LogLayer({
 ```
 
 ::: warning Security Note
-If using the `logFile` option, be aware that:
+If using a file-backed database, be aware that:
 1. All logs will be stored in the specified SQLite database file.
-2. The file will be purged of any existing data when the transport initializes
-3. Relative paths (e.g., "logs/app.db") are resolved from the current working directory
-4. It is recommended to add the `logFile` path to your `.gitignore` file to avoid committing sensitive log data
-5. Do not use the same logfile path in another application (as in two separate applications running the transport against the same file) to avoid data corruption.
+2. The table is purged and recreated when the transport initializes.
+3. It is recommended to add the database file path to your `.gitignore` to avoid committing sensitive log data.
+4. Do not point two separate applications at the same database file to avoid data corruption.
 
-If you do have sensitive data that shouldn't be logged in general, use the [Redaction Plugin](/plugins/redaction) to filter out sensitive information before logging.
+If you have sensitive data that shouldn't be logged at all, use the [Redaction Plugin](/plugins/redaction) to filter it out before it reaches the transport.
 :::
 
 ## Themes
@@ -439,22 +440,28 @@ const transport = getPrettyTerminal({
 
 ### v5 → v6
 
-**`better-sqlite3` is now an optional peer dependency.**
+**`database` is now a required config option. `logFile` has been removed.**
 
-Previously it was bundled as a direct dependency and installed automatically. Starting in v6 you must install it yourself if you are not providing your own `database` instance.
+Previously the transport managed its own SQLite database internally. Starting in v6 you must create and pass the database instance yourself. This removes `better-sqlite3` as a dependency entirely.
 
 ::: code-group
-```bash [npm]
-npm install better-sqlite3
+```ts [Node.js (better-sqlite3)]
+import Database from 'better-sqlite3';
+import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
+
+// Before
+const transport = getPrettyTerminal({ logFile: 'logs.sqlite' });
+
+// After
+const transport = getPrettyTerminal({ database: new Database('logs.sqlite') });
 ```
 
-```bash [pnpm]
-pnpm add better-sqlite3
-```
+```ts [Bun]
+import { Database } from 'bun:sqlite';
+import { getPrettyTerminal } from '@loglayer/transport-pretty-terminal';
 
-```bash [yarn]
-yarn add better-sqlite3
+// Before (not supported)
+// After
+const transport = getPrettyTerminal({ database: new Database(':memory:') });
 ```
 :::
-
-If you are on Bun, you can skip this step and use `bun:sqlite` instead — see [Custom SQLite instance](#custom-sqlite-instance).

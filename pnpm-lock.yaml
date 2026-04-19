@@ -1543,9 +1543,6 @@ importers:
       '@loglayer/transport':
         specifier: workspace:*
         version: link:../../core/transport
-      better-sqlite3:
-        specifier: '>=9'
-        version: 12.6.2
       chalk:
         specifier: 5.6.2
         version: 5.6.2
@@ -1571,6 +1568,9 @@ importers:
       '@types/node':
         specifier: 25.2.3
         version: 25.2.3
+      better-sqlite3:
+        specifier: 12.6.2
+        version: 12.6.2
       loglayer:
         specifier: workspace:*
         version: link:../../core/loglayer
@@ -6123,8 +6123,8 @@ packages:
     resolution: {integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==}
     engines: {node: '>= 0.6'}
 
-  node-abi@3.78.0:
-    resolution: {integrity: sha512-E2wEyrgX/CqvicaQYU3Ze1PFGjc4QYPGsjUrlYkqAE0WjHEZwgOsGMPMzkMse4LjJbDmaEuDX3CM036j5K2DSQ==}
+  node-abi@3.89.0:
+    resolution: {integrity: sha512-6u9UwL0HlAl21+agMN3YAMXcKByMqwGx+pq+P76vii5f7hTPtKDp08/H9py6DY+cfDw7kQNTGEj/rly3IgbNQA==}
     engines: {node: '>=10'}
 
   node-addon-api@6.1.0:
@@ -12259,7 +12259,7 @@ snapshots:
 
   negotiator@1.0.0: {}
 
-  node-abi@3.78.0:
+  node-abi@3.89.0:
     dependencies:
       semver: 7.7.3
 
@@ -12499,7 +12499,7 @@ snapshots:
       minimist: 1.2.8
       mkdirp-classic: 0.5.3
       napi-build-utils: 2.0.0
-      node-abi: 3.78.0
+      node-abi: 3.89.0
       pump: 3.0.3
       rc: 1.2.8
       simple-get: 4.0.1

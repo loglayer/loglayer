@@ -14,19 +14,16 @@ export interface SqliteStatement {
 /**
  * Minimal interface for a SQLite database instance.
  * Compatible with better-sqlite3, bun:sqlite, and other synchronous SQLite bindings.
- * Pass an instance of this type via `PrettyTerminalConfig.database` to use a custom SQLite implementation.
  *
  * @example
  * // Using bun:sqlite
  * import { Database } from "bun:sqlite";
- * const db = new Database(":memory:");
- * getPrettyTerminal({ database: db });
+ * getPrettyTerminal({ database: new Database(":memory:") });
  *
  * @example
- * // Using better-sqlite3 (default behavior when no database is provided)
+ * // Using better-sqlite3
  * import Database from "better-sqlite3";
- * const db = new Database(":memory:");
- * getPrettyTerminal({ database: db });
+ * getPrettyTerminal({ database: new Database(":memory:") });
  */
 export interface SqliteDatabaseInstance {
   exec(sql: string): void;
@@ -145,15 +142,12 @@ export interface PrettyTerminalConfig extends LoggerlessTransportConfig {
   maxInlineLength?: number;
   /** Custom theme configuration for log display */
   theme?: PrettyTerminalTheme;
-  /** Path to SQLite file for persistent storage. If not provided, uses in-memory database */
-  logFile?: string;
   /**
-   * A pre-existing SQLite database instance to use for log storage.
-   * When provided, `logFile` is ignored and no internal database is created.
+   * SQLite database instance to use for log storage.
    * The instance must implement `exec`, `prepare`, and `close`.
    * Compatible with better-sqlite3, bun:sqlite, and other synchronous SQLite bindings.
    */
-  database?: SqliteDatabaseInstance;
+  database: SqliteDatabaseInstance;
   /** Whether the transport is enabled. If false, all operations will no-op. Defaults to true */
   enabled?: boolean;
   /** Whether to disable interactive mode (keyboard input and navigation). Useful when multiple applications need to print to the same terminal. Defaults to false */
