@@ -53,7 +53,8 @@ import { SentryTransport } from "@loglayer/transport-sentry";
 import { serializeError } from "serialize-error";
 
 const log = new LogLayer({
-  errorSerializer: serializeError, 
+  errorSerializer: serializeError,
+  transport: [
     new SentryTransport({
       logger: Sentry.logger,
     }),
