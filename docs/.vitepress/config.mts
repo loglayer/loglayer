@@ -72,6 +72,7 @@ export default defineConfig({
       { text: '<img alt="NPM Version" src="https://img.shields.io/npm/v/loglayer" />', link: 'https://www.npmjs.com/package/loglayer' },
       { text: `What's new`, link: '/whats-new'},
       { text: 'Get Started', link: '/getting-started' },
+      { text: 'Go Version', link: 'https://go.loglayer.dev' },
     ],
     sidebar: [
       {

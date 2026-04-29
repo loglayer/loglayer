@@ -18,6 +18,8 @@ Supports browser, Node.js, Bun, and Deno platforms.
 
 For full documentation, read the [docs](https://loglayer.dev).
 
+> **Also available for Go!** See [go.loglayer.dev](https://go.loglayer.dev) for the Go version.
+
 ```javascript
 // Example using the Pino logging library with LogLayer
 // You can also start out with a console logger and swap to another later!

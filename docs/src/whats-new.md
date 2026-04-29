@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Apr 28, 2026
+
+`loglayer`:
+
+- LogLayer is now available for **Go**. The Go version brings the same fluent API, multi-transport fan-out, and plugin model to Go projects, with first-class support for Zerolog, Zap, log/slog, phuslu/log, logrus, charmbracelet/log, OpenTelemetry, and Datadog. See the [Go documentation](https://go.loglayer.dev) to get started.
+
 ## Apr 18, 2026
 
 `@loglayer/transport-pretty-terminal`:
