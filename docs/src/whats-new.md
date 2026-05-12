@@ -7,6 +7,15 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## May 11, 2026
+
+`@loglayer/transport-new-relic`:
+
+- **Major rewrite (v4):** Now extends `HttpTransport` instead of `LoggerlessTransport`, enabling **Bun** and **Deno** compatibility via the `fetch` API.
+- Adds batch sending support with configurable size and timeout.
+- **Breaking change:** `useCompression` config option renamed to `compression`.
+- See the [migration guide](/transports/new-relic#v3x-to-v4x).
+
 ## Apr 28, 2026
 
 `loglayer`:

@@ -15,7 +15,8 @@ const log = new LogLayer({
   transport: new NewRelicTransport({
     apiKey: process.env.NEW_RELIC_API_KEY,
     endpoint: "https://log-api.newrelic.com/log/v1", // optional, this is the default
-    useCompression: true, // optional, defaults to true
+    compression: true, // optional, defaults to true
+    enableBatchSend: false, // disable batching so each log is sent immediately
     maxRetries: 3, // optional, defaults to 3
     retryDelay: 1000, // optional, base delay in ms, defaults to 1000
     respectRateLimit: true, // optional, defaults to true

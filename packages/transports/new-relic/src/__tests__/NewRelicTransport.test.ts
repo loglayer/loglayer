@@ -1,532 +1,394 @@
-import { LogLayer } from "loglayer";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { NewRelicTransport } from "../NewRelicTransport.js";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { NewRelicTransport, ValidationError } from "../NewRelicTransport.js";
+
+// Mock the HttpTransport module
+vi.mock("@loglayer/transport-http", () => ({
+  HttpTransport: vi.fn(),
+  RateLimitError: class RateLimitError extends Error {
+    constructor(
+      message: string,
+      public retryAfter: number,
+    ) {
+      super(message);
+      this.name = "RateLimitError";
+    }
+  },
+}));
 
 describe("NewRelicTransport", () => {
-  let mockFetch: ReturnType<typeof vi.fn>;
-  let originalFetch: typeof fetch;
+  let HttpTransportMock: any;
 
-  beforeEach(() => {
-    vi.useFakeTimers();
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    const { HttpTransport } = await import("@loglayer/transport-http");
+    HttpTransportMock = vi.mocked(HttpTransport);
+  });
 
-    // Store original fetch
-    originalFetch = global.fetch;
+  it("should export ValidationError", () => {
+    expect(ValidationError).toBeDefined();
+    const error = new ValidationError("test error");
+    expect(error.name).toBe("ValidationError");
+    expect(error.message).toBe("test error");
+  });
 
-    // Mock fetch function
-    mockFetch = vi.fn(() =>
-      Promise.resolve(
-        new Response(null, {
-          status: 200,
-          statusText: "OK",
+  it("should re-export RateLimitError from http transport", async () => {
+    const index = await import("../index.js");
+    expect(index.RateLimitError).toBeDefined();
+    const error = new index.RateLimitError("rate limited", 30);
+    expect(error.name).toBe("RateLimitError");
+    expect(error.message).toBe("rate limited");
+    expect(error.retryAfter).toBe(30);
+  });
+
+  describe("constructor", () => {
+    it("should create transport with required configuration", () => {
+      new NewRelicTransport({
+        apiKey: "test-api-key",
+      });
+
+      expect(HttpTransportMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: "https://log-api.newrelic.com/log/v1",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Api-Key": "test-api-key",
+          },
+          payloadTemplate: expect.any(Function),
+          compression: true,
+          maxRetries: 3,
+          retryDelay: 1000,
+          respectRateLimit: true,
+          maxLogSize: 1_048_576,
+          maxPayloadSize: 1_048_576,
         }),
-      ),
-    );
-    global.fetch = mockFetch as typeof fetch;
-
-    // Mock CompressionStream
-    const mockWriter = {
-      write: vi.fn().mockResolvedValue(undefined),
-      close: vi.fn().mockResolvedValue(undefined),
-    };
-
-    const mockReader = {
-      read: vi
-        .fn()
-        .mockResolvedValueOnce({ value: new Uint8Array([1, 2, 3]), done: false })
-        .mockResolvedValueOnce({ done: true }),
-    };
-
-    const mockStream = {
-      writable: { getWriter: () => mockWriter },
-      readable: { getReader: () => mockReader },
-    };
-
-    global.CompressionStream = vi.fn(function () {
-      return mockStream;
-    }) as unknown as typeof CompressionStream;
-    global.TextEncoder = vi.fn(function () {
-      return {
-        encode: (str: string) => new Uint8Array(str.length),
-      };
-    }) as unknown as typeof TextEncoder;
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-    // Restore original fetch
-    global.fetch = originalFetch;
-  });
-
-  it("should send logs to New Relic", async () => {
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
-        apiKey: "test-api-key",
-        useCompression: false,
-      }),
+      );
     });
 
-    const sendPromise = log.info("test message");
-    await vi.runAllTimersAsync();
-    await sendPromise;
-
-    expect(mockFetch).toHaveBeenCalledWith(
-      "https://log-api.newrelic.com/log/v1",
-      expect.objectContaining({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Api-Key": "test-api-key",
-        },
-        body: expect.stringContaining("test message"),
-      }),
-    );
-  });
-
-  it("should handle payload size limit", async () => {
-    const onError = vi.fn();
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
-        apiKey: "test-api-key",
-        useCompression: false,
-        onError,
-      }),
-    });
-
-    // Create a large string that exceeds 1MB
-    const largeString = "x".repeat(1_000_001);
-    log.info(largeString);
-
-    // Wait for the next tick to allow error handling to complete
-    await vi.runAllTimersAsync();
-    await new Promise((resolve) => process.nextTick(resolve));
-
-    expect(onError).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: "ValidationError",
-        message: expect.stringContaining("Payload size exceeds maximum"),
-      }),
-    );
-    expect(mockFetch).not.toHaveBeenCalled();
-  });
-
-  it("should handle maximum number of attributes", async () => {
-    const onError = vi.fn();
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
-        apiKey: "test-api-key",
-        onError,
-      }),
-    });
-
-    // Create an object with more than 255 attributes
-    const metadata: Record<string, string> = {};
-    for (let i = 0; i < 256; i++) {
-      metadata[`key${i}`] = `value${i}`;
-    }
-
-    const sendPromise = log.withMetadata(metadata).info("test message");
-    await vi.runAllTimersAsync();
-    await sendPromise;
-
-    expect(onError).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: "ValidationError",
-        message: expect.stringContaining("exceeds maximum number of attributes"),
-      }),
-    );
-  });
-
-  it("should handle attribute name length limit", async () => {
-    const onError = vi.fn();
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
-        apiKey: "test-api-key",
-        onError,
-      }),
-    });
-
-    // Create an attribute name longer than 255 characters
-    const longKey = "x".repeat(256);
-    const sendPromise = log.withMetadata({ [longKey]: "value" }).info("test message");
-    await vi.runAllTimersAsync();
-    await sendPromise;
-
-    expect(onError).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: "ValidationError",
-        message: expect.stringContaining("exceeds maximum length"),
-      }),
-    );
-  });
-
-  it("should truncate attribute values longer than 4094 characters", async () => {
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
-        apiKey: "test-api-key",
-        useCompression: false,
-      }),
-    });
-
-    // Create a string longer than 4094 characters
-    const longValue = "x".repeat(5000);
-    const sendPromise = log.withMetadata({ test: longValue }).info("test message");
-    await vi.runAllTimersAsync();
-    await sendPromise;
-
-    const expectedTruncated = `"attributes":{"test":"${("x").repeat(4094)}"}`;
-    const notExpectedLonger = `"attributes":{"test":"${("x").repeat(4095)}"}`;
-
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.objectContaining({
-        body: expect.stringContaining(expectedTruncated),
-      }),
-    );
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.not.objectContaining({
-        body: expect.stringContaining(notExpectedLonger),
-      }),
-    );
-  });
-
-  it("should use gzip compression by default", async () => {
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
-        apiKey: "test-api-key",
-      }),
-    });
-
-    const sendPromise = log.info("test message");
-    await vi.runAllTimersAsync();
-    await sendPromise;
-
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.objectContaining({
-        headers: expect.objectContaining({
-          "Content-Encoding": "gzip",
-        }),
-        body: expect.any(Uint8Array),
-      }),
-    );
-    expect(global.CompressionStream).toHaveBeenCalledWith("gzip");
-  });
-
-  it("should use custom endpoint", async () => {
-    const customEndpoint = "https://custom.newrelic.com/logs";
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
+    it("should create transport with custom endpoint", () => {
+      const customEndpoint = "https://custom.newrelic.com/logs";
+      new NewRelicTransport({
         apiKey: "test-api-key",
         endpoint: customEndpoint,
-        useCompression: false,
-      }),
-    });
+      });
 
-    const sendPromise = log.info("test message");
-    await vi.runAllTimersAsync();
-    await sendPromise;
-
-    expect(mockFetch).toHaveBeenCalledWith(customEndpoint, expect.any(Object));
-  });
-
-  it("should retry on failure", async () => {
-    mockFetch
-      .mockImplementationOnce(() => Promise.reject(new Error("Network error")))
-      .mockImplementationOnce(() => Promise.reject(new Error("Network error")))
-      .mockImplementationOnce(() =>
-        Promise.resolve(
-          new Response(null, {
-            status: 200,
-            statusText: "OK",
-          }),
-        ),
-      );
-
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
-        apiKey: "test-api-key",
-        useCompression: false,
-        retryDelay: 10,
-      }),
-    });
-
-    const sendPromise = log.info("test message");
-
-    // Run timers for each retry attempt
-    for (let i = 0; i < 3; i++) {
-      await vi.runAllTimersAsync();
-    }
-    await sendPromise;
-
-    expect(mockFetch).toHaveBeenCalledTimes(3);
-  });
-
-  it("should not retry on validation errors", async () => {
-    const onError = vi.fn();
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
-        apiKey: "test-api-key",
-        useCompression: false,
-        onError,
-      }),
-    });
-
-    // Create a payload that exceeds size limit
-    const largeString = "x".repeat(1_000_001);
-    log.info(largeString);
-
-    // Wait for the next tick to allow error handling to complete
-    await vi.runAllTimersAsync();
-    await new Promise((resolve) => process.nextTick(resolve));
-
-    expect(mockFetch).not.toHaveBeenCalled();
-    expect(onError).toHaveBeenCalledTimes(1);
-    expect(onError).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: "ValidationError",
-      }),
-    );
-  });
-
-  it("should call onError after max retries", async () => {
-    const error = new Error("Network error");
-    mockFetch.mockImplementation(() => Promise.reject(error));
-
-    const onError = vi.fn();
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
-        apiKey: "test-api-key",
-        useCompression: false,
-        retryDelay: 10,
-        maxRetries: 2,
-        onError,
-      }),
-    });
-
-    const sendPromise = log.info("test message");
-
-    // Run timers for each retry attempt
-    for (let i = 0; i <= 2; i++) {
-      await vi.runAllTimersAsync();
-    }
-    await sendPromise;
-
-    expect(mockFetch).toHaveBeenCalledTimes(3);
-    expect(onError).toHaveBeenCalledWith(expect.any(Error));
-    expect(onError.mock.calls[0][0].message).toContain("Failed to send logs after 2 retries");
-  });
-
-  it("should include metadata in log entry", async () => {
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
-        apiKey: "test-api-key",
-        useCompression: false,
-      }),
-    });
-
-    const sendPromise = log.withMetadata({ test: "data" }).info("test message");
-    await vi.runAllTimersAsync();
-    await sendPromise;
-
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.objectContaining({
-        body: expect.stringContaining('"attributes":{"test":"data"}'),
-      }),
-    );
-  });
-
-  it("should handle rate limiting with Retry-After header", async () => {
-    const retryAfter = 30; // 30 seconds
-    mockFetch
-      .mockImplementationOnce(() =>
-        Promise.resolve(
-          new Response(null, {
-            status: 429,
-            statusText: "Too Many Requests",
-            headers: new Headers({
-              "Retry-After": retryAfter.toString(),
-            }),
-          }),
-        ),
-      )
-      .mockImplementationOnce(() =>
-        Promise.resolve(
-          new Response(null, {
-            status: 200,
-            statusText: "OK",
-          }),
-        ),
-      );
-
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
-        apiKey: "test-api-key",
-        useCompression: false,
-        retryDelay: 10,
-      }),
-    });
-
-    const sendPromise = log.info("test message");
-
-    // Fast-forward time by the retry-after duration
-    await vi.advanceTimersByTimeAsync(retryAfter * 1000);
-    await vi.runAllTimersAsync();
-    await sendPromise;
-
-    expect(mockFetch).toHaveBeenCalledTimes(2);
-  });
-
-  it("should not retry on rate limit when respectRateLimit is false", async () => {
-    const retryAfter = 30; // 30 seconds
-    mockFetch.mockImplementationOnce(() =>
-      Promise.resolve(
-        new Response(null, {
-          status: 429,
-          statusText: "Too Many Requests",
-          headers: new Headers({
-            "Retry-After": retryAfter.toString(),
-          }),
+      expect(HttpTransportMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: customEndpoint,
         }),
-      ),
-    );
+      );
+    });
 
-    const onError = vi.fn();
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
+    it("should create transport with custom configuration", () => {
+      new NewRelicTransport({
         apiKey: "test-api-key",
-        useCompression: false,
+        endpoint: "https://custom.newrelic.com/logs",
+        compression: false,
+        maxRetries: 5,
+        retryDelay: 2000,
         respectRateLimit: false,
+        enableBatchSend: false,
+        batchSize: 50,
+        batchSendTimeout: 3000,
+      });
+
+      expect(HttpTransportMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: "https://custom.newrelic.com/logs",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Api-Key": "test-api-key",
+          },
+          compression: false,
+          maxRetries: 5,
+          retryDelay: 2000,
+          respectRateLimit: false,
+          enableBatchSend: false,
+          batchSize: 50,
+          batchSendTimeout: 3000,
+        }),
+      );
+    });
+
+    it("should create transport with error and debug callbacks", () => {
+      const onError = vi.fn();
+      const onDebug = vi.fn();
+      const onDebugReqRes = vi.fn();
+
+      new NewRelicTransport({
+        apiKey: "test-api-key",
         onError,
-      }),
+        onDebug,
+        onDebugReqRes,
+      });
+
+      expect(HttpTransportMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          onError,
+          onDebug,
+          onDebugReqRes,
+        }),
+      );
     });
 
-    const sendPromise = log.info("test message");
-    await vi.runAllTimersAsync();
-    await sendPromise;
+    it("should use default payload template with correct New Relic format", () => {
+      new NewRelicTransport({
+        apiKey: "test-api-key",
+      });
 
-    expect(mockFetch).toHaveBeenCalledTimes(1);
-    expect(onError).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: "RateLimitError",
-        message: expect.stringContaining(`Retry after ${retryAfter} seconds`),
-      }),
-    );
+      const callArgs = HttpTransportMock.mock.calls[0][0];
+      const payloadTemplate = callArgs.payloadTemplate;
+
+      const result = payloadTemplate({
+        logLevel: "info",
+        message: "test message",
+        data: { userId: "123", action: "login" },
+      });
+
+      const parsed = JSON.parse(result);
+      expect(parsed.level).toBe("info");
+      expect(parsed.log).toBe("test message");
+      expect(parsed.timestamp).toBeDefined();
+      expect(typeof parsed.timestamp).toBe("number");
+      expect(parsed.attributes).toEqual({ userId: "123", action: "login" });
+    });
+
+    it("should handle logs without data in payload template", () => {
+      new NewRelicTransport({
+        apiKey: "test-api-key",
+      });
+
+      const callArgs = HttpTransportMock.mock.calls[0][0];
+      const payloadTemplate = callArgs.payloadTemplate;
+
+      const result = payloadTemplate({
+        logLevel: "debug",
+        message: "debug message",
+      });
+
+      const parsed = JSON.parse(result);
+      expect(parsed.level).toBe("debug");
+      expect(parsed.log).toBe("debug message");
+      expect(parsed.attributes).toBeUndefined();
+    });
+
+    it("should handle empty data in payload template", () => {
+      new NewRelicTransport({
+        apiKey: "test-api-key",
+      });
+
+      const callArgs = HttpTransportMock.mock.calls[0][0];
+      const payloadTemplate = callArgs.payloadTemplate;
+
+      const result = payloadTemplate({
+        logLevel: "warn",
+        message: "warning message",
+        data: {},
+      });
+
+      const parsed = JSON.parse(result);
+      expect(parsed.level).toBe("warn");
+      expect(parsed.log).toBe("warning message");
+      expect(parsed.attributes).toEqual({});
+    });
+
+    it("should pass through enabled and level configuration", () => {
+      new NewRelicTransport({
+        apiKey: "test-api-key",
+        enabled: false,
+        level: "warn",
+      });
+
+      expect(HttpTransportMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          enabled: false,
+          level: "warn",
+        }),
+      );
+    });
   });
 
-  it("should not count rate limit retries against maxRetries", async () => {
-    const retryAfter = 5; // 5 seconds
-    mockFetch
-      .mockImplementationOnce(() =>
-        Promise.resolve(
-          new Response(null, {
-            status: 429,
-            statusText: "Too Many Requests",
-            headers: new Headers({
-              "Retry-After": retryAfter.toString(),
-            }),
-          }),
-        ),
-      )
-      .mockImplementationOnce(() =>
-        Promise.resolve(
-          new Response(null, {
-            status: 429,
-            statusText: "Too Many Requests",
-            headers: new Headers({
-              "Retry-After": retryAfter.toString(),
-            }),
-          }),
-        ),
-      )
-      .mockImplementationOnce(() =>
-        Promise.resolve(
-          new Response(null, {
-            status: 500,
-            statusText: "Internal Server Error",
-          }),
-        ),
-      )
-      .mockImplementationOnce(() =>
-        Promise.resolve(
-          new Response(null, {
-            status: 200,
-            statusText: "OK",
-          }),
-        ),
-      );
-
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
+  describe("attribute validation", () => {
+    it("should throw ValidationError for too many attributes", () => {
+      new NewRelicTransport({
         apiKey: "test-api-key",
-        useCompression: false,
-        maxRetries: 1,
-        retryDelay: 10,
-      }),
+      });
+
+      const callArgs = HttpTransportMock.mock.calls[0][0];
+      const payloadTemplate = callArgs.payloadTemplate;
+
+      const metadata: Record<string, string> = {};
+      for (let i = 0; i < 256; i++) {
+        metadata[`key${i}`] = `value${i}`;
+      }
+
+      expect(() =>
+        payloadTemplate({
+          logLevel: "info",
+          message: "test",
+          data: metadata,
+        }),
+      ).toThrow(ValidationError);
     });
 
-    const sendPromise = log.info("test message");
+    it("should throw ValidationError for attribute name too long", () => {
+      new NewRelicTransport({
+        apiKey: "test-api-key",
+      });
 
-    // Fast-forward time for each retry
-    await vi.advanceTimersByTimeAsync(retryAfter * 1000);
-    await vi.advanceTimersByTimeAsync(retryAfter * 1000);
-    await vi.advanceTimersByTimeAsync(10); // Regular retry delay
-    await vi.runAllTimersAsync();
-    await sendPromise;
+      const callArgs = HttpTransportMock.mock.calls[0][0];
+      const payloadTemplate = callArgs.payloadTemplate;
 
-    expect(mockFetch).toHaveBeenCalledTimes(4);
+      const longKey = "x".repeat(256);
+
+      expect(() =>
+        payloadTemplate({
+          logLevel: "info",
+          message: "test",
+          data: { [longKey]: "value" },
+        }),
+      ).toThrow(ValidationError);
+    });
+
+    it("should truncate attribute values longer than 4094 characters", () => {
+      new NewRelicTransport({
+        apiKey: "test-api-key",
+      });
+
+      const callArgs = HttpTransportMock.mock.calls[0][0];
+      const payloadTemplate = callArgs.payloadTemplate;
+
+      const longValue = "x".repeat(5000);
+
+      const result = payloadTemplate({
+        logLevel: "info",
+        message: "test message",
+        data: { test: longValue },
+      });
+
+      const parsed = JSON.parse(result);
+      expect(parsed.attributes.test).toBe("x".repeat(4094));
+    });
+
+    it("should handle complex metadata correctly", () => {
+      new NewRelicTransport({
+        apiKey: "test-api-key",
+      });
+
+      const callArgs = HttpTransportMock.mock.calls[0][0];
+      const payloadTemplate = callArgs.payloadTemplate;
+
+      const result = payloadTemplate({
+        logLevel: "error",
+        message: "error message",
+        data: {
+          userId: "123",
+          requestId: "req-456",
+          error: {
+            name: "ValidationError",
+            message: "Invalid input",
+          },
+          tags: ["api", "validation"],
+          duration: 150,
+        },
+      });
+
+      const parsed = JSON.parse(result);
+      expect(parsed.level).toBe("error");
+      expect(parsed.log).toBe("error message");
+      expect(parsed.attributes.userId).toBe("123");
+      expect(parsed.attributes.requestId).toBe("req-456");
+      expect(parsed.attributes.error).toEqual({
+        name: "ValidationError",
+        message: "Invalid input",
+      });
+      expect(parsed.attributes.tags).toEqual(["api", "validation"]);
+      expect(parsed.attributes.duration).toBe(150);
+    });
+
+    it("should handle special characters in message and metadata", () => {
+      new NewRelicTransport({
+        apiKey: "test-api-key",
+      });
+
+      const callArgs = HttpTransportMock.mock.calls[0][0];
+      const payloadTemplate = callArgs.payloadTemplate;
+
+      const result = payloadTemplate({
+        logLevel: "info",
+        message: "Message with special chars: éñ中文🚀",
+        data: {
+          "field-with-dash": "value",
+          field_with_underscore: "value",
+          "field.with.dots": "value",
+        },
+      });
+
+      const parsed = JSON.parse(result);
+      expect(parsed.log).toBe("Message with special chars: éñ中文🚀");
+      expect(parsed.level).toBe("info");
+      expect(parsed.attributes["field-with-dash"]).toBe("value");
+      expect(parsed.attributes.field_with_underscore).toBe("value");
+      expect(parsed.attributes["field.with.dots"]).toBe("value");
+    });
+
+    it("should allow exactly 255 attributes (the max)", () => {
+      new NewRelicTransport({
+        apiKey: "test-api-key",
+      });
+
+      const callArgs = HttpTransportMock.mock.calls[0][0];
+      const payloadTemplate = callArgs.payloadTemplate;
+
+      const metadata: Record<string, string> = {};
+      for (let i = 0; i < 255; i++) {
+        metadata[`key${i}`] = `value${i}`;
+      }
+
+      expect(() =>
+        payloadTemplate({
+          logLevel: "info",
+          message: "test",
+          data: metadata,
+        }),
+      ).not.toThrow();
+    });
+
+    it("should allow attribute names of exactly 255 characters (the max)", () => {
+      new NewRelicTransport({
+        apiKey: "test-api-key",
+      });
+
+      const callArgs = HttpTransportMock.mock.calls[0][0];
+      const payloadTemplate = callArgs.payloadTemplate;
+
+      const exactLengthKey = "x".repeat(255);
+
+      expect(() =>
+        payloadTemplate({
+          logLevel: "info",
+          message: "test",
+          data: { [exactLengthKey]: "value" },
+        }),
+      ).not.toThrow();
+    });
   });
 
-  it("should use default retry-after of 60 seconds when header is missing", async () => {
-    mockFetch
-      .mockImplementationOnce(() =>
-        Promise.resolve(
-          new Response(null, {
-            status: 429,
-            statusText: "Too Many Requests",
-          }),
-        ),
-      )
-      .mockImplementationOnce(() =>
-        Promise.resolve(
-          new Response(null, {
-            status: 200,
-            statusText: "OK",
-          }),
-        ),
-      );
+  describe("custom payloadTemplate", () => {
+    it("should accept a custom payloadTemplate", () => {
+      const customTemplate = vi.fn(() => JSON.stringify({ custom: "format" }));
 
-    const log = new LogLayer({
-      transport: new NewRelicTransport({
-        id: "new-relic",
+      new NewRelicTransport({
         apiKey: "test-api-key",
-        useCompression: false,
-        retryDelay: 10,
-      }),
+        payloadTemplate: customTemplate,
+      });
+
+      expect(HttpTransportMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          payloadTemplate: customTemplate,
+        }),
+      );
     });
-
-    const sendPromise = log.info("test message");
-
-    // Fast-forward time by the default retry-after duration
-    await vi.advanceTimersByTimeAsync(60 * 1000);
-    await vi.runAllTimersAsync();
-    await sendPromise;
-
-    expect(mockFetch).toHaveBeenCalledTimes(2);
   });
 });

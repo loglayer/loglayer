@@ -3,11 +3,11 @@ title: New Relic Transport for LogLayer
 description: Send logs to New Relic with the LogLayer logging library
 ---
 
-# New Relic Transport <Badge type="tip" text="Server" />
+# New Relic Transport <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-new-relic)](https://www.npmjs.com/package/@loglayer/transport-new-relic)
 
-The New Relic transport allows you to send logs directly to New Relic's [Log API](https://docs.newrelic.com/docs/logs/log-api/introduction-log-api/). It provides robust features including compression, retry logic, rate limiting support, and validation of New Relic's API constraints.
+The New Relic transport allows you to send logs directly to New Relic's [Log API](https://docs.newrelic.com/docs/logs/log-api/introduction-log-api/). It extends the [HTTP transport](/transports/http) to provide robust features including compression, retry logic, rate limiting support, batch sending, and validation of New Relic's API constraints. It is compatible with Node.js, Bun, and Deno.
 
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/new-relic)
 
@@ -39,12 +39,12 @@ const log = new LogLayer({
    transport: new NewRelicTransport({
       apiKey: "YOUR_NEW_RELIC_API_KEY",
       endpoint: "https://log-api.newrelic.com/log/v1", // optional, this is the default
-      useCompression: true, // optional, defaults to true
+      compression: true, // optional, defaults to true
       maxRetries: 3, // optional, defaults to 3
       retryDelay: 1000, // optional, base delay in ms, defaults to 1000
       respectRateLimit: true, // optional, defaults to true
       onError: (err) => {
-         console.error('Failed to send logs to New Relic:', err);
+         console.error('Failed to send logs:', err);
       },
       onDebug: (entry) => {
          console.log('Log entry being sent:', entry);
@@ -70,14 +70,19 @@ log.withMetadata({ userId: "123" }).error("User not found");
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `endpoint` | `string` | `"https://log-api.newrelic.com/log/v1"` | The New Relic Log API endpoint |
-| `useCompression` | `boolean` | `true` | Whether to use gzip compression |
+| `compression` | `boolean` | `true` | Whether to use gzip compression |
 | `maxRetries` | `number` | `3` | Maximum number of retry attempts |
 | `retryDelay` | `number` | `1000` | Base delay between retries (ms) |
 | `respectRateLimit` | `boolean` | `true` | Whether to respect rate limiting |
 | `onError` | `(err: Error) => void` | - | Error handling callback |
 | `onDebug` | `(entry: Record<string, any>) => void` | - | Debug callback for inspecting log entries |
-| `enabled` | `boolean` | `true` | Whether the transport is enabled |
-| `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | Minimum log level to process. Logs below this level will be filtered out |
+| `onDebugReqRes` | `(reqRes: {...}) => void` | - | Debug callback for HTTP requests and responses |
+
+::: details Inherited HTTP Transport Options
+
+The New Relic transport extends the [HTTP transport](/transports/http) and inherits all its configuration options (batching, content types, level filtering, Next.js Edge compat, etc.). See the [HTTP transport docs](/transports/http#configuration-options) for the full list.
+
+:::
 
 ## Features
 
@@ -88,13 +93,17 @@ The transport uses gzip compression by default to reduce bandwidth usage. You ca
 ```typescript
 new NewRelicTransport({
   apiKey: "YOUR_API_KEY",
-  useCompression: false
+  compression: false
 })
 ```
 
+::: tip Next.js Edge Runtime
+Set `enableNextJsEdgeCompat: true` when using this transport in the Next.js Edge runtime. This disables compression (as `CompressionStream` is unavailable) and falls back to `Buffer.byteLength` for log size checks.
+:::
+
 ### Retry Logic
 
-The transport includes a sophisticated retry mechanism with exponential backoff and jitter:
+The transport includes a sophisticated retry mechanism with exponential backoff:
 
 ```typescript
 new NewRelicTransport({
@@ -102,11 +111,6 @@ new NewRelicTransport({
   maxRetries: 5, // Increase max retries
   retryDelay: 2000 // Increase base delay to 2 seconds
 })
-```
-
-The actual delay between retries is calculated using:
-```
-delay = baseDelay * (2 ^ attemptNumber) + random(0-200)ms
 ```
 
 ### Rate Limiting
@@ -122,7 +126,6 @@ The transport handles New Relic's rate limiting in two ways:
    ```
    - Waits for the duration specified in the `Retry-After` header
    - Rate limit retries don't count against `maxRetries`
-   - Uses 60 seconds as default wait time if no header is present
 
 2. **Ignore Rate Limits**
    ```typescript
@@ -130,14 +133,13 @@ The transport handles New Relic's rate limiting in two ways:
      apiKey: "YOUR_API_KEY",
      respectRateLimit: false,
      onError: (err) => {
-       if (err.name === "RateLimitError") {
-         // Handle rate limit error
-       }
+       // Handle rate limit errors
+       console.error("Request failed:", err.message);
      }
    })
    ```
    - Fails immediately when rate limited
-   - Calls `onError` with a `RateLimitError`
+   - Calls `onError` with the error
 
 ### Validation
 
@@ -152,7 +154,6 @@ log.withMetadata({
 ```
 
 Validation includes:
-- Maximum payload size of 1MB (before and after compression)
 - Maximum of 255 attributes per log entry
 - Maximum attribute name length of 255 characters
 - Automatic truncation of attribute values longer than 4094 characters
@@ -165,18 +166,12 @@ The transport provides detailed error information through the `onError` callback
 new NewRelicTransport({
   apiKey: "YOUR_API_KEY",
   onError: (err) => {
-    switch (err.name) {
-      case "ValidationError":
-        // Handle validation errors (payload size, attribute limits)
-        break;
-      case "RateLimitError":
-        // Handle rate limiting errors
-        const rateLimitErr = err as RateLimitError;
-        console.log(`Rate limited. Retry after: ${rateLimitErr.retryAfter}s`);
-        break;
-      default:
-        // Handle other errors (network, API errors)
-        console.error("Failed to send logs:", err.message);
+    if (err.name === "ValidationError") {
+      // Handle validation errors (attribute limits)
+      console.error("Validation error:", err.message);
+    } else {
+      // Handle other errors (network, rate limiting, API errors, etc.)
+      console.error("Failed to send logs:", err.message);
     }
   }
 })
@@ -184,7 +179,7 @@ new NewRelicTransport({
 
 ### Debug Callback
 
-The transport includes a debug callback that allows you to inspect log entries before they are sent to New Relic:
+The transport includes debug callbacks that allow you to inspect log entries and HTTP traffic:
 
 ```typescript
 new NewRelicTransport({
@@ -192,40 +187,40 @@ new NewRelicTransport({
   onDebug: (entry) => {
     // Log the entry being sent
     console.log('Sending log entry:', JSON.stringify(entry, null, 2));
+  },
+  onDebugReqRes: ({ req, res }) => {
+    // Inspect HTTP request and response
+    console.log('Request:', req.url, req.method);
+    console.log('Response:', res.status, res.statusText);
   }
 })
 ```
 
-## Best Practices
+## Migration Guide
 
-1. **Error Handling**: Always provide an `onError` callback to handle failures gracefully.
+### From v3.x to v4.x
 
-2. **Compression**: Keep compression enabled unless you have a specific reason to disable it.
+v4 rewrites the transport to extend `HttpTransport`, which enables Bun and Deno compatibility and adds batch sending support.
 
-3. **Rate Limiting**: Use the default rate limit handling unless you have a custom rate limiting strategy.
+#### Renamed configuration option
 
-4. **Retry Configuration**: Adjust `maxRetries` and `retryDelay` based on your application's needs:
-   - Increase for critical logs that must be delivered
-   - Decrease for high-volume, less critical logs
+| v3.x | v4.x |
+|------|------|
+| `useCompression` | `compression` |
 
-5. **Validation**: Be aware of the attribute limits when adding metadata to avoid validation errors.
-
-## Changelog
-
-View the changelog [here](./changelogs/new-relic-changelog.md).
-
-## TypeScript Support
-
-The transport is written in TypeScript and provides full type definitions:
-
-```typescript
-import type { NewRelicTransportConfig } from "@loglayer/transport-new-relic"
-
-const config: NewRelicTransportConfig = {
+```diff
+new NewRelicTransport({
   apiKey: "YOUR_API_KEY",
-  // TypeScript will enforce correct options
-}
-``` 
+- useCompression: true,
++ compression: true,
+})
+```
+
+#### New features inherited from HttpTransport
+
+- **Batch sending** — configurable via `enableBatchSend`, `batchSize`, `batchSendTimeout` (enabled by default)
+- **`onDebugReqRes`** — inspect HTTP request/response details
+- Full set of [HTTP transport options](/transports/http#configuration-options)
 
 ## Changelog
 
