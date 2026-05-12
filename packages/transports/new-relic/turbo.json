@@ -30,6 +30,7 @@
       "dependsOn": [
         "@internal/tsconfig#build",
         "@loglayer/transport#build",
+        "@loglayer/transport-http#build",
         "loglayer#build"
       ],
       "inputs": [

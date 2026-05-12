@@ -6,13 +6,13 @@
 
 The New Relic transport for the [LogLayer](https://loglayer.dev) logging library.
 
-Ships logs to New Relic using their [Log API](https://docs.newrelic.com/docs/logs/log-api/introduction-log-api/). Features include:
+Ships logs to New Relic using their [Log API](https://docs.newrelic.com/docs/logs/log-api/introduction-log-api/). Compatible with Node.js, Bun, and Deno. Features include:
 - Automatic gzip compression (configurable)
 - Retry mechanism with exponential backoff
-- Rate limiting support with configurable behavior
+- Rate limiting support
+- Batch sending with configurable size and timeout
 - Validation of New Relic's API constraints
-- Error handling callback
-- Configurable endpoints for different regions
+- Error handling and debug callbacks
 
 ## Installation
 
@@ -32,12 +32,12 @@ const log = new LogLayer({
   transport: new NewRelicTransport({
     apiKey: "YOUR_NEW_RELIC_API_KEY",
     endpoint: "https://log-api.newrelic.com/log/v1", // optional, this is the default
-    useCompression: true, // optional, defaults to true
+    compression: true, // optional, defaults to true
     maxRetries: 3, // optional, defaults to 3
     retryDelay: 1000, // optional, base delay in ms, defaults to 1000
     respectRateLimit: true, // optional, defaults to true
     onError: (err) => {
-      console.error('Failed to send logs to New Relic:', err);
+      console.error('Failed to send logs:', err);
     },
     onDebug: (entry) => {
       console.log('Log entry being sent:', entry);
@@ -64,7 +64,7 @@ interface NewRelicTransportConfig {
   apiKey: string;
   /**
    * The New Relic Log API endpoint
-   * @default https://log-api.newrelic.com/log/v1
+   * @default "https://log-api.newrelic.com/log/v1"
    */
   endpoint?: string;
   /**
@@ -73,22 +73,21 @@ interface NewRelicTransportConfig {
   onError?: (err: Error) => void;
   /**
    * Optional callback for debugging log entries
-   * Called with the validated entry before it is sent
+   * Called with the entry before it is sent
    */
   onDebug?: (entry: Record<string, any>) => void;
   /**
    * Whether to use gzip compression
    * @default true
    */
-  useCompression?: boolean;
+  compression?: boolean;
   /**
    * Number of retry attempts before giving up
    * @default 3
    */
   maxRetries?: number;
   /**
-   * Base delay between retries in milliseconds. 
-   * The actual delay will use exponential backoff with jitter.
+   * Base delay between retries in milliseconds
    * @default 1000
    */
   retryDelay?: number;
@@ -102,4 +101,4 @@ interface NewRelicTransportConfig {
 
 ## Documentation
 
-For more details, visit [https://loglayer.dev/transports/new-relic](https://loglayer.dev/transports/new-relic) 
+For more details, visit [https://loglayer.dev/transports/new-relic](https://loglayer.dev/transports/new-relic)

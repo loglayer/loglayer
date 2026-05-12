@@ -1411,13 +1411,16 @@ importers:
 
   packages/transports/new-relic:
     dependencies:
-      '@loglayer/transport':
+      '@loglayer/transport-http':
         specifier: workspace:*
-        version: link:../../core/transport
+        version: link:../http
     devDependencies:
       '@internal/tsconfig':
         specifier: workspace:*
         version: link:../../core/tsconfig
+      '@loglayer/transport':
+        specifier: workspace:*
+        version: link:../../core/transport
       '@types/node':
         specifier: 25.2.3
         version: 25.2.3
