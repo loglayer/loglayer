@@ -38,9 +38,7 @@ jobs:
           node-version: 22
 
       - name: Prepare npm for OIDC
-        run: |
-          npm install -g npm@latest
-          rm -f ~/.npmrc
+        run: rm -f ~/.npmrc
 
       - name: Install turbo
         run: pnpm install turbo --global
