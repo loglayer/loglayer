@@ -36,7 +36,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: 'https://registry.npmjs.org'
+
+      - name: Prepare npm for OIDC
+        run: |
+          npm install -g npm@latest
+          rm -f ~/.npmrc
 
       - name: Install turbo
         run: pnpm install turbo --global
@@ -67,6 +71,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ''
+          NODE_AUTH_TOKEN: ''
 
   deploy-docs:
     needs: release
