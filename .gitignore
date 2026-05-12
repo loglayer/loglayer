@@ -145,3 +145,4 @@ docs/src/plugins/changelogs/*.md
 audit.json
 test-logs/
 live-logs/
+.npm-access-state.json

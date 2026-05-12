@@ -12,11 +12,8 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   contents: write
-  pull-requests: write
-  actions: read
-  checks: read
-  deployments: read
-  statuses: read
+  pull-requests: write # Required by changesets/action for version PRs
+  id-token: write      # Required for OIDC trusted publishing
 
 jobs:
   release:
@@ -38,8 +35,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: pnpm # or pnpm / yarn
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install turbo
         run: pnpm install turbo --global
@@ -69,7 +66,6 @@ jobs:
           title: 'chore: release package(s)'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   deploy-docs:
     needs: release
