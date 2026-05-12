@@ -35,10 +35,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Prepare npm for OIDC
-        run: rm -f ~/.npmrc
+        run: |
+          echo "npm version: $(npm --version)"
+          rm -f ~/.npmrc
 
       - name: Install turbo
         run: pnpm install turbo --global
