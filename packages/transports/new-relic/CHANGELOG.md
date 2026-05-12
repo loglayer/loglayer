@@ -1,5 +1,24 @@
 # `@loglayer/transport-new-relic` Changelog
 
+## 5.0.0
+
+### Major Changes
+
+- [#372](https://github.com/loglayer/loglayer/pull/372) [`cfc9bf5`](https://github.com/loglayer/loglayer/commit/cfc9bf5cb8ea7dd38f5a3edaa46f834deb747010) Thanks [@theogravity](https://github.com/theogravity)! - Rewrite New Relic transport to extend HttpTransport for Bun and Deno compatibility
+
+  The NewRelicTransport now extends HttpTransport instead of LoggerlessTransport, making it compatible with Bun and Deno runtimes (uses the fetch API instead of Node.js-specific features). Benefits of the HttpTransport base include:
+
+  - Batch sending with configurable size and timeout
+  - Retry logic with exponential backoff
+  - Rate limiting support
+  - Compression support
+  - Bun and Deno compatibility via platform-agnostic fetch API
+
+  **Breaking changes:**
+
+  - `useCompression` config option renamed to `compression` (consistent with HttpTransport)
+  - `RateLimitError` is now re-exported from `@loglayer/transport-http` (same shape, same behavior)
+
 ## 3.0.2
 
 ### Patch Changes
