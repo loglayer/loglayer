@@ -1,5 +1,11 @@
 # `@loglayer/transport-new-relic` Changelog
 
+## 4.0.0
+
+### Major Changes
+
+- [#376](https://github.com/loglayer/loglayer/pull/376) [`fddcd9a`](https://github.com/loglayer/loglayer/commit/fddcd9aa1d1c972c8a5c9a6c5820cbcfb4e2fa1a) Thanks [@theogravity](https://github.com/theogravity)! - Release: rewrite New Relic transport to extend HttpTransport for Bun and Deno compatibility
+
 ## 3.0.2
 
 ### Patch Changes
