@@ -33,8 +33,8 @@ export abstract class LoggerlessTransport implements LogLayerTransport {
   protected consoleDebug?: boolean;
 
   constructor(config: LoggerlessTransportConfig) {
-    // loglayer still needs an id, so we generate one even if it won't really be used
-    this.id = Date.now().toString() + Math.random().toString();
+    // Use config.id if provided, otherwise generate a unique id
+    this.id = config.id ?? Date.now().toString() + Math.random().toString();
     this.enabled = config.enabled ?? true;
     this.consoleDebug = config.consoleDebug ?? false;
     this.level = config.level ?? "trace";

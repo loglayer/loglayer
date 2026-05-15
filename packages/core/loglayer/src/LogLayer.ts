@@ -1337,8 +1337,8 @@ export class LogLayer implements ILogLayer<LogLayer> {
       const transportPromises = (this._config.transport as LogLayerTransport[])
         .filter((transport) => {
           if (!transport.enabled) return false;
-          // Group routing check
-          if (!this._shouldTransportReceiveLog(transport.id!, logLevel, groups)) return false;
+          // Group routing check - use effectiveGroups (merged groups including _assignedGroups)
+          if (!this._shouldTransportReceiveLog(transport.id!, logLevel, effectiveGroups)) return false;
           return true;
         })
         .map(async (transport) => {
@@ -1389,8 +1389,8 @@ export class LogLayer implements ILogLayer<LogLayer> {
         return;
       }
 
-      // Group routing check
-      if (!this._shouldTransportReceiveLog(this.singleTransport.id!, logLevel, groups)) {
+      // Group routing check - use effectiveGroups (merged groups including _assignedGroups)
+      if (!this._shouldTransportReceiveLog(this.singleTransport.id!, logLevel, effectiveGroups)) {
         return;
       }
 
