@@ -365,15 +365,36 @@ describe("LogLayer groups functionality", () => {
 
       const testLogger = log.withGroup("test");
 
-      // Grouped log should go to BOTH transports
-      testLogger.info("grouped message");
-      expect(getLogger(log, "t1").popLine()).toBeDefined();
-      expect(getLogger(log, "t2").popLine()).toBeDefined();
+      // Multiple grouped logs should go to BOTH transports
+      const messages = ["first grouped message", "second grouped message", "third grouped message"];
+
+      for (const msg of messages) {
+        testLogger.info(msg);
+      }
+
+      // Verify 3 messages went to each transport
+      const t1Lines = [];
+      const t2Lines = [];
+
+      for (let i = 0; i < 3; i++) {
+        t1Lines.push(getLogger(log, "t1").popLine());
+        t2Lines.push(getLogger(log, "t2").popLine());
+      }
+
+      expect(t1Lines).toHaveLength(3);
+      expect(t2Lines).toHaveLength(3);
+
+      // Verify messages match (order may vary due to async transport processing)
+      const t1Messages = t1Lines.map((l) => l?.data?.[0]);
+      const t2Messages = t2Lines.map((l) => l?.data?.[0]);
+
+      expect(t1Messages.sort()).toEqual(messages.sort());
+      expect(t2Messages.sort()).toEqual(messages.sort());
 
       // Regular ungrouped log should also go to both (ungroupedBehavior: all)
       log.info("ungrouped message");
-      expect(getLogger(log, "t1").popLine()).toBeDefined();
-      expect(getLogger(log, "t2").popLine()).toBeDefined();
+      expect(getLogger(log, "t1").popLine()).toStrictEqual(expect.objectContaining({ data: ["ungrouped message"] }));
+      expect(getLogger(log, "t2").popLine()).toStrictEqual(expect.objectContaining({ data: ["ungrouped message"] }));
     });
 
     it("should not affect the parent logger", () => {
