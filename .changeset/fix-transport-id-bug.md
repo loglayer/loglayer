@@ -1,5 +1,6 @@
 ---
 "@loglayer/transport": patch
+"loglayer": patch
 ---
 
 Fix transport `id` property not being set from config
