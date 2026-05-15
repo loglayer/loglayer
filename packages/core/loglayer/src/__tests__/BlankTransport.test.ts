@@ -29,6 +29,26 @@ describe("BlankTransport", () => {
     expect(transport.id).toBeDefined();
   });
 
+  it("should use configured id instead of generating one", () => {
+    const customId = "my-custom-transport";
+    const customTransport = new BlankTransport({
+      shipToLogger: mockShipToLogger,
+      id: customId,
+    });
+
+    expect(customTransport.id).toBe(customId);
+  });
+
+  it("should generate id when not provided", () => {
+    const transportWithGeneratedId = new BlankTransport({
+      shipToLogger: mockShipToLogger,
+    });
+
+    // Should be defined and not empty
+    expect(transportWithGeneratedId.id).toBeDefined();
+    expect(transportWithGeneratedId.id.length).toBeGreaterThan(0);
+  });
+
   it("should respect custom configuration", () => {
     const customTransport = new BlankTransport({
       shipToLogger: mockShipToLogger,

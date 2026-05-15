@@ -351,6 +351,31 @@ describe("LogLayer groups functionality", () => {
       expect(getLogger(log, "t2").popLine()).toBeUndefined();
     });
 
+    it("should route grouped logs to ALL transports in the group's transports list", () => {
+      // Regression test for https://github.com/loglayer/loglayer/issues/382
+      const transport1 = createTestTransport("t1");
+      const transport2 = createTestTransport("t2");
+
+      const log = new LogLayer({
+        transport: [transport1, transport2],
+        groups: {
+          test: { transports: ["t1", "t2"], level: "info" },
+        },
+      });
+
+      const testLogger = log.withGroup("test");
+
+      // Grouped log should go to BOTH transports
+      testLogger.info("grouped message");
+      expect(getLogger(log, "t1").popLine()).toBeDefined();
+      expect(getLogger(log, "t2").popLine()).toBeDefined();
+
+      // Regular ungrouped log should also go to both (ungroupedBehavior: all)
+      log.info("ungrouped message");
+      expect(getLogger(log, "t1").popLine()).toBeDefined();
+      expect(getLogger(log, "t2").popLine()).toBeDefined();
+    });
+
     it("should not affect the parent logger", () => {
       const transport1 = createTestTransport("t1");
       const transport2 = createTestTransport("t2");
