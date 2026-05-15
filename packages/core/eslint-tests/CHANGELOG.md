@@ -1,5 +1,12 @@
 # @internal/eslint-tests
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [[`5fcc12f`](https://github.com/loglayer/loglayer/commit/5fcc12f61d0625583cf8589f81084c115fd8af71)]:
+  - loglayer@9.1.1
+
 ## 0.0.3
 
 ### Patch Changes
