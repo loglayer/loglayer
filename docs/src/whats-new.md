@@ -9,9 +9,13 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## May 15, 2026
 
-`@loglayer/transport`:
+`loglayer`:
 
 - **Bug fix:** Fixed transport `id` property not being set from config. When creating a transport with `id: "file"`, the ID was always generated instead of using the configured value. This caused group-based routing to fail because transports couldn't be matched against group configurations.
+
+If you are using group-based routing, you will need to update all your loglayer libraries to the latest.
+
+## May 13, 2026
 
 `@loglayer/transport-new-relic`:
 
