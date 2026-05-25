@@ -7,6 +7,20 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## May 25, 2026
+
+`loglayer`:
+
+- **Tagged template syntax support**: All log methods (`info`, `warn`, `error`, `debug`, `trace`, `fatal`) now support native JavaScript tagged template syntax:
+
+```typescript
+log.info`User ${userId} logged in`;
+log.withMetadata({ requestId }).warn`Request ${requestId} timed out`;
+log.withError(err).error`Failed: ${err.message}`;
+```
+
+See the [Basic Logging documentation](/logging-api/basic-logging#tagged-template-syntax) for usage examples.
+
 ## May 15, 2026
 
 `loglayer`:

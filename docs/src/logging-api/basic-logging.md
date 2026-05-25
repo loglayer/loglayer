@@ -48,6 +48,71 @@ The logging library you use may or may not support sprintf-style string formatti
 If it does not, you can use the [sprintf plugin](/plugins/sprintf) to enable support.
 :::
 
+## Tagged Template Syntax
+
+All log methods support native JavaScript tagged template syntax. This allows you to write natural template strings without parentheses:
+
+```typescript
+const userId = '123'
+const action = 'login'
+
+// Basic tagged template
+log.info`User ${userId} logged in`
+
+// Multiple interpolations
+log.info`User ${userId} performed ${action}`
+
+// Works with all log levels
+log.warn`Request ${requestId} timed out`
+log.error`Failed: ${error.message}`
+log.debug`Cache hit for ${cacheKey}`
+```
+
+### With Fluent API
+
+Tagged templates work seamlessly with LogLayer's fluent API:
+
+```typescript
+// With context
+log.withContext({ userId, requestId })
+  .info`User ${userId} requested ${requestId}`
+
+// With metadata
+log.withMetadata({ duration: 150, status: 200 })
+  .info`Request completed in ${duration}ms with status ${status}`
+
+// With error
+log.withError(error)
+  .error`Operation failed: ${error.message}`
+
+// Full chain
+log
+  .withContext({ userId, requestId })
+  .withMetadata({ duration: 150 })
+  .withError(error)
+  .warn`Request ${requestId} timed out after ${duration}ms`
+```
+
+### Behavior
+
+- **Immediate value capture**: Values are captured when the template is evaluated (standard tagged template behavior)
+- **String coercion**: All interpolated values use `String()` for coercion
+- **Object handling**: Objects are stringified to `"[object Object]"` — this is intentional. Use `withMetadata()` or `withContext()` for structured data
+
+```typescript
+// null becomes "null"
+log.info`User ${null} logged in`  // "User null logged in"
+
+// undefined becomes "undefined"
+log.info`Value: ${undefined}`     // "Value: undefined"
+
+// Pure interpolations work too
+log.info`${userId}`               // "123"
+
+// For structured objects, use metadata (not template interpolations)
+log.withMetadata({ user }).info`User logged in`
+```
+
 ## Message Prefixing
 
 You can add a prefix to all log messages either through configuration or using the `withPrefix` method:
