@@ -56,6 +56,55 @@ log.info('User', 123, 'logged in')
 log.info('User %s logged in from %s', 'john', 'localhost')
 ```
 
+### Tagged Template Syntax
+
+Log methods support tagged template syntax directly — no special setup or configuration required:
+
+```typescript
+const userId = '123'
+const count = 42
+
+// Simple interpolations
+log.info`User ${userId} logged in`
+
+// Multiple values
+log.warn`Request ${requestId} completed in ${duration}ms with status ${status}`
+
+// Works with all log levels
+log.debug`Cache miss for key ${cacheKey}`
+log.trace`Entering function ${fnName} with args ${argsCount}`
+```
+
+**Combining with fluent API:**
+
+```typescript
+log.withMetadata({ env: 'production' })
+   .withContext({ service: 'api' })
+   .info`Processing ${taskCount} items`
+```
+
+**Interpolation behavior:**
+
+All interpolated values are converted using `String()`. For structured data, use `withMetadata()`:
+
+```typescript
+// ✅ Good: simple values in templates
+log.info`User ${userId} connected from ${ip}`
+
+// ✅ Good: structured data via withMetadata
+log.withMetadata({ user: { id: userId, name: name } }).info('User logged in')
+
+// ⚠️ Objects in templates become "[object Object]"
+log.info`Data: ${myObject}`  // Output: "Data: [object Object]"
+```
+
+This is intentional design — it encourages use of `withMetadata()` for structured data, which preserves the object structure for downstream log processors.
+
+```typescript
+log.info('User', 123, 'logged in')
+log.info('User %s logged in from %s', 'john', 'localhost')
+```
+
 ## Metadata (per-message structured data)
 
 Metadata is attached to a single log entry and not persisted.

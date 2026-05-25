@@ -35,6 +35,43 @@ log.fatal('Critical failure')
 
 // Multiple parameters
 log.info('User', 123, 'logged in')
+
+// Tagged template syntax (use withMetadata for structured data)
+log.info`User ${userId} logged in`
+log.warn`Request ${requestId} took ${duration}ms`
+```
+
+## Tagged Template Syntax
+
+Log methods accept tagged templates directly — no special setup required.
+
+```typescript
+const userId = '123'
+const count = 42
+
+// Simple interpolations work great
+log.info`User ${userId} logged in`
+
+// Multiple values
+log.warn`Request ${requestId} completed in ${duration}ms with status ${status}`
+
+// Fluent chains still work
+log.withMetadata({ env: 'production' })
+   .withContext({ service: 'api' })
+   .info`Processing ${taskCount} items`
+```
+
+**Behavior:** Interpolations are converted using `String()`. For structured data, use `withMetadata()`:
+
+```typescript
+// ✅ Good: simple values in templates
+log.info`User ${userId} connected from ${ip}`
+
+// ✅ Good: structured data via withMetadata
+log.withMetadata({ user: { id: userId, name: name } }).info('User logged in')
+
+// ⚠️ Objects in templates become "[object Object]" (intentional)
+log.info`Data: ${myObject}`  // Output: "Data: [object Object]"
 ```
 
 ## Metadata (per-message data)
