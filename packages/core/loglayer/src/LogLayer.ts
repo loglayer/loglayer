@@ -43,6 +43,31 @@ interface FormatLogParams {
 }
 
 /**
+ * Checks if the arguments are from a tagged template literal call.
+ * Tagged templates pass a TemplateStringsArray (which has a `raw` property)
+ * as the first argument.
+ */
+function isTaggedTemplate(args: any[]): args is [TemplateStringsArray, ...any[]] {
+  const first = args[0];
+  return Array.isArray(first) && typeof (first as any).raw !== "undefined";
+}
+
+/**
+ * Converts a tagged template call back into a string.
+ * Uses String() for all interpolated values to handle objects, null, undefined, etc.
+ */
+function taggedTemplateToString(strings: TemplateStringsArray, values: any[]): string {
+  let result = "";
+  for (let i = 0; i < strings.length; i++) {
+    result += strings[i];
+    if (i < values.length) {
+      result += String(values[i]);
+    }
+  }
+  return result;
+}
+
+/**
  * Wraps around a logging framework to provide convenience methods that allow
  * developers to programmatically specify their errors and metadata along with
  * a message in a consistent fashion.
@@ -683,10 +708,21 @@ export class LogLayer implements ILogLayer<LogLayer> {
    * The logging library may or may not support multiple message parameters and only
    * the first parameter would be used.
    *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.info`User ${userId} logged in`;
+   * ```
+   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  info(...messages: MessageDataType[]): void {
+  info(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.info)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.info, params: messages });
   }
@@ -694,10 +730,21 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Sends a log message to the logging library under the warn log level
    *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.warn`Request ${requestId} timed out`;
+   * ```
+   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  warn(...messages: MessageDataType[]): void {
+  warn(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.warn)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.warn, params: messages });
   }
@@ -705,10 +752,21 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Sends a log message to the logging library under the error log level
    *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.error`Failed to process ${taskId}`;
+   * ```
+   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  error(...messages: MessageDataType[]): void {
+  error(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.error)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.error, params: messages });
   }
@@ -716,10 +774,21 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Sends a log message to the logging library under the debug log level
    *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.debug`Cache hit for ${cacheKey}`;
+   * ```
+   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  debug(...messages: MessageDataType[]): void {
+  debug(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.debug)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.debug, params: messages });
   }
@@ -727,10 +796,21 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Sends a log message to the logging library under the trace log level
    *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.trace`Entering ${functionName}`;
+   * ```
+   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  trace(...messages: MessageDataType[]): void {
+  trace(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.trace)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.trace, params: messages });
   }
@@ -738,10 +818,21 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Sends a log message to the logging library under the fatal log level
    *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.fatal`System crash: ${reason}`;
+   * ```
+   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  fatal(...messages: MessageDataType[]): void {
+  fatal(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void {
     if (!this.isLevelEnabled(LogLevel.fatal)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.fatal, params: messages });
   }

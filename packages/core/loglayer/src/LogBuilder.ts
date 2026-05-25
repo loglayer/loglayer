@@ -6,6 +6,31 @@ import { mixinRegistry } from "./mixins.js";
 import type { PluginManager } from "./PluginManager.js";
 
 /**
+ * Checks if the arguments are from a tagged template literal call.
+ * Tagged templates pass a TemplateStringsArray (which has a `raw` property)
+ * as the first argument.
+ */
+function isTaggedTemplate(args: any[]): args is [TemplateStringsArray, ...any[]] {
+  const first = args[0];
+  return Array.isArray(first) && typeof (first as any).raw !== "undefined";
+}
+
+/**
+ * Converts a tagged template call back into a string.
+ * Uses String() for all interpolated values to handle objects, null, undefined, etc.
+ */
+function taggedTemplateToString(strings: TemplateStringsArray, values: any[]): string {
+  let result = "";
+  for (let i = 0; i < strings.length; i++) {
+    result += strings[i];
+    if (i < values.length) {
+      result += String(values[i]);
+    }
+  }
+  return result;
+}
+
+/**
  * A class that contains methods to specify log metadata and an error and assembles
  * it to form a data object that can be passed into the transport.
  */
@@ -108,27 +133,60 @@ export class LogBuilder implements ILogBuilder<LogBuilder, boolean> {
 
   /**
    * Sends a log message to the logging library under an info log level.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withMetadata({ userId }).info`User ${userId} logged in`;
+   * ```
    */
-  info(...messages: MessageDataType[]): void | Promise<void> {
+  info(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.info)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this.structuredLogger._formatMessage(messages);
     return this.formatLog(LogLevel.info, messages);
   }
 
   /**
    * Sends a log message to the logging library under the warn log level
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withMetadata({ requestId }).warn`Request ${requestId} timed out`;
+   * ```
    */
-  warn(...messages: MessageDataType[]): void | Promise<void> {
+  warn(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.warn)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this.structuredLogger._formatMessage(messages);
     return this.formatLog(LogLevel.warn, messages);
   }
 
   /**
    * Sends a log message to the logging library under the error log level
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withError(err).error`Failed to process ${taskId}`;
+   * ```
    */
-  error(...messages: MessageDataType[]): void | Promise<void> {
+  error(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.error)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this.structuredLogger._formatMessage(messages);
     return this.formatLog(LogLevel.error, messages);
   }
@@ -138,9 +196,20 @@ export class LogBuilder implements ILogBuilder<LogBuilder, boolean> {
    *
    * The logging library may or may not support multiple message parameters and only
    * the first parameter would be used.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withMetadata({ cacheKey }).debug`Cache hit for ${cacheKey}`;
+   * ```
    */
-  debug(...messages: MessageDataType[]): void | Promise<void> {
+  debug(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.debug)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this.structuredLogger._formatMessage(messages);
     return this.formatLog(LogLevel.debug, messages);
   }
@@ -150,9 +219,20 @@ export class LogBuilder implements ILogBuilder<LogBuilder, boolean> {
    *
    * The logging library may or may not support multiple message parameters and only
    * the first parameter would be used.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withMetadata({ functionName }).trace`Entering ${functionName}`;
+   * ```
    */
-  trace(...messages: MessageDataType[]): void | Promise<void> {
+  trace(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.trace)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this.structuredLogger._formatMessage(messages);
     return this.formatLog(LogLevel.trace, messages);
   }
@@ -162,9 +242,20 @@ export class LogBuilder implements ILogBuilder<LogBuilder, boolean> {
    *
    * The logging library may or may not support multiple message parameters and only
    * the first parameter would be used.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withError(err).fatal`System crash: ${reason}`;
+   * ```
    */
-  fatal(...messages: MessageDataType[]): void | Promise<void> {
+  fatal(...args: [TemplateStringsArray, ...any[]] | MessageDataType[]): void | Promise<void> {
     if (!this.structuredLogger.isLevelEnabled(LogLevel.fatal)) return;
+    let messages: MessageDataType[];
+    if (isTaggedTemplate(args)) {
+      messages = [taggedTemplateToString(args[0], args.slice(1))];
+    } else {
+      messages = args as MessageDataType[];
+    }
     this.structuredLogger._formatMessage(messages);
     return this.formatLog(LogLevel.fatal, messages);
   }

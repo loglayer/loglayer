@@ -32,12 +32,13 @@ export class MockLogLayer implements ILogLayer<MockLogLayer> {
   private mockContextManager: IContextManager = new MockContextManager();
   private mockLogLevelManager: ILogLevelManager = new MockLogLevelManager();
 
-  info(..._messages: MessageDataType[]): void {}
-  warn(..._messages: MessageDataType[]): void {}
-  error(..._messages: MessageDataType[]): void {}
-  debug(..._messages: MessageDataType[]): void {}
-  trace(..._messages: MessageDataType[]): void {}
-  fatal(..._messages: MessageDataType[]): void {}
+  // Accepts both regular calls and tagged templates
+  info(..._args: MessageDataType[] | [TemplateStringsArray, ...any[]]): void {}
+  warn(..._args: MessageDataType[] | [TemplateStringsArray, ...any[]]): void {}
+  error(..._args: MessageDataType[] | [TemplateStringsArray, ...any[]]): void {}
+  debug(..._args: MessageDataType[] | [TemplateStringsArray, ...any[]]): void {}
+  trace(..._args: MessageDataType[] | [TemplateStringsArray, ...any[]]): void {}
+  fatal(..._args: MessageDataType[] | [TemplateStringsArray, ...any[]]): void {}
   raw(_rawEntry: RawLogEntry): any {}
 
   getLoggerInstance<_T extends LogLayerTransport>(_id: string) {
