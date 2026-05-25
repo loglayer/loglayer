@@ -37,6 +37,22 @@ log.info('User', userId, 'performed action', action)
 
 See [Basic Logging](/logging-api/basic-logging) for more details.
 
+## Tagged Template Syntax
+
+```typescript
+const userId = '123'
+const duration = 250
+
+// Tagged template syntax — direct interpolation
+log.info`User ${userId} logged in`
+log.warn`Request took ${duration}ms`
+
+// Combine with fluent chain
+log.withMetadata({ env: 'production' }).info`Processing ${count} items`
+```
+
+**Note:** For structured data, use `withMetadata()`. Objects in templates become `"[object Object]"`.
+
 ## Metadata (Per-Log Data)
 
 Metadata is attached to a **single** log entry only.
@@ -360,6 +376,7 @@ See [Basic Logging](/logging-api/basic-logging#raw-logging) for context behavior
 | What | Method | Scope |
 |------|--------|-------|
 | Log a message | `log.info('msg')` | Single entry |
+| Log with template | `` log.info`User ${id} logged in` `` | Single entry |
 | Attach metadata | `log.withMetadata({...}).info('msg')` | Single entry |
 | Attach an error | `log.withError(err).error('msg')` | Single entry |
 | Set context | `log.withContext({...})` | Persistent |

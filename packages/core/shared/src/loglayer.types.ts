@@ -272,32 +272,68 @@ export interface ILogBuilder<This = ILogBuilder<any, any>, IsAsync extends boole
   /**
    * Sends a log message to the logging library under an info log level.
    * Returns a Promise when async lazy values are present in metadata.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withMetadata({ userId }).info`User ${userId} logged in`;
+   * ```
    */
+  info(strings: TemplateStringsArray, ...values: any[]): LogReturnType<IsAsync>;
   info(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
    * Sends a log message to the logging library under the warn log level.
    * Returns a Promise when async lazy values are present in metadata.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withMetadata({ requestId }).warn`Request ${requestId} timed out`;
+   * ```
    */
+  warn(strings: TemplateStringsArray, ...values: any[]): LogReturnType<IsAsync>;
   warn(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
    * Sends a log message to the logging library under the error log level.
    * Returns a Promise when async lazy values are present in metadata.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withError(err).error`Failed to process ${taskId}`;
+   * ```
    */
+  error(strings: TemplateStringsArray, ...values: any[]): LogReturnType<IsAsync>;
   error(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
    * Sends a log message to the logging library under the debug log level.
    * Returns a Promise when async lazy values are present in metadata.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withMetadata({ cacheKey }).debug`Cache hit for ${cacheKey}`;
+   * ```
    */
+  debug(strings: TemplateStringsArray, ...values: any[]): LogReturnType<IsAsync>;
   debug(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
    * Sends a log message to the logging library under the trace log level.
    * Returns a Promise when async lazy values are present in metadata.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withMetadata({ functionName }).trace`Entering ${functionName}`;
+   * ```
    */
+  trace(strings: TemplateStringsArray, ...values: any[]): LogReturnType<IsAsync>;
   trace(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
    * Sends a log message to the logging library under the fatal log level.
    * Returns a Promise when async lazy values are present in metadata.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.withError(err).fatal`System crash: ${reason}`;
+   * ```
    */
+  fatal(strings: TemplateStringsArray, ...values: any[]): LogReturnType<IsAsync>;
   fatal(...messages: MessageDataType[]): LogReturnType<IsAsync>;
   /**
    * Specifies metadata to include with the log message.
@@ -341,27 +377,63 @@ export interface ILogBuilder<This = ILogBuilder<any, any>, IsAsync extends boole
 export interface ILogLayer<This = ILogLayer<any>> {
   /**
    * Sends a log message to the logging library under an info log level.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.info`User ${userId} logged in`;
+   * ```
    */
+  info(strings: TemplateStringsArray, ...values: any[]): void;
   info(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the warn log level.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.warn`Request ${requestId} timed out`;
+   * ```
    */
+  warn(strings: TemplateStringsArray, ...values: any[]): void;
   warn(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the error log level.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.error`Failed to process ${taskId}`;
+   * ```
    */
+  error(strings: TemplateStringsArray, ...values: any[]): void;
   error(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the debug log level.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.debug`Cache hit for ${cacheKey}`;
+   * ```
    */
+  debug(strings: TemplateStringsArray, ...values: any[]): void;
   debug(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the trace log level.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.trace`Entering ${functionName}`;
+   * ```
    */
+  trace(strings: TemplateStringsArray, ...values: any[]): void;
   trace(...messages: MessageDataType[]): void;
   /**
    * Sends a log message to the logging library under the fatal log level.
+   *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.fatal`System crash: ${reason}`;
+   * ```
    */
+  fatal(strings: TemplateStringsArray, ...values: any[]): void;
   fatal(...messages: MessageDataType[]): void;
   /**
    * Specifies metadata to include with the log message.

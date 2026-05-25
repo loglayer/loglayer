@@ -25,7 +25,9 @@ import {
   type RawLogEntry,
   replacePromiseValues,
   resolveLazyValues,
+  resolveMessages,
   resolvePromiseValues,
+  type TaggedTemplateOrMessageArgs,
 } from "@loglayer/shared";
 import type { LogLayerTransport } from "@loglayer/transport";
 import { LogBuilder } from "./LogBuilder.js";
@@ -680,13 +682,16 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Sends a log message to the logging library under an info log level.
    *
-   * The logging library may or may not support multiple message parameters and only
-   * the first parameter would be used.
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.info`User ${userId} logged in`;
+   * ```
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  info(...messages: MessageDataType[]): void {
+  info(...args: TaggedTemplateOrMessageArgs): void {
     if (!this.isLevelEnabled(LogLevel.info)) return;
+    const messages = resolveMessages(args);
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.info, params: messages });
   }
@@ -694,10 +699,16 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Sends a log message to the logging library under the warn log level
    *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.warn`Request ${requestId} timed out`;
+   * ```
+   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  warn(...messages: MessageDataType[]): void {
+  warn(...args: TaggedTemplateOrMessageArgs): void {
     if (!this.isLevelEnabled(LogLevel.warn)) return;
+    const messages = resolveMessages(args);
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.warn, params: messages });
   }
@@ -705,10 +716,16 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Sends a log message to the logging library under the error log level
    *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.error`Failed to process ${taskId}`;
+   * ```
+   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  error(...messages: MessageDataType[]): void {
+  error(...args: TaggedTemplateOrMessageArgs): void {
     if (!this.isLevelEnabled(LogLevel.error)) return;
+    const messages = resolveMessages(args);
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.error, params: messages });
   }
@@ -716,10 +733,16 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Sends a log message to the logging library under the debug log level
    *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.debug`Cache hit for ${cacheKey}`;
+   * ```
+   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  debug(...messages: MessageDataType[]): void {
+  debug(...args: TaggedTemplateOrMessageArgs): void {
     if (!this.isLevelEnabled(LogLevel.debug)) return;
+    const messages = resolveMessages(args);
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.debug, params: messages });
   }
@@ -727,10 +750,16 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Sends a log message to the logging library under the trace log level
    *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.trace`Entering ${functionName}`;
+   * ```
+   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  trace(...messages: MessageDataType[]): void {
+  trace(...args: TaggedTemplateOrMessageArgs): void {
     if (!this.isLevelEnabled(LogLevel.trace)) return;
+    const messages = resolveMessages(args);
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.trace, params: messages });
   }
@@ -738,10 +767,16 @@ export class LogLayer implements ILogLayer<LogLayer> {
   /**
    * Sends a log message to the logging library under the fatal log level
    *
+   * Supports tagged template syntax:
+   * ```typescript
+   * log.fatal`System crash: ${reason}`;
+   * ```
+   *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html | Basic Logging Docs}
    */
-  fatal(...messages: MessageDataType[]): void {
+  fatal(...args: TaggedTemplateOrMessageArgs): void {
     if (!this.isLevelEnabled(LogLevel.fatal)) return;
+    const messages = resolveMessages(args);
     this._formatMessage(messages);
     this._formatLog({ logLevel: LogLevel.fatal, params: messages });
   }

@@ -17,8 +17,8 @@ import type {
   LogLayerTransport,
   LogLevel,
   LogLevelType,
-  MessageDataType,
   RawLogEntry,
+  TaggedTemplateOrMessageArgs,
 } from "@loglayer/shared";
 import { MockLogBuilder } from "./MockLogBuilder.js";
 
@@ -32,12 +32,13 @@ export class MockLogLayer implements ILogLayer<MockLogLayer> {
   private mockContextManager: IContextManager = new MockContextManager();
   private mockLogLevelManager: ILogLevelManager = new MockLogLevelManager();
 
-  info(..._messages: MessageDataType[]): void {}
-  warn(..._messages: MessageDataType[]): void {}
-  error(..._messages: MessageDataType[]): void {}
-  debug(..._messages: MessageDataType[]): void {}
-  trace(..._messages: MessageDataType[]): void {}
-  fatal(..._messages: MessageDataType[]): void {}
+  // Accepts both regular calls and tagged templates
+  info(..._args: TaggedTemplateOrMessageArgs): void {}
+  warn(..._args: TaggedTemplateOrMessageArgs): void {}
+  error(..._args: TaggedTemplateOrMessageArgs): void {}
+  debug(..._args: TaggedTemplateOrMessageArgs): void {}
+  trace(..._args: TaggedTemplateOrMessageArgs): void {}
+  fatal(..._args: TaggedTemplateOrMessageArgs): void {}
   raw(_rawEntry: RawLogEntry): any {}
 
   getLoggerInstance<_T extends LogLayerTransport>(_id: string) {

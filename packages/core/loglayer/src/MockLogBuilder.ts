@@ -1,24 +1,20 @@
 /* eslint @typescript-eslint/no-empty-function: 0 */
 /* istanbul ignore file */
 
-import type { ILogBuilder, MessageDataType } from "@loglayer/shared";
+import type { ILogBuilder, TaggedTemplateOrMessageArgs } from "@loglayer/shared";
 
 /**
  * A mock implementation of the ILogBuilder interface that does nothing.
  * Useful for writing unit tests.
  */
 export class MockLogBuilder implements ILogBuilder<MockLogBuilder, false> {
-  debug(..._messages: MessageDataType[]): void {}
-
-  error(..._messages: MessageDataType[]): void {}
-
-  info(..._messages: MessageDataType[]): void {}
-
-  trace(..._messages: MessageDataType[]): void {}
-
-  warn(..._messages: MessageDataType[]): void {}
-
-  fatal(..._messages: MessageDataType[]): void {}
+  // Accepts both regular calls and tagged templates
+  debug(..._args: TaggedTemplateOrMessageArgs): void {}
+  error(..._args: TaggedTemplateOrMessageArgs): void {}
+  info(..._args: TaggedTemplateOrMessageArgs): void {}
+  trace(..._args: TaggedTemplateOrMessageArgs): void {}
+  warn(..._args: TaggedTemplateOrMessageArgs): void {}
+  fatal(..._args: TaggedTemplateOrMessageArgs): void {}
 
   enableLogging() {
     return this;
