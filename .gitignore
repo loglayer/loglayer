@@ -146,3 +146,4 @@ audit.json
 test-logs/
 live-logs/
 .npm-access-state.json
+docs/plans/
