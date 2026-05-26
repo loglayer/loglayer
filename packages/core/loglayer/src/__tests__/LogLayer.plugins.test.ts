@@ -766,4 +766,396 @@ describe("LogLayer plugin system", () => {
       );
     });
   });
+
+  describe("groups parameter", () => {
+    it("should pass groups to onBeforeDataOut", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          onBeforeDataOut: spy,
+        },
+      ]);
+
+      log.withGroup("database").info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          groups: expect.arrayContaining(["database"]),
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass groups to onBeforeMessageOut", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          onBeforeMessageOut: spy,
+        },
+      ]);
+
+      log.withGroup(["auth", "database"]).info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          groups: expect.arrayContaining(["auth", "database"]),
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass groups to transformLogLevel", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          transformLogLevel: spy,
+        },
+      ]);
+
+      log.withGroup("critical").warn("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          groups: expect.arrayContaining(["critical"]),
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass groups to shouldSendToLogger", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          shouldSendToLogger: spy,
+        },
+      ]);
+
+      log.withGroup("audit").info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          groups: expect.arrayContaining(["audit"]),
+        }),
+        expect.any(Object),
+      );
+    });
+  });
+
+  describe("schema parameter", () => {
+    it("should pass schema to onBeforeDataOut", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          onBeforeDataOut: spy,
+        },
+      ]);
+
+      log.info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          schema: expect.objectContaining({
+            errorFieldName: "err",
+          }),
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass schema with contextFieldName when configured", () => {
+      const log = getLogger({
+        contextFieldName: "ctx",
+        transport: new TestTransport({
+          id: "test",
+          logger: new TestLoggingLibrary(),
+        }),
+      });
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          onBeforeDataOut: spy,
+        },
+      ]);
+
+      log.withContext({ userId: "123" }).info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          schema: expect.objectContaining({
+            contextFieldName: "ctx",
+          }),
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass schema with metadataFieldName when configured", () => {
+      const log = getLogger({
+        metadataFieldName: "meta",
+        transport: new TestTransport({
+          id: "test",
+          logger: new TestLoggingLibrary(),
+        }),
+      });
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          onBeforeDataOut: spy,
+        },
+      ]);
+
+      log.withMetadata({ key: "value" }).info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          schema: expect.objectContaining({
+            metadataFieldName: "meta",
+          }),
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass schema with all three field names when all configured", () => {
+      const log = getLogger({
+        contextFieldName: "ctx",
+        metadataFieldName: "meta",
+        errorFieldName: "customError",
+        transport: new TestTransport({
+          id: "test",
+          logger: new TestLoggingLibrary(),
+        }),
+      });
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          onBeforeDataOut: spy,
+        },
+      ]);
+
+      log
+        .withContext({ userId: "123" })
+        .withMetadata({ requestId: "abc" })
+        .withError(new Error("test error"))
+        .info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          schema: {
+            contextFieldName: "ctx",
+            metadataFieldName: "meta",
+            errorFieldName: "customError",
+          },
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass schema to onBeforeMessageOut", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          onBeforeMessageOut: spy,
+        },
+      ]);
+
+      log.info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          schema: expect.objectContaining({
+            errorFieldName: "err",
+          }),
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass schema to transformLogLevel", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          transformLogLevel: spy,
+        },
+      ]);
+
+      log.info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          schema: expect.objectContaining({
+            errorFieldName: "err",
+          }),
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass schema to shouldSendToLogger", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          shouldSendToLogger: spy,
+        },
+      ]);
+
+      log.info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          schema: expect.objectContaining({
+            errorFieldName: "err",
+          }),
+        }),
+        expect.any(Object),
+      );
+    });
+  });
+
+  describe("prefix parameter", () => {
+    it("should pass prefix to onBeforeDataOut", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          onBeforeDataOut: spy,
+        },
+      ]);
+
+      log.withPrefix("[APP]").info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          prefix: "[APP]",
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass empty prefix when not set", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          onBeforeDataOut: spy,
+        },
+      ]);
+
+      log.info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          prefix: undefined,
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass prefix from config", () => {
+      const log = getLogger({
+        prefix: "[CONFIG]",
+        transport: new TestTransport({
+          id: "test",
+          logger: new TestLoggingLibrary(),
+        }),
+      });
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          onBeforeDataOut: spy,
+        },
+      ]);
+
+      log.info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          prefix: "[CONFIG]",
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass prefix to onBeforeMessageOut", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          onBeforeMessageOut: spy,
+        },
+      ]);
+
+      log.withPrefix("[AUTH]").info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          prefix: "[AUTH]",
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass prefix to transformLogLevel", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          transformLogLevel: spy,
+        },
+      ]);
+
+      log.withPrefix("[API]").info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          prefix: "[API]",
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("should pass prefix to shouldSendToLogger", () => {
+      const log = getLoggerWithTestTransport();
+      const spy = vi.fn();
+
+      log.addPlugins([
+        {
+          shouldSendToLogger: spy,
+        },
+      ]);
+
+      log.withPrefix("[DB]").info("Test message");
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          prefix: "[DB]",
+        }),
+        expect.any(Object),
+      );
+    });
+  });
 });

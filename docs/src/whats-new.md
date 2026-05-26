@@ -21,6 +21,15 @@ log.withError(err).error`Failed: ${err.message}`;
 
 See the [Basic Logging documentation](/logging-api/basic-logging#tagged-template-syntax) for usage examples.
 
+`@loglayer/shared`, `@loglayer/plugin`, `loglayer`:
+
+- **Plugin parameter parity with loglayer-go**: All plugin hooks now receive additional parameters:
+  - `groups?: string[]` - The group tags assigned to this log entry
+  - `schema?: LogLayerPluginSchema` - Schema information for navigating the assembled data (`contextFieldName`, `metadataFieldName`, `errorFieldName`)
+  - `prefix?: string` - The prefix attached via `withPrefix()`
+
+These parameters are also passed to transport `_sendToLogger` calls. See the [Creating Plugins documentation](/plugins/creating-plugins#loglayerpluginschema) for details.
+
 ## May 15, 2026
 
 `loglayer`:

@@ -10,7 +10,7 @@ import type {
   LogReturnType,
   MessageDataType,
 } from "./common.types.js";
-import type { LogLayerPlugin } from "./plugin.types.js";
+import type { LogLayerPlugin, LogLayerPluginSchema } from "./plugin.types.js";
 
 /**
  * Interface for raw log entries that allows complete control over all aspects of a log entry.
@@ -225,6 +225,15 @@ export interface LogLayerTransportParams extends LogLayerCommonDataParams {
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
   groups?: string[];
+  /**
+   * Schema information for navigating the assembled data.
+   */
+  schema?: LogLayerPluginSchema;
+  /**
+   * The prefix attached via withPrefix() on the emitting logger (or set
+   * via config.prefix). Empty when no prefix was set.
+   */
+  prefix?: string;
 }
 
 /**

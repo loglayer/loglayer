@@ -459,6 +459,12 @@ describe("LogLayer basic functionality", () => {
       error: testError,
       metadata: testMetadata,
       context: testContext,
+      schema: {
+        contextFieldName: undefined,
+        metadataFieldName: undefined,
+        errorFieldName: "err",
+      },
+      prefix: undefined,
     });
   });
 
@@ -503,6 +509,12 @@ describe("LogLayer basic functionality", () => {
       error: testError,
       metadata: testMetadata,
       context: testContext,
+      schema: {
+        contextFieldName: undefined,
+        metadataFieldName: undefined,
+        errorFieldName: "err",
+      },
+      prefix: undefined,
     };
 
     expect(mockTransport1._sendToLogger).toHaveBeenCalledWith(expectedParams);
@@ -591,6 +603,12 @@ describe("LogLayer basic functionality", () => {
         error: testError,
         metadata: testMetadata,
         context: testContext,
+        schema: {
+          contextFieldName: undefined,
+          metadataFieldName: undefined,
+          errorFieldName: "err",
+        },
+        prefix: undefined,
       });
     });
 
@@ -957,6 +975,13 @@ describe("LogLayer basic functionality", () => {
         error: testError,
         metadata: testMetadata,
         context: {},
+        groups: undefined,
+        schema: {
+          contextFieldName: undefined,
+          metadataFieldName: undefined,
+          errorFieldName: "err",
+        },
+        prefix: undefined,
       });
     });
 
@@ -995,6 +1020,13 @@ describe("LogLayer basic functionality", () => {
         error: undefined,
         metadata: { multiTransport: "test" },
         context: {},
+        groups: undefined,
+        schema: {
+          contextFieldName: undefined,
+          metadataFieldName: undefined,
+          errorFieldName: "err",
+        },
+        prefix: undefined,
       };
 
       expect(mockTransport1._sendToLogger).toHaveBeenCalledWith(expectedParams);

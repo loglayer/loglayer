@@ -142,6 +142,9 @@ export class PluginManager {
             error: params.error,
             metadata: params.metadata,
             context: params.context,
+            groups: params.groups,
+            schema: params.schema,
+            prefix: params.prefix,
           },
           loglayer,
         );
@@ -176,6 +179,9 @@ export class PluginManager {
             error: initialData.error,
             metadata: initialData.metadata,
             context: initialData.context,
+            groups: initialData.groups,
+            schema: initialData.schema,
+            prefix: initialData.prefix,
           },
           loglayer,
         );
@@ -241,6 +247,9 @@ export class PluginManager {
         {
           messages: messages,
           logLevel: params.logLevel,
+          groups: params.groups,
+          schema: params.schema,
+          prefix: params.prefix,
         },
         loglayer,
       );
