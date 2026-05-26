@@ -234,7 +234,7 @@ The wide event includes timing data, context from `withContext()`, and accumulat
 }
 ```
 
-See more about [wide events](/mixins/wide-events) or follow the complete [Event-Wide Logging guide](/guides/event-wide-logging).
+See more about [wide events](/mixins/wide-events) or follow the complete [Wide Events Logging guide](/guides/wide-events).
 
 ## File Logging
 

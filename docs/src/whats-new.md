@@ -30,7 +30,7 @@ See the [Basic Logging documentation](/logging-api/basic-logging#tagged-template
 
 `@loglayer/mixin-wide-events`:
 
-- **New Wide Events Mixin**: Adds `withWideEvents()` and `emitWideEvent()` methods for comprehensive, self-contained log entries that capture an entire operation's context. See the [Wide Events documentation](/mixins/wide-events) and [Event-Wide Logging guide](/guides/event-wide-logging).
+- **New Wide Events Mixin**: Adds `withWideEvents()` and `emitWideEvent()` methods for comprehensive, self-contained log entries that capture an entire operation's context. See the [Wide Events documentation](/mixins/wide-events) and [Wide Events Logging guide](/guides/wide-events).
 
 ## May 15, 2026
 

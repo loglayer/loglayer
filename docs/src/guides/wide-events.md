@@ -1,9 +1,9 @@
 ---
-title: Event-Wide Logging (Wide Events)
+title: Wide Events Logging
 description: Learn how to implement wide events for better observability using LogLayer
 ---
 
-# Event-Wide Logging (Wide Events)
+# Wide Events Logging
 
 This guide shows how to implement [wide events](https://loggingsucks.com/)
 using LogLayer's [Wide Events Mixin](/mixins/wide-events) (`@loglayer/mixin-wide-events`).

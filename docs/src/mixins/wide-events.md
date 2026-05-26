@@ -6,7 +6,7 @@
 
 The Wide Events Mixin adds functionality for creating comprehensive, self-contained log entries that capture an entire operation's context and data in a single emission. This pattern is sometimes called "canonical log lines" or "wide events."
 
-For a complete Express example, see the [Event-Wide Logging guide](/guides/event-wide-logging).
+For a complete Express example, see the [Wide Events Logging guide](/guides/wide-events).
 
 ## Installation
 
@@ -346,5 +346,5 @@ const mixin = createWideEventMixin({ asyncContext: browserContext });
 
 ## See Also
 
-- [Event-Wide Logging Guide](/guides/event-wide-logging) - A comprehensive guide to implementing wide event logging
+- [Wide Events Logging Guide](/guides/wide-events) - A comprehensive guide to implementing wide event logging
 - [AsyncLocalStorage](https://nodejs.org/api/async_hooks.html#asynchooksasynclocalstorage) - Node.js documentation

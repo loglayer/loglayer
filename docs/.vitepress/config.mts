@@ -229,7 +229,7 @@ export default defineConfig({
           { text: 'Async context tracking', link: '/example-integrations/async-context' },
           { text: 'Bun', link: '/example-integrations/bun' },
           { text: 'Deno', link: '/example-integrations/deno' },
-          { text: 'Event-Wide Logging', link: '/guides/event-wide-logging' },
+          { text: 'Wide Events', link: '/guides/wide-events' },
           { text: 'Next.js', link: '/example-integrations/nextjs' },
         ]
       }
