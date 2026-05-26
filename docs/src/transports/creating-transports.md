@@ -248,6 +248,16 @@ interface LogLayerTransportParams {
    * Group tags assigned to this log entry.
    */
   groups?: string[];
+  /**
+   * Schema information for navigating the assembled data structure.
+   * Contains field names where context, metadata, and error data are nested.
+   */
+  schema?: LogLayerPluginSchema;
+  /**
+   * The prefix attached via withPrefix() on the emitting logger.
+   * Empty when no prefix was set.
+   */
+  prefix?: string;
 }
 ```
 
@@ -269,6 +279,73 @@ shipToLogger({ logLevel, messages, data, hasData, groups }: LogLayerTransportPar
 
   this.service.send(payload)
   return messages
+}
+```
+
+### Using Schema in Transports
+
+The `schema` object provides field names where context, metadata, and error data are nested in the `data` object. This helps transports properly extract and structure log data:
+
+```typescript
+interface LogLayerPluginSchema {
+  /** Key under which persistent context data is nested (undefined if merged at root) */
+  contextFieldName?: string;
+  /** Key under which per-call metadata is nested (undefined if merged at root) */
+  metadataFieldName?: string;
+  /** Key under which serialized error is stored (always present, defaults to "err") */
+  errorFieldName: string;
+}
+```
+
+Example usage:
+
+```typescript
+shipToLogger({ logLevel, messages, data, hasData, schema }: LogLayerTransportParams) {
+  const payload: Record<string, any> = {
+    level: logLevel,
+    message: messages.join(' '),
+  }
+
+  // Access context data using schema field names
+  if (schema.contextFieldName && data[schema.contextFieldName]) {
+    payload.context = data[schema.contextFieldName]
+  }
+
+  // Access metadata using schema field names
+  if (schema.metadataFieldName && data[schema.metadataFieldName]) {
+    payload.metadata = data[schema.metadataFieldName]
+  }
+
+  // Access error using schema (errorFieldName is always present)
+  if (data[schema.errorFieldName]) {
+    payload.error = data[schema.errorFieldName]
+  }
+
+  this.service.send(payload)
+  return messages
+}
+```
+
+### Using Prefix in Transports
+
+The `prefix` string contains the prefix attached via `withPrefix()` on the emitting logger. Use it to include prefix information in your transport output:
+
+```typescript
+shipToLogger({ logLevel, messages, data, hasData, prefix }: LogLayerTransportParams) {
+  const formattedMessages = messages.map(msg => {
+    if (typeof msg === 'string' && prefix) {
+      return `[${prefix}] ${msg}`
+    }
+    return msg
+  })
+
+  this.service.send({
+    level: logLevel,
+    messages: formattedMessages,
+    ...(data && hasData ? data : {}),
+  })
+
+  return formattedMessages
 }
 ```
 
