@@ -19,6 +19,7 @@ export type {
   LogLayerData,
   LogLayerMetadata,
   LogLayerPlugin,
+  LogLayerPluginSchema,
   LogLayerTransport,
   LogLayerTransportParams,
   LogLevelPriority,

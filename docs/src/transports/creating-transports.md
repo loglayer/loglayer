@@ -287,6 +287,8 @@ shipToLogger({ logLevel, messages, data, hasData, groups }: LogLayerTransportPar
 The `schema` object provides field names where context, metadata, and error data are nested in the `data` object. This helps transports properly extract and structure log data:
 
 ```typescript
+import type { LogLayerPluginSchema } from 'loglayer';
+
 interface LogLayerPluginSchema {
   /** Key under which persistent context data is nested (undefined if merged at root) */
   contextFieldName?: string;
@@ -300,6 +302,8 @@ interface LogLayerPluginSchema {
 Example usage:
 
 ```typescript
+import type { LogLayerTransportParams, LogLayerPluginSchema } from 'loglayer';
+
 shipToLogger({ logLevel, messages, data, hasData, schema }: LogLayerTransportParams) {
   const payload: Record<string, any> = {
     level: logLevel,
