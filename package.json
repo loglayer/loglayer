@@ -20,7 +20,7 @@
     "syncpack:update": "syncpack update && syncpack fix && pnpm i",
     "syncpack:format": "syncpack format",
     "syncpack:lint": "syncpack lint",
-    "release": "changeset publish",
+    "release": "git config user.name \"github-actions[bot]\" && git config user.email \"github-actions[bot]@users.noreply.github.com\" && changeset publish",
     "version-packages": "changeset version"
   },
   "devDependencies": {
