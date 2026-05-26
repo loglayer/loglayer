@@ -481,4 +481,167 @@ describe("WideEventMixin", () => {
       expect(data.first.ref.ref).toBeDefined();
     });
   });
+
+  describe("withWideEventError", () => {
+    it("should capture error with default serializer", () => {
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        const testError = new Error("Something went wrong");
+        testError.name = "CustomError";
+
+        logger.withWideEventError(testError);
+        logger.emitWideEvent({ message: "Operation failed" });
+
+        expect(emittedLogs).toHaveLength(1);
+        expect(emittedLogs[0].metadata.error).toEqual({
+          name: "CustomError",
+          message: "Something went wrong",
+          stack: testError.stack,
+        });
+      });
+    });
+
+    it("should use custom error field name", () => {
+      const customContext = new AsyncLocalStorage<Record<string, any>>();
+      const customLog = new LogLayer({
+        transport: new BlankTransport({
+          shipToLogger: (params) => {
+            emittedLogs.push({
+              level: params.logLevel,
+              metadata: params.metadata,
+            });
+            return params.messages;
+          },
+        }),
+      });
+      const mixin = createWideEventMixin({
+        asyncContext: customContext,
+        errorField: "errorInfo",
+      });
+      useLogLayerMixin(mixin);
+
+      customContext.run({}, () => {
+        const logger = customLog.child();
+        logger.withWideEventError(new Error("Test error"));
+        logger.emitWideEvent({ message: "Done" });
+      });
+
+      expect(emittedLogs[0].metadata.errorInfo).toBeDefined();
+      expect(emittedLogs[0].metadata.error).toBeUndefined();
+    });
+
+    it("should use 'errors' field name by default when errorsAsArray is true", () => {
+      const customContext = new AsyncLocalStorage<Record<string, any>>();
+      const customLog = new LogLayer({
+        transport: new BlankTransport({
+          shipToLogger: (params) => {
+            emittedLogs.push({
+              level: params.logLevel,
+              metadata: params.metadata,
+            });
+            return params.messages;
+          },
+        }),
+      });
+      const mixin = createWideEventMixin({
+        asyncContext: customContext,
+        errorsAsArray: true,
+      });
+      useLogLayerMixin(mixin);
+
+      customContext.run({}, () => {
+        const logger = customLog.child();
+        logger.withWideEventError(new Error("First error"));
+        logger.withWideEventError(new Error("Second error"));
+        logger.emitWideEvent({ message: "Done" });
+      });
+
+      // Should use 'errors' (plural) by default when errorsAsArray is true
+      expect(emittedLogs[0].metadata.errors).toEqual([
+        { name: "Error", message: "First error", stack: expect.any(String) },
+        { name: "Error", message: "Second error", stack: expect.any(String) },
+      ]);
+      // Should NOT have 'error' field
+      expect(emittedLogs[0].metadata.error).toBeUndefined();
+    });
+
+    it("should replace error when errorsAsArray is false (default)", () => {
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.withWideEventError(new Error("First"));
+        logger.withWideEventError(new Error("Second"));
+        logger.emitWideEvent({ message: "Done" });
+      });
+
+      expect(emittedLogs[0].metadata.error).toEqual({
+        name: "Error",
+        message: "Second",
+        stack: expect.any(String),
+      });
+    });
+
+    it("should handle non-Error values with default serializer", () => {
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.withWideEventError("Just a string error");
+        logger.emitWideEvent({ message: "Done" });
+      });
+
+      expect(emittedLogs[0].metadata.error).toEqual({
+        message: "Just a string error",
+      });
+    });
+
+    it("should return logger for chaining", () => {
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        const result = logger.withWideEventError(new Error("test"));
+        expect(result).toBe(logger);
+      });
+    });
+
+    it("should silently ignore when not in async context", () => {
+      const logger = log.child();
+      const result = logger.withWideEventError(new Error("test"));
+      expect(result).toBe(logger);
+    });
+
+    it("should use LogLayer's errorSerializer when configured", () => {
+      const customContext = new AsyncLocalStorage<Record<string, any>>();
+      const loglayerErrorSerializer = (err: any) => ({
+        class: err.constructor.name,
+        text: err.message,
+        code: err.code || "NO_CODE",
+      });
+
+      const customLog = new LogLayer({
+        transport: new BlankTransport({
+          shipToLogger: (params) => {
+            emittedLogs.push({ metadata: params.metadata });
+            return params.messages;
+          },
+        }),
+        errorSerializer: loglayerErrorSerializer,
+      });
+      const mixin = createWideEventMixin({
+        asyncContext: customContext,
+        // No custom errorSerializer - should use LogLayer's
+      });
+      useLogLayerMixin(mixin);
+
+      customContext.run({}, () => {
+        const logger = customLog.child();
+        const err = new Error("Service unavailable");
+        (err as any).code = "SVC_DOWN";
+        logger.withWideEventError(err);
+        logger.emitWideEvent({ message: "Done" });
+      });
+
+      expect(emittedLogs[0].metadata.error).toEqual({
+        class: "Error",
+        text: "Service unavailable",
+        code: "SVC_DOWN",
+      });
+    });
+  });
 });

@@ -117,6 +117,8 @@ const mixin = createWideEventMixin({
 |------|------|---------|-------------|
 | `includeContext` | `boolean` | `true` | Include data from `withContext()` calls in the emitted wide event. |
 | `wideEventField` | `string` | `undefined` | Field name to nest all wide event data under. When undefined, data is flattened at root level. |
+| `errorField` | `string` | `error`/`errors` | Field name for error data. `error` in single mode, `errors` in array mode. |
+| `errorsAsArray` | `boolean` | `false` | When true, errors are collected as an array. Each call to `withWideEventError()` appends. |
 
 ### `withWideEvents(data)`
 
@@ -184,6 +186,46 @@ logger.emitWideEvent({ message: "Second" });
 logger.withWideEvents({ user: { id: "123", name: "Alice" } });
 logger.clearWideEvents("user");
 // Result: user object is removed
+```
+
+### `withWideEventError(error)`
+
+`(error: any) => this`
+
+Captures an error for inclusion in the wide event. Serializes the error using LogLayer's [`errorSerializer`](/configuration#error-handling-configuration) (or built-in default).
+
+By default:
+- **Single error mode** (`errorsAsArray: false`): Each call replaces the previous error
+- **Array mode** (`errorsAsArray: true`): Each call appends to an `errors` array
+
+The error field defaults to `error` for single mode and `errors` for array mode.
+
+```typescript
+// Single error (replaces on subsequent calls)
+try {
+  await doSomething();
+} catch (err) {
+  logger.withWideEventError(err);
+}
+
+// Multiple errors (accumulates when errorsAsArray: true)
+try {
+  await step1();
+} catch (err) {
+  logger.withWideEventError(err);
+}
+
+try {
+  await step2();
+} catch (err) {
+  logger.withWideEventError(err);
+}
+
+// With array mode for multiple errors
+const mixin = createWideEventMixin({
+  asyncContext,
+  errorsAsArray: true,
+});
 ```
 
 ### `emitWideEvent(config)`
@@ -267,7 +309,7 @@ logger.emitWideEvent({ message: "Complete" });
 Wide events and `withError()` serve different purposes:
 
 - **`withError(err).error("msg")`** - Logs an error immediately with stack trace and error details
-- **`withWideEvents({ error: {...} })`** - Captures error information for the final wide event
+- **`withWideEventError(err)`** - Captures error for inclusion in the wide event
 
 The [canonical logging pattern](https://loggingsucks.com/) recommends including error details in your wide event rather than relying on `withError()`. This keeps all operation data in one self-contained entry.
 
@@ -278,47 +320,26 @@ try {
   // Immediate error log with stack trace
   logger.withError(err).error("Order processing failed");
   
-  // Error details for wide event
-  logger.withWideEvents({
-    error: {
-      type: err.name,
-      message: err.message,
-      code: err.code,
-    },
-  });
+  // Error for wide event
+  logger.withWideEventError(err);
   
   // Don't emit yet - let the response handler emit with final status
 }
 ```
 
-### Helper Function Pattern
-
-For cleaner code, create a helper to capture error details:
+### Configuration Options
 
 ```typescript
-function captureError(logger: ILogLayer, error: unknown) {
-  if (error instanceof Error) {
-    return {
-      type: error.name,
-      message: error.message,
-      code: (error as any).code,
-      stack: error.stack,
-    };
-  }
-  return { message: String(error) };
-}
-
-// Usage
-try {
-  await doSomething();
-} catch (err) {
-  getLogger()
-    .withError(err)
-    .error("Operation failed");
-  getLogger()
-    .withWideEvents({ error: captureError(getLogger(), err) });
-}
+const mixin = createWideEventMixin({
+  asyncContext,
+  // Default field names: "error" (single) or "errors" (array mode)
+  errorField: "error",
+  // Set to true to collect multiple errors as an array
+  errorsAsArray: false,
+});
 ```
+
+The error serializer uses LogLayer's configured [`errorSerializer`](/configuration#error-handling-configuration) if available.
 
 ### Emitting Error Wide Events
 
@@ -402,16 +423,8 @@ app.post("/orders", async (req, res) => {
     // Immediate log with stack trace
     logger.withError(err).error("Order creation failed");
     
-    // Error details for wide event
-    if (err instanceof Error) {
-      logger.withWideEvents({
-        error: {
-          type: err.name,
-          message: err.message,
-          code: (err as any).code,
-        },
-      });
-    }
+    // Capture error for wide event
+    logger.withWideEventError(err);
     
     res.status(500).json({ error: "Failed to create order" });
   }

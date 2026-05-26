@@ -32,6 +32,20 @@ export interface WideEventMixinOptions {
    * { "userId": "123", "orderId": "456", "msg": "done" }
    */
   wideEventField?: string;
+
+  /**
+   * Optional: Field name to use for error data in wide events.
+   * @default "error" (single mode) or "errors" (array mode)
+   */
+  errorField?: string;
+
+  /**
+   * Optional: When true, errors are collected as an array.
+   * Each call to withWideEventError() appends to the array.
+   * When false, each call replaces the previous error.
+   * @default false
+   */
+  errorsAsArray?: boolean;
 }
 
 /**
@@ -149,7 +163,29 @@ export interface IWideEventMixin {
    * ```
    */
   emitWideEvent(config: EmitWideEventConfig): this;
-}
+
+  /**
+   * Captures an error for inclusion in the wide event.
+   * Serializes the error using the configured errorSerializer (or default).
+   *
+   * @param error - The error to capture
+   * @returns This logger instance for chaining
+   *
+   * @example
+   * ```typescript
+   * try {
+   *   await doSomething();
+   * } catch (err) {
+   *   // For single error (replaces previous)
+   *   logger.withWideEventError(err);
+   *   
+   *   // With errorsAsArray: true - errors accumulate
+   *   logger.withWideEventError(err).withWideEventError(otherErr);
+   * }
+   * ```
+   */
+  withWideEventError(error: any): this;
+};
 
 // Module augmentation for ILogLayer and ILogBuilder
 declare module "loglayer" {
