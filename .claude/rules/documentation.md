@@ -44,8 +44,34 @@ When adding new features or changing existing APIs, you must also update:
 
 ### Configuration Tables
 
+Use `## Configuration Options` with subsections for required and optional parameters:
+
+```markdown
+## Configuration Options
+
+### Required Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| `paramName` | `Type` | Description |
+
+### Optional Parameters
+
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
+| `paramName` | `Type` | `default` | Description |
+```
+
+### Method Type Signatures
+
+Include type signatures for all methods:
+
+```markdown
+### `methodName(param)`
+
+`(paramType) => returnType`
+
+Description...
 
 ### Custom Containers
 

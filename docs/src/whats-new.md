@@ -28,7 +28,9 @@ See the [Basic Logging documentation](/logging-api/basic-logging#tagged-template
   - `schema?: LogLayerPluginSchema` - Schema information for navigating the assembled data (`contextFieldName`, `metadataFieldName`, `errorFieldName`)
   - `prefix?: string` - The prefix attached via `withPrefix()`
 
-These parameters are also passed to transport `_sendToLogger` calls. See the [Creating Plugins documentation](/plugins/creating-plugins#loglayerpluginschema) for details.
+`@loglayer/mixin-wide-events`:
+
+- **New Wide Events Mixin**: Adds `withWideEvents()` and `emitWideEvent()` methods for comprehensive, self-contained log entries that capture an entire operation's context. See the [Wide Events documentation](/mixins/wide-events) and [Event-Wide Logging guide](/guides/event-wide-logging).
 
 ## May 15, 2026
 
