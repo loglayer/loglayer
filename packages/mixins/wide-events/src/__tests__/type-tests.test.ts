@@ -12,9 +12,9 @@ import { describe, expectTypeOf, it } from "vitest";
 import { createWideEventMixin } from "../index.js";
 
 describe("Type Tests", () => {
-  // Setup mixin once for all tests
-  const asyncContext = new AsyncLocalStorage<Record<string, any>>();
-  const wideEventsMixin = createWideEventMixin({ asyncContext });
+  // Setup mixin once for all tests (matching docs pattern)
+  const asyncLocalStorage = new AsyncLocalStorage<{ logger: ILogLayer }>();
+  const wideEventsMixin = createWideEventMixin({ asyncContext: asyncLocalStorage });
   useLogLayerMixin(wideEventsMixin);
 
   it("should preserve type when using ILogLayer interface", () => {
