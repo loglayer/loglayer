@@ -113,6 +113,36 @@ const mixin = createWideEventMixin({
 
 **Type:** `WideEventMixinOptions`
 
+```typescript
+interface WideEventMixinOptions {
+  /**
+   * An async context implementation for propagating wide event data across async boundaries.
+   * @example
+   * ```typescript
+   * const asyncLocalStorage = new AsyncLocalStorage<{
+   *   logger: ILogLayer;
+   * }>();
+   * ```
+   */
+  asyncContext: AsyncLocalStorage<Record<string, any>>;
+  /**
+   * Include data from `withContext()` calls in the emitted wide event.
+   * @default true
+   */
+  includeContext?: boolean;
+  /**
+   * Field name to nest all wide event data under. When undefined, data is flattened at root level.
+   * @default undefined
+   * @example
+   * ```typescript
+   * // With wideEventField: data will be nested under 'wideEvents'
+   * // { wideEvents: { userId: "123", orderId: "456" } }
+   * ```
+   */
+  wideEventField?: string;
+}
+```
+
 ### `withWideEvents(data)`
 
 Accumulates data into the wide event. Call multiple times to build up the event.
@@ -182,6 +212,24 @@ logger.clearWideEvents("user");
 ### `emitWideEvent(config)`
 
 **Type:** `(config: EmitWideEventConfig) => this`
+
+```typescript
+interface EmitWideEventConfig {
+  /**
+   * The log message for the wide event.
+   */
+  message: string;
+  /**
+   * The log level for the emission.
+   * @default "info"
+   */
+  level?: LogLevelType;
+  /**
+   * Additional metadata to include in this emission.
+   */
+  metadata?: Record<string, any>;
+}
+```
 
 Emits the accumulated wide event as a single log entry. Returns the logger
 for chaining.
