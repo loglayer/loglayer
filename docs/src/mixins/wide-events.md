@@ -120,6 +120,8 @@ const mixin = createWideEventMixin({
 
 ### `withWideEvents(data)`
 
+`(data: Record<string, any>) => this`
+
 Accumulates data into the wide event. Call multiple times to build up the event.
 Nested objects are **deep merged** - later calls merge into existing nested objects
 rather than replacing them entirely.
@@ -145,7 +147,7 @@ log.child()
 
 ### `getWideEvents(key?)`
 
-**Type:** `(key?: string) => Record<string, any> | any`
+`(key?: string) => Record<string, any> | any`
 
 Retrieves the currently accumulated wide event data. Returns undefined if called
 outside async context or if the key doesn't exist.
@@ -165,7 +167,7 @@ const userId = logger.getWideEvents("userId");
 
 ### `clearWideEvents(key?)`
 
-**Type:** `(key?: string) => this`
+`(key?: string) => this`
 
 Clears the accumulated wide event data. Optionally clear only a specific key.
 Returns the logger for chaining.
@@ -185,6 +187,8 @@ logger.clearWideEvents("user");
 ```
 
 ### `emitWideEvent(config)`
+
+`(config: { message: string; level?: LogLevelType; metadata?: Record<string, any> }) => this`
 
 Emits the accumulated wide event as a single log entry. Returns the logger
 for chaining.
