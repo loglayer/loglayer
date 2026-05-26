@@ -1,5 +1,8 @@
 {
   "extends": "@internal/tsconfig/tsconfig.json",
   "include": ["./src/**/*"],
-  "exclude": ["./src/__tests__/livetest-bun-sqlite.ts"]
+  "exclude": ["./src/__tests__/livetest-bun-sqlite.ts"],
+  "compilerOptions": {
+    "types": ["node", "better-sqlite3", "keypress"]
+  }
 }

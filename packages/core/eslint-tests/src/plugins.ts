@@ -128,7 +128,7 @@ function testPluginOnBeforeDataOut() {
       {
         id: "data-out-plugin",
         onBeforeDataOut: ({ data }) => {
-          return { ...data, extra: "field" } as Record<string, unknown>;
+          return { ...data, extra: "field" };
         },
       },
     ],
@@ -152,7 +152,7 @@ function testPluginOnBeforeDataOut() {
   // Plugin that inspects logLevel in params
   const levelAware: LogLayerPlugin = {
     onBeforeDataOut: ({ logLevel, data }) => {
-      return { ...data, processedLevel: logLevel } as Record<string, unknown>;
+      return { ...data, processedLevel: logLevel };
     },
   };
   const logLevel = new LogLayer({
@@ -420,7 +420,7 @@ function testPluginCombinations() {
     id: "full-plugin",
     onMetadataCalled: () => ({ from: "plugin" }),
     onContextCalled: () => ({ from: "plugin" }),
-    onBeforeDataOut: ({ data }) => ({ ...data, enriched: true } as Record<string, unknown>),
+    onBeforeDataOut: ({ data }) => ({ ...data, enriched: true }),
     onBeforeMessageOut: () => ["(plugin) message"],
     shouldSendToLogger: () => true,
     transformLogLevel: () => null,
@@ -445,7 +445,7 @@ function testPluginCombinations() {
   };
   const plugin2: LogLayerPlugin = {
     id: "plugin-2",
-    onBeforeDataOut: ({ data }) => ({ ...data, step: 2 } as Record<string, unknown>),
+    onBeforeDataOut: ({ data }) => ({ ...data, step: 2 }),
   };
   const plugin3: LogLayerPlugin = {
     id: "plugin-3",
@@ -522,7 +522,7 @@ function testPluginManagement() {
 
   // Add multiple
   log.addPlugins([
-    { id: "extra-1", onBeforeDataOut: ({ data }) => ({ ...data, extra1: true } as Record<string, unknown>) },
+    { id: "extra-1", onBeforeDataOut: ({ data }) => ({ ...data, extra1: true }) },
     { id: "extra-2", shouldSendToLogger: () => true },
   ]);
   log.withMetadata({ key: "value" }).info("multiple plugins added");
