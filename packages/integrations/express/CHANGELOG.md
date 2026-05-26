@@ -1,5 +1,23 @@
 # @loglayer/express
 
+## 1.1.0
+
+### Minor Changes
+
+- [#387](https://github.com/loglayer/loglayer/pull/387) [`677043e`](https://github.com/loglayer/loglayer/commit/677043ee2830f9d0e43b0a5276a3e5866342315d) Thanks [@theogravity](https://github.com/theogravity)! - Add missing parameters to plugin hooks and transports for feature parity with loglayer-go
+
+  Added to all plugin params (`PluginBeforeDataOutParams`, `PluginBeforeMessageOutParams`, `PluginShouldSendToLoggerParams`, `PluginTransformLogLevelParams`) and `LogLayerTransportParams`:
+
+  - `groups?: string[]` - The group names this log entry belongs to
+  - `schema?: LogLayerPluginSchema` - Schema information for navigating the assembled data (contextFieldName, metadataFieldName, errorFieldName)
+  - `prefix?: string` - The prefix attached via withPrefix()
+
+  New `LogLayerPluginSchema` interface provides:
+
+  - `contextFieldName?: string` - Key under which persistent context data is nested
+  - `metadataFieldName?: string` - Key under which per-call metadata is nested
+  - `errorFieldName: string` - Key under which serialized error is stored
+
 ## 1.0.0
 
 ### Major Changes

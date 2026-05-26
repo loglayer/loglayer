@@ -1,5 +1,42 @@
 # `loglayer` Changelog
 
+## 9.2.0
+
+### Minor Changes
+
+- [#387](https://github.com/loglayer/loglayer/pull/387) [`677043e`](https://github.com/loglayer/loglayer/commit/677043ee2830f9d0e43b0a5276a3e5866342315d) Thanks [@theogravity](https://github.com/theogravity)! - Add missing parameters to plugin hooks and transports for feature parity with loglayer-go
+
+  Added to all plugin params (`PluginBeforeDataOutParams`, `PluginBeforeMessageOutParams`, `PluginShouldSendToLoggerParams`, `PluginTransformLogLevelParams`) and `LogLayerTransportParams`:
+
+  - `groups?: string[]` - The group names this log entry belongs to
+  - `schema?: LogLayerPluginSchema` - Schema information for navigating the assembled data (contextFieldName, metadataFieldName, errorFieldName)
+  - `prefix?: string` - The prefix attached via withPrefix()
+
+  New `LogLayerPluginSchema` interface provides:
+
+  - `contextFieldName?: string` - Key under which persistent context data is nested
+  - `metadataFieldName?: string` - Key under which per-call metadata is nested
+  - `errorFieldName: string` - Key under which serialized error is stored
+
+- [#385](https://github.com/loglayer/loglayer/pull/385) [`9628fa4`](https://github.com/loglayer/loglayer/commit/9628fa42caffea52197ad90baedb6aed177824f2) Thanks [@theogravity](https://github.com/theogravity)! - Add tagged template syntax support for log methods. You can now write:
+
+  ```typescript
+  log.info`User ${userId} logged in`;
+  log.withMetadata({ requestId }).warn`Request ${requestId} timed out`;
+  log.withError(err).error`Failed: ${err.message}`;
+  ```
+
+  All log methods (info, warn, error, debug, trace, fatal) support tagged template syntax on both `LogLayer` and `LogBuilder` instances.
+
+### Patch Changes
+
+- Updated dependencies [[`677043e`](https://github.com/loglayer/loglayer/commit/677043ee2830f9d0e43b0a5276a3e5866342315d), [`9628fa4`](https://github.com/loglayer/loglayer/commit/9628fa42caffea52197ad90baedb6aed177824f2)]:
+  - @loglayer/shared@4.2.0
+  - @loglayer/plugin@3.1.0
+  - @loglayer/transport@3.1.0
+  - @loglayer/context-manager@2.1.0
+  - @loglayer/log-level-manager@2.1.0
+
 ## 9.1.1
 
 ### Patch Changes
