@@ -51,7 +51,7 @@
     "rolldown": "1.0.0-beta.43",
     "tsdown": "0.22.0",
     "tsx": "4.22.3",
-    "typescript": "5.9.3",
+    "typescript": "6.0.3",
     "vitest": "4.1.7"
   },
   "peerDependencies": {

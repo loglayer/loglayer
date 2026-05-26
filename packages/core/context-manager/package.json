@@ -48,7 +48,7 @@
     "@internal/tsconfig": "workspace:*",
     "serialize-error": "13.0.1",
     "tsdown": "0.22.0",
-    "typescript": "5.9.3",
+    "typescript": "6.0.3",
     "vitest": "4.1.7"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
