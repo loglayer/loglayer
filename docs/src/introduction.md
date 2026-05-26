@@ -204,6 +204,38 @@ Send logs directly to any HTTP endpoint without a third-party logging library. S
 
 See the [HTTP transport](/transports/http) for more details.
 
+## Wide Event Logging
+
+Instead of emitting many small log entries throughout your code, accumulate all context into a single comprehensive event emitted at the end of each operation. This "wide event" or "canonical log line" pattern makes it easy to correlate all data from a single operation without joining multiple log entries.
+
+```typescript
+// Accumulate data throughout the request - no wrapping needed!
+logger.withWideEvents({ userId: 'user-123' });
+await processPayment();
+logger.withWideEvents({ orderId: 'order-456', amount: 99.99 });
+await sendConfirmation();
+logger.withWideEvents({ emailSent: true });
+
+// Emit single comprehensive event at the end
+logger.emitWideEvent({ message: 'Order completed' });
+```
+
+The wide event includes timing data, context from `withContext()`, and accumulated data from `withWideEvents()` all in one place:
+
+```json
+{
+  "msg": "Order completed",
+  "requestId": "req-789",
+  "userId": "user-123",
+  "orderId": "order-456",
+  "amount": 99.99,
+  "emailSent": true,
+  "duration": 234
+}
+```
+
+See more about [wide events](/mixins/wide-events) or follow the complete [Event-Wide Logging guide](/guides/event-wide-logging).
+
 ## File Logging
 
 Write logs directly to files with support for rotation based on time or size, optional compression, and batching.
