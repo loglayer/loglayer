@@ -55,6 +55,30 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
   const asyncContext = options.asyncContext;
   const includeContext = options.includeContext ?? true;
   const wideEventField = options.wideEventField;
+  const errorsAsArray = options.errorsAsArray ?? false;
+  // Default error field: "errors" for arrays, "error" for single
+  const errorField = options.errorField ?? (errorsAsArray ? "errors" : "error");
+
+  // Default error serializer - used if LogLayer has no errorSerializer configured
+  function defaultErrorSerializer(err: any): Record<string, any> {
+    if (err instanceof Error) {
+      return {
+        name: err.name,
+        message: err.message,
+        stack: err.stack,
+      };
+    }
+    return { message: String(err) };
+  }
+
+  // Get error serializer - uses LogLayer's if configured, otherwise default
+  function getErrorSerializer(self: any): (err: any) => Record<string, any> {
+    const config = self.getConfig?.();
+    if (config?.errorSerializer) {
+      return config.errorSerializer;
+    }
+    return defaultErrorSerializer;
+  }
 
   // Generate unique plugin ID to avoid conflicts
   const pluginId = `@loglayer/wide-events-context-tracker-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -174,13 +198,39 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
   }
 
   /**
+   * Implementation for withWideEventError
+   */
+  function withWideEventErrorImpl(error: any, self: any): any {
+    const store = asyncContext.getStore();
+    if (store) {
+      const serializer = getErrorSerializer(self);
+      const serializedError = serializer(error);
+
+      if (errorsAsArray) {
+        // Append to array
+        if (!store._llWideEvents) {
+          store._llWideEvents = {};
+        }
+        if (!store._llWideEvents[errorField]) {
+          store._llWideEvents[errorField] = [];
+        }
+        store._llWideEvents[errorField].push(serializedError);
+      } else {
+        // Replace single error
+        withWideEventsImpl({ [errorField]: serializedError }, self);
+      }
+    }
+    return self;
+  }
+
+  /**
    * Implementation for emitWideEvent
    */
-  function emitWideEventImpl(config: EmitWideEventConfig, self: any): any {
+  function emitWideEventImpl(config: EmitWideEventConfig, self: any): void {
     const store = asyncContext.getStore();
 
-    // Build wide event data with priority order (later = higher priority)
-    // Priority: context < wideEvents < emit metadata
+    // Build wide event data with priority order
+    // Priority: context < wideEvents
     const wideEventData: Record<string, any> = {};
 
     // Include context data first (lowest priority)
@@ -193,11 +243,6 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
       Object.assign(wideEventData, store._llWideEvents);
     }
 
-    // Include emit config metadata last (highest priority, can override anything)
-    if (config.metadata) {
-      Object.assign(wideEventData, config.metadata);
-    }
-
     // Determine log level
     const level = config.level ?? "info";
 
@@ -206,8 +251,6 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
 
     // Emit the wide event with metadata
     self.withMetadata(metadataToEmit)[level](config.message);
-
-    return self;
   }
 
   /**
@@ -231,6 +274,10 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
       prototype.emitWideEvent = function (this: LogLayer, config: EmitWideEventConfig) {
         return emitWideEventImpl(config, this);
       };
+
+      prototype.withWideEventError = function (this: LogLayer, error: any) {
+        return withWideEventErrorImpl(error, this);
+      };
     },
     augmentMock: (prototype: any) => {
       prototype.withWideEvents = function (this: any, data: Record<string, any>) {
@@ -247,6 +294,10 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
 
       prototype.emitWideEvent = function (this: any, config: EmitWideEventConfig) {
         return emitWideEventImpl(config, this);
+      };
+
+      prototype.withWideEventError = function (this: any, error: any) {
+        return withWideEventErrorImpl(error, this);
       };
     },
   };

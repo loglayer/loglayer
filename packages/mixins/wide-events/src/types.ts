@@ -32,6 +32,20 @@ export interface WideEventMixinOptions {
    * { "userId": "123", "orderId": "456", "msg": "done" }
    */
   wideEventField?: string;
+
+  /**
+   * Optional: Field name to use for error data in wide events.
+   * @default "error" (single mode) or "errors" (array mode)
+   */
+  errorField?: string;
+
+  /**
+   * Optional: When true, errors are collected as an array.
+   * Each call to withWideEventError() appends to the array.
+   * When false, each call replaces the previous error.
+   * @default false
+   */
+  errorsAsArray?: boolean;
 }
 
 /**
@@ -47,12 +61,6 @@ export interface EmitWideEventConfig {
    * Optional: Log level (defaults to "info").
    */
   level?: LogLevelType;
-
-  /**
-   * Optional: Additional metadata to include in this specific emission.
-   * This is merged with the accumulated wide event data.
-   */
-  metadata?: Record<string, any>;
 }
 
 /**
@@ -133,23 +141,43 @@ export interface IWideEventMixin {
    * and logs at the specified level.
    *
    * @param config - Configuration for the wide event emission
-   * @returns This logger instance for chaining
    *
    * @example
    * ```typescript
    * // Emit as info log
    * logger.emitWideEvent({ message: "Order processed" });
    *
-   * // Emit as error with additional metadata
+   * // Emit as error
    * logger.emitWideEvent({
    *   message: "Order failed",
    *   level: "error",
-   *   metadata: { reason: "payment_declined" }
    * });
    * ```
    */
-  emitWideEvent(config: EmitWideEventConfig): this;
-}
+  emitWideEvent(config: EmitWideEventConfig): void;
+
+  /**
+   * Captures an error for inclusion in the wide event.
+   * Serializes the error using the configured errorSerializer (or default).
+   *
+   * @param error - The error to capture
+   * @returns This logger instance for chaining
+   *
+   * @example
+   * ```typescript
+   * try {
+   *   await doSomething();
+   * } catch (err) {
+   *   // For single error (replaces previous)
+   *   logger.withWideEventError(err);
+   *   
+   *   // With errorsAsArray: true - errors accumulate
+   *   logger.withWideEventError(err).withWideEventError(otherErr);
+   * }
+   * ```
+   */
+  withWideEventError(error: any): this;
+};
 
 // Module augmentation for ILogLayer and ILogBuilder
 declare module "loglayer" {
