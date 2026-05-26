@@ -97,11 +97,12 @@ This project uses [OIDC (OpenID Connect) trusted publishing](https://docs.npmjs.
 
 For new packages, OIDC requires an initial manual publish:
 
-1. **Publish the first version manually** with OTP:
+1. **Publish the first version manually** with OTP at version `0.0.1`:
    ```bash
    cd packages/<new-package>
    npm publish --access public --otp=<code>
    ```
+   Using `0.0.1` ensures changesets can bump to `1.0.0` on the first release PR.
 2. **Configure trusted publisher** on npmjs.com:
    - Go to the package settings: `https://www.npmjs.com/settings/loglayer/packages/<package-name>/access`
    - Click **Settings** → **Publishing access**
