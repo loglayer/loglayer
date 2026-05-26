@@ -153,7 +153,19 @@ app.post("/api/orders", async (req, res) => {
 
     res.status(201).json(order);
   } catch (error) {
+    // Immediate log with stack trace
     logger.withError(error as Error).error("Order failed");
+    
+    // Capture error details for wide event
+    if (error instanceof Error) {
+      logger.withWideEvents({
+        error: {
+          type: error.name,
+          message: error.message,
+        },
+      });
+    }
+    
     res.status(500).json({ error: "Failed to create order" });
   }
 

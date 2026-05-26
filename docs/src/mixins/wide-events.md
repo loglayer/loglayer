@@ -262,6 +262,83 @@ logger.emitWideEvent({ message: "Complete" });
 // Wide event: { msg: "Complete", businessData: "value" }
 ```
 
+## Capturing Errors
+
+Wide events and `withError()` serve different purposes:
+
+- **`withError(err).error("msg")`** - Logs an error immediately with stack trace and error details
+- **`withWideEvents({ error: {...} })`** - Captures error information for the final wide event
+
+The [canonical logging pattern](https://loggingsucks.com/) recommends including error details in your wide event rather than relying on `withError()`. This keeps all operation data in one self-contained entry.
+
+```typescript
+try {
+  await processOrder(orderId);
+} catch (err) {
+  // Immediate error log with stack trace
+  logger.withError(err).error("Order processing failed");
+  
+  // Error details for wide event
+  logger.withWideEvents({
+    error: {
+      type: err.name,
+      message: err.message,
+      code: err.code,
+    },
+  });
+  
+  // Don't emit yet - let the response handler emit with final status
+}
+```
+
+### Helper Function Pattern
+
+For cleaner code, create a helper to capture error details:
+
+```typescript
+function captureError(logger: ILogLayer, error: unknown) {
+  if (error instanceof Error) {
+    return {
+      type: error.name,
+      message: error.message,
+      code: (error as any).code,
+      stack: error.stack,
+    };
+  }
+  return { message: String(error) };
+}
+
+// Usage
+try {
+  await doSomething();
+} catch (err) {
+  getLogger()
+    .withError(err)
+    .error("Operation failed");
+  getLogger()
+    .withWideEvents({ error: captureError(getLogger(), err) });
+}
+```
+
+### Emitting Error Wide Events
+
+When emitting a wide event after an error, set the level appropriately:
+
+```typescript
+res.on("finish", () => {
+  getLogger()
+    .withWideEvents({
+      duration: Date.now() - startTime,
+      statusCode: res.statusCode,
+      outcome: res.statusCode >= 400 ? "error" : "ok",
+    })
+    .emitWideEvent({
+      message: "Request completed",
+      level: res.statusCode >= 400 ? "error" : "info",
+    });
+});
+```
+
 ## Complete Example
 
 Here's a complete Express middleware example:
@@ -306,19 +383,52 @@ app.use((req, res, next) => {
   asyncLocalStorage.run({ logger }, next);
 });
 
-// Route handler - no wrapping needed!
-app.get("/orders/:id", (req, res) => {
-  getLogger().debug("Fetching order");
-  const order = getOrder(req.params.id);
-  
-  getLogger().withWideEvents({ orderId: order.id, items: order.items.length });
-  
+// Route handler with error handling
+app.post("/orders", async (req, res) => {
+  const logger = getLogger();
+  const startTime = Date.now();
+
+  logger.withWideEvents({ itemCount: req.body.items?.length ?? 0 });
+
+  try {
+    const order = await createOrder(req.body);
+    
+    logger
+      .withWideEvents({ orderId: order.id })
+      .info("Order created");
+    
+    res.status(201).json(order);
+  } catch (err) {
+    // Immediate log with stack trace
+    logger.withError(err).error("Order creation failed");
+    
+    // Error details for wide event
+    if (err instanceof Error) {
+      logger.withWideEvents({
+        error: {
+          type: err.name,
+          message: err.message,
+          code: (err as any).code,
+        },
+      });
+    }
+    
+    res.status(500).json({ error: "Failed to create order" });
+  }
+
+  // Emit wide event on response finish
   res.on("finish", () => {
-    getLogger().withWideEvents({ statusCode: res.statusCode });
-    getLogger().emitWideEvent({ message: "Request completed" });
+    logger
+      .withWideEvents({
+        duration: Date.now() - startTime,
+        statusCode: res.statusCode,
+        outcome: res.statusCode >= 400 ? "error" : "ok",
+      })
+      .emitWideEvent({
+        message: "Request completed",
+        level: res.statusCode >= 400 ? "error" : "info",
+      });
   });
-  
-  res.json(order);
 });
 ```
 
