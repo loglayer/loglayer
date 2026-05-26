@@ -213,41 +213,6 @@ The wide event accumulates all data throughout the request:
 }
 ```
 
-## How It Works
-
-1. **AsyncLocalStorage** holds the request-specific logger, propagating it
-   across all `await` calls within the same request
-2. **Middleware** creates a child logger with `log.child()` and stores it
-   in the async context
-3. **`withWideEvents()`** automatically initializes `_llWideEvents` on
-   first use and accumulates data
-4. **`emitWideEvent()`** outputs the accumulated data as a single log entry
-5. **`res.on("finish")`** triggers the final emission
-
-The key is using `log.child()` in the middleware. This creates an isolated
-logger for each request, so context from one request doesn't leak into
-another.
-
-## What to Include in a Wide Event
-
-A well-formed wide event includes:
-
-**Always included:**
-- `duration` - How long the operation took
-- `outcome` - `"ok"` or `"error"`
-- `statusCode` - HTTP status or error code
-
-**Request context (set via withContext):**
-- `requestId` - For correlation
-- `method`, `path` - What was requested
-- `service` - Which service generated this
-
-**Business data (accumulated via withWideEvents):**
-- What was saved/updated/deleted
-- External API responses
-- Cache hits/misses
-- Operation timing for each step
-
 ## Related
 
 - [Wide Events Mixin](/mixins/wide-events)
