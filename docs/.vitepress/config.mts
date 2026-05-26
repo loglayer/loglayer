@@ -190,9 +190,11 @@ export default defineConfig({
         text: 'Mixins (v7)',
         items: [
           { text: 'Overview', link: '/mixins/' },
+          { text: 'Wide Events', link: '/mixins/wide-events' },
           { text: 'Creating Mixins', link: '/mixins/creating-mixins' },
           { text: 'Testing Mixins', link: '/mixins/testing-mixins' },
           { text: 'Available Mixins', items: [
+              { text: 'Wide Events', link: '/mixins/wide-events' },
               { text: 'Datadog Metrics (HTTP)', link: '/mixins/datadog-http-metrics' },
               { text: 'Hot-Shots (StatsD)', link: '/mixins/hot-shots' },
           ]}
@@ -227,7 +229,7 @@ export default defineConfig({
           { text: 'Async context tracking', link: '/example-integrations/async-context' },
           { text: 'Bun', link: '/example-integrations/bun' },
           { text: 'Deno', link: '/example-integrations/deno' },
-
+          { text: 'Event-Wide Logging', link: '/guides/event-wide-logging' },
           { text: 'Next.js', link: '/example-integrations/nextjs' },
         ]
       }
