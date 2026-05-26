@@ -11,10 +11,11 @@
   },
   "dependencies": {
     "@nolebase/ui-asciinema": "2.18.2",
-    "asciinema-player": "3.14.0"
+    "asciinema-player": "3.15.1",
+    "tsdown": "0.22.0"
   },
   "devDependencies": {
-    "glob": "13.0.3",
+    "glob": "13.0.6",
     "vitepress": "1.6.4"
   },
   "engines": {

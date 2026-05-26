@@ -33,7 +33,7 @@
     "transport"
   ],
   "scripts": {
-    "build": "tsdown --config-loader unconfig",
+    "build": "tsdown src/index.ts --config-loader tsx",
     "test": "vitest --run",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "biome check --no-errors-on-unmatched --write --unsafe src",
@@ -46,13 +46,13 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "25.2.3",
+    "@types/node": "25.9.1",
     "loglayer": "workspace:*",
     "rolldown": "1.0.0-beta.43",
-    "tsdown": "0.20.3",
-    "tsx": "4.21.0",
+    "tsdown": "0.22.0",
+    "tsx": "4.22.3",
     "typescript": "5.9.3",
-    "vitest": "4.0.18"
+    "vitest": "4.1.7"
   },
   "peerDependencies": {
     "@aws-sdk/client-cloudwatch-logs": "*"
