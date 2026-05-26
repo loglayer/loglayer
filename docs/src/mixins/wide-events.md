@@ -103,11 +103,18 @@ const mixin = createWideEventMixin({
 });
 ```
 
-### Configuration
+## Configuration Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `asyncContext` | `AsyncLocalStorage<Record<string, any>>` | - | An async context implementation for propagating wide event data across async boundaries. |
+### Required Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| `asyncContext` | `AsyncLocalStorage<Record<string, any>>` | An async context implementation for propagating wide event data across async boundaries. |
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
 | `includeContext` | `boolean` | `true` | Include data from `withContext()` calls in the emitted wide event. |
 | `wideEventField` | `string` | `undefined` | Field name to nest all wide event data under. When undefined, data is flattened at root level. |
 
