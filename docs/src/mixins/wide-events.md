@@ -103,10 +103,10 @@ const mixin = createWideEventMixin({
 });
 ```
 
-**Type:** `createWideEventMixin(options: WideEventMixinOptions)`
+### Configuration
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
 | `asyncContext` | `AsyncLocalStorage<Record<string, any>>` | - | An async context implementation for propagating wide event data across async boundaries. |
 | `includeContext` | `boolean` | `true` | Include data from `withContext()` calls in the emitted wide event. |
 | `wideEventField` | `string` | `undefined` | Field name to nest all wide event data under. When undefined, data is flattened at root level. |
@@ -179,16 +179,14 @@ logger.clearWideEvents("user");
 
 ### `emitWideEvent(config)`
 
-**Type:** `(config: EmitWideEventConfig) => this`
+Emits the accumulated wide event as a single log entry. Returns the logger
+for chaining.
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
 | `message` | `string` | - | The log message for the wide event. |
 | `level` | `LogLevelType` | `"info"` | The log level for the emission. |
 | `metadata` | `Record<string, any>` | `undefined` | Additional metadata to include in this emission. |
-
-Emits the accumulated wide event as a single log entry. Returns the logger
-for chaining.
 
 ```typescript
 logger.emitWideEvent({ message: "Order processed" });
