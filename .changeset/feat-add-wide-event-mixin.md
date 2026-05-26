@@ -17,9 +17,4 @@ Add `@loglayer/mixin-wide-events` package for wide event logging functionality.
 | `includeContext` | `boolean` | `true` | Include `withContext()` data |
 | `wideEventField` | `string` | undefined | Nest data under field |
 
-**Safety Features:**
-- Prototype pollution protection (`__proto__`, `constructor`, `prototype` blocked)
-- Circular reference detection via `WeakSet`
-- Deep merge for nested objects
-
 For more details, see the [wide event documentation](https://loglayer.dev/guides/event-wide-logging).
