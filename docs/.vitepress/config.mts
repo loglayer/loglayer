@@ -190,7 +190,6 @@ export default defineConfig({
         text: 'Mixins (v7)',
         items: [
           { text: 'Overview', link: '/mixins/' },
-          { text: 'Wide Events', link: '/mixins/wide-events' },
           { text: 'Creating Mixins', link: '/mixins/creating-mixins' },
           { text: 'Testing Mixins', link: '/mixins/testing-mixins' },
           { text: 'Available Mixins', items: [

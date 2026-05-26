@@ -293,8 +293,10 @@ logger.emitWideEvent({ message: "Wide event" });
 // Output: { msg: "Wide event", orderId: "456" }
 
 // They work independently and can be used together
-logger.withMetadata({ debug: true }).debug("Debug info");
-logger.withWideEvents({ businessData: "value" });
+logger.withWideEvents({ businessData: "value" })
+  .withMetadata({ debug: true })
+  .debug("Debug info");
+
 logger.emitWideEvent({ message: "Complete" });
 // Intermediate log: { msg: "Debug info", debug: true }
 // Wide event: { msg: "Complete", businessData: "value" }
