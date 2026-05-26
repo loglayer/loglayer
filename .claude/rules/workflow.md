@@ -89,6 +89,32 @@ Examples:
 - `feat: add datadog HTTP metrics mixin`
 - `fix(transport): handle null logger gracefully`
 
+## OIDC Publishing
+
+This project uses [OIDC (OpenID Connect) trusted publishing](https://docs.npmjs.com/about-oidc-trusted-publishing) for automated package releases via GitHub Actions.
+
+### First-Time Package Setup
+
+For new packages, OIDC requires an initial manual publish:
+
+1. **Publish the first version manually** with OTP at version `0.0.1`:
+   ```bash
+   cd packages/<new-package>
+   npm publish --access public --otp=<code>
+   ```
+   Using `0.0.1` ensures changesets can bump to `1.0.0` on the first release PR.
+2. **Configure trusted publisher** on npmjs.com:
+   - Go to the package settings: `https://www.npmjs.com/settings/loglayer/packages/<package-name>/access`
+   - Click **Settings** → **Publishing access**
+   - Add GitHub Actions as a trusted publisher
+   - Set the workflow filename to `release.yml`
+   - Enable **"Require two-factor authentication and disallow tokens (recommended)"**
+3. **Future releases** will automatically use OIDC — no manual OTP needed
+
+### Why Manual First Publish?
+
+OIDC trusted publishing requires the package to already exist on npm. The initial publish establishes the trusted publisher relationship. Subsequent releases through GitHub Actions will have SLSA provenance enabled.
+
 ## Changesets
 
 **ALWAYS** create a changeset for any code changes to packages. Changesets are used to track changes and generate changelogs/version bumps.
