@@ -49,11 +49,11 @@
     "@internal/tsconfig": "workspace:*",
     "@types/bunyan": "1.8.11",
     "@types/fast-redact": "3.0.4",
-    "@types/node": "25.2.3",
+    "@types/node": "25.9.1",
     "loglayer": "workspace:*",
-    "tsdown": "0.20.3",
+    "tsdown": "0.22.0",
     "typescript": "5.9.3",
-    "vitest": "4.0.18"
+    "vitest": "4.1.7"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

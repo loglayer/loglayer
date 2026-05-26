@@ -8,13 +8,14 @@
     "test": "eslint src/"
   },
   "dependencies": {
-    "loglayer": "workspace:*"
+    "loglayer": "workspace:*",
+    "tsdown": "0.22.0"
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "8.55.0",
-    "@typescript-eslint/parser": "8.55.0",
-    "eslint": "10.0.0",
+    "@typescript-eslint/eslint-plugin": "8.59.4",
+    "@typescript-eslint/parser": "8.59.4",
+    "eslint": "10.4.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.55.0"
   }

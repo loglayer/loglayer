@@ -2,6 +2,9 @@
   "name": "@internal/tsconfig",
   "version": "2.1.0",
   "private": true,
+  "dependencies": {
+    "tsdown": "0.22.0"
+  },
   "files": [
     "tsconfig.json"
   ],

@@ -6,5 +6,8 @@ export default defineConfig({
   "format": ["esm", "cjs"],
   "sourcemap": true,
   "target": ["es2022"],
-  "nodeProtocol": true
+  "nodeProtocol": true,
+  "deps": {
+    neverBundle: ["dd-trace"]
+  }
 });

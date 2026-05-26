@@ -45,17 +45,17 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@elysiajs/node": "1.4.4",
+    "@elysiajs/node": "1.4.5",
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "25.2.3",
-    "elysia": "1.4.25",
+    "@types/node": "25.9.1",
+    "elysia": "1.4.28",
     "loglayer": "workspace:*",
     "@loglayer/transport-simple-pretty-terminal": "workspace:*",
     "serialize-error": "13.0.1",
-    "tsdown": "0.20.3",
-    "tsx": "4.21.0",
+    "tsdown": "0.22.0",
+    "tsx": "4.22.3",
     "typescript": "5.9.3",
-    "vitest": "4.0.18"
+    "vitest": "4.1.7"
   },
   "peerDependencies": {
     "elysia": ">=1.0.0",
