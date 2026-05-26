@@ -180,28 +180,6 @@ describe("WideEventMixin", () => {
     expect(emittedLogs[0].metadata).toEqual({ key: "from-wideEvents" });
   });
 
-  it("should prioritize emit metadata over withWideEvents for same key", () => {
-    const ctx = new AsyncLocalStorage();
-    useLogLayerMixin(createWideEventMixin({ asyncContext: ctx }));
-    const l = new LogLayer({
-      transport: new BlankTransport({
-        shipToLogger: (p) => {
-          emittedLogs.push({ metadata: p.metadata });
-          return p.messages;
-        },
-      }),
-    });
-
-    ctx.run({}, () => {
-      const logger = l.child();
-      logger.withWideEvents({ key: "from-wideEvents" });
-      logger.emitWideEvent({ message: "Test", metadata: { key: "from-emit" } });
-    });
-
-    // Emit metadata should override wideEvents
-    expect(emittedLogs[0].metadata).toEqual({ key: "from-emit" });
-  });
-
   it("should allow withMetadata and withWideEvents to work independently", () => {
     const ctx = new AsyncLocalStorage();
     useLogLayerMixin(createWideEventMixin({ asyncContext: ctx }));
@@ -264,14 +242,6 @@ describe("WideEventMixin", () => {
     asyncContext.run({}, () => {
       const logger = log.child();
       const result = logger.withWideEvents({ key: "value" });
-      expect(result).toBe(logger);
-    });
-  });
-
-  it("should return logger for emitWideEvent chaining", () => {
-    asyncContext.run({}, () => {
-      const logger = log.child();
-      const result = logger.emitWideEvent({ message: "test" });
       expect(result).toBe(logger);
     });
   });

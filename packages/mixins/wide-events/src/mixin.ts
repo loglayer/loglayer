@@ -226,11 +226,11 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
   /**
    * Implementation for emitWideEvent
    */
-  function emitWideEventImpl(config: EmitWideEventConfig, self: any): any {
+  function emitWideEventImpl(config: EmitWideEventConfig, self: any): void {
     const store = asyncContext.getStore();
 
-    // Build wide event data with priority order (later = higher priority)
-    // Priority: context < wideEvents < emit metadata
+    // Build wide event data with priority order
+    // Priority: context < wideEvents
     const wideEventData: Record<string, any> = {};
 
     // Include context data first (lowest priority)
@@ -243,11 +243,6 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
       Object.assign(wideEventData, store._llWideEvents);
     }
 
-    // Include emit config metadata last (highest priority, can override anything)
-    if (config.metadata) {
-      Object.assign(wideEventData, config.metadata);
-    }
-
     // Determine log level
     const level = config.level ?? "info";
 
@@ -256,8 +251,6 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
 
     // Emit the wide event with metadata
     self.withMetadata(metadataToEmit)[level](config.message);
-
-    return self;
   }
 
   /**

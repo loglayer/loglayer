@@ -61,12 +61,6 @@ export interface EmitWideEventConfig {
    * Optional: Log level (defaults to "info").
    */
   level?: LogLevelType;
-
-  /**
-   * Optional: Additional metadata to include in this specific emission.
-   * This is merged with the accumulated wide event data.
-   */
-  metadata?: Record<string, any>;
 }
 
 /**
@@ -147,22 +141,20 @@ export interface IWideEventMixin {
    * and logs at the specified level.
    *
    * @param config - Configuration for the wide event emission
-   * @returns This logger instance for chaining
    *
    * @example
    * ```typescript
    * // Emit as info log
    * logger.emitWideEvent({ message: "Order processed" });
    *
-   * // Emit as error with additional metadata
+   * // Emit as error
    * logger.emitWideEvent({
    *   message: "Order failed",
    *   level: "error",
-   *   metadata: { reason: "payment_declined" }
    * });
    * ```
    */
-  emitWideEvent(config: EmitWideEventConfig): this;
+  emitWideEvent(config: EmitWideEventConfig): void;
 
   /**
    * Captures an error for inclusion in the wide event.

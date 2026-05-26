@@ -230,25 +230,22 @@ const mixin = createWideEventMixin({
 
 ### `emitWideEvent(config)`
 
-`(config: { message: string; level?: LogLevelType; metadata?: Record<string, any> }) => this`
+`(config: EmitWideEventConfig) => void`
 
-Emits the accumulated wide event as a single log entry. Returns the logger
-for chaining.
+Emits the accumulated wide event as a single log entry. Use `withWideEvents()`
+before calling this to add any additional data.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `message` | `string` | - | The log message for the wide event. |
 | `level` | `LogLevelType` | `"info"` | The log level for the emission. |
-| `metadata` | `Record<string, any>` | `undefined` | Additional metadata to include in this emission. |
 
 ```typescript
 logger.emitWideEvent({ message: "Order processed" });
 
-// Or chain with other operations
-logger
-  .withWideEvents({ statusCode: 200 })
-  .emitWideEvent({ message: "Request completed" })
-  .info("After emitting");
+// Add final data before emitting
+logger.withWideEvents({ statusCode: 200 });
+logger.emitWideEvent({ message: "Request completed", level: "error" });
 ```
 
 ### Data Priority
@@ -256,8 +253,7 @@ logger
 When multiple sources provide the same key, the following priority order applies:
 
 1. **`withContext()`** data (lowest priority)
-2. **`withWideEvents()`** data
-3. **`emitWideEvent({ metadata: {...} })`** data (highest priority)
+2. **`withWideEvents()`** data (highest priority)
 
 Top-level keys are overwritten by later calls. Nested objects are **deep merged**.
 

@@ -32,24 +32,25 @@ describe("Type Tests", () => {
     const result3 = logger.clearWideEvents();
     expectTypeOf(result3).toMatchTypeOf<ILogLayer>();
 
-    // emitWideEvent should return the logger type
-    const result4 = logger.emitWideEvent({ message: "test" });
-    expectTypeOf(result4).toMatchTypeOf<ILogLayer>();
+    // emitWideEvent returns void
+    logger.emitWideEvent({ message: "test" });
   });
 
   it("should allow method chaining", () => {
     const logger: ILogLayer = new LogLayer({ transport: {} as any });
 
-    // All methods should return the same type for chaining
+    // Most methods return the logger for chaining
     const result = logger
       .withWideEvents({ userId: "123" })
       .withWideEvents({ orderId: "456" })
       .withContext({ requestStart: Date.now() })
       .clearWideEvents()
-      .withWideEvents({ newRequest: "req-789" })
-      .emitWideEvent({ message: "New request completed" });
+      .withWideEvents({ newRequest: "req-789" });
 
     expectTypeOf(result).toMatchTypeOf<ILogLayer>();
+
+    // emitWideEvent returns void, call separately
+    logger.emitWideEvent({ message: "New request completed" });
   });
 
   it("should preserve LogLayer type", () => {
@@ -84,11 +85,5 @@ describe("Type Tests", () => {
     // All config options should be valid
     logger.emitWideEvent({ message: "msg" });
     logger.emitWideEvent({ message: "msg", level: "error" });
-    logger.emitWideEvent({ message: "msg", metadata: { extra: "data" } });
-    logger.emitWideEvent({
-      message: "msg",
-      level: "warn",
-      metadata: { code: 123 },
-    });
   });
 });
