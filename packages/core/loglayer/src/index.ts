@@ -15,6 +15,7 @@ export type {
   LazyLogValue,
   LogGroupConfig,
   LogGroupsConfig,
+  LogLayerCommonDataParams,
   LogLayerContext,
   LogLayerData,
   LogLayerMetadata,
