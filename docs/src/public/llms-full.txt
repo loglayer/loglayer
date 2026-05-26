@@ -654,13 +654,15 @@ The `shouldSendToLogger` plugin hook receives the `groups` array:
 
 ### Transport Integration
 
-Transports receive the `groups` array in `LogLayerTransportParams`:
+Transports receive `groups`, `schema`, and `prefix` in `LogLayerTransportParams`:
 
 ```typescript
-shipToLogger({ logLevel, messages, groups }) {
+shipToLogger({ logLevel, messages, groups, schema, prefix }) {
   if (groups) {
     // Include group info in structured output
   }
+  // schema.contextFieldName, schema.metadataFieldName, schema.errorFieldName
+  // prefix from withPrefix() or config.prefix (undefined when not set)
 }
 ```
 
@@ -892,6 +894,8 @@ interface LogLayerTransportParams {
   error?: any                     // individual error
   context?: Record<string, any>   // individual context
   groups?: string[]               // group tags for this log entry
+  schema?: LogLayerPluginSchema   // field names for context/metadata/error
+  prefix?: string                 // from withPrefix() or config.prefix (undefined when not set)
 }
 ```
 
@@ -937,6 +941,18 @@ log.removePlugin('my-plugin')
 log.withFreshPlugins([newPlugin1, newPlugin2])
 ```
 
+### LogLayerPluginSchema
+
+The `schema` parameter provides field names for navigating assembled data:
+
+```typescript
+interface LogLayerPluginSchema {
+  contextFieldName?: string  // Key for context data
+  metadataFieldName?: string // Key for metadata
+  errorFieldName: string     // Key for error (defaults to "err")
+}
+```
+
 ### Plugin Lifecycle Methods
 
 ```typescript
@@ -945,16 +961,16 @@ interface LogLayerPlugin {
   disabled?: boolean
 
   // Modify data (metadata + context + error) before transport
-  onBeforeDataOut?(params: { logLevel, data, metadata, error, context }, loglayer): Record<string, any> | null
+  onBeforeDataOut?(params: { logLevel, data, metadata, error, context, groups, schema, prefix }, loglayer): Record<string, any> | null
 
   // Modify messages before transport
-  onBeforeMessageOut?(params: { messages, logLevel }, loglayer): MessageDataType[]
+  onBeforeMessageOut?(params: { messages, logLevel, groups, schema, prefix }, loglayer): MessageDataType[]
 
   // Transform the log level dynamically
-  transformLogLevel?(params: { logLevel, messages, data, metadata, error, context }, loglayer): LogLevelType | null
+  transformLogLevel?(params: { logLevel, messages, data, metadata, error, context, groups, schema, prefix }, loglayer): LogLevelType | null
 
   // Control whether a log should be sent (return false to drop)
-  shouldSendToLogger?(params: { messages, logLevel, transportId, data, metadata, error, context, groups }, loglayer): boolean
+  shouldSendToLogger?(params: { messages, logLevel, transportId, data, metadata, error, context, groups, schema, prefix }, loglayer): boolean
 
   // Intercept withMetadata() / metadataOnly() calls
   onMetadataCalled?(metadata, loglayer): Record<string, any> | null

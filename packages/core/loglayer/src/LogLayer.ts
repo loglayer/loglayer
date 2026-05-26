@@ -1,6 +1,7 @@
 import { DefaultContextManager } from "@loglayer/context-manager";
 import { DefaultLogLevelManager } from "@loglayer/log-level-manager";
 import { type LogLayerPlugin, PluginCallbackType } from "@loglayer/plugin";
+import type { LogLayerPluginSchema } from "@loglayer/shared";
 import {
   type ContainsAsyncLazy,
   countLazyValues,
@@ -1260,8 +1261,24 @@ export class LogLayer implements ILogLayer<LogLayer> {
     context: LogLayerContext | null,
     groups: string[] | null = null,
   ) {
-    const { errorSerializer, errorFieldInMetadata, muteContext, contextFieldName, metadataFieldName, errorFieldName } =
-      this._config;
+    const {
+      errorSerializer,
+      errorFieldInMetadata,
+      muteContext,
+      contextFieldName,
+      metadataFieldName,
+      errorFieldName,
+      prefix,
+    } = this._config;
+
+    // Build schema for plugins and transports
+    const schema: LogLayerPluginSchema = {
+      contextFieldName: contextFieldName ?? undefined,
+      metadataFieldName: metadataFieldName ?? undefined,
+      errorFieldName: errorFieldName ?? "err",
+    };
+
+    const effectiveGroups = this._mergeGroups(groups) ?? undefined;
 
     let hasObjData =
       !!metadata ||
@@ -1332,6 +1349,9 @@ export class LogLayer implements ILogLayer<LogLayer> {
           error: err,
           metadata,
           context: contextData,
+          groups: effectiveGroups,
+          schema,
+          prefix: prefix,
         },
         this,
       );
@@ -1346,6 +1366,9 @@ export class LogLayer implements ILogLayer<LogLayer> {
         {
           messages: [...params],
           logLevel,
+          groups: effectiveGroups,
+          schema,
+          prefix: prefix,
         },
         this,
       );
@@ -1361,12 +1384,24 @@ export class LogLayer implements ILogLayer<LogLayer> {
           error: err,
           metadata,
           context: contextData,
+          groups: effectiveGroups,
+          schema,
+          prefix: prefix,
         },
         this,
       );
     }
 
-    const effectiveGroups = this._mergeGroups(groups) ?? undefined;
+    // Build shared params object for shouldSendToLogger and transport calls
+    const sharedParams = {
+      data: hasObjData ? d : undefined,
+      error: err,
+      metadata,
+      context: contextData,
+      groups: effectiveGroups,
+      schema,
+      prefix: prefix,
+    };
 
     if (this.hasMultipleTransports) {
       const transportPromises = (this._config.transport as LogLayerTransport[])
@@ -1384,13 +1419,9 @@ export class LogLayer implements ILogLayer<LogLayer> {
             const shouldSend = this.pluginManager.runShouldSendToLogger(
               {
                 messages: [...params],
-                data: hasObjData ? d : undefined,
                 logLevel: currentLogLevel,
                 transportId: transport.id,
-                error: err,
-                metadata,
-                context: contextData,
-                groups: effectiveGroups,
+                ...sharedParams,
               },
               this,
             );
@@ -1403,12 +1434,8 @@ export class LogLayer implements ILogLayer<LogLayer> {
           return transport._sendToLogger({
             logLevel: currentLogLevel,
             messages: [...params],
-            data: hasObjData ? d : undefined,
             hasData: hasObjData,
-            error: err,
-            metadata,
-            context: contextData,
-            groups: effectiveGroups,
+            ...sharedParams,
           });
         });
 
@@ -1433,13 +1460,9 @@ export class LogLayer implements ILogLayer<LogLayer> {
         const shouldSend = this.pluginManager.runShouldSendToLogger(
           {
             messages: [...params],
-            data: hasObjData ? d : undefined,
             logLevel,
             transportId: this.singleTransport.id,
-            error: err,
-            metadata,
-            context: contextData,
-            groups: effectiveGroups,
+            ...sharedParams,
           },
           this,
         );
@@ -1453,12 +1476,8 @@ export class LogLayer implements ILogLayer<LogLayer> {
       this.singleTransport._sendToLogger({
         logLevel,
         messages: [...params],
-        data: hasObjData ? d : undefined,
         hasData: hasObjData,
-        error: err,
-        metadata,
-        context: contextData,
-        groups: effectiveGroups,
+        ...sharedParams,
       });
     }
   }

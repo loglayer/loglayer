@@ -10,6 +10,7 @@ import type {
 export type {
   LogLayerPlugin,
   LogLayerPluginParams,
+  LogLayerPluginSchema,
   PluginBeforeDataOutParams,
   PluginBeforeMessageOutParams,
   PluginShouldSendToLoggerParams,

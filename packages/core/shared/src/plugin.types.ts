@@ -8,6 +8,38 @@ import type {
 import type { ILogLayer } from "./loglayer.types.js";
 
 /**
+ * Schema information for navigating the assembled log data.
+ *
+ * Contains the resolved field names used when assembling the log data,
+ * so plugins can navigate Data precisely (e.g., find the error map at
+ * errorFieldName).
+ *
+ * @note Only `errorFieldName` is guaranteed to be present. `contextFieldName`
+ * and `metadataFieldName` are `undefined` when their respective data is merged
+ * at the root level of the data object (i.e., when `contextFieldName` or
+ * `metadataFieldName` is not configured in LogLayer).
+ *
+ * @see {@link https://loglayer.dev/plugins/creating-plugins.html | Creating Plugins}
+ */
+export interface LogLayerPluginSchema {
+  /**
+   * The key under which persistent context data is nested in data.
+   * `undefined` when context is merged at root level.
+   */
+  contextFieldName?: string;
+  /**
+   * The key under which per-call metadata is nested in data.
+   * `undefined` when metadata is merged at root level.
+   */
+  metadataFieldName?: string;
+  /**
+   * The key under which the serialized error is stored in data.
+   * Always populated; defaults to "err".
+   */
+  errorFieldName: string;
+}
+
+/**
  * Input for the `onBeforeDataOut` plugin lifecycle method.
  * @see {@link https://loglayer.dev/plugins/creating-plugins.html#onbeforedataout | Creating Plugins}
  */
@@ -16,6 +48,21 @@ export interface PluginBeforeDataOutParams extends LogLayerCommonDataParams {
    * Log level of the data
    */
   logLevel: LogLevelType;
+  /**
+   * The group names this log entry belongs to, if any.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  groups?: string[];
+  /**
+   * Schema information for navigating the assembled data.
+   */
+  schema?: LogLayerPluginSchema;
+  /**
+   * The prefix attached via withPrefix() on the emitting logger (or set
+   * via config.prefix). Empty when no prefix was set.
+   */
+  prefix?: string;
 }
 
 /**
@@ -31,6 +78,21 @@ export interface PluginTransformLogLevelParams extends LogLayerCommonDataParams 
    * Message data that is copied from the original.
    */
   messages: any[];
+  /**
+   * The group names this log entry belongs to, if any.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  groups?: string[];
+  /**
+   * Schema information for navigating the assembled data.
+   */
+  schema?: LogLayerPluginSchema;
+  /**
+   * The prefix attached via withPrefix() on the emitting logger (or set
+   * via config.prefix). Empty when no prefix was set.
+   */
+  prefix?: string;
 }
 
 /**
@@ -56,6 +118,15 @@ export interface PluginShouldSendToLoggerParams extends LogLayerCommonDataParams
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
   groups?: string[];
+  /**
+   * Schema information for navigating the assembled data.
+   */
+  schema?: LogLayerPluginSchema;
+  /**
+   * The prefix attached via withPrefix() on the emitting logger (or set
+   * via config.prefix). Empty when no prefix was set.
+   */
+  prefix?: string;
 }
 
 /**
@@ -71,6 +142,21 @@ export interface PluginBeforeMessageOutParams {
    * Message data that is copied from the original.
    */
   messages: any[];
+  /**
+   * The group names this log entry belongs to, if any.
+   *
+   * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
+   */
+  groups?: string[];
+  /**
+   * Schema information for navigating the assembled data.
+   */
+  schema?: LogLayerPluginSchema;
+  /**
+   * The prefix attached via withPrefix() on the emitting logger (or set
+   * via config.prefix). Empty when no prefix was set.
+   */
+  prefix?: string;
 }
 
 /**

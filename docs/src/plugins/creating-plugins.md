@@ -167,6 +167,9 @@ transformLogLevel?(params: PluginTransformLogLevelParams, loglayer: ILogLayer): 
 | `metadata` | `Record<string, any>` (optional) | Individual metadata object passed to the log message method |
 | `error` | `any` (optional) | Error passed to the log message method |
 | `context` | `Record<string, any>` (optional) | Context data that is included with each log entry |
+| `groups` | `string[]` (optional) | [Group](/logging-api/groups) tags assigned to this log entry |
+| `schema` | `LogLayerPluginSchema` (optional) | Schema information for navigating the assembled data |
+| `prefix` | `string` (optional) | The prefix attached via [`withPrefix()`](/logging-api/basic-logging#prefix-and-suffix) |
 
 **Return Value:**
 
@@ -231,6 +234,9 @@ onBeforeDataOut?(params: PluginBeforeDataOutParams, loglayer: ILogLayer): Record
 | `metadata` | `Record<string, any>` (optional) | Individual metadata object passed to the log message method |
 | `error` | `any` (optional) | Error passed to the log message method |
 | `context` | `Record<string, any>` (optional) | Context data that is included with each log entry |
+| `groups` | `string[]` (optional) | [Group](/logging-api/groups) tags assigned to this log entry |
+| `schema` | `LogLayerPluginSchema` (optional) | Schema information for navigating the assembled data |
+| `prefix` | `string` (optional) | The prefix attached via [`withPrefix()`](/logging-api/basic-logging#prefix-and-suffix) |
 
 **Example:**
 ```typescript
@@ -265,6 +271,9 @@ onBeforeMessageOut?(params: PluginBeforeMessageOutParams, loglayer: ILogLayer): 
 |-----------|------|-------------|
 | `messages` | `any[]` | Message data that is copied from the original |
 | `logLevel` | `LogLevel` | Log level of the message |
+| `groups` | `string[]` (optional) | [Group](/logging-api/groups) tags assigned to this log entry |
+| `schema` | `LogLayerPluginSchema` (optional) | Schema information for navigating the assembled data |
+| `prefix` | `string` (optional) | The prefix attached via [`withPrefix()`](/logging-api/basic-logging#prefix-and-suffix) |
 
 **Example:**
 ```typescript
@@ -296,6 +305,8 @@ shouldSendToLogger?(params: PluginShouldSendToLoggerParams, loglayer: ILogLayer)
 | `error` | `any` (optional) | Error passed to the log message method |
 | `context` | `Record<string, any>` (optional) | Context data that is included with each log entry |
 | `groups` | `string[]` (optional) | [Group](/logging-api/groups) tags assigned to this log entry |
+| `schema` | `LogLayerPluginSchema` (optional) | Schema information for navigating the assembled data |
+| `prefix` | `string` (optional) | The prefix attached via [`withPrefix()`](/logging-api/basic-logging#prefix-and-suffix) |
 
 **Example:**
 ```typescript
@@ -413,6 +424,61 @@ const contextEnrichmentPlugin = {
 ::: tip Lazy values
 This hook runs at `withContext()` time, before lazy values are resolved. If context contains [`lazy()` values](/logging-api/lazy-evaluation), they will appear as wrapper objects rather than their evaluated values. Use [`onBeforeDataOut`](#onbeforedataout) if you need to inspect resolved values.
 :::
+
+## LogLayerPluginSchema
+
+The `schema` parameter passed to plugin hooks provides schema information for navigating the assembled data object:
+
+```typescript
+interface LogLayerPluginSchema {
+  /**
+   * Key under which persistent context data is nested.
+   * `undefined` when context fields are merged at the root level.
+   */
+  contextFieldName?: string;
+  
+  /**
+   * Key under which per-call metadata is nested.
+   * `undefined` when metadata fields are merged at the root level.
+   */
+  metadataFieldName?: string;
+  
+  /**
+   * Key under which serialized error is stored.
+   * Always populated; defaults to `"err"`.
+   */
+  errorFieldName: string;
+}
+```
+
+::: info Only `errorFieldName` is guaranteed to be present
+`contextFieldName` and `metadataFieldName` are `undefined` when their respective data is merged at the root level of the data object. Only `errorFieldName` is always populated.
+:::
+
+This allows plugins to locate context, metadata, and error data within the assembled `data` object regardless of how LogLayer is configured.
+
+**Example:**
+```typescript
+const schemaAwarePlugin = {
+  onBeforeDataOut: ({ data, schema }: PluginBeforeDataOutParams, loglayer: ILogLayer) => {
+    // Access error using schema information
+    const errorField = schema.errorFieldName;
+    const error = data[errorField];
+    
+    // Access context using schema information
+    const contextData = schema.contextFieldName 
+      ? data[schema.contextFieldName] 
+      : data;
+    
+    // Access metadata using schema information
+    const metadataData = schema.metadataFieldName 
+      ? data[schema.metadataFieldName] 
+      : data;
+    
+    return data;
+  }
+}
+```
 
 ## Boilerplate / Template Code
 
