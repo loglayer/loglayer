@@ -22,9 +22,9 @@ export interface WideEventSamplingParams {
 /**
  * Sampling strategy for wide events.
  *
- * - `"default"` — a single `rate` applies to all non-error levels.
+ * - `"default"` — a single `rate` applies to all non-error/fatal levels.
  * - `"per_level"` — per-level rates keyed by LogLevelType; levels not in the
- *   map are kept unconditionally.
+ *   map are kept at 100%.
  */
 export type WideEventSamplingStrategy = "default" | "per_level";
 
@@ -38,7 +38,7 @@ export interface WideEventSamplingConfig {
   /**
    * The sampling strategy.
    *
-   * - `"default"` — a single `rate` applies to all non-error levels.
+   * - `"default"` — a single `rate` applies to all non-error/fatal levels.
    * - `"per_level"` — per-level rates from the `perLevel` map; levels not in
    *   the map are kept at 100%.
    *
@@ -55,8 +55,7 @@ export interface WideEventSamplingConfig {
    *
    * With `"default"` strategy this rate applies to all non-error/fatal levels.
    * With `"per_level"` strategy this field is **ignored** — unmapped levels
-   * default to a fill for levels not present
-   * in the `perLevel` map.
+   * default to a 100% keep rate.
    *
    * @default 1
    */

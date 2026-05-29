@@ -25,9 +25,9 @@ export interface SamplingParams {
 /**
  * Sampling strategy for log emissions.
  *
- * - `"default"` — a single `rate` applies to all non-error levels.
+ * - `"default"` — a single `rate` applies to all non-error/fatal levels.
  * - `"per_level"` — per-level rates keyed by LogLevelType; levels not in the
- *   map are kept unconditionally.
+ *   map are kept at 100%.
  */
 export type SamplingStrategy = "default" | "per_level";
 

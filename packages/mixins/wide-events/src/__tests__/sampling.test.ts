@@ -193,7 +193,7 @@ describe("WideEventMixin - Sampling", () => {
         logger.emitWideEvent({ message: "warn-1", level: "warn" });
       });
 
-      // Should have: debug-1, error-1, fatal-1, warn-1 (always kept + debug-1)
+      // Should have: debug-1, error-1, fatal-1, warn-1 (default 100% + debug-1)
       // warn is kept because it's not in the map (defaults to 100%)
       const kept = emittedLogs.map((l) => l.messages[0]);
       expect(kept).toContain("debug-1");
@@ -542,7 +542,7 @@ describe("WideEventMixin - Sampling", () => {
         logger.emitWideEvent({ message: "error", level: "error" });
       });
 
-      // info dropped (rate clamped to 0), error always kept
+      // info dropped (rate clamped to 0), error kept by default
       expect(emittedLogs).toHaveLength(1);
       expect(emittedLogs[0].level).toBe("error");
     });

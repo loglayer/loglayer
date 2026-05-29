@@ -8,7 +8,7 @@ import {
 import type { EmitWideEventConfig, WideEventMixinOptions, WideEventSamplingConfig } from "./types.js";
 
 /**
- * Log levels that are never sampled — always kept at 100%.
+ * Log levels that default to rate=1 (error/fatal) — can be overridden via `perLevel` or callback.
  */
 const EXEMPT_LEVELS = new Set(["error", "fatal"]);
 

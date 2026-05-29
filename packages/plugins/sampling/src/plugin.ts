@@ -40,7 +40,7 @@ function shouldKeepEmission(
 /**
  * Creates a sampling plugin that randomly drops log entries to control volume.
  *
- * "error" and "fatal" levels default to rate=1 (always kept) unless explicitly
+ * "error" and "fatal" default to rate=1 (can be overridden via `perLevel` or callback unless explicitly
  * set in `perLevel`. Custom `shouldSample` callbacks can override this behavior.
  *
  * @example

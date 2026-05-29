@@ -41,14 +41,14 @@ describe("samplingPlugin", () => {
   it("keeps everything when rate is 0", () => {
     const { log, logs } = createLog({ rate: 0 });
     log.info("test");
-    log.error("error - always kept");
-    log.fatal("fatal - always kept");
+    log.error("error kept by default");
+    log.fatal("fatal kept by default");
     expect(logs).toHaveLength(2);
   });
 
-  it("error levels are always kept", () => {
+  it("error levels are kept by default", () => {
     const { log, logs } = createLog({ rate: 0 });
-    log.error("fatal - always kept");
+    log.error("fatal kept by default");
     expect(logs).toHaveLength(1);
   });
 

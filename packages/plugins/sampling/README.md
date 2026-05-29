@@ -11,7 +11,7 @@ A sampling plugin for [LogLayer](https://loglayer.dev) that randomly drops log e
 - **Rate-based sampling**: Keep a configurable percentage of log entries
 - **Per-level sampling**: Different rates per log level
 - **Custom sampling**: Use a callback for content-aware filtering
-- **Fail-safe**: "error" and "fatal" levels are always kept (100% sampled)
+- **Fail-safe**: `error` and `fatal` default to a 100% keep rate (can be overridden via `perLevel` or callback)
 - **Fail-open**: Callback exceptions keep the event (never crash)
 
 ## Installation
@@ -29,7 +29,7 @@ import { LogLayer, ConsoleTransport } from "loglayer";
 const log = new LogLayer({
   transport: new ConsoleTransport({ logger: console }),
   plugins: [
-    // Keep only 10% of logs (errors/fatals always kept)
+    // Keep only 10% of logs (errors/fatals default to 100%)
     samplingPlugin({ rate: 0.1 }),
   ],
 });
@@ -42,7 +42,7 @@ const log = new LogLayer({
 - `perLevel`: per-level rates like `{ trace: 0.1, debug: 0.3 }`
 - `shouldSample`: custom callback `(params: SamplingParams) => boolean`
 
-"error" and "fatal" levels are always kept regardless of rate or callback.
+`error` and `fatal` default to 100% but can be overridden.
 
 ## See Also
 
