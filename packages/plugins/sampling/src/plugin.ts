@@ -69,7 +69,7 @@ export function samplingPlugin(config: SamplingConfig): LogLayerPlugin {
     id: config.id,
     disabled: config.disabled,
     shouldSendToLogger: (params: PluginShouldSendToLoggerParams): boolean => {
-      // error/fatal are always kept
+      // error/fatal are always kept — checked first
       if (EXEMPT_LEVELS.has(params.logLevel)) {
         return true;
       }
@@ -89,6 +89,11 @@ export function samplingPlugin(config: SamplingConfig): LogLayerPlugin {
           // Fail-open: if callback throws, keep the event
           return true;
         }
+      }
+
+      // error/fatal are always kept when using rate-based sampling
+      if (EXEMPT_LEVELS.has(params.logLevel)) {
+        return true;
       }
 
       return shouldKeepEmission(params.logLevel, strategy, rate, perLevel);

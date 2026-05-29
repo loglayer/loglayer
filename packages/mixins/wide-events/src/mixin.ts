@@ -314,25 +314,23 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
 
     // Run custom callback sampling (now that data is available)
     if (samplingConfig?.shouldEmit) {
-      // error/fatal are always kept — skip callback entirely
-      if (!EXEMPT_LEVELS.has(level)) {
-        // Run rate sampling if not already done
-        const ratePassed = runRateSampling(
-          level,
-          samplingConfig.strategy,
-          samplingConfig.rate,
-          samplingConfig.perLevel,
-        );
-        // Fail-open: if callback throws, keep the event
-        let callbackOk = true;
-        try {
-          callbackOk = samplingConfig.shouldEmit({ wideData: wideEventData, level });
-        } catch {
-          // Callback threw — keep the event
-        }
-        if (!ratePassed || !callbackOk) {
-          return;
-        }
+      // Custom callback can override error/fatal exemption — run it for all levels
+      // Run rate sampling if not already done
+      const ratePassed = runRateSampling(
+        level,
+        samplingConfig.strategy,
+        samplingConfig.rate,
+        samplingConfig.perLevel,
+      );
+      // Fail-open: if callback throws, keep the event
+      let callbackOk = true;
+      try {
+        callbackOk = samplingConfig.shouldEmit({ wideData: wideEventData, level });
+      } catch {
+        // Callback threw — keep the event
+      }
+      if (!ratePassed || !callbackOk) {
+        return;
       }
     }
 
