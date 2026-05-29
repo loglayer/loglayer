@@ -56,10 +56,6 @@ log.metadataOnly({
 
 ## Configuration Options
 
-### Required Parameters
-
-None - all parameters are optional.
-
 ### Optional Parameters
 
 | Name | Type | Default | Description |

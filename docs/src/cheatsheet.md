@@ -65,7 +65,7 @@ log.withMetadata({ userId: '123', duration: 42 }).info('Request handled')
 { "msg": "Request handled", "userId": "123", "duration": 42 }
 ```
 
-Log metadata without a message:
+Log `metadata` without a message:
 
 ```typescript
 log.metadataOnly({ status: 'healthy', uptime: 3600 })
@@ -308,7 +308,7 @@ const log = new LogLayer({
   errorFieldName: 'err',                      // default: 'err'
   errorSerializer: (err) => ({ message: err.message, stack: err.stack }),
   copyMsgOnOnlyError: false,                   // copy error.message on errorOnly()
-  errorFieldInMetadata: false,                 // nest error inside metadata field
+  errorFieldInMetadata: false,                 // nest error inside `metadata` field
 
   // Field naming (places data in dedicated fields instead of root)
   contextFieldName: 'context',
@@ -377,7 +377,7 @@ See [Basic Logging](/logging-api/basic-logging#raw-logging) for context behavior
 |------|--------|-------|
 | Log a message | `log.info('msg')` | Single entry |
 | Log with template | `` log.info`User ${id} logged in` `` | Single entry |
-| Attach metadata | `log.withMetadata({...}).info('msg')` | Single entry |
+| Attach `metadata` | `log.withMetadata({...}).info('msg')` | Single entry |
 | Attach an error | `log.withError(err).error('msg')` | Single entry |
 | Set context | `log.withContext({...})` | Persistent |
 | Create child | `log.child()` | New instance |
@@ -387,7 +387,7 @@ See [Basic Logging](/logging-api/basic-logging#raw-logging) for context behavior
 | Group child logger | `log.withGroup('db')` | New instance |
 | Lazy value | `lazy(() => expensiveCall())` | Per evaluation |
 | Log error only | `log.errorOnly(err)` | Single entry |
-| Log metadata only | `log.metadataOnly({...})` | Single entry |
+| Log `metadata` only | `log.metadataOnly({...})` | Single entry |
 | Mock for tests | `new MockLogLayer()` | - |
 | Wide events mixin | `@loglayer/mixin-wide-events` | Accumulate data across async boundaries and emit as single log entry (canonical log line). Supports sampling with `error`/`fatal` defaulting to 100% (overridable via `perLevel` or ``shouldEmit``). |
 | Create wide event mixin | `createWideEventMixin({ asyncContext, sampling: { strategy: 'default', `rate`: 0.1 } })` | - |

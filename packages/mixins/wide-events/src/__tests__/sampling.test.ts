@@ -244,24 +244,22 @@ describe("WideEventMixin - Sampling", () => {
       expect(emittedLogs).toHaveLength(2);
     });
 
-    it("should not use rate as fallback for unmapped levels in per_level", () => {
-      // Even with rate: 0, unmapped levels should still be kept at 100%
+    it("should use rate as fallback for unmapped levels in per_level", () => {
+      const n = 5000;
       const log = createLog({
         strategy: "per_level",
-        rate: 0, // this only matters for default strategy
-        perLevel: {
-          trace: 0,
-        },
+        rate: 0.5, // unmapped → 50%
+        perLevel: { trace: 0 },
       });
-
       asyncContext.run({}, () => {
         const logger = log.child();
-        // info is not in perLevel, should be kept at 100%
-        logger.emitWideEvent({ message: "info", level: "info" });
+        for (let i = 0; i < n; i++) {
+          logger.emitWideEvent({ message: "info", level: "info" });
+        }
       });
-
-      expect(emittedLogs).toHaveLength(1);
-      expect(emittedLogs[0].level).toBe("info");
+      const rate = emittedLogs.length / n;
+      expect(rate).toBeGreaterThan(0.4);
+      expect(rate).toBeLessThan(0.6);
     });
 
     it("error/fatal in perLevel map are respected (can be dropped)", () => {

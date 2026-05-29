@@ -19,7 +19,7 @@ function shouldKeepEmission(
 ): boolean {
   if (strategy === "per_level" && perLevel) {
     const perRate = toRate(perLevel[level]);
-    // If level is not in perLevel map, fall back to rate for unmapped levels in per_level
+    // Unmapped levels → use rate as fallback
     if (perLevel[level] === undefined) {
       const r = toRate(rate);
       if (r === 1) return true;
@@ -40,8 +40,8 @@ function shouldKeepEmission(
 /**
  * Creates a sampling plugin that randomly drops log entries to control volume.
  *
- * "error" and "fatal" default to rate=1 (can be overridden via `perLevel` or callback unless explicitly
- * set in `perLevel`. Custom `shouldSample` callbacks can override this behavior.
+ * `error` and `fatal` default to a 100% keep rate. This can be overridden by
+ * explicitly setting their rate in `perLevel` or by providing a `shouldSample` callback.
  *
  * @example
  * ```typescript

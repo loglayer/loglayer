@@ -156,11 +156,11 @@ describe("samplingPlugin", () => {
     expect(logs).toHaveLength(0);
   });
 
-  it("per_level falls through to rate for unmapped levels", () => {
+  it("per_level: unmapped levels fall back to rate", () => {
     const n = 5000;
     const { log, logs } = createLog({
       strategy: "per_level",
-      rate: 0.5,
+      rate: 0.5, // unmapped → 50%
       perLevel: { trace: 0 },
     });
     for (let i = 0; i < n; i++) {

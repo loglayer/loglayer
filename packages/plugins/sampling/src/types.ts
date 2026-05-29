@@ -48,7 +48,7 @@ export interface SamplingConfig extends LogLayerPluginParams {
    * - `0.1` — ~10% of events kept
    * - `0` (or `false`) — keep 0% (all dropped for sample-able levels)
    * With `"default"` strategy this rate applies to all levels.
-   * With `"per_level"` strategy the rate applies if the level is also not present in the `perLevel` map.
+   * With `"per_level"` strategy the rate acts as a fallback for unmapped levels.
    * @default 1
    */
   rate?: boolean | number;
@@ -69,10 +69,11 @@ export interface SamplingConfig extends LogLayerPluginParams {
    * A custom sampling callback that receives log data and allows you to make
    * an informed keep/drop decision.
    *
-   * When provided, this callback is invoked and can override the default
-   * error/fatal exemption. Returning `false` will drop the event even at
-   * "error" or "fatal" levels. If only `shouldSample` is set (no `rate`),
-   * the callback acts as the sole gate.
+   * When provided, this callback completely replaces rate-based sampling and is
+   * the sole gate for keep/drop decisions. It can override the default error/fatal
+   * exemption. Returning `false` drops the event even at "error" or "fatal" levels.
+   * When both `shouldSample` and `rate`/`perLevel` are set, only the callback is
+   * consulted — `rate` and `perLevel` are ignored.
    *
    * **Note:** If the callback throws, the event is kept (fail-open).
    */

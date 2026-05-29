@@ -301,6 +301,7 @@ Other: HTTP, Log File Rotation, OpenTelemetry
 - Redaction: redact sensitive fields
 - Sprintf: printf-style string formatting
 - OpenTelemetry: add trace/span context
+- Sampling: randomly drop log entries
 - DataDog APM Trace Injector: inject DD trace IDs
 
 ## Documentation

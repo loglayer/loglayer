@@ -1355,6 +1355,7 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 
 ## Available Plugins
 
+- `@loglayer/plugin-sampling` - Sample log emissions to control volume with rate-based, per-level, or custom callback strategies
 - `@loglayer/plugin-filter` - Filter logs by patterns, regex, or JSON queries
 - `@loglayer/plugin-redaction` - Redact sensitive fields
 - `@loglayer/plugin-sprintf` - Printf-style string formatting

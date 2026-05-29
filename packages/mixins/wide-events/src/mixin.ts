@@ -27,7 +27,7 @@ function toRate(value: boolean | number | undefined): number {
 /**
  * Run rate-based sampling (default or per_level strategy).
  * Returns true if the rate check passes, false if dropped.
- * Always returns true for error/fatal levels.
+ * Returns true for error/fatal by default, unless their rate is explicitly set in `perLevel`.
  */
 function runRateSampling(
   level: string,
@@ -35,12 +35,20 @@ function runRateSampling(
   rate: boolean | number | undefined,
   perLevel?: Partial<Record<string, boolean | number>>,
 ): boolean {
+  // error/fatal exempt UNLESS explicitly set in perLevel
   if (EXEMPT_LEVELS.has(level) && perLevel?.[level] === undefined) {
     return true;
   }
 
   if (strategy === "per_level" && perLevel) {
     const perRate = toRate(perLevel[level]);
+    // Unmapped levels → use rate as fallback
+    if (perLevel[level] === undefined) {
+      const r = toRate(rate);
+      if (r === 1) return true;
+      if (r === 0) return false;
+      return Math.random() < r;
+    }
     if (perRate === 1) return true;
     if (perRate === 0) return false;
     return Math.random() < perRate;
