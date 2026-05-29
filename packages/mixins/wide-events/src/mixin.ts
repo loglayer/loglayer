@@ -35,7 +35,7 @@ function runRateSampling(
   rate: boolean | number | undefined,
   perLevel?: Partial<Record<string, boolean | number>>,
 ): boolean {
-  if (EXEMPT_LEVELS.has(level)) {
+  if (EXEMPT_LEVELS.has(level) && perLevel?.[level] === undefined) {
     return true;
   }
 
@@ -315,22 +315,21 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
     // Run custom callback sampling (now that data is available)
     if (samplingConfig?.shouldEmit) {
       // Custom callback can override error/fatal exemption — run it for all levels
-      // Run rate sampling if not already done
-      const ratePassed = runRateSampling(
-        level,
-        samplingConfig.strategy,
-        samplingConfig.rate,
-        samplingConfig.perLevel,
-      );
-      // Fail-open: if callback throws, keep the event
-      let callbackOk = true;
+      // Fail-open: if callback throws, keep everything (override rate check too)
       try {
-        callbackOk = samplingConfig.shouldEmit({ wideData: wideEventData, level });
+        const callbackOk = samplingConfig.shouldEmit({ wideData: wideEventData, level });
+        // Run rate sampling if callback passed
+        const ratePassed = runRateSampling(
+          level,
+          samplingConfig.strategy,
+          samplingConfig.rate,
+          samplingConfig.perLevel,
+        );
+        if (!ratePassed || !callbackOk) {
+          return;
+        }
       } catch {
-        // Callback threw — keep the event
-      }
-      if (!ratePassed || !callbackOk) {
-        return;
+        // Callback threw — fail-open: keep the event (fall through to emit)
       }
     }
 

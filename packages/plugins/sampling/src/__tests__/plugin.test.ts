@@ -96,12 +96,12 @@ describe("samplingPlugin", () => {
     expect(logs).toHaveLength(0);
   });
 
-  it("shouldSample: error levels bypass the callback", () => {
+  it("shouldSample: can override error/fatal exemption", () => {
     const { log, logs } = createLog({
-      shouldSample: () => false,
+      shouldSample: ({ level }) => level !== "error",
     });
-    log.error("error - always kept");
-    expect(logs).toHaveLength(1);
+    log.error("error - dropped");
+    expect(logs).toHaveLength(0);
   });
 
   it("shouldSample: if callback throws, keep the event (fail-open)", () => {
@@ -146,14 +146,14 @@ describe("samplingPlugin", () => {
     expect(logs).toHaveLength(0);
   });
 
-  it("per_level ignores error/fatal in perLevel map", () => {
+  it("per_level: error/fatal can be dropped via perLevel map", () => {
     const { log, logs } = createLog({
       strategy: "per_level",
       perLevel: { error: 0, fatal: 0 },
     });
-    log.error("error");
-    log.fatal("fatal");
-    expect(logs).toHaveLength(2);
+    log.error("error - dropped");
+    log.fatal("fatal - dropped");
+    expect(logs).toHaveLength(0);
   });
 
   it("per_level falls through to rate for unmapped levels", () => {

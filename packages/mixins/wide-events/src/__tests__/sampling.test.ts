@@ -264,13 +264,13 @@ describe("WideEventMixin - Sampling", () => {
       expect(emittedLogs[0].level).toBe("info");
     });
 
-    it("should ignore error/fatal in perLevel map", () => {
+    it("error/fatal in perLevel map are respected (can be dropped)", () => {
       const log = createLog({
         strategy: "per_level",
         perLevel: {
           trace: 1,
-          error: 0, // should be ignored — always kept
-          fatal: 0, // should be ignored — always kept
+          error: 0, // now respected — error dropped
+          fatal: 0, // now respected — fatal dropped
         },
       });
 
@@ -280,7 +280,7 @@ describe("WideEventMixin - Sampling", () => {
         logger.emitWideEvent({ message: "fatal", level: "fatal" });
       });
 
-      expect(emittedLogs).toHaveLength(2);
+      expect(emittedLogs).toHaveLength(0);
     });
 
     it("should snapshot the perLevel map at construction time", () => {
@@ -408,9 +408,9 @@ describe("WideEventMixin - Sampling", () => {
       expect(logs[0].level).toBe("info");
     });
 
-    it("should always keep error/fatal regardless of callback", () => {
+    it("shouldEmit callback can override error/fatal exemption", () => {
       const { log, ctx, logs } = createLogWithCapture({
-        shouldEmit: () => false, // always drop
+        shouldEmit: ({ level }) => level !== "error", // drop errors
       });
 
       ctx.run({}, () => {
@@ -421,8 +421,8 @@ describe("WideEventMixin - Sampling", () => {
       });
 
       expect(logs).toHaveLength(2);
-      expect(logs[0].level).toBe("error");
-      expect(logs[1].level).toBe("fatal");
+      expect(logs[0].level).toBe("fatal");
+      expect(logs[1].level).toBe("info");
     });
 
     it("should compose with rate sampling (both checks must pass)", () => {
@@ -547,7 +547,7 @@ describe("WideEventMixin - Sampling", () => {
       expect(emittedLogs[0].level).toBe("error");
     });
 
-    it("should keep error/fatal when only shouldEmit throws", () => {
+    it("should keep error/fatal when shouldEmit throws (fail-open overrides rate)", () => {
       const { log, ctx, logs } = createLogWithCapture({
         strategy: "per_level",
         perLevel: { trace: 1, error: 0, fatal: 0 },
@@ -563,7 +563,7 @@ describe("WideEventMixin - Sampling", () => {
         logger.emitWideEvent({ message: "fatal", level: "fatal" });
       });
 
-      // All kept: error/fatal exempt from everything, trace via fail-open
+      // All kept via fail-open overriding rate check
       expect(logs).toHaveLength(3);
     });
 

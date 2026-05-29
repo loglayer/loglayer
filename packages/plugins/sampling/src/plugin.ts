@@ -40,11 +40,12 @@ function shouldKeepEmission(
 /**
  * Creates a sampling plugin that randomly drops log entries to control volume.
  *
- * "error" and "fatal" levels are always kept regardless of the configured rate.
+ * "error" and "fatal" levels default to rate=1 (always kept) unless explicitly
+ * set in `perLevel`. Custom `shouldSample` callbacks can override this behavior.
  *
  * @example
  * ```typescript
- * // Keep ~10% of logs (excluding errors/fatals)
+ * // Keep ~10% of logs (errors/fatals still kept by default)
  * const config = samplingPlugin({ rate: 0.1 });
  *
  * // Per-level: sample debug at 1%, keep the rest
@@ -53,9 +54,15 @@ function shouldKeepEmission(
  *   perLevel: { trace: 0.01, debug: 0.1 },
  * });
  *
+ * // Drop errors too by explicitly setting error rate to 0
+ * const dropErrors = samplingPlugin({
+ *   strategy: "per_level",
+ *   perLevel: { error: 0, fatal: 0 },
+ * });
+ *
  * // Custom: only keep logs that have a userId
  * const custom = samplingPlugin({
- *   shouldSample: ({ wideData }) => !!wideData.userId,
+ *   shouldSample: ({ metadata }) => !!metadata?.userId,
  * });
  * ```
  */
@@ -69,12 +76,7 @@ export function samplingPlugin(config: SamplingConfig): LogLayerPlugin {
     id: config.id,
     disabled: config.disabled,
     shouldSendToLogger: (params: PluginShouldSendToLoggerParams): boolean => {
-      // error/fatal are always kept — checked first
-      if (EXEMPT_LEVELS.has(params.logLevel)) {
-        return true;
-      }
-
-      // Custom callback takes priority when provided
+      // Custom callback takes priority — can override error/fatal default exemption
       if (config.shouldSample) {
         const samplingParams: SamplingParams = {
           level: params.logLevel,
@@ -91,8 +93,8 @@ export function samplingPlugin(config: SamplingConfig): LogLayerPlugin {
         }
       }
 
-      // error/fatal are always kept when using rate-based sampling
-      if (EXEMPT_LEVELS.has(params.logLevel)) {
+      // error/fatal default to rate=1 unless explicitly set in perLevel
+      if (EXEMPT_LEVELS.has(params.logLevel) && perLevel?.[params.logLevel] === undefined) {
         return true;
       }
 
