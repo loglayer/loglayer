@@ -34,6 +34,20 @@ deno add npm:@loglayer/mixin-wide-events
 
 :::
 
+## TypeScript Setup
+
+To use this mixin with TypeScript, you must register the types by adding the mixin package to your `tsconfig.json` includes:
+
+```json
+{
+  "include": [
+    "./node_modules/@loglayer/mixin-wide-events"
+  ]
+}
+```
+
+This ensures TypeScript recognizes the mixin methods on your LogLayer instances.
+
 ## Why Wide Events?
 
 Wide events solve a common observability problem: when you have distributed systems with many log entries, it can be difficult to correlate all the data from a single operation. Wide events capture everything in one place, making it easy to:
