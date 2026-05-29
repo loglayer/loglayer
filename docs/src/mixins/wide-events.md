@@ -440,7 +440,7 @@ const mixin = createWideEventMixin({
     },
   },
 });
-// warn, error, fatal are kept at 100% automatically
+// error/fatal: kept by default (can be overridden). info/warn: unmapped → use `rate` (default: 100%)
 ```
 
 The `perLevel` map is **snapshotted at construction time** — mutating the object after

@@ -3,6 +3,7 @@
   "description": "Sample log emissions to control volume with rate-based or per-level strategies.",
   "version": "0.0.1",
   "type": "module",
+  "private": false,
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "exports": {
@@ -20,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/loglayer/loglayer.git",
+    "url": "git+https://github.com/loglayer/loglayer.git",
     "directory": "packages/plugins/sampling"
   },
   "author": "Theo Gravity <theo@suteki.nu>",
