@@ -107,7 +107,7 @@ describe("WideEventMixin - Sampling", () => {
       expect(emittedLogs).toHaveLength(0);
     });
 
-    it("shouldDefault keep error level (callback overrides rate=0)", () => {
+    it("should default keep error level (callback overrides rate=0)", () => {
       const log = createLog({ strategy: "default", rate: 0 });
       asyncContext.run({}, () => {
         const logger = log.child();

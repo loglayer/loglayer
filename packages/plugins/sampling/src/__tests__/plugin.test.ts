@@ -48,7 +48,7 @@ describe("samplingPlugin", () => {
 
   it("error levels are kept by default", () => {
     const { log, logs } = createLog({ rate: 0 });
-    log.error("fatal kept by default");
+    log.error("error kept by default");
     expect(logs).toHaveLength(1);
   });
 
