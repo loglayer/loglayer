@@ -16,18 +16,20 @@ If you need async data in context, resolve it first and then pass the result to 
 To create a custom context manager, you'll first need to install the base package:
 
 ::: code-group
-```bash [npm]
+
+```sh [npm]
 npm install @loglayer/context-manager
 ```
 
-```bash [yarn]
-yarn add @loglayer/context-manager
-```
-
-```bash [pnpm]
+```sh [pnpm]
 pnpm add @loglayer/context-manager
 ```
+
+```sh [yarn]
+yarn add @loglayer/context-manager
+```
 :::
+
 
 Then implement the `IContextManager` interface:
 

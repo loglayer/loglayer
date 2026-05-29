@@ -5,6 +5,8 @@ description: Send logs to the console with the LogLayer logging library
 
 # Console Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
+[![NPM Version](https://img.shields.io/npm/v/loglayer)](https://www.npmjs.com/package/loglayer)
+
 The simplest integration is with the built-in `console` object, which is available in both Node.js and browser environments.
 
 [Transport Source](https://github.com/loglayer/loglayer/blob/master/packages/core/loglayer/src/transports/ConsoleTransport.ts)

@@ -1,8 +1,13 @@
+---
+title: Wide Events Mixin for LogLayer
+description: Create comprehensive, self-contained log entries with wide events
+---
+
 # Wide Events Mixin <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
-[![npm version](https://img.shields.io/npm/v/@loglayer/mixin-wide-events.svg)](https://www.npmjs.com/package/@loglayer/mixin-wide-events)
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fmixin-wide-events)](https://www.npmjs.com/package/@loglayer/mixin-wide-events)
 
-[![Source](https://img.shields.io/badge/source-GitHub-blue)](https://github.com/loglayer/loglayer/tree/master/packages/mixins/wide-events)
+[Mixin Source](https://github.com/loglayer/loglayer/tree/master/packages/mixins/wide-events)
 
 The Wide Events Mixin adds functionality for creating comprehensive, self-contained log entries that capture an entire operation's context and data in a single emission. This pattern is sometimes called "canonical log lines" or "wide events."
 
@@ -22,23 +27,23 @@ For more context, see [Why Logging Sucks](https://loggingsucks.com/).
 
 ::: code-group
 
-```bash [npm]
+```sh [npm]
 npm install @loglayer/mixin-wide-events
 ```
 
-```bash [pnpm]
+```sh [pnpm]
 pnpm add @loglayer/mixin-wide-events
 ```
 
-```bash [yarn]
+```sh [yarn]
 yarn add @loglayer/mixin-wide-events
 ```
 
-```bash [bun]
+```sh [bun]
 bun add @loglayer/mixin-wide-events
 ```
 
-```bash [deno]
+```sh [deno]
 deno add npm:@loglayer/mixin-wide-events
 ```
 
@@ -58,7 +63,7 @@ To use this mixin with TypeScript, you must register the types by adding the mix
 
 This ensures TypeScript recognizes the mixin methods on your LogLayer instances.
 
-## Quick Start
+## Usage
 
 ### 1. Create the AsyncLocalStorage instance
 

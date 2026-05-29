@@ -5,6 +5,8 @@ description: Console-based structured logging transport with JSON output enabled
 
 # Structured Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
+[![NPM Version](https://img.shields.io/npm/v/loglayer)](https://www.npmjs.com/package/loglayer)
+
 A console-based transport with structured logging enabled by default. Unlike the [Console Transport](/transports/console), which requires manually configuring `messageField`, `levelField`, and `dateField`, the Structured Transport comes pre-configured with sensible defaults.
 
 [Transport Source](https://github.com/loglayer/loglayer/blob/master/packages/core/loglayer/src/transports/StructuredTransport.ts)

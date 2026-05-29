@@ -25,16 +25,16 @@ If you don't know what that is, then you'll want to use this plugin instead of t
 
 ::: code-group
 
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/plugin-opentelemetry
 ```
 
-```bash [yarn]
-yarn add loglayer @loglayer/plugin-opentelemetry
+```sh [pnpm]
+pnpm add loglayer @loglayer/plugin-opentelemetry
 ```
 
-```bash [pnpm]
-pnpm add loglayer @loglayer/plugin-opentelemetry
+```sh [yarn]
+yarn add loglayer @loglayer/plugin-opentelemetry
 ```
 
 :::
@@ -59,7 +59,7 @@ const logger = new LogLayer({
 });
 ```
 
-## Configuration
+## Configuration Options
 
 The plugin accepts the following configuration options:
 
@@ -121,20 +121,20 @@ This setup assumes you have Typescript configured and have `tsx` installed as a 
 
 ::: code-group
 
-```bash [npm]
+```sh [npm]
 npm install express loglayer @loglayer/plugin-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
   @opentelemetry/sdk-node
 ```
 
-```bash [yarn]
-yarn add express loglayer @loglayer/plugin-opentelemetry serialize-error \
+```sh [pnpm]
+pnpm add express loglayer @loglayer/plugin-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
   @opentelemetry/sdk-node
 ```
 
-```bash [pnpm]
-pnpm add express loglayer @loglayer/plugin-opentelemetry serialize-error \
+```sh [yarn]
+yarn add express loglayer @loglayer/plugin-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
   @opentelemetry/sdk-node
 ```

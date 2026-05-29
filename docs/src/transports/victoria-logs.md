@@ -18,15 +18,15 @@ _The code has been manually tested against a local VictoriaLogs instance._
 ## Installation
 
 ::: code-group
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/transport-victoria-logs serialize-error
 ```
 
-```bash [pnpm]
+```sh [pnpm]
 pnpm add loglayer @loglayer/transport-victoria-logs serialize-error
 ```
 
-```bash [yarn]
+```sh [yarn]
 yarn add loglayer @loglayer/transport-victoria-logs serialize-error
 ```
 :::

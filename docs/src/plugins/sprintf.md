@@ -20,18 +20,20 @@ etc. **It is recommended to only use string / boolean / number specifiers in you
 ## Installation
 
 ::: code-group
-```bash [npm]
+
+```sh [npm]
 npm install @loglayer/plugin-sprintf
 ```
 
-```bash [yarn]
-yarn add @loglayer/plugin-sprintf
-```
-
-```bash [pnpm]
+```sh [pnpm]
 pnpm add @loglayer/plugin-sprintf
 ```
+
+```sh [yarn]
+yarn add @loglayer/plugin-sprintf
+```
 :::
+
 
 ## Usage
 

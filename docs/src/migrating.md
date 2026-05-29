@@ -36,18 +36,20 @@ as the default context manager is already used when creating a new LogLayer inst
 The option `linkParentContext` has been removed. If you need this functionality, then use the [Linked Context Manager](/context-managers/linked):
 
 ::: code-group
-```bash [npm]
+
+```sh [npm]
 npm install @loglayer/context-manager-linked
 ```
 
-```bash [yarn]
-yarn add @loglayer/context-manager-linked
-```
-
-```bash [pnpm]
+```sh [pnpm]
 pnpm add @loglayer/context-manager-linked
 ```
+
+```sh [yarn]
+yarn add @loglayer/context-manager-linked
+```
 :::
+
 
 Then, use the plugin like this:
 ```typescript

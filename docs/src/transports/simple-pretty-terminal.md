@@ -20,13 +20,15 @@ The Simple Pretty Terminal does not support keyboard navigation, search / filter
 ## Installation
 
 ::: code-group
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/transport-simple-pretty-terminal
 ```
-```bash [pnpm]
+
+```sh [pnpm]
 pnpm add loglayer @loglayer/transport-simple-pretty-terminal
 ```
-```bash [yarn]
+
+```sh [yarn]
 yarn add loglayer @loglayer/transport-simple-pretty-terminal
 ```
 :::

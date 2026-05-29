@@ -28,15 +28,15 @@ This transport was 99% vibe-coded, with manual testing against [VictoriaLogs](vi
 ## Installation
 
 ::: code-group
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/transport-http serialize-error
 ```
 
-```bash [pnpm]
+```sh [pnpm]
 pnpm add loglayer @loglayer/transport-http serialize-error
 ```
 
-```bash [yarn]
+```sh [yarn]
 yarn add loglayer @loglayer/transport-http serialize-error
 ```
 :::

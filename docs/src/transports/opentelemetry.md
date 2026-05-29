@@ -27,16 +27,16 @@ which is licensed under Apache 2.0.
 
 ::: code-group
 
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/transport-opentelemetry serialize-error
 ```
 
-```bash [yarn]
-yarn add loglayer @loglayer/transport-opentelemetry serialize-error
+```sh [pnpm]
+pnpm add loglayer @loglayer/transport-opentelemetry serialize-error
 ```
 
-```bash [pnpm]
-pnpm add loglayer @loglayer/transport-opentelemetry serialize-error
+```sh [yarn]
+yarn add loglayer @loglayer/transport-opentelemetry serialize-error
 ```
 
 :::
@@ -120,22 +120,22 @@ This setup assumes you have Typescript configured and have `tsx` installed as a 
 
 ::: code-group
 
-```bash [npm]
+```sh [npm]
 npm install express loglayer @loglayer/transport-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
   @opentelemetry/sdk-logs @opentelemetry/sdk-node \
   @opentelemetry/sdk-trace-node @opentelemetry/semantic-conventions
 ```
 
-```bash [yarn]
-yarn add express loglayer @loglayer/transport-opentelemetry serialize-error \
+```sh [pnpm]
+pnpm add express loglayer @loglayer/transport-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
   @opentelemetry/sdk-logs @opentelemetry/sdk-node \
   @opentelemetry/sdk-trace-node @opentelemetry/semantic-conventions
 ```
 
-```bash [pnpm]
-pnpm add express loglayer @loglayer/transport-opentelemetry serialize-error \
+```sh [yarn]
+yarn add express loglayer @loglayer/transport-opentelemetry serialize-error \
   @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http \
   @opentelemetry/sdk-logs @opentelemetry/sdk-node \
   @opentelemetry/sdk-trace-node @opentelemetry/semantic-conventions

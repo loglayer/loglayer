@@ -21,19 +21,19 @@ First, install LogLayer, the wide events mixin, and Express:
 
 ::: code-group
 
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/mixin-wide-events express
 ```
 
-```bash [pnpm]
+```sh [pnpm]
 pnpm add loglayer @loglayer/mixin-wide-events express
 ```
 
-```bash [yarn]
+```sh [yarn]
 yarn add loglayer @loglayer/mixin-wide-events express
 ```
 
-```bash [bun]
+```sh [bun]
 bun add loglayer @loglayer/mixin-wide-events express
 ```
 

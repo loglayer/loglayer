@@ -7,7 +7,7 @@ description: Add Datadog metrics functionality to LogLayer using the datadog-met
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fmixin-datadog-http-metrics)](https://www.npmjs.com/package/@loglayer/mixin-datadog-http-metrics)
 
-[![Source](https://img.shields.io/badge/source-GitHub-blue)](https://github.com/loglayer/loglayer/tree/master/packages/mixins/datadog-http-metrics)
+[Mixin Source](https://github.com/loglayer/loglayer/tree/master/packages/mixins/datadog-http-metrics)
 
 Adds Datadog metrics functionality to the [LogLayer](https://loglayer.dev) logging library using [datadog-metrics](https://github.com/dbader/node-datadog-metrics). The mixin provides a fluent builder API for sending metrics to Datadog via HTTP through a `ddStats` property on LogLayer instances.
 
@@ -17,16 +17,16 @@ Unlike the [Hot-Shots mixin](/mixins/hot-shots) which sends metrics via StatsD/U
 
 ::: code-group
 
-```bash [npm]
+```sh [npm]
 npm install @loglayer/mixin-datadog-http-metrics
 ```
 
-```bash [yarn]
-yarn add @loglayer/mixin-datadog-http-metrics
+```sh [pnpm]
+pnpm add @loglayer/mixin-datadog-http-metrics
 ```
 
-```bash [pnpm]
-pnpm add @loglayer/mixin-datadog-http-metrics
+```sh [yarn]
+yarn add @loglayer/mixin-datadog-http-metrics
 ```
 
 :::
@@ -171,11 +171,11 @@ await mockLogger.ddStats.flush(); // resolves immediately
 
 For more information on testing with MockLogLayer, see the [Unit Testing documentation](/logging-api/unit-testing).
 
-## Configuration
+## Configuration Options
 
 The `datadogMetricsMixin` function accepts a configuration object with all options from the `BufferedMetricsLogger` class, or `null` for no-op mode.
 
-### Options
+### Optional Parameters
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|

@@ -23,18 +23,20 @@ This package is included with the `loglayer` package, so you don't need to insta
 It is, however, available as a standalone package:
 
 ::: code-group
-```bash [npm]
+
+```sh [npm]
 npm install @loglayer/log-level-manager
 ```
 
-```bash [yarn]
-yarn add @loglayer/log-level-manager
-```
-
-```bash [pnpm]
+```sh [pnpm]
 pnpm add @loglayer/log-level-manager
 ```
+
+```sh [yarn]
+yarn add @loglayer/log-level-manager
+```
 :::
+
 
 ## Usage
 

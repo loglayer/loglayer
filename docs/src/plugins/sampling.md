@@ -1,16 +1,33 @@
-# Sampling Plugin <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server"/> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
+---
+title: Sampling Plugin for LogLayer
+description: Randomly drop log entries to control log volume and cost
+---
 
-[![npm version](https://img.shields.io/npm/v/@loglayer/plugin-sampling.svg)](https://www.npmjs.com/package/@loglayer/plugin-sampling)
+# Sampling Plugin <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
-[![Source](https://img.shields.io/badge/source-GitHub-blue)](https://github.com/loglayer/loglayer/tree/master/packages/plugins/sampling)
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fplugin-sampling)](https://www.npmjs.com/package/@loglayer/plugin-sampling)
+
+[Plugin Source](https://github.com/loglayer/loglayer/tree/master/packages/plugins/sampling)
 
 The Sampling Plugin lets you randomly drop log entries to control log volume and cost. It works with all log levels and supports rate-based, per-level, or custom callback strategies.
 
 ## Installation
 
-```bash
+::: code-group
+
+```sh [npm]
 npm install @loglayer/plugin-sampling
 ```
+
+```sh [pnpm]
+pnpm add @loglayer/plugin-sampling
+```
+
+```sh [yarn]
+yarn add @loglayer/plugin-sampling
+```
+
+:::
 
 ## Configuration Options
 

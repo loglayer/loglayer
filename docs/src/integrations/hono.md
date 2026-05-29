@@ -81,7 +81,7 @@ const app = new Hono<AppEnv>();
 ```
 :::
 
-## Configuration
+## Configuration Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|

@@ -1,23 +1,32 @@
+---
+title: Sentry Transport for LogLayer
+description: Send structured logs to Sentry with the LogLayer logging library
+---
+
 # Sentry Transport <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
-[![npm version](https://img.shields.io/npm/v/@loglayer/transport-sentry.svg)](https://www.npmjs.com/package/@loglayer/transport-sentry)
+[![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Ftransport-sentry)](https://www.npmjs.com/package/@loglayer/transport-sentry)
 [Transport Source](https://github.com/loglayer/loglayer/tree/master/packages/transports/sentry)
 
 The Sentry transport for LogLayer sends structured logs to Sentry using the Sentry SDK's logger API. This transport integrates seamlessly with Sentry's structured logging features and supports all Sentry log levels.
 
 ## Installation
 
-```bash
+::: code-group
+
+```sh [npm]
 npm install @loglayer/transport-sentry serialize-error <sentry-sdk>
 ```
 
-```bash
+```sh [pnpm]
+pnpm add @loglayer/transport-sentry serialize-error <sentry-sdk>
+```
+
+```sh [yarn]
 yarn add @loglayer/transport-sentry serialize-error <sentry-sdk>
 ```
 
-```bash
-pnpm add @loglayer/transport-sentry serialize-error <sentry-sdk>
-```
+:::
 
 Replace `<sentry-sdk>` with the appropriate Sentry SDK for your platform:
 
@@ -62,7 +71,7 @@ const log = new LogLayer({
 });
 ```
 
-## Configuration
+## Configuration Options
 
 ### Required Parameters
 

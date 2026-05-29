@@ -15,16 +15,16 @@ or [JSON Queries](https://jsonquerylang.org/).
 ## Installation
 
 ::: code-group
-```bash [npm]
+```sh [npm]
 npm install @loglayer/plugin-filter
 ```
 
-```bash [yarn]
-yarn add @loglayer/plugin-filter
+```sh [pnpm]
+pnpm add @loglayer/plugin-filter
 ```
 
-```bash [pnpm]
-pnpm add @loglayer/plugin-filter
+```sh [yarn]
+yarn add @loglayer/plugin-filter
 ```
 :::
 
@@ -45,16 +45,16 @@ const levelFilter = filterPlugin({
 });
 ```
 
-### Configuration
+## Configuration Options
 
-The plugin accepts the following configuration options:
+### Optional Parameters
 
-| Option | Type | Description                                                                                                                       |
-|--------|------|-----------------------------------------------------------------------------------------------------------------------------------|
-| `messages` | `Array<string \| RegExp>` | Optional. Array of string patterns or regular expressions to match against log messages                                           |
-| `queries` | `string[]` | Optional. Array of JSON queries to filter logs. A JSON Query `filter()` is applied, which each item being part of an OR condition |
-| `debug` | `boolean` | Optional. Enable debug mode for troubleshooting                                                                                   |
-| `disabled` | `boolean` | Optional. Disable the plugin                                                                                                      |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `messages` | `Array<string \| RegExp>` | - | Array of string patterns or regular expressions to match against log messages |
+| `queries` | `string[]` | - | Array of JSON queries to filter logs. A JSON Query `filter()` is applied, with each item being part of an OR condition |
+| `debug` | `boolean` | `false` | Enable debug mode for troubleshooting |
+| `disabled` | `boolean` | `false` | Disable the plugin |
 
 ## Message Pattern Matching
 

@@ -20,18 +20,20 @@ This Context Manager was 99% vibe-coded.
 ## Installation
 
 ::: code-group
-```bash [npm]
+
+```sh [npm]
 npm install @loglayer/context-manager-isolated
 ```
 
-```bash [yarn]
-yarn add @loglayer/context-manager-isolated
-```
-
-```bash [pnpm]
+```sh [pnpm]
 pnpm add @loglayer/context-manager-isolated
 ```
+
+```sh [yarn]
+yarn add @loglayer/context-manager-isolated
+```
 :::
+
 
 ## Usage
 

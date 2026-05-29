@@ -16,18 +16,20 @@ This means that changes to the context in the parent / child / child of child lo
 ## Installation
 
 ::: code-group
-```bash [npm]
+
+```sh [npm]
 npm install @loglayer/context-manager-linked
 ```
 
-```bash [yarn]
-yarn add @loglayer/context-manager-linked
-```
-
-```bash [pnpm]
+```sh [pnpm]
 pnpm add @loglayer/context-manager-linked
 ```
+
+```sh [yarn]
+yarn add @loglayer/context-manager-linked
+```
 :::
+
 
 ## Usage
 

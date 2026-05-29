@@ -22,15 +22,15 @@ Ships logs to [Cribl Stream](https://cribl.io) via the [HTTP/S Bulk API source](
 ## Installation
 
 ::: code-group
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/transport-cribl-http serialize-error
 ```
 
-```bash [pnpm]
+```sh [pnpm]
 pnpm add loglayer @loglayer/transport-cribl-http serialize-error
 ```
 
-```bash [yarn]
+```sh [yarn]
 yarn add loglayer @loglayer/transport-cribl-http serialize-error
 ```
 :::

@@ -55,10 +55,6 @@ log.metadataOnly({
 }, LogLevel.warn)
 ```
 
-::: info Passing empty metadata
-Passing an empty value (`null`, `undefined`, or an empty object) to `withMetadata` will not add any metadata or call related plugins.
-:::
-
 ## Structuring Metadata
 
 ### Using a Dedicated Metadata Field

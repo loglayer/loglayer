@@ -14,15 +14,15 @@ The New Relic transport allows you to send logs directly to New Relic's [Log API
 ## Installation
 
 ::: code-group
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/transport-new-relic serialize-error
 ```
 
-```bash [pnpm]
+```sh [pnpm]
 pnpm add loglayer @loglayer/transport-new-relic serialize-error
 ```
 
-```bash [yarn]
+```sh [yarn]
 yarn add loglayer @loglayer/transport-new-relic serialize-error
 ```
 :::

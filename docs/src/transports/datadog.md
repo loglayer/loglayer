@@ -37,7 +37,7 @@ yarn add loglayer @loglayer/transport-datadog serialize-error
 
 :::
 
-## Usage Example
+## Setup
 
 <!--@include: ./_partials/datadog-error-tracking-tip.md-->
 
@@ -71,7 +71,7 @@ const log = new LogLayer({
 })
 ```
 
-## Transport Configuration
+## Configuration Options
 
 ### Required Parameters
 
