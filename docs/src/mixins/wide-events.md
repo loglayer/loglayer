@@ -1,4 +1,4 @@
-# Wide Events Mixin <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
+# Wide Events Mixin <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
 [![npm version](https://img.shields.io/npm/v/@loglayer/mixin-wide-events.svg)](https://www.npmjs.com/package/@loglayer/mixin-wide-events)
 
@@ -33,6 +33,20 @@ deno add npm:@loglayer/mixin-wide-events
 ```
 
 :::
+
+## TypeScript Setup
+
+To use this mixin with TypeScript, you must register the types by adding the mixin package to your `tsconfig.json` includes:
+
+```json
+{
+  "include": [
+    "./node_modules/@loglayer/mixin-wide-events"
+  ]
+}
+```
+
+This ensures TypeScript recognizes the mixin methods on your LogLayer instances.
 
 ## Why Wide Events?
 
@@ -105,7 +119,7 @@ getLogger().emitWideEvent({ message: "Order processed" });
 | `wideEventField` | `string` | `undefined` | Field name to nest all wide event data under. When undefined, data is flattened at root level. |
 | `errorField` | `string` | `error`/`errors` | Field name for error data. `error` in single mode, `errors` in array mode. |
 | `errorsAsArray` | `boolean` | `false` | When true, errors are collected as an array. Each call to `withWideEventError()` appends. |
-| `sampling` | `WideEventSamplingConfig` | `undefined` | Sampling configuration to drop wide events at the configured rate. See [Sampling](#sampling) below. |
+| `sampling` | `WideEventSamplingConfig` | `undefined` | Sampling configuration to drop wide events at the configured `rate`. See [Sampling](#sampling) below. |
 
 ## API
 
@@ -280,7 +294,7 @@ logger.emitWideEvent({ message: "test" });
 
 `withMetadata()` and `withWideEvents()` serve different purposes:
 
-- **`withMetadata()`** - Adds metadata to an immediate log entry (not accumulated into wide events)
+- **`withMetadata()`** - Adds `metadata` to an immediate log entry (not accumulated into wide events)
 - **`withWideEvents()`** - Accumulates data for the final wide event emission
 
 ```typescript
@@ -362,13 +376,20 @@ res.on("finish", () => {
 ## Sampling
 
 Wide event sampling lets you randomly drop wide event emissions to control log volume and cost.
-"error" and "fatal" levels are **always kept** (100% sampled) — they are excluded from sampling
-regardless of the configured rate.
+"error" and "fatal" default to a 100% keep `rate`, but can be overridden by
+setting `perLevel` rates or using the `shouldEmit` callback.
+
+### Evaluation Order
+
+1. **`shouldEmit` callback** (if set): Inspects `wideData` + `level`. Returns `true` → kept, `false` → dropped. Throws → kept (fail-open). **Then** runs `rate` check too — **BOTH must pass.**
+2. **`error`/`fatal` default to 100%**: Kept by default unless explicitly mapped in `perLevel`.
+3. **`per_level` strategy**: Checks `perLevel` map → unmapped → `rate`.
+4. **`default` strategy**: Uses `rate` for all non-error/fatal levels.
 
 ### Quick Start
 
 ```typescript
-// Keep ~10% of wide events (errors and fatals always kept)
+// Keep ~10% of wide events (errors and fatals default to 100%)
 const mixin = createWideEventMixin({
   asyncContext,
   sampling: {
@@ -380,9 +401,9 @@ const mixin = createWideEventMixin({
 
 ### Sampling Strategies
 
-#### `default` — single rate
+#### `default` — single `rate`
 
-A single rate applies to all non-error/fatal levels.
+A single `rate` applies to all non-error/fatal levels.
 
 ```typescript
 const mixin = createWideEventMixin({
@@ -405,7 +426,7 @@ When `rate` is `0` (or `false`), all sample-able events are dropped.
 
 #### `per_level` — per-level rates
 
-Set independent rates per log level. Levels not in the map are kept at 100%.
+Set independent rates per log level. Levels not in the map fall back to `rate`.
 
 ```typescript
 const mixin = createWideEventMixin({
@@ -419,7 +440,7 @@ const mixin = createWideEventMixin({
     },
   },
 });
-// warn, error, fatal are kept at 100% automatically
+// error/fatal: kept by default (can be overridden). info/warn: unmapped → use `rate` (default: 100%)
 ```
 
 The `perLevel` map is **snapshotted at construction time** — mutating the object after
@@ -430,9 +451,9 @@ calling `createWideEventMixin()` has no effect.
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `strategy` | `"default"` \| `"per_level"` | `"default"` | How sampling rates are applied. |
-| `rate` | `boolean` \| `number` | `1` | Single rate for `default` strategy. |
+| `rate` | `boolean` \| `number` | `1` | Single `rate` for `default` strategy; with `"per_level"` acts as fallback for unmapped levels. |
 | `perLevel` | `Partial<Record<LogLevelType, boolean \| number>>` | `undefined` | Per-level rates for `per_level` strategy. |
-| `shouldEmit` | `(params: { wideData, level }) => boolean` | `undefined` | Custom callback that receives the accumulated wide event data and log level. Error/fatal levels always bypass this callback. |
+| `shouldEmit` | `(params: { wideData, level }) => boolean` | `undefined` | Custom callback that receives the accumulated wide event data and log level. Can override the default error/fatal exemption by returning `false`. |
 | `emitLevel` | `LogLevelType` | `undefined` | Override the default emit level when no explicit `level` is passed to `emitWideEvent()`. |
 
 ### Custom Sampling Function
@@ -451,7 +472,7 @@ const mixin = createWideEventMixin({
 });
 ```
 
-You can compose the callback with rate-based sampling — both checks must pass:
+You can compose the callback with `rate`-based sampling — both checks must pass:
 
 ```typescript
 const mixin = createWideEventMixin({
@@ -464,7 +485,7 @@ const mixin = createWideEventMixin({
 });
 ```
 
-**Note:** "error" and "fatal" levels always bypass `shouldEmit` — they are emitted regardless of what the callback returns.
+**Note:** "error" and "fatal" default to a 100% keep `rate`, but can be overridden by returning `false` from `shouldEmit` or by explicitly setting their `rate` in `perLevel`.
 
 ### What Gets Sampled
 

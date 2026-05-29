@@ -9,9 +9,13 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## May 28, 2026
 
+`@loglayer/plugin-sampling`:
+
+- **New Sampling plugin**: Randomly drop log entries to control log volume and cost. Supports rate-based sampling, per-level rates, and custom callback strategies. `error` and `fatal` levels default to 100% (can be overridden via `perLevel` or callback).
+
 `@loglayer/mixin-wide-events`:
 
-- **Sampling support**: The mixin can now randomly drop wide event emissions to control log volume and cost, with `"error"` and `"fatal"` levels always kept. Custom `shouldEmit` callbacks can filter by inspecting accumulated wide event data:
+- **Sampling support**: The mixin can now randomly drop wide event emissions to control log volume and cost, with `"error"` and `"fatal"` levels defaulting to 100% (can be overridden via `perLevel` or callback). Custom `shouldEmit` callbacks can filter by inspecting accumulated wide event data:
 
 ```typescript
 // Rate-based sampling
@@ -19,7 +23,7 @@ createWideEventMixin({
   asyncContext,
   sampling: {
     strategy: "default",    // default | per_level
-    rate: 0.1,              // ~10% kept (error/fatal always 100%)
+    rate: 0.1,              // ~10% kept (error/fatal default to 100%)
   },
 });
 
@@ -126,12 +130,12 @@ If you are using group-based routing, you will need to update all your loglayer 
 
 `v9.0.1`:
 
-- Log methods now return `void` by default instead of `void | Promise<void>`. Only when async lazy values are present in metadata do log methods return `Promise<void>`. This fixes [`@typescript-eslint/no-floating-promises`](https://typescript-eslint.io/rules/no-floating-promises/) lint errors for users not using async lazy.
+- Log methods now return `void` by default instead of `void | Promise<void>`. Only when async lazy values are present in `metadata` do log methods return `Promise<void>`. This fixes [`@typescript-eslint/no-floating-promises`](https://typescript-eslint.io/rules/no-floating-promises/) lint errors for users not using async lazy.
 
 `v9`:
 
-- Added [`lazy()` function](/logging-api/lazy-evaluation) for dynamic context and metadata evaluation. Wrap any callback with `lazy()` to defer its evaluation until log time — the callback is only invoked when the log level is enabled, avoiding unnecessary computation for disabled log levels. This is useful for expensive operations (like serializing large objects) and for values that change between log calls (like request IDs or memory usage). Adapted from [LogTape's lazy evaluation](https://logtape.org/manual/lazy). Thank you to the LogTape team for answering questions around its implementation!
-- `lazy()` supports [async callbacks](/logging-api/lazy-evaluation#async-lazy-evaluation) in metadata for values that require asynchronous operations (database queries, API calls, async storage). When async lazy values are present in metadata, log methods return `Promise<void>` so you can `await` the log call to ensure values are resolved before dispatch. Async lazy is not supported in context.
+- Added [`lazy()` function](/logging-api/lazy-evaluation) for dynamic context and `metadata` evaluation. Wrap any callback with `lazy()` to defer its evaluation until log time — the callback is only invoked when the log level is enabled, avoiding unnecessary computation for disabled log levels. This is useful for expensive operations (like serializing large objects) and for values that change between log calls (like request IDs or memory usage). Adapted from [LogTape's lazy evaluation](https://logtape.org/manual/lazy). Thank you to the LogTape team for answering questions around its implementation!
+- `lazy()` supports [async callbacks](/logging-api/lazy-evaluation#async-lazy-evaluation) in `metadata` for values that require asynchronous operations (database queries, API calls, async storage). When async lazy values are present in metadata, log methods return `Promise<void>` so you can `await` the log call to ensure values are resolved before dispatch. Async lazy is not supported in context.
 - `getContext()` now resolves lazy values by default. Use `getContext({ raw: true })` to get the raw lazy wrappers.
 - Lazy evaluation [error handling](/logging-api/lazy-evaluation#error-handling): failed lazy callbacks now replace the value with `"[LazyEvalError]"`, still send the original log, and emit a separate error-level entry describing the failure. The `LAZY_EVAL_ERROR` constant is exported for programmatic detection.
 - Added `LogLevelPriority` and `LogLevelPriorityToNames` exports for mapping between log levels and their numeric priority values.
@@ -479,8 +483,8 @@ Thanks to [@Eptagone](https://github.com/Eptagone) for the following:
   - See [Basic Logging documentation](https://loglayer.dev/logging-api/basic-logging.html#raw-logging) for usage examples
 
 - Fixed bug where `errorFieldInMetadata` option was not working correctly
-  - Error objects were not being placed in metadata fields when `errorFieldInMetadata` was set to true
-  - Now properly places errors in metadata fields as specified by the configuration
+  - Error objects were not being placed in `metadata` fields when `errorFieldInMetadata` was set to true
+  - Now properly places errors in `metadata` fields as specified by the configuration
 
 ## Oct 6, 2025
 
@@ -524,7 +528,7 @@ For more information on this parameter, see the [tslog transport documentation](
 
 Thanks to [@osamaqarem](https://github.com/osamaqarem) for the following:
 
-- Add `rootLevelMetadataFields` config for specifying `LogEntry` metadata using `withMetadata()` / `withContext()`
+- Add `rootLevelMetadataFields` config for specifying `LogEntry` `metadata` using `withMetadata()` / `withContext()`
 - Fix type error when passing a `LogSync` instance
 
 ## Sept 7, 2025
@@ -568,7 +572,7 @@ Added the new [Isolated Context Manager](/context-managers/isolated) - a context
 
 ## June 30, 2025
 
-- `@loglayer/transport-simple-pretty-terminal`: Fixes a bug where in `expanded` mode, empty lines were being printed when no metadata is being used with a log entry
+- `@loglayer/transport-simple-pretty-terminal`: Fixes a bug where in `expanded` mode, empty lines were being printed when no `metadata` is being used with a log entry
 
 ## June 23, 2025
 

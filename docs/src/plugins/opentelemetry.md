@@ -63,10 +63,6 @@ const logger = new LogLayer({
 
 The plugin accepts the following configuration options:
 
-### Required Parameters
-
-None - all parameters are optional.
-
 ### Optional Parameters
 
 | Name | Type | Default | Description |

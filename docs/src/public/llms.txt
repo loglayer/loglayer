@@ -301,6 +301,7 @@ Other: HTTP, Log File Rotation, OpenTelemetry
 - Redaction: redact sensitive fields
 - Sprintf: printf-style string formatting
 - OpenTelemetry: add trace/span context
+- Sampling: randomly drop log entries
 - DataDog APM Trace Injector: inject DD trace IDs
 
 ## Documentation
@@ -327,7 +328,7 @@ Other: HTTP, Log File Rotation, OpenTelemetry
 - [Context Managers](https://loglayer.dev/context-managers/): Customize context inheritance behavior
 - [Log Level Managers](https://loglayer.dev/log-level-managers/): Customize log level behavior
 - [Mixins](https://loglayer.dev/mixins/): Extend LogLayer with custom methods
-  - [Wide Events](https://loglayer.dev/mixins/wide-events): Accumulate data across async boundaries and emit as single log entry; supports configurable sampling (default/per-level) with error/fatal always kept at 100%
+  - [Wide Events](https://loglayer.dev/mixins/wide-events): Accumulate data across async boundaries and emit as single log entry; supports configurable sampling (default/per-level) with error/fatal defaulting to 100% (can be overridden)
   - [Hot-Shots](https://loglayer.dev/mixins/hot-shots): Emit StatsD/dogstatsd metrics from log entries
   - [Datadog HTTP Metrics](https://loglayer.dev/mixins/datadog-http-metrics): Send metrics to Datadog HTTP endpoint
 - [ElysiaJS Integration](https://loglayer.dev/integrations/elysia): ElysiaJS plugin with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering

@@ -1355,6 +1355,7 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 
 ## Available Plugins
 
+- `@loglayer/plugin-sampling` - Sample log emissions to control volume with rate-based, per-level, or custom callback strategies
 - `@loglayer/plugin-filter` - Filter logs by patterns, regex, or JSON queries
 - `@loglayer/plugin-redaction` - Redact sensitive fields
 - `@loglayer/plugin-sprintf` - Printf-style string formatting
@@ -1363,7 +1364,7 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 
 ## Available Mixins
 
-- `@loglayer/mixin-wide-events` - Accumulate telemetry across async boundaries and emit as a single log entry (canonical log line). Supports configurable sampling (`rate` or `perLevel`) with `error`/`fatal` always kept at 100%.
+- `@loglayer/mixin-wide-events` - Accumulate telemetry across async boundaries and emit as a single log entry (canonical log line). Supports configurable sampling (`rate` or `perLevel`) with `error`/`fatal` defaulting to 100% (can be overridden).
 - `@loglayer/mixin-hot-shots` - Hot-Shots (StatsD) metrics
 
 ## Available Context Managers

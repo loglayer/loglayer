@@ -22,25 +22,25 @@ export interface WideEventSamplingParams {
 /**
  * Sampling strategy for wide events.
  *
- * - `"default"` — a single `rate` applies to all non-error levels.
+ * - `"default"` — a single `rate` applies to all non-error/fatal levels.
  * - `"per_level"` — per-level rates keyed by LogLevelType; levels not in the
- *   map are kept unconditionally.
+ *   map use `rate` as a fallback.
  */
 export type WideEventSamplingStrategy = "default" | "per_level";
 
 /**
  * Configuration for sampling wide event emissions.
  *
- * "error" and "fatal" levels are always kept (100% sampled) regardless of
- * the configured rate.
+ * "error" and "fatal" levels default to a 100% keep rate, but can be
+ * overridden by setting `perLevel` rates or via `shouldEmit`.
  */
 export interface WideEventSamplingConfig {
   /**
    * The sampling strategy.
    *
-   * - `"default"` — a single `rate` applies to all non-error levels.
+   * - `"default"` — a single `rate` applies to all non-error/fatal levels.
    * - `"per_level"` — per-level rates from the `perLevel` map; levels not in
-   *   the map are kept at 100%.
+   *   the map use `rate` as a fallback.
    *
    * @default "default"
    */
@@ -55,8 +55,7 @@ export interface WideEventSamplingConfig {
    *
    * With `"default"` strategy this rate applies to all non-error/fatal levels.
    * With `"per_level"` strategy this field is **ignored** — unmapped levels
-   * default to a fill for levels not present
-   * in the `perLevel` map.
+   * default to a 100% keep rate.
    *
    * @default 1
    */
@@ -65,10 +64,11 @@ export interface WideEventSamplingConfig {
   /**
    * Per-level sampling rates when strategy is `"per_level"`.
    * Keys are log level strings (e.g. `"trace"`, `"info"`, `"warn"`).
-   * Levels not listed are kept at 100%.
+   * Levels not listed use `rate` as a fallback.
    *
-   * **Important:** "error" and "fatal" are always kept (100%) — values
-   * for those keys are silently ignored.
+   * **Important:** "error" and "fatal" default to a 100% keep rate, but can be
+   * explicitly overridden by setting their rate in `perLevel` or using a
+   * `shouldEmit` callback.
    *
    * The map is snapshotted at construction time; mutating it afterward has
    * no effect.
@@ -98,8 +98,8 @@ export interface WideEventSamplingConfig {
    * returns `true`. If only `shouldEmit` is set (no `rate`), the callback
    * acts as the sole gate.
    *
-   * **Note:** "error" and "fatal" levels are always emitted regardless of
-   * what this callback returns.
+   * **Note:** "error" and "fatal" default to a 100% keep rate, but can be
+   * overridden by returning `false` from this callback.
    *
    * @example
    * ```ts
@@ -175,7 +175,8 @@ export interface WideEventMixinOptions {
    * When provided, the mixin will randomly decide whether to emit or skip wide
    * events based on the configured rate(s).
    *
-   * "error" and "fatal" levels are always emitted (100% sampled).
+   * "error" and "fatal" default to a 100% keep rate, but can be overridden
+   * via `perLevel` rates or the `shouldEmit` callback.
    *
    * @example
    * // Keep ~10% of wide events (excluding errors/fatals)

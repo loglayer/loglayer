@@ -8,7 +8,7 @@ import {
 import type { EmitWideEventConfig, WideEventMixinOptions, WideEventSamplingConfig } from "./types.js";
 
 /**
- * Log levels that are never sampled — always kept at 100%.
+ * Log levels that default to rate=1 (error/fatal) — can be overridden via `perLevel` or callback.
  */
 const EXEMPT_LEVELS = new Set(["error", "fatal"]);
 
@@ -27,7 +27,7 @@ function toRate(value: boolean | number | undefined): number {
 /**
  * Run rate-based sampling (default or per_level strategy).
  * Returns true if the rate check passes, false if dropped.
- * Always returns true for error/fatal levels.
+ * Returns true for error/fatal by default, unless their rate is explicitly set in `perLevel`.
  */
 function runRateSampling(
   level: string,
@@ -35,12 +35,20 @@ function runRateSampling(
   rate: boolean | number | undefined,
   perLevel?: Partial<Record<string, boolean | number>>,
 ): boolean {
-  if (EXEMPT_LEVELS.has(level)) {
+  // error/fatal exempt UNLESS explicitly set in perLevel
+  if (EXEMPT_LEVELS.has(level) && perLevel?.[level] === undefined) {
     return true;
   }
 
   if (strategy === "per_level" && perLevel) {
     const perRate = toRate(perLevel[level]);
+    // Unmapped levels → use rate as fallback
+    if (perLevel[level] === undefined) {
+      const r = toRate(rate);
+      if (r === 1) return true;
+      if (r === 0) return false;
+      return Math.random() < r;
+    }
     if (perRate === 1) return true;
     if (perRate === 0) return false;
     return Math.random() < perRate;
@@ -314,25 +322,22 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
 
     // Run custom callback sampling (now that data is available)
     if (samplingConfig?.shouldEmit) {
-      // error/fatal are always kept — skip callback entirely
-      if (!EXEMPT_LEVELS.has(level)) {
-        // Run rate sampling if not already done
+      // Custom callback can override error/fatal exemption — run it for all levels
+      // Fail-open: if callback throws, keep everything (override rate check too)
+      try {
+        const callbackOk = samplingConfig.shouldEmit({ wideData: wideEventData, level });
+        // Run rate sampling if callback passed
         const ratePassed = runRateSampling(
           level,
           samplingConfig.strategy,
           samplingConfig.rate,
           samplingConfig.perLevel,
         );
-        // Fail-open: if callback throws, keep the event
-        let callbackOk = true;
-        try {
-          callbackOk = samplingConfig.shouldEmit({ wideData: wideEventData, level });
-        } catch {
-          // Callback threw — keep the event
-        }
         if (!ratePassed || !callbackOk) {
           return;
         }
+      } catch {
+        // Callback threw — fail-open: keep the event (fall through to emit)
       }
     }
 
