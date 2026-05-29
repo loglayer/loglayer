@@ -1,4 +1,4 @@
-# Wide Events Mixin <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
+# Wide Events Mixin <Badge type="warning" text="Browser" /> <Badge type="tip" text="Server" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" /> <Badge type="info" text="Deno" /> <Badge type="info" text="Bun" />
 
 [![npm version](https://img.shields.io/npm/v/@loglayer/mixin-wide-events.svg)](https://www.npmjs.com/package/@loglayer/mixin-wide-events)
 

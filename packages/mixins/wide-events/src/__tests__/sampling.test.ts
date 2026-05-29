@@ -118,7 +118,7 @@ describe("WideEventMixin - Sampling", () => {
       expect(emittedLogs[0].level).toBe("error");
     });
 
-    it("should always keep fatal level regardless of rate=0", () => {
+    it("should default keep fatal level regardless of rate=0", () => {
       const log = createLog({ strategy: "default", rate: 0 });
       asyncContext.run({}, () => {
         const logger = log.child();
