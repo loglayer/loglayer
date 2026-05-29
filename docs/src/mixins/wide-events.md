@@ -8,6 +8,16 @@ The Wide Events Mixin adds functionality for creating comprehensive, self-contai
 
 For a complete Express example, see the [Wide Events Logging guide](/guides/wide-events).
 
+## Why Wide Events?
+
+Wide events solve a common observability problem: when you have distributed systems with many log entries, it can be difficult to correlate all the data from a single operation. Wide events capture everything in one place, making it easy to:
+
+- See the complete context of an operation at a glance
+- Correlate all data without joining multiple log entries
+- Simplify log analysis and debugging
+
+For more context, see [Why Logging Sucks](https://loggingsucks.com/).
+
 ## Installation
 
 ::: code-group
@@ -47,16 +57,6 @@ To use this mixin with TypeScript, you must register the types by adding the mix
 ```
 
 This ensures TypeScript recognizes the mixin methods on your LogLayer instances.
-
-## Why Wide Events?
-
-Wide events solve a common observability problem: when you have distributed systems with many log entries, it can be difficult to correlate all the data from a single operation. Wide events capture everything in one place, making it easy to:
-
-- See the complete context of an operation at a glance
-- Correlate all data without joining multiple log entries
-- Simplify log analysis and debugging
-
-For more context, see [Why Logging Sucks](https://loggingsucks.com/).
 
 ## Quick Start
 

@@ -35,16 +35,6 @@ const log = new LogLayer({
 });
 ```
 
-## Configuration
+## Documentation
 
-- `strategy`: `"default"` or `"per_level"` (default: `"default"`)
-- `rate`: 0-1 fraction to keep (default: 1 = keep all)
-- `perLevel`: per-level rates like `{ trace: 0.1, debug: 0.3 }`
-- `shouldSample`: custom callback `(params: SamplingParams) => boolean`
-
-`error` and `fatal` default to 100% but can be overridden.
-
-## See Also
-
-- [LogLayer](https://loglayer.dev)
-- [Wide Events Mixin](https://loglayer.dev/mixins/wide-events) (for wide-event-specific sampling)
+For more details, visit [https://loglayer.dev/plugins/sampling](https://loglayer.dev/plugins/sampling)

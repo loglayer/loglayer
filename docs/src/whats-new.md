@@ -13,6 +13,8 @@ description: Learn about the latest features and improvements in LogLayer
 
 - **New Sampling plugin**: Randomly drop log entries to control log volume and cost. Supports rate-based sampling, per-level rates, and custom callback strategies. `error` and `fatal` levels default to 100% (can be overridden via `perLevel` or callback).
 
+See the [Sampling plugin documentation](/plugins/sampling) for details.
+
 `@loglayer/mixin-wide-events`:
 
 - **Sampling support**: The mixin can now randomly drop wide event emissions to control log volume and cost, with `"error"` and `"fatal"` levels defaulting to 100% (can be overridden via `perLevel` or callback). Custom `shouldEmit` callbacks can filter by inspecting accumulated wide event data:
