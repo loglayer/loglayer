@@ -19,7 +19,7 @@ createWideEventMixin({
   asyncContext,
   sampling: {
     strategy: "default",    // default | per_level
-    rate: 0.1,              // ~10% kept (error/fatal always 100%)
+    `rate`: 0.1,              // ~10% kept (error/fatal always 100%)
   },
 });
 
@@ -27,7 +27,7 @@ createWideEventMixin({
 createWideEventMixin({
   asyncContext,
   sampling: {
-    shouldEmit: ({ wideData, level }) => wideData.important === true,
+    `shouldEmit`: ({ `wideData`, level }) => `wideData`.important === true,
   },
 });
 ```

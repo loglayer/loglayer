@@ -390,4 +390,4 @@ See [Basic Logging](/logging-api/basic-logging#raw-logging) for context behavior
 | Log metadata only | `log.metadataOnly({...})` | Single entry |
 | Mock for tests | `new MockLogLayer()` | - |
 | Wide events mixin | `@loglayer/mixin-wide-events` | Accumulate data across async boundaries and emit as single log entry (canonical log line). Supports sampling with `error`/`fatal` defaulting to 100% (overridable via `perLevel` or `shouldEmit`). |
-| Create wide event mixin | `createWideEventMixin({ asyncContext, sampling: { strategy: 'default', rate: 0.1 } })` | - |
+| Create wide event mixin | `createWideEventMixin({ asyncContext, sampling: { strategy: 'default', `rate`: 0.1 } })` | - |
