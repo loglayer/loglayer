@@ -9,7 +9,7 @@ import { AsyncLocalStorage } from "node:async_hooks";
 import type { ILogLayer } from "loglayer";
 import { LogLayer, useLogLayerMixin } from "loglayer";
 import { describe, expectTypeOf, it } from "vitest";
-import { createWideEventMixin } from "../index.js";
+import { createWideEventMixin, type WideEventSamplingConfig, type WideEventSamplingStrategy } from "../index.js";
 
 describe("Type Tests", () => {
   // Setup mixin once for all tests (matching docs pattern)
@@ -85,5 +85,46 @@ describe("Type Tests", () => {
     // All config options should be valid
     logger.emitWideEvent({ message: "msg" });
     logger.emitWideEvent({ message: "msg", level: "error" });
+  });
+
+  it("should accept sampling config in mixin options", () => {
+    // default strategy
+    const config1: WideEventSamplingConfig = {
+      strategy: "default",
+      rate: 0.5,
+    };
+
+    const asyncContext = new AsyncLocalStorage<Record<string, any>>();
+    createWideEventMixin({ asyncContext: asyncContext, sampling: config1 });
+
+    // per_level strategy
+    const config2: WideEventSamplingConfig = {
+      strategy: "per_level",
+      perLevel: {
+        trace: 0,
+        debug: 0.1,
+        info: 0.5,
+        error: 1, // ignored — but type-accepted
+      },
+    };
+
+    createWideEventMixin({ asyncContext: new AsyncLocalStorage(), sampling: config2 });
+
+    // boolean rate
+    const config3: WideEventSamplingConfig = {
+      rate: true,
+    };
+    createWideEventMixin({ asyncContext: new AsyncLocalStorage(), sampling: config3 });
+
+    // emitLevel
+    const config4: WideEventSamplingConfig = {
+      strategy: "default",
+      rate: 1,
+      emitLevel: "debug",
+    };
+    createWideEventMixin({ asyncContext: new AsyncLocalStorage(), sampling: config4 });
+
+    // Type check: strategy is literal
+    expectTypeOf<WideEventSamplingStrategy>().toEqualTypeOf<"default" | "per_level">();
   });
 });

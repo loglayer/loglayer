@@ -5,7 +5,52 @@ import {
   type LogLayerMixinRegistration,
   type LogLayerPlugin,
 } from "loglayer";
-import type { EmitWideEventConfig, WideEventMixinOptions } from "./types.js";
+import type { EmitWideEventConfig, WideEventMixinOptions, WideEventSamplingConfig } from "./types.js";
+
+/**
+ * Log levels that are never sampled — always kept at 100%.
+ */
+const EXEMPT_LEVELS = new Set(["error", "fatal"]);
+
+/**
+ * Normalize a boolean or numeric rate to a number in [0, 1].
+ * `true` becomes 1, `false` becomes 0, numbers are clamped to [0, 1].
+ * `NaN`, `Infinity`, and `-Infinity` are treated as 0 (drop all).
+ */
+function toRate(value: boolean | number | undefined): number {
+  if (value === undefined) return 1;
+  if (typeof value === "boolean") return value ? 1 : 0;
+  if (typeof value !== "number" || !Number.isFinite(value)) return 0;
+  return Math.max(0, Math.min(1, value));
+}
+
+/**
+ * Run rate-based sampling (default or per_level strategy).
+ * Returns true if the rate check passes, false if dropped.
+ * Always returns true for error/fatal levels.
+ */
+function runRateSampling(
+  level: string,
+  strategy: "default" | "per_level" | undefined,
+  rate: boolean | number | undefined,
+  perLevel?: Partial<Record<string, boolean | number>>,
+): boolean {
+  if (EXEMPT_LEVELS.has(level)) {
+    return true;
+  }
+
+  if (strategy === "per_level" && perLevel) {
+    const perRate = toRate(perLevel[level]);
+    if (perRate === 1) return true;
+    if (perRate === 0) return false;
+    return Math.random() < perRate;
+  }
+
+  const r = toRate(rate);
+  if (r === 1) return true;
+  if (r === 0) return false;
+  return Math.random() < r;
+}
 
 /**
  * Creates a LogLayer mixin that adds wide event logging functionality.
@@ -19,7 +64,6 @@ import type { EmitWideEventConfig, WideEventMixinOptions } from "./types.js";
  *   wide event data across async boundaries. For Node.js, use `new AsyncLocalStorage()`
  *   from `async_hooks`. For browser environments, provide your own compatible implementation.
  * @param options.includeContext - Whether to include withContext() data in emitted wide events (default: true)
-
  *
  * @returns A LogLayer mixin registration object
  *
@@ -58,6 +102,18 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
   const errorsAsArray = options.errorsAsArray ?? false;
   // Default error field: "errors" for arrays, "error" for single
   const errorField = options.errorField ?? (errorsAsArray ? "errors" : "error");
+
+  // Snapshot perLevel map at construction time
+  const snapshotPerLevel = options.sampling?.perLevel ? { ...options.sampling.perLevel } : undefined;
+  const samplingConfig: WideEventSamplingConfig | undefined = options.sampling
+    ? {
+        strategy: options.sampling.strategy ?? "default",
+        rate: options.sampling.rate,
+        perLevel: snapshotPerLevel,
+        emitLevel: options.sampling.emitLevel,
+        shouldEmit: options.sampling.shouldEmit,
+      }
+    : undefined;
 
   // Default error serializer - used if LogLayer has no errorSerializer configured
   function defaultErrorSerializer(err: any): Record<string, any> {
@@ -227,6 +283,19 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
    * Implementation for emitWideEvent
    */
   function emitWideEventImpl(config: EmitWideEventConfig, self: any): void {
+    // Determine log level
+    const defaultLevel = samplingConfig?.emitLevel ?? "info";
+    const level = config.level ?? defaultLevel;
+
+    // Check non-callback rate sampling early (skip data building when possible)
+    if (
+      samplingConfig &&
+      !samplingConfig.shouldEmit &&
+      !runRateSampling(level, samplingConfig.strategy, samplingConfig.rate, samplingConfig.perLevel)
+    ) {
+      return;
+    }
+
     const store = asyncContext.getStore();
 
     // Build wide event data with priority order
@@ -243,8 +312,29 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
       Object.assign(wideEventData, store._llWideEvents);
     }
 
-    // Determine log level
-    const level = config.level ?? "info";
+    // Run custom callback sampling (now that data is available)
+    if (samplingConfig?.shouldEmit) {
+      // error/fatal are always kept — skip callback entirely
+      if (!EXEMPT_LEVELS.has(level)) {
+        // Run rate sampling if not already done
+        const ratePassed = runRateSampling(
+          level,
+          samplingConfig.strategy,
+          samplingConfig.rate,
+          samplingConfig.perLevel,
+        );
+        // Fail-open: if callback throws, keep the event
+        let callbackOk = true;
+        try {
+          callbackOk = samplingConfig.shouldEmit({ wideData: wideEventData, level });
+        } catch {
+          // Callback threw — keep the event
+        }
+        if (!ratePassed || !callbackOk) {
+          return;
+        }
+      }
+    }
 
     // Wrap in field if configured, otherwise use flat
     const metadataToEmit = wideEventField ? { [wideEventField]: wideEventData } : wideEventData;
