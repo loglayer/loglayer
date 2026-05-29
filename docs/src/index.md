@@ -33,8 +33,8 @@ features:
     details: Fan out logs to multiple logging libraries like Pino and cloud providers like DataDog at the same time.
   - title: OpenTelemetry Support
     details: A transport and plugin is available for connecting logs to OpenTelemetry.
-  - title: StatsD Support
-    details: A mixin is available to add methods to LogLayer to easily send metrics with your logs to StatsD.
+  - title: Wide Event Logging
+    details: Capture rich, self-contained log entries that span async boundaries using the Wide Events mixin.
   - title: HTTP Support
     details: A transport is available to send logs via HTTP.
   - title: Log File Rotation Support
@@ -67,23 +67,20 @@ src="/asciinema/pretty-terminal.cast"
 :idleTimeLimit=3
 />
 
-### Add Metrics Support with Mixins
+### Add Wide Event Logging with Mixins
 
-Extend LogLayer with StatsD metrics support using the [Hot Shots Mixin](/mixins/hot-shots):
+Capture rich, self-contained log entries that span async boundaries. Use the [Wide Events Mixin](/mixins/wide-events) to accumulate data across your request:
 
 ```typescript
 import { LogLayer, useLogLayerMixin, ConsoleTransport } from 'loglayer';
-import { StatsD } from 'hot-shots';
-import { hotshotsMixin } from '@loglayer/mixin-hot-shots';
+import { AsyncLocalStorage } from 'async_hooks';
+import { createWideEventMixin } from '@loglayer/mixin-wide-events';
 
-// Create a StatsD client
-const statsd = new StatsD({
-  host: 'localhost',
-  port: 8125
-});
+// Set up async context for propagating wide event data
+const asyncLocalStorage = new AsyncLocalStorage<Record<string, any>>();
 
-// Register the mixin (must be called before creating LogLayer instances)
-useLogLayerMixin(hotshotsMixin(statsd));
+// Register the mixin (called before creating instances)
+useLogLayerMixin(createWideEventMixin({ asyncContext: asyncLocalStorage }));
 
 // Create LogLayer instance
 const log = new LogLayer({
@@ -92,13 +89,17 @@ const log = new LogLayer({
   })
 });
 
-// Use StatsD methods through the stats property
-log.stats.increment('request.count').send();
-log.info('Request received');
-log.stats.timing('request.duration', 150).send();
-log.info('Request processed');
-log.stats.gauge('active.connections', 42).send();
-log.info('Connection established');
+// Accumulate data across async boundaries
+asyncLocalStorage.run({}, () => {
+  log.withWideEvents({ userId: '123', ip: '10.0.0.1' });
+  log.info('User logged in');
+
+  log.withWideEvents({ action: 'view' });
+  log.info('User performed action');
+
+  // Emit the accumulated wide event as a single log entry
+  log.emitWideEvent({ message: 'Request completed' });
+});
 ```
 
 <!--@include: ./transports/_partials/transport-list.md-->
