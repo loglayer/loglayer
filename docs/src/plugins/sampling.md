@@ -67,7 +67,7 @@ const log = new LogLayer({
 
 ## Behavior
 
-- **error/fatal always kept**: Levels `error` and `fatal` are always emitted regardless of rate or callback
+- **error/fatal default to 100%**: Levels `error` and `fatal` are kept by default. Use `perLevel: { error: 0 }` or a `shouldSample` callback to override.
 - **fail-open**: If the shouldSample callback throws, the event is kept
 - **snapshot**: perLevel map is snapshotted at construction; mutating it afterward has no effect
 - **rate clamping**: Rates are clamped to [0, 1]. NaN/Infinity are treated as 0

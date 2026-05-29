@@ -34,8 +34,9 @@ export type SamplingStrategy = "default" | "per_level";
 /**
  * Configuration for sampling log emissions.
  *
- * "error" and "fatal" levels are always kept (100% sampled) regardless of
- * the configured rate.
+ * "error" and "fatal" levels default to a 100% keep rate, but can be
+ * explicitly overridden by setting `perLevel` rates or by using a
+ * `shouldSample` callback.
  */
 export interface SamplingConfig extends LogLayerPluginParams {
   /** The log level to sample. Defaults to "default". */
@@ -46,7 +47,7 @@ export interface SamplingConfig extends LogLayerPluginParams {
    * - `1` (or `true`) — keep 100% (sampling disabled)
    * - `0.1` — ~10% of events kept
    * - `0` (or `false`) — keep 0% (all dropped for sample-able levels)
-   * With `"default"` strategy this rate applies to all non-error/fatal levels.
+   * With `"default"` strategy this rate applies to all levels.
    * With `"per_level"` strategy the rate applies if the level is also not present in the `perLevel` map.
    * @default 1
    */
@@ -55,10 +56,9 @@ export interface SamplingConfig extends LogLayerPluginParams {
   /**
    * Per-level sampling rates when strategy is `"per_level"`.
    * Keys are log level strings (e.g. `"trace"`, `"info"`, `"warn"`).
-   * Levels not listed are kept at 100%.
+   * Levels not listed keep at 100%.
    *
-   * **Important:** "error" and "fatal" are always kept (100%) — values
-   * for those keys are silently ignored.
+   * "error" and "fatal" default to a 100% keep rate unless explicitly set here.
    *
    * The map is snapshotted at construction time; mutating it afterward has
    * no effect.
@@ -69,12 +69,12 @@ export interface SamplingConfig extends LogLayerPluginParams {
    * A custom sampling callback that receives log data and allows you to make
    * an informed keep/drop decision.
    *
-   * When provided, this callback is invoked. An event is only kept when
-   * the callback returns `true`. If only `shouldSample` is set (no `rate`),
+   * When provided, this callback is invoked and can override the default
+   * error/fatal exemption. Returning `false` will drop the event even at
+   * "error" or "fatal" levels. If only `shouldSample` is set (no `rate`),
    * the callback acts as the sole gate.
    *
-   * **Note:** "error" and "fatal" levels are always emitted regardless of
-   * what this callback returns.
+   * **Note:** If the callback throws, the event is kept (fail-open).
    */
   shouldSample?: (params: SamplingParams) => boolean;
 }
