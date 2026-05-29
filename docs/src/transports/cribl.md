@@ -119,7 +119,7 @@ const log = new LogLayer({
 })
 ```
 
-## Configuration
+## Configuration Options
 
 ### Required Parameters
 

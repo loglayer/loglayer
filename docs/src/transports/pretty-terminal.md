@@ -252,7 +252,7 @@ Features in Detail View:
 - Collapsible arrays for better readability
 - Raw JSON view for easy copying
 
-## Configuration
+## Configuration Options
 
 The Pretty Terminal Transport can be customized with various options:
 

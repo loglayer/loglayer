@@ -57,7 +57,7 @@ const log = new LogLayer({
 log.info('Hello world')
 ```
 
-## Configuration
+## Configuration Options
 
 The transport accepts the following configuration options:
 

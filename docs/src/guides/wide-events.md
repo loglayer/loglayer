@@ -186,7 +186,7 @@ app.listen(3000, () => console.log("Server running on http://localhost:3000"));
 
 ## Run It
 
-```bash
+```sh
 curl -X POST http://localhost:3000/api/orders \
   -H "Content-Type: application/json" \
   -H "x-request-id: test-123" \

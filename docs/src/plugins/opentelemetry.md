@@ -61,8 +61,6 @@ const logger = new LogLayer({
 
 ## Configuration Options
 
-The plugin accepts the following configuration options:
-
 ### Optional Parameters
 
 | Name | Type | Default | Description |
@@ -230,7 +228,7 @@ app.listen(3000, () => {
 
 ### Running the Example
 
-```bash
+```sh
 npx tsx --import ./instrumentation.ts ./app.ts
 ```
 

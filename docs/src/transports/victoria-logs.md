@@ -77,7 +77,7 @@ log.info("This is a test message");
 log.withMetadata({ userId: "123" }).error("User not found");
 ```
 
-## Configuration
+## Configuration Options
 
 The VictoriaLogs transport extends the [HTTP transport configuration](/transports/http#configuration) with VictoriaLogs specific defaults:
 

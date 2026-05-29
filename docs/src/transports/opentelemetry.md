@@ -245,7 +245,7 @@ app.listen(3000, () => {
 
 ### Running the Example
 
-```bash
+```sh
 npx tsx --import ./instrumentation.ts ./app.ts
 ```
 
