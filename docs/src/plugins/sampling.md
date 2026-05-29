@@ -12,6 +12,17 @@ The Sampling Plugin lets you randomly drop log entries to control log volume and
 npm install @loglayer/plugin-sampling
 ```
 
+## Configuration Options
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `strategy` | `"default"` \| `"per_level"` | `"default"` | Sampling strategy. |
+| `rate` | `boolean` \| `number` | `1` | Fraction of events to keep (0-1). With `"per_level"` this acts as a fallback for unmapped levels. |
+| `perLevel` | `Partial<Record<LogLevelType, boolean \| number>>` | `undefined` | Per-level rates. Levels not listed fall back to `rate` (or 1 if `rate` is not set). |
+| `shouldSample` | `(params) => boolean` | `undefined` | Callback to make a keep/drop decision. Receives the log level, messages, `metadata`, context, and error. |
+
 ## Usage
 
 ### Rate-Based Sampling
@@ -78,15 +89,6 @@ const log = new LogLayer({
 - **snapshot**: `perLevel` map is snapshotted at construction; mutating it afterward has no effect
 - **rate clamping**: Rates are clamped to [0, 1]. NaN/Infinity are treated as 0
 
-## Configuration Options
+## Changelog
 
-### Optional Parameters
-
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `strategy` | `"default"` \| `"per_level"` | `"default"` | Sampling strategy. |
-| `rate` | `boolean` \| `number` | `1` | Fraction of events to keep (0-1). With `"per_level"` this acts as a fallback for unmapped levels. |
-| `perLevel` | `Partial<Record<LogLevelType, boolean \| number>>` | `undefined` | Per-level rates. Levels not listed fall back to `rate` (or 1 if `rate` is not set). |
-| `shouldSample` | `(params) => boolean` | `undefined` | Callback to make a keep/drop decision. Receives the log level, messages, `metadata`, context, and error. |
-
-<!--@include: ../changelogs/plugins/sampling-changelog.md-->
+View the changelog [here](./changelogs/sampling-changelog.md).
