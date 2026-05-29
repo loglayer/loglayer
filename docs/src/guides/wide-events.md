@@ -12,7 +12,7 @@ context into a single comprehensive event emitted at the end of each operation.
 
 ::: info Example Framework
 This guide uses **Express** to demonstrate wide event logging. The same patterns
-apply to any framework—Hono, Fastify, Elysia, Koa, etc.—just adapt the middleware.
+apply to any framework: Hono, Fastify, Elysia, Koa, etc.; just adapt the middleware.
 :::
 
 ## Installation
