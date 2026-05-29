@@ -89,20 +89,6 @@ getLogger().withWideEvents({ orderId: "456" });
 getLogger().emitWideEvent({ message: "Order processed" });
 ```
 
-## API
-
-### `createWideEventMixin(options)`
-
-Creates a wide event mixin that can be registered with LogLayer.
-
-```typescript
-import { createWideEventMixin } from "@loglayer/mixin-wide-events";
-
-const mixin = createWideEventMixin({
-  asyncContext: new AsyncLocalStorage(),
-});
-```
-
 ## Configuration Options
 
 ### Required Parameters
@@ -119,6 +105,21 @@ const mixin = createWideEventMixin({
 | `wideEventField` | `string` | `undefined` | Field name to nest all wide event data under. When undefined, data is flattened at root level. |
 | `errorField` | `string` | `error`/`errors` | Field name for error data. `error` in single mode, `errors` in array mode. |
 | `errorsAsArray` | `boolean` | `false` | When true, errors are collected as an array. Each call to `withWideEventError()` appends. |
+| `sampling` | `WideEventSamplingConfig` | `undefined` | Sampling configuration to drop wide events at the configured rate. See [Sampling](#sampling) below. |
+
+## API
+
+### `createWideEventMixin(options)`
+
+Creates a wide event mixin that can be registered with LogLayer.
+
+```typescript
+import { createWideEventMixin } from "@loglayer/mixin-wide-events";
+
+const mixin = createWideEventMixin({
+  asyncContext: new AsyncLocalStorage(),
+});
+```
 
 ### `withWideEvents(data)`
 
@@ -358,7 +359,117 @@ res.on("finish", () => {
 });
 ```
 
-## Complete Example
+## Sampling
+
+Wide event sampling lets you randomly drop wide event emissions to control log volume and cost.
+"error" and "fatal" levels are **always kept** (100% sampled) — they are excluded from sampling
+regardless of the configured rate.
+
+### Quick Start
+
+```typescript
+// Keep ~10% of wide events (errors and fatals always kept)
+const mixin = createWideEventMixin({
+  asyncContext,
+  sampling: {
+    strategy: "default",
+    rate: 0.1,
+  },
+});
+```
+
+### Sampling Strategies
+
+#### `default` — single rate
+
+A single rate applies to all non-error/fatal levels.
+
+```typescript
+const mixin = createWideEventMixin({
+  asyncContext,
+  sampling: {
+    strategy: "default",
+    rate: 0.1,  // ~10% of info/warn/debug/trace events kept
+  },
+});
+```
+
+When `rate` is `1` (or `true`), all events are kept (sampling disabled).
+When `rate` is `0` (or `false`), all sample-able events are dropped.
+
+| Rate | Behaviour |
+|------|-----------|
+| `1` / `true` | Keep 100% (sampling off) |
+| `0.1` | ~10% of sample-able events kept |
+| `0` / `false` | Drop 100% of sample-able events |
+
+#### `per_level` — per-level rates
+
+Set independent rates per log level. Levels not in the map are kept at 100%.
+
+```typescript
+const mixin = createWideEventMixin({
+  asyncContext,
+  sampling: {
+    strategy: "per_level",
+    perLevel: {
+      trace: 0.01,  // keep 1% of trace
+      debug: 0.1,   // keep 10% of debug
+      info: 0.5,    // keep 50% of info
+    },
+  },
+});
+// warn, error, fatal are kept at 100% automatically
+```
+
+The `perLevel` map is **snapshotted at construction time** — mutating the object after
+calling `createWideEventMixin()` has no effect.
+
+### Sampling Configuration
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `strategy` | `"default"` \| `"per_level"` | `"default"` | How sampling rates are applied. |
+| `rate` | `boolean` \| `number` | `1` | Single rate for `default` strategy. |
+| `perLevel` | `Partial<Record<LogLevelType, boolean \| number>>` | `undefined` | Per-level rates for `per_level` strategy. |
+| `shouldEmit` | `(params: { wideData, level }) => boolean` | `undefined` | Custom callback that receives the accumulated wide event data and log level. Error/fatal levels always bypass this callback. |
+| `emitLevel` | `LogLevelType` | `undefined` | Override the default emit level when no explicit `level` is passed to `emitWideEvent()`. |
+
+### Custom Sampling Function
+
+The `shouldEmit` callback lets you inspect the full wide event data before deciding whether to emit:
+
+```typescript
+const mixin = createWideEventMixin({
+  asyncContext,
+  sampling: {
+    shouldEmit: ({ wideData, level }) => {
+      // Only emit events that have a userId
+      return !!wideData.userId;
+    },
+  },
+});
+```
+
+You can compose the callback with rate-based sampling — both checks must pass:
+
+```typescript
+const mixin = createWideEventMixin({
+  asyncContext,
+  sampling: {
+    strategy: "default",
+    rate: 0.5, // first pass: ~50% kept randomly
+    shouldEmit: ({ wideData }) => wideData.priority !== "low", // second pass: filter by content
+  },
+});
+```
+
+**Note:** "error" and "fatal" levels always bypass `shouldEmit` — they are emitted regardless of what the callback returns.
+
+### What Gets Sampled
+
+Sampling only applies to `emitWideEvent()` calls. Normal log calls (`logger.info()`, etc.)
+are unaffected.
 
 Here's a complete Express middleware example:
 

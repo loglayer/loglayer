@@ -7,6 +7,33 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## May 28, 2026
+
+`@loglayer/mixin-wide-events`:
+
+- **Sampling support**: The mixin can now randomly drop wide event emissions to control log volume and cost, with `"error"` and `"fatal"` levels always kept. Custom `shouldEmit` callbacks can filter by inspecting accumulated wide event data:
+
+```typescript
+// Rate-based sampling
+createWideEventMixin({
+  asyncContext,
+  sampling: {
+    strategy: "default",    // default | per_level
+    rate: 0.1,              // ~10% kept (error/fatal always 100%)
+  },
+});
+
+// Custom callback — filter by event contents
+createWideEventMixin({
+  asyncContext,
+  sampling: {
+    shouldEmit: ({ wideData, level }) => wideData.important === true,
+  },
+});
+```
+
+See the [Wide Events Mixin documentation](/mixins/wide-events#sampling) for details.
+
 ## May 25, 2026
 
 `loglayer`:

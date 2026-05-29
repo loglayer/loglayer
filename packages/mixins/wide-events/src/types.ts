@@ -2,6 +2,129 @@ import type { AsyncLocalStorage } from "node:async_hooks";
 import type { LogLevelType } from "loglayer";
 
 /**
+ * Parameters passed to a custom `shouldEmit` sampling callback.
+ * Provides the accumulated wide event data and the log level so the
+ * callback can make an informed keep/drop decision.
+ */
+export interface WideEventSamplingParams {
+  /**
+   * The accumulated wide event data (wide events + optional context).
+   * Contains the merged data that would be emitted if kept.
+   */
+  wideData: Record<string, any>;
+
+  /**
+   * The log level that would be used for the emission.
+   */
+  level: LogLevelType;
+}
+
+/**
+ * Sampling strategy for wide events.
+ *
+ * - `"default"` — a single `rate` applies to all non-error levels.
+ * - `"per_level"` — per-level rates keyed by LogLevelType; levels not in the
+ *   map are kept unconditionally.
+ */
+export type WideEventSamplingStrategy = "default" | "per_level";
+
+/**
+ * Configuration for sampling wide event emissions.
+ *
+ * "error" and "fatal" levels are always kept (100% sampled) regardless of
+ * the configured rate.
+ */
+export interface WideEventSamplingConfig {
+  /**
+   * The sampling strategy.
+   *
+   * - `"default"` — a single `rate` applies to all non-error levels.
+   * - `"per_level"` — per-level rates from the `perLevel` map; levels not in
+   *   the map are kept at 100%.
+   *
+   * @default "default"
+   */
+  strategy?: WideEventSamplingStrategy;
+
+  /**
+   * A rate between 0 and 1 that determines the fraction of events to keep.
+   *
+   * - `1` (or `true`) — keep 100% (sampling disabled)
+   * - `0.1` — ~10% of events kept
+   * - `0` (or `false`) — keep 0% (all dropped for sample-able levels)
+   *
+   * With `"default"` strategy this rate applies to all non-error/fatal levels.
+   * With `"per_level"` strategy this field is **ignored** — unmapped levels
+   * default to a fill for levels not present
+   * in the `perLevel` map.
+   *
+   * @default 1
+   */
+  rate?: boolean | number;
+
+  /**
+   * Per-level sampling rates when strategy is `"per_level"`.
+   * Keys are log level strings (e.g. `"trace"`, `"info"`, `"warn"`).
+   * Levels not listed are kept at 100%.
+   *
+   * **Important:** "error" and "fatal" are always kept (100%) — values
+   * for those keys are silently ignored.
+   *
+   * The map is snapshotted at construction time; mutating it afterward has
+   * no effect.
+   *
+   * @example
+   * ```ts
+   * {
+   *   strategy: "per_level",
+   *   perLevel: {
+   *     trace: 0.1,
+   *     debug: 0.3,
+   *     info: 0.5,
+   *   },
+   * }
+   * // warn, error, fatal are all 100%
+   * ```
+   */
+  perLevel?: Partial<Record<LogLevelType, boolean | number>>;
+
+  /**
+   * A custom sampling callback that receives the wide event data and log
+   * level, allowing you to make an informed keep/drop decision.
+   *
+   * When provided, this callback is invoked **in addition to** the built-in
+   * rate-based sampling. An event is only kept when **both** the built-in
+   * check passes (if `rate`/`perLevel` are configured) **and** the callback
+   * returns `true`. If only `shouldEmit` is set (no `rate`), the callback
+   * acts as the sole gate.
+   *
+   * **Note:** "error" and "fatal" levels are always emitted regardless of
+   * what this callback returns.
+   *
+   * @example
+   * ```ts
+   * {
+   *   shouldEmit: ({ wideData, level }) => {
+   *     // Only emit wide events that have a userId
+   *     return !!wideData.userId;
+   *   },
+   * }
+   * ```
+   */
+  shouldEmit?: (params: WideEventSamplingParams) => boolean;
+
+  /**
+   * Override the default log level when no explicit `level` is passed to
+   * `emitWideEvent()`. When set, the resolved level uses this value instead
+   * of `"info"`. This **does** affect sampling decisions — with `per_level`
+   * strategy, the level from `emitLevel` determines which rate bucket applies.
+   *
+   * @default undefined (falls back to `"info"`)
+   */
+  emitLevel?: LogLevelType;
+}
+
+/**
  * Configuration options for creating a wide event mixin.
  */
 export interface WideEventMixinOptions {
@@ -46,6 +169,22 @@ export interface WideEventMixinOptions {
    * @default false
    */
   errorsAsArray?: boolean;
+
+  /**
+   * Optional: Sampling configuration for wide events.
+   * When provided, the mixin will randomly decide whether to emit or skip wide
+   * events based on the configured rate(s).
+   *
+   * "error" and "fatal" levels are always emitted (100% sampled).
+   *
+   * @example
+   * // Keep ~10% of wide events (excluding errors/fatals)
+   * { sampling: { strategy: "default", rate: 0.1 } }
+   *
+   * // Per-level: keep all trace/debug, but sample info at 5%
+   * { sampling: { strategy: "per_level", perLevel: { info: 0.05 } } }
+   */
+  sampling?: WideEventSamplingConfig;
 }
 
 /**
@@ -170,14 +309,14 @@ export interface IWideEventMixin {
    * } catch (err) {
    *   // For single error (replaces previous)
    *   logger.withWideEventError(err);
-   *   
+   *
    *   // With errorsAsArray: true - errors accumulate
    *   logger.withWideEventError(err).withWideEventError(otherErr);
    * }
    * ```
    */
   withWideEventError(error: any): this;
-};
+}
 
 // Module augmentation for ILogLayer and ILogBuilder
 declare module "loglayer" {

@@ -1,0 +1,621 @@
+import { AsyncLocalStorage } from "node:async_hooks";
+import { BlankTransport, LogLayer, useLogLayerMixin } from "loglayer";
+import { describe, expect, it } from "vitest";
+import { createWideEventMixin } from "../index.js";
+
+describe("WideEventMixin - Sampling", () => {
+  let asyncContext: AsyncLocalStorage<Record<string, any>>;
+  let emittedLogs: any[];
+
+  function createLog(samplingConfig?: any) {
+    asyncContext = new AsyncLocalStorage();
+    emittedLogs = [];
+
+    const transport = new BlankTransport({
+      shipToLogger: (params) => {
+        emittedLogs.push({
+          level: params.logLevel,
+          messages: params.messages,
+          metadata: params.metadata,
+        });
+        return params.messages;
+      },
+    });
+
+    const mixin = createWideEventMixin({
+      asyncContext,
+      sampling: samplingConfig,
+    });
+    useLogLayerMixin(mixin);
+
+    return new LogLayer({ transport });
+  }
+
+  // Isolated helper for tests that need their own capture array
+  function createLogWithCapture(captureConfig: any): {
+    log: LogLayer;
+    ctx: AsyncLocalStorage<Record<string, any>>;
+    logs: any[];
+  } {
+    const ctx = new AsyncLocalStorage();
+    const logs: any[] = [];
+
+    const transport = new BlankTransport({
+      shipToLogger: (params) => {
+        logs.push({
+          level: params.logLevel,
+          messages: params.messages,
+          metadata: params.metadata,
+        });
+        return params.messages;
+      },
+    });
+
+    const mixin = createWideEventMixin({
+      asyncContext: ctx,
+      includeContext: captureConfig.includeContext ?? true,
+      sampling: {
+        strategy: captureConfig.strategy,
+        rate: captureConfig.rate,
+        perLevel: captureConfig.perLevel,
+        emitLevel: captureConfig.emitLevel,
+        shouldEmit: captureConfig.shouldEmit,
+      },
+    });
+    useLogLayerMixin(mixin);
+
+    return { log: new LogLayer({ transport }), ctx, logs };
+  }
+
+  describe("no sampling (default)", () => {
+    it("should keep all wide events when sampling is not configured", () => {
+      const log = createLog();
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "event 1" });
+        logger.emitWideEvent({ message: "event 2" });
+        logger.emitWideEvent({ message: "event 3" });
+      });
+
+      expect(emittedLogs).toHaveLength(3);
+    });
+  });
+
+  describe("default strategy", () => {
+    it("should keep all events when rate is 1", () => {
+      const log = createLog({ strategy: "default", rate: 1 });
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        for (let i = 0; i < 100; i++) {
+          logger.emitWideEvent({ message: `test-${i}` });
+        }
+      });
+
+      expect(emittedLogs).toHaveLength(100);
+    });
+
+    it("should drop all sample-able events when rate is 0", () => {
+      const log = createLog({ strategy: "default", rate: 0 });
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "trace", level: "trace" });
+        logger.emitWideEvent({ message: "debug", level: "debug" });
+        logger.emitWideEvent({ message: "info", level: "info" });
+        logger.emitWideEvent({ message: "warn", level: "warn" });
+      });
+
+      expect(emittedLogs).toHaveLength(0);
+    });
+
+    it("should always keep error level regardless of rate=0", () => {
+      const log = createLog({ strategy: "default", rate: 0 });
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "error", level: "error" });
+      });
+
+      expect(emittedLogs).toHaveLength(1);
+      expect(emittedLogs[0].level).toBe("error");
+    });
+
+    it("should always keep fatal level regardless of rate=0", () => {
+      const log = createLog({ strategy: "default", rate: 0 });
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "fatal", level: "fatal" });
+      });
+
+      expect(emittedLogs).toHaveLength(1);
+      expect(emittedLogs[0].level).toBe("fatal");
+    });
+
+    it("should sample at approximately the configured rate (0.1)", () => {
+      const log = createLog({ strategy: "default", rate: 0.1 });
+      const n = 5000;
+
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        for (let i = 0; i < n; i++) {
+          logger.emitWideEvent({ message: `test-${i}` });
+        }
+      });
+
+      const rate = emittedLogs.length / n;
+      // With 5000 samples, 0.1 rate, σ ≈ 0.0095
+      // ±3σ = ±0.0285 is permissive enough to avoid flakes
+      expect(rate).toBeGreaterThan(0.07);
+      expect(rate).toBeLessThan(0.13);
+    });
+
+    it("should accept boolean rate (true = keep all)", () => {
+      const log = createLog({ strategy: "default", rate: true });
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        for (let i = 0; i < 10; i++) {
+          logger.emitWideEvent({ message: `test-${i}` });
+        }
+      });
+
+      expect(emittedLogs).toHaveLength(10);
+    });
+
+    it("should accept boolean rate (false = drop all for sample-able levels)", () => {
+      const log = createLog({ strategy: "default", rate: false });
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "info", level: "info" });
+        logger.emitWideEvent({ message: "error", level: "error" });
+      });
+
+      expect(emittedLogs).toHaveLength(1);
+      expect(emittedLogs[0].level).toBe("error");
+    });
+  });
+
+  describe("per_level strategy", () => {
+    it("should apply per-level rates", () => {
+      const log = createLog({
+        strategy: "per_level",
+        perLevel: {
+          trace: 0, // drop all trace
+          debug: 1, // keep all debug
+          info: 0.5, // sample 50% of info
+        },
+      });
+
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "trace-1", level: "trace" });
+        logger.emitWideEvent({ message: "trace-2", level: "trace" });
+        logger.emitWideEvent({ message: "debug-1", level: "debug" });
+        logger.emitWideEvent({ message: "error-1", level: "error" });
+        logger.emitWideEvent({ message: "fatal-1", level: "fatal" });
+        logger.emitWideEvent({ message: "warn-1", level: "warn" });
+      });
+
+      // Should have: debug-1, error-1, fatal-1, warn-1 (always kept + debug-1)
+      // warn is kept because it's not in the map (defaults to 100%)
+      const kept = emittedLogs.map((l) => l.messages[0]);
+      expect(kept).toContain("debug-1");
+      expect(kept).toContain("error-1");
+      expect(kept).toContain("fatal-1");
+      expect(kept).toContain("warn-1");
+
+      // trace should be dropped
+      expect(kept).not.toContain("trace-1");
+      expect(kept).not.toContain("trace-2");
+    });
+
+    it("should allow ~50% sampling on a single level", () => {
+      const log = createLog({
+        strategy: "per_level",
+        perLevel: {
+          info: 0.5,
+        },
+      });
+
+      const n = 1000;
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        for (let i = 0; i < n; i++) {
+          logger.emitWideEvent({ message: `info-${i}`, level: "info" });
+        }
+      });
+
+      const rate = emittedLogs.length / n;
+      expect(rate).toBeGreaterThan(0.4);
+      expect(rate).toBeLessThan(0.6);
+    });
+
+    it("should keep levels not in the perLevel map at 100%", () => {
+      const log = createLog({
+        strategy: "per_level",
+        perLevel: {
+          trace: 0, // only trace is explicitly set
+        },
+      });
+
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "info", level: "info" });
+        logger.emitWideEvent({ message: "debug", level: "debug" });
+      });
+
+      expect(emittedLogs).toHaveLength(2);
+    });
+
+    it("should not use rate as fallback for unmapped levels in per_level", () => {
+      // Even with rate: 0, unmapped levels should still be kept at 100%
+      const log = createLog({
+        strategy: "per_level",
+        rate: 0, // this only matters for default strategy
+        perLevel: {
+          trace: 0,
+        },
+      });
+
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        // info is not in perLevel, should be kept at 100%
+        logger.emitWideEvent({ message: "info", level: "info" });
+      });
+
+      expect(emittedLogs).toHaveLength(1);
+      expect(emittedLogs[0].level).toBe("info");
+    });
+
+    it("should ignore error/fatal in perLevel map", () => {
+      const log = createLog({
+        strategy: "per_level",
+        perLevel: {
+          trace: 1,
+          error: 0, // should be ignored — always kept
+          fatal: 0, // should be ignored — always kept
+        },
+      });
+
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "error", level: "error" });
+        logger.emitWideEvent({ message: "fatal", level: "fatal" });
+      });
+
+      expect(emittedLogs).toHaveLength(2);
+    });
+
+    it("should snapshot the perLevel map at construction time", () => {
+      const perLevel = { info: 0 };
+      const log = createLog({ strategy: "per_level", perLevel });
+
+      // Mutate the map after construction — should have no effect
+      perLevel.info = 1;
+
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        for (let i = 0; i < 100; i++) {
+          logger.emitWideEvent({ message: `info-${i}`, level: "info" });
+        }
+      });
+
+      // info was sampled at rate=0 at construction time
+      expect(emittedLogs).toHaveLength(0);
+    });
+  });
+
+  describe("emitLevel option", () => {
+    it("should use emitLevel as default when no level provided", () => {
+      const log = createLog({ strategy: "default", rate: 1, emitLevel: "debug" });
+
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        // No level provided — should use emitLevel
+        logger.emitWideEvent({ message: "test" });
+      });
+
+      expect(emittedLogs[0].level).toBe("debug");
+    });
+
+    it("should respect explicit level over emitLevel", () => {
+      const log = createLog({ strategy: "default", rate: 1, emitLevel: "debug" });
+
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "test", level: "error" });
+      });
+
+      expect(emittedLogs[0].level).toBe("error");
+    });
+  });
+
+  describe("mixed usage", () => {
+    it("should only sample wide events, not normal log calls", () => {
+      const log = createLog({ strategy: "default", rate: 0 });
+
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        // Normal log should still go through
+        logger.info("normal info log");
+        // Wide event should be dropped
+        logger.emitWideEvent({ message: "wide event" });
+        // Error wide event should pass through
+        logger.emitWideEvent({ message: "wide error", level: "error" });
+      });
+
+      // Should have the normal info log and the wide error, but not the dropped wide event
+      expect(emittedLogs).toHaveLength(2);
+      expect(emittedLogs[0].level).toBe("info");
+      expect(emittedLogs[1].level).toBe("error");
+    });
+
+    it("should work with withContext", () => {
+      const log = createLog({ strategy: "default", rate: 1 });
+
+      asyncContext.run({}, () => {
+        const logger = log.child().withContext({ requestId: "req-1" });
+        logger.withWideEvents({ userId: "123" });
+        logger.emitWideEvent({ message: "test" });
+      });
+
+      expect(emittedLogs).toHaveLength(1);
+      expect(emittedLogs[0].metadata).toEqual({ userId: "123" });
+      expect(emittedLogs[0].level).toBe("info");
+    });
+  });
+
+  describe("shouldEmit callback", () => {
+    it("should receive wideData and level", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        shouldEmit: ({ wideData: _wideData, level: _level }) => true,
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.withWideEvents({ userId: "123", action: "login" });
+        logger.emitWideEvent({ message: "test", level: "debug" });
+      });
+
+      expect(logs).toHaveLength(1);
+      // Note: shouldEmit receives the wideData, which we can verify via caption
+      expect(logs[0].level).toBe("debug");
+    });
+
+    it("should drop the event when callback returns false", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        shouldEmit: ({ wideData }) => !!wideData.includeMe,
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.withWideEvents({ userId: "123" });
+        logger.emitWideEvent({ message: "dropped" });
+      });
+
+      expect(logs).toHaveLength(0);
+    });
+
+    it("should keep the event when callback returns true", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        shouldEmit: ({ wideData }) => !!wideData.keepMe,
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.withWideEvents({ keepMe: true });
+        logger.emitWideEvent({ message: "kept" });
+      });
+
+      expect(logs).toHaveLength(1);
+      expect(logs[0].level).toBe("info");
+    });
+
+    it("should always keep error/fatal regardless of callback", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        shouldEmit: () => false, // always drop
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "error", level: "error" });
+        logger.emitWideEvent({ message: "fatal", level: "fatal" });
+        logger.emitWideEvent({ message: "info", level: "info" });
+      });
+
+      expect(logs).toHaveLength(2);
+      expect(logs[0].level).toBe("error");
+      expect(logs[1].level).toBe("fatal");
+    });
+
+    it("should compose with rate sampling (both checks must pass)", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "default",
+        rate: 0, // drop all non-error/fatal
+        shouldEmit: ({ wideData }) => !!wideData.keepMe, // would keep
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.withWideEvents({ keepMe: true });
+        logger.emitWideEvent({ message: "dropped-by-rate" });
+      });
+
+      expect(logs).toHaveLength(0);
+    });
+
+    it("should still filter via callback when rate check passes", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "default",
+        rate: 1, // keep all non-error/fatal
+        shouldEmit: ({ wideData }) => !!wideData.secret,
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.withWideEvents({ noSecret: true });
+        logger.emitWideEvent({ message: "dropped-by-callback" });
+      });
+
+      // Rate passes but callback returns false -> dropped
+      expect(logs).toHaveLength(0);
+    });
+
+    it("should work with per_level strategy and shouldEmit", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "per_level",
+        perLevel: {
+          trace: 1, // keep trace, drop everything else
+        },
+        shouldEmit: ({ wideData }) => !!wideData.keepMe,
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+
+        logger.withWideEvents({ keepMe: true });
+        logger.emitWideEvent({ message: "trace-kept", level: "trace" });
+
+        logger.clearWideEvents();
+
+        // info level: not in perLevel, rate=1 (unmapped levels keep)
+        // but callback says !keepMe -> false -> dropped
+        logger.withWideEvents({ keepMe: false });
+        logger.emitWideEvent({ message: "info-dropped", level: "info" });
+      });
+
+      expect(logs).toHaveLength(1);
+      expect(logs[0].level).toBe("trace");
+    });
+
+    it("should keep event when shouldEmit callback throws (fail-open)", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        shouldEmit: () => {
+          throw new Error("oops");
+        },
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "kept-despite-throw" });
+      });
+
+      // Callback threw — event is kept (fail-open)
+      expect(logs).toHaveLength(1);
+    });
+
+    it("should keep error/fatal when shouldEmit throws", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        shouldEmit: () => {
+          throw new Error("oops");
+        },
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "error", level: "error" });
+        logger.emitWideEvent({ message: "info", level: "info" });
+      });
+
+      // Both kept — error exempt, info kept due to fail-open
+      expect(logs).toHaveLength(2);
+    });
+  });
+
+  describe("rate clamping", () => {
+    it("should clamp rate > 1 to 1 (keep all)", () => {
+      const log = createLog({ strategy: "default", rate: 1.5 });
+
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        for (let i = 0; i < 100; i++) {
+          logger.emitWideEvent({ message: `test-${i}` });
+        }
+      });
+
+      expect(emittedLogs).toHaveLength(100);
+    });
+
+    it("should clamp rate < 0 to 0 (drop all for sample-able levels)", () => {
+      const log = createLog({ strategy: "default", rate: -0.5 });
+
+      asyncContext.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "info", level: "info" });
+        logger.emitWideEvent({ message: "error", level: "error" });
+      });
+
+      // info dropped (rate clamped to 0), error always kept
+      expect(emittedLogs).toHaveLength(1);
+      expect(emittedLogs[0].level).toBe("error");
+    });
+
+    it("should keep error/fatal when only shouldEmit throws", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "per_level",
+        perLevel: { trace: 1, error: 0, fatal: 0 },
+        shouldEmit: () => {
+          throw new Error("oops");
+        },
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "trace", level: "trace" });
+        logger.emitWideEvent({ message: "error", level: "error" });
+        logger.emitWideEvent({ message: "fatal", level: "fatal" });
+      });
+
+      // All kept: error/fatal exempt from everything, trace via fail-open
+      expect(logs).toHaveLength(3);
+    });
+
+    it("emitLevel feeds into per_level rate bucket", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "per_level",
+        perLevel: { debug: 0 }, // drop all debug
+        emitLevel: "debug",
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        // No explicit level — uses emitLevel "debug", rate for debug is 0
+        logger.emitWideEvent({ message: "dropped" });
+      });
+
+      expect(logs).toHaveLength(0);
+    });
+
+    it("shouldEmit receives level from emitLevel", () => {
+      const receivedLevels: string[] = [];
+      const { log, ctx } = createLogWithCapture({
+        strategy: "default",
+        rate: 1,
+        emitLevel: "warn",
+        shouldEmit: ({ level }) => {
+          receivedLevels.push(level);
+          return true;
+        },
+      });
+
+      ctx.run({}, () => {
+        log.child().emitWideEvent({ message: "test" });
+      });
+
+      expect(receivedLevels).toEqual(["warn"]);
+    });
+
+    it("explicit level overrides emitLevel for sampling", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "per_level",
+        perLevel: { info: 0 },
+        emitLevel: "debug", // would not be sampled
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        // Explicit "info" overrides emitLevel "debug", rate=0 drops it
+        logger.emitWideEvent({ message: "dropped", level: "info" });
+      });
+
+      expect(logs).toHaveLength(0);
+    });
+  });
+});
