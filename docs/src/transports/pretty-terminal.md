@@ -281,8 +281,6 @@ const transport = getPrettyTerminal({
 });
 ```
 
-### Configuration Options
-
 ### Required Parameters
 
 | Name | Type | Description |
