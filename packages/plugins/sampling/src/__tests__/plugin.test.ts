@@ -52,7 +52,7 @@ describe("samplingPlugin", () => {
     expect(logs).toHaveLength(1);
   });
 
-  it("drops non-error levels at rate 0", () => {
+  it("drops non-error/fatal levels at rate 0", () => {
     const { log, logs } = createLog({ rate: 0 });
     log.info("info - dropped");
     log.debug("debug - dropped");
