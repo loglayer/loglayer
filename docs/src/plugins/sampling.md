@@ -36,7 +36,7 @@ const log = new LogLayer({
   transport: new ConsoleTransport({ logger: console }),
   plugins: [
     samplingPlugin({
-      strategy: "per_level",
+     `strategy`: "per_level",
       `perLevel`: {
         trace: 0.1,  // keep 10% of trace
         debug: 0.3,  // keep 30% of debug
@@ -56,7 +56,7 @@ const log = new LogLayer({
   transport: new ConsoleTransport({ logger: console }),
   plugins: [
     samplingPlugin({
-      ``shouldSample``: ({ level, `metadata` }) => {
+      ```shouldSample```: ({ level, `metadata` }) => {
         // keep everything at error level or above, or logs with a userId
         return level === "error" || `metadata`?.userId;
       },
@@ -67,8 +67,8 @@ const log = new LogLayer({
 
 ## Behavior
 
-- **error/fatal default to 100%**: Levels `error` and `fatal` are kept by default. Use `perLevel`: { error: 0 }` or a ``shouldSample`` callback to override.
-- **fail-open**: If the ``shouldSample`` callback throws, the event is kept
+- **error/fatal default to 100%**: Levels `error` and `fatal` are kept by default. Use `perLevel`: { error: 0 }` or a ```shouldSample``` callback to override.
+- **fail-open**: If the ```shouldSample``` callback throws, the event is kept
 - **snapshot**: `perLevel` map is snapshotted at construction; mutating it afterward has no effect
 - **`rate` clamping**: Rates are clamped to [0, 1]. NaN/Infinity are treated as 0
 
@@ -82,9 +82,9 @@ None.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `strategy` | `"default"` \| `"per_level"` | `"default"` | Sampling strategy. |
+| `strategy` | `"default"` \| `"per_level"` | `"default"` | Sampling`strategy`. |
 | `rate` | `boolean` \| `number` | `1` | Fraction of events to keep (0-1). With `"per_level"` this acts as a fallback for unmapped levels. |
 | `perLevel` | `Partial<Record<LogLevelType, boolean \| number>>` | `undefined` | Per-level rates. Levels not listed fall back to `rate` (or 1 if `rate` is not set). |
-| ``shouldSample`` | `(params) => boolean` | `undefined` | Callback to make a keep/drop decision. Receives the log level, messages, `metadata`, context, and error. |
+| ```shouldSample``` | `(params) => boolean` | `undefined` | Callback to make a keep/drop decision. Receives the log level, messages, `metadata`, context, and error. |
 
 <!--@include: ../changelogs/plugins/sampling-changelog.md-->

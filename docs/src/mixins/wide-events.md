@@ -377,7 +377,7 @@ res.on("finish", () => {
 
 Wide event sampling lets you randomly drop wide event emissions to control log volume and cost.
 "error" and "fatal" default to a 100% keep `rate`, but can be overridden by
-setting `perLevel` rates or using the ``shouldEmit`` callback.
+setting `perLevel` rates or using the ```shouldEmit``` callback.
 
 ### Quick Start
 
@@ -386,7 +386,7 @@ setting `perLevel` rates or using the ``shouldEmit`` callback.
 const mixin = createWideEventMixin({
   asyncContext,
   sampling: {
-    strategy: "default",
+   `strategy`: "default",
     `rate`: 0.1,
   },
 });
@@ -402,7 +402,7 @@ A single `rate` applies to all non-error/fatal levels.
 const mixin = createWideEventMixin({
   asyncContext,
   sampling: {
-    strategy: "default",
+   `strategy`: "default",
     `rate`: 0.1,  // ~10% of info/warn/debug/trace events kept
   },
 });
@@ -425,7 +425,7 @@ Set independent rates per log level. Levels not in the map are kept at 100%.
 const mixin = createWideEventMixin({
   asyncContext,
   sampling: {
-    strategy: "per_level",
+   `strategy`: "per_level",
     `perLevel`: {
       trace: 0.01,  // keep 1% of trace
       debug: 0.1,   // keep 10% of debug
@@ -444,20 +444,20 @@ calling `createWideEventMixin()` has no effect.
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `strategy` | `"default"` \| `"per_level"` | `"default"` | How sampling rates are applied. |
-| `rate` | `boolean` \| `number` | `1` | Single `rate` for `default` strategy. |
-| `perLevel` | `Partial<Record<LogLevelType, boolean \| number>>` | `undefined` | Per-level rates for `per_level` strategy. |
-| ``shouldEmit`` | `(params: { `wideData`, level }) => boolean` | `undefined` | Custom callback that receives the accumulated wide event data and log level. Can override the default error/fatal exemption by returning `false`. |
+| `rate` | `boolean` \| `number` | `1` | Single `rate` for `default``strategy`. |
+| `perLevel` | `Partial<Record<LogLevelType, boolean \| number>>` | `undefined` | Per-level rates for `per_level``strategy`. |
+| ```shouldEmit``` | `(params: { `wideData`, level }) => boolean` | `undefined` | Custom callback that receives the accumulated wide event data and log level. Can override the default error/fatal exemption by returning `false`. |
 | ``emitLevel`` | `LogLevelType` | `undefined` | Override the default emit level when no explicit `level` is passed to `emitWideEvent()`. |
 
 ### Custom Sampling Function
 
-The ``shouldEmit`` callback lets you inspect the full wide event data before deciding whether to emit:
+The ```shouldEmit``` callback lets you inspect the full wide event data before deciding whether to emit:
 
 ```typescript
 const mixin = createWideEventMixin({
   asyncContext,
   sampling: {
-    ``shouldEmit``: ({ `wideData`, level }) => {
+    ```shouldEmit```: ({ `wideData`, level }) => {
       // Only emit events that have a userId
       return !!`wideData`.userId;
     },
@@ -471,14 +471,14 @@ You can compose the callback with `rate`-based sampling — both checks must pas
 const mixin = createWideEventMixin({
   asyncContext,
   sampling: {
-    strategy: "default",
+   `strategy`: "default",
     `rate`: 0.5, // first pass: ~50% kept randomly
-    ``shouldEmit``: ({ `wideData` }) => `wideData`.priority !== "low", // second pass: filter by content
+    ```shouldEmit```: ({ `wideData` }) => `wideData`.priority !== "low", // second pass: filter by content
   },
 });
 ```
 
-**Note:** "error" and "fatal" default to a 100% keep `rate`, but can be overridden by returning `false` from ``shouldEmit`` or by explicitly setting their `rate` in `perLevel`.
+**Note:** "error" and "fatal" default to a 100% keep `rate`, but can be overridden by returning `false` from ```shouldEmit``` or by explicitly setting their `rate` in `perLevel`.
 
 ### What Gets Sampled
 
