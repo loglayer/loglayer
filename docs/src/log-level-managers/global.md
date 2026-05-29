@@ -14,18 +14,20 @@ A log level manager that applies log level changes to all loggers globally, rega
 ## Installation
 
 ::: code-group
-```bash [npm]
+
+```sh [npm]
 npm install @loglayer/log-level-manager-global
 ```
 
-```bash [yarn]
-yarn add @loglayer/log-level-manager-global
-```
-
-```bash [pnpm]
+```sh [pnpm]
 pnpm add @loglayer/log-level-manager-global
 ```
+
+```sh [yarn]
+yarn add @loglayer/log-level-manager-global
+```
 :::
+
 
 ## Usage
 

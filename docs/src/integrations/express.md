@@ -81,7 +81,7 @@ The middleware attaches a LogLayer child logger to `req.log`, so you can use it 
 Importing from `@loglayer/express` automatically augments the Express `Request` interface, so `req.log` has all LogLayer methods available with full type safety.
 :::
 
-## Configuration
+## Configuration Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|

@@ -22,15 +22,15 @@ Ships logs to [Logflare](https://logflare.app) using the HTTP transport with Log
 ## Installation
 
 ::: code-group
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/transport-logflare serialize-error
 ```
 
-```bash [pnpm]
+```sh [pnpm]
 pnpm add loglayer @loglayer/transport-logflare serialize-error
 ```
 
-```bash [yarn]
+```sh [yarn]
 yarn add loglayer @loglayer/transport-logflare serialize-error
 ```
 :::
@@ -81,7 +81,7 @@ log.info("This is a test message");
 log.withMetadata({ userId: "123" }).error("User not found");
 ```
 
-## Configuration
+## Configuration Options
 
 ### Required Parameters
 

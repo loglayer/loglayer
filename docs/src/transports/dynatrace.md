@@ -20,18 +20,20 @@ Although the limitations are pretty generous, it is advised to define the `onErr
 ## Installation
 
 ::: code-group
-```bash [npm]
+
+```sh [npm]
 npm install loglayer @loglayer/transport-dynatrace serialize-error
 ```
 
-```bash [yarn]
-yarn add loglayer @loglayer/transport-dynatrace serialize-error
-```
-
-```bash [pnpm]
+```sh [pnpm]
 pnpm add loglayer @loglayer/transport-dynatrace serialize-error
 ```
+
+```sh [yarn]
+yarn add loglayer @loglayer/transport-dynatrace serialize-error
+```
 :::
+
 
 ## Usage
 
@@ -55,7 +57,7 @@ const log = new LogLayer({
 log.info('Hello world')
 ```
 
-## Configuration
+## Configuration Options
 
 The transport accepts the following configuration options:
 

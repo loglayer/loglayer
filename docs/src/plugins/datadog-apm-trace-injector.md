@@ -1,8 +1,13 @@
+---
+title: Datadog APM Trace Injector Plugin for LogLayer
+description: Inject Datadog APM trace context into your LogLayer logs
+---
+
 # Datadog APM Trace Injector Plugin <Badge type="tip" text="Server" />
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fplugin-datadog-apm-trace-injector)](https://www.npmjs.com/package/@loglayer/plugin-datadog-apm-trace-injector)
 
-[![Source](https://img.shields.io/badge/source-GitHub-blue)](https://github.com/loglayer/loglayer/tree/master/packages/plugins/datadog-apm-trace-injector)
+[Plugin Source](https://github.com/loglayer/loglayer/tree/master/packages/plugins/datadog-apm-trace-injector)
 
 The Datadog APM Trace Injector Plugin automatically injects Datadog APM trace context into your LogLayer logs, enabling correlation between your application logs and distributed traces in Datadog.
 
@@ -12,21 +17,21 @@ This plugin requires the [`dd-trace`](https://github.com/DataDog/dd-trace-js) li
 
 ::: code-group
 
-```bash [npm]
+```sh [npm]
 npm install @loglayer/plugin-datadog-apm-trace-injector dd-trace
 ```
 
-```bash [yarn]
-yarn add @loglayer/plugin-datadog-apm-trace-injector dd-trace
+```sh [pnpm]
+pnpm add @loglayer/plugin-datadog-apm-trace-injector dd-trace
 ```
 
-```bash [pnpm]
-pnpm add @loglayer/plugin-datadog-apm-trace-injector dd-trace
+```sh [yarn]
+yarn add @loglayer/plugin-datadog-apm-trace-injector dd-trace
 ```
 
 :::
 
-## Configuration
+## Configuration Options
 
 ### Required Parameters
 

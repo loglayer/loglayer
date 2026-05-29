@@ -81,7 +81,7 @@ Do **not** set `logger: true` or provide a `loggerInstance` on the Fastify const
 The plugin augments Fastify's `FastifyBaseLogger` interface with `ILogLayer`, so `request.log` has all LogLayer methods available with full type safety.
 :::
 
-## Configuration
+## Configuration Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|

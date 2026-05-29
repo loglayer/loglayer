@@ -71,7 +71,7 @@ The middleware attaches a LogLayer child logger to `ctx.log`, following the conv
 Importing from `@loglayer/koa` automatically augments Koa's `ExtendableContext` interface, so `ctx.log` has all LogLayer methods available with full type safety.
 :::
 
-## Configuration
+## Configuration Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|

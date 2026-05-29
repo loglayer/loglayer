@@ -14,18 +14,20 @@ A log level manager that keeps log levels synchronized between parent and childr
 ## Installation
 
 ::: code-group
-```bash [npm]
+
+```sh [npm]
 npm install @loglayer/log-level-manager-one-way
 ```
 
-```bash [yarn]
-yarn add @loglayer/log-level-manager-one-way
-```
-
-```bash [pnpm]
+```sh [pnpm]
 pnpm add @loglayer/log-level-manager-one-way
 ```
+
+```sh [yarn]
+yarn add @loglayer/log-level-manager-one-way
+```
 :::
+
 
 ## Usage
 

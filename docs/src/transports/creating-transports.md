@@ -46,18 +46,20 @@ If you need to create a reusable transport library or require more complex funct
 To implement a full transport class, you must install the `@loglayer/transport` package:
 
 ::: code-group
-```bash [npm]
+
+```sh [npm]
 npm install @loglayer/transport
 ```
 
-```bash [yarn]
-yarn add @loglayer/transport
-```
-
-```bash [pnpm]
+```sh [pnpm]
 pnpm add @loglayer/transport
 ```
+
+```sh [yarn]
+yarn add @loglayer/transport
+```
 :::
+
 
 ### Implementing a Transport
 

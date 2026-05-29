@@ -37,16 +37,16 @@ This transport sends logs to [Google Cloud Logging](https://cloud.google.com/log
 
 ::: code-group
 
-```bash [npm]
+```sh [npm]
 npm install @loglayer/transport-google-cloud-logging @google-cloud/logging serialize-error
 ```
 
-```bash [yarn]
-yarn add @loglayer/transport-google-cloud-logging @google-cloud/logging serialize-error
+```sh [pnpm]
+pnpm add @loglayer/transport-google-cloud-logging @google-cloud/logging serialize-error
 ```
 
-```bash [pnpm]
-pnpm add @loglayer/transport-google-cloud-logging @google-cloud/logging serialize-error
+```sh [yarn]
+yarn add @loglayer/transport-google-cloud-logging @google-cloud/logging serialize-error
 ```
 
 :::

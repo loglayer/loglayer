@@ -18,15 +18,15 @@ _The code has been manually tested against a local VictoriaLogs instance._
 ## Installation
 
 ::: code-group
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/transport-victoria-logs serialize-error
 ```
 
-```bash [pnpm]
+```sh [pnpm]
 pnpm add loglayer @loglayer/transport-victoria-logs serialize-error
 ```
 
-```bash [yarn]
+```sh [yarn]
 yarn add loglayer @loglayer/transport-victoria-logs serialize-error
 ```
 :::
@@ -77,7 +77,7 @@ log.info("This is a test message");
 log.withMetadata({ userId: "123" }).error("User not found");
 ```
 
-## Configuration
+## Configuration Options
 
 The VictoriaLogs transport extends the [HTTP transport configuration](/transports/http#configuration) with VictoriaLogs specific defaults:
 

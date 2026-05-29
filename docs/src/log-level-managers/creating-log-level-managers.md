@@ -10,18 +10,20 @@ description: Learn how to create a custom log level manager for LogLayer
 To create a custom log level manager, you'll first need to install the base package:
 
 ::: code-group
-```bash [npm]
+
+```sh [npm]
 npm install @loglayer/log-level-manager
 ```
 
-```bash [yarn]
-yarn add @loglayer/log-level-manager
-```
-
-```bash [pnpm]
+```sh [pnpm]
 pnpm add @loglayer/log-level-manager
 ```
+
+```sh [yarn]
+yarn add @loglayer/log-level-manager
+```
 :::
+
 
 ## Understanding Log Level Hierarchy
 

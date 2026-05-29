@@ -7,7 +7,7 @@ description: Add StatsD metrics functionality to LogLayer using hot-shots
 
 [![NPM Version](https://img.shields.io/npm/v/%40loglayer%2Fmixin-hot-shots)](https://www.npmjs.com/package/@loglayer/mixin-hot-shots)
 
-[![Source](https://img.shields.io/badge/source-GitHub-blue)](https://github.com/loglayer/loglayer/tree/master/packages/mixins/hot-shots)
+[Mixin Source](https://github.com/loglayer/loglayer/tree/master/packages/mixins/hot-shots)
 
 Adds StatsD metrics functionality to the [LogLayer](https://loglayer.dev) logging library using [hot-shots](https://github.com/bdeitte/hot-shots). The mixin provides a fluent builder API for sending metrics to StatsD, DogStatsD, and Telegraf through a `stats` property on LogLayer instances.
 
@@ -17,16 +17,16 @@ This mixin requires the [`hot-shots`](https://github.com/bdeitte/hot-shots) libr
 
 ::: code-group
 
-```bash [npm]
+```sh [npm]
 npm install @loglayer/mixin-hot-shots hot-shots
 ```
 
-```bash [yarn]
-yarn add @loglayer/mixin-hot-shots hot-shots
+```sh [pnpm]
+pnpm add @loglayer/mixin-hot-shots hot-shots
 ```
 
-```bash [pnpm]
-pnpm add @loglayer/mixin-hot-shots hot-shots
+```sh [yarn]
+yarn add @loglayer/mixin-hot-shots hot-shots
 ```
 
 :::
@@ -136,7 +136,7 @@ mockLogger.stats.timing('timer', 500).send();
 
 For more information on testing with MockLogLayer, see the [Unit Testing documentation](/logging-api/unit-testing).
 
-## Configuration
+## Configuration Options
 
 The `hotshotsMixin` function requires a configured `StatsD` client instance from the `hot-shots` library.
 

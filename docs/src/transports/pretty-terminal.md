@@ -57,15 +57,15 @@ It may not work as expected in other terminal emulators or operating systems.
 ### Node.js
 
 ::: code-group
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/transport-pretty-terminal serialize-error better-sqlite3
 ```
 
-```bash [pnpm]
+```sh [pnpm]
 pnpm add loglayer @loglayer/transport-pretty-terminal serialize-error better-sqlite3
 ```
 
-```bash [yarn]
+```sh [yarn]
 yarn add loglayer @loglayer/transport-pretty-terminal serialize-error better-sqlite3
 ```
 :::
@@ -75,18 +75,19 @@ yarn add loglayer @loglayer/transport-pretty-terminal serialize-error better-sql
 Bun has a built-in SQLite module, so [`better-sqlite3`](https://github.com/WiseLibs/better-sqlite3) is not needed. Pass a `bun:sqlite` `Database` instance via the `database` option — see [Custom SQLite instance](#custom-sqlite-instance).
 
 ::: code-group
-```bash [npm]
+```sh [npm]
 npm install loglayer @loglayer/transport-pretty-terminal serialize-error
 ```
 
-```bash [pnpm]
+```sh [pnpm]
 pnpm add loglayer @loglayer/transport-pretty-terminal serialize-error
 ```
 
-```bash [yarn]
+```sh [yarn]
 yarn add loglayer @loglayer/transport-pretty-terminal serialize-error
 ```
-```bash [bun]
+
+```sh [bun]
 bun add loglayer @loglayer/transport-pretty-terminal serialize-error
 ```
 :::
@@ -251,7 +252,7 @@ Features in Detail View:
 - Collapsible arrays for better readability
 - Raw JSON view for easy copying
 
-## Configuration
+## Configuration Options
 
 The Pretty Terminal Transport can be customized with various options:
 
@@ -279,8 +280,6 @@ const transport = getPrettyTerminal({
   disableInteractiveMode: false,
 });
 ```
-
-### Configuration Options
 
 ### Required Parameters
 

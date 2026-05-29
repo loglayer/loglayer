@@ -66,7 +66,7 @@ Each request automatically gets:
 - Automatic request and response logging following pino-http conventions
 - Error logging via the `onError` hook
 
-## Configuration
+## Configuration Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
