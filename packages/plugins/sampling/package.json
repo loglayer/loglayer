@@ -1,7 +1,7 @@
 {
   "name": "@loglayer/plugin-sampling",
   "description": "Sample log emissions to control volume with rate-based or per-level strategies.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "private": false,
   "main": "./dist/index.cjs",
