@@ -27,7 +27,7 @@ export interface SamplingParams {
  *
  * - `"default"` — a single `rate` applies to all non-error/fatal levels.
  * - `"per_level"` — per-level rates keyed by LogLevelType; levels not in the
- *   map are kept at 100%.
+ *   map use `rate` as a fallback.
  */
 export type SamplingStrategy = "default" | "per_level";
 
@@ -39,7 +39,7 @@ export type SamplingStrategy = "default" | "per_level";
  * `shouldSample` callback.
  */
 export interface SamplingConfig extends LogLayerPluginParams {
-  /** The log level to sample. Defaults to "default". */
+  /** The sampling strategy. Defaults to "default". */
   strategy?: SamplingStrategy;
 
   /**
@@ -56,7 +56,7 @@ export interface SamplingConfig extends LogLayerPluginParams {
   /**
    * Per-level sampling rates when strategy is `"per_level"`.
    * Keys are log level strings (e.g. `"trace"`, `"info"`, `"warn"`).
-   * Levels not listed keep at 100%.
+   * Levels not listed use `rate` as a fallback.
    *
    * "error" and "fatal" default to a 100% keep rate unless explicitly set here.
    *

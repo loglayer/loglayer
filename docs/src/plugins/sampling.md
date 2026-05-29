@@ -73,7 +73,7 @@ const log = new LogLayer({
 1. **`shouldSample` callback** (if set): Sole gate. If present, it completely replaces rate-based sampling. Returns `true` → kept, `false` → dropped. Throws → kept (fail-open).
 2. **error/fatal default to 100%**: Kept by default unless explicitly mapped in `perLevel`.
 3. **`per_level` strategy**: Checks `perLevel` map → unmapped → `rate`.
-4. **`default` strategy**: Uses `rate` for all non-error/fatal levels.: Levels `error` and `fatal` are kept by default. Use `perLevel: { error: 0 }` or a `shouldSample` callback to override.
+4. **`default` strategy**: Uses `rate` for all non-error/fatal levels.
 - **fail-open**: If the `shouldSample` callback throws, the event is kept
 - **snapshot**: `perLevel` map is snapshotted at construction; mutating it afterward has no effect
 - **rate clamping**: Rates are clamped to [0, 1]. NaN/Infinity are treated as 0

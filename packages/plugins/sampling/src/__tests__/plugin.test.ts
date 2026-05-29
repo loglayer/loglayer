@@ -38,7 +38,7 @@ describe("samplingPlugin", () => {
     expect(logs).toHaveLength(1);
   });
 
-  it("keeps everything when rate is 0", () => {
+  it("keeps only error/fatal when rate is 0", () => {
     const { log, logs } = createLog({ rate: 0 });
     log.info("test");
     log.error("error kept by default");
