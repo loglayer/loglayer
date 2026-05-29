@@ -1,5 +1,11 @@
 # @loglayer/mixin-wide-events
 
+## 1.1.0
+
+### Minor Changes
+
+- [#396](https://github.com/loglayer/loglayer/pull/396) [`2e26492`](https://github.com/loglayer/loglayer/commit/2e2649262f61f9eaaf64d306a585eb14b5e673d7) Thanks [@theogravity](https://github.com/theogravity)! - Add sampling configuration to the wide events mixin. Supports `rate`-based and `per_level` strategies (unmapped levels fall back to `rate`). A custom \`shouldEmit\` callback accepts accumulated wide event data and log level for content-aware filtering. \`error\`/\`fatal\` levels default to a 100% keep rate but can be overridden via \`perLevel\` rates or the \`shouldEmit\` callback.
+
 ## 1.0.1
 
 ### Patch Changes
