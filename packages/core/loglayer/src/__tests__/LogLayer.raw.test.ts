@@ -431,8 +431,6 @@ describe("raw method", () => {
 
     log.raw(rawEntry);
 
-    // When errorFieldInMetadata is true and metadata exists, the error should be placed
-    // in the metadata field as specified
     expect(genericLogger.popLine()).toStrictEqual(
       expect.objectContaining({
         level: LogLevel.info,
@@ -466,8 +464,6 @@ describe("raw method", () => {
 
     log.raw(rawEntry);
 
-    // When errorFieldInMetadata is true and no existing metadata, the error should be
-    // placed in a new metadata field
     expect(genericLogger.popLine()).toStrictEqual(
       expect.objectContaining({
         level: LogLevel.info,

@@ -189,3 +189,46 @@ describe("log level management", () => {
     );
   });
 });
+
+describe("errorOnly", () => {
+  it("should log only an error", () => {
+    const log = getLogger();
+    const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+    const e = new Error("err");
+    log.errorOnly(e);
+
+    expect(genericLogger.popLine()).toStrictEqual(
+      expect.objectContaining({
+        level: LogLevel.error,
+        data: [
+          {
+            err: e,
+          },
+        ],
+      }),
+    );
+  });
+
+  it("should copy the error message as the log message", () => {
+    const log = getLogger();
+    const genericLogger = log.getLoggerInstance("console") as TestLoggingLibrary;
+    const e = new Error("error message");
+
+    log.errorOnly(e, {
+      logLevel: LogLevel.info,
+      copyMsg: true,
+    });
+
+    expect(genericLogger.popLine()).toStrictEqual(
+      expect.objectContaining({
+        level: LogLevel.info,
+        data: [
+          {
+            err: e,
+          },
+          "error message",
+        ],
+      }),
+    );
+  });
+});

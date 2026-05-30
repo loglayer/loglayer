@@ -135,6 +135,12 @@ Description of the change.
 - Include all affected packages in the frontmatter
 - Look at existing changeset files in `.changeset/` for examples
 
+## Linting
+
+- **ALWAYS** use `turbo lint` to lint all packages
+- **Do NOT** run `pnpm run lint` at the root — no such script exists, and pnpm's reporter crashes with a fake OOM warning
+- Use `turbo lint --filter <pkg>` for a specific package
+
 ## Rules
 
 - **ALWAYS** write tests for any code changes
