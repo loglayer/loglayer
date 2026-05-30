@@ -6,7 +6,7 @@ import { posthog } from "posthog-js";
 import { serializeError } from "serialize-error";
 import { PosthogTransport } from "../PosthogTransport.js";
 
-posthog.init("phc_vK2FdBYjURU6hQK9Ru5BinDrUQc6LfY336zP8UnnoCTU", {
+posthog.init(process.env.POSTHOG_PROJECT_TOKEN!, {
   api_host: "https://us.i.posthog.com",
   defaults: "2026-01-30",
   logs: {
