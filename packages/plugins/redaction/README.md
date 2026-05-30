@@ -7,7 +7,7 @@
 The redaction plugin for [loglayer](https://loglayer.dev) provides data redaction support for LogLayer using [fast-redact](https://www.npmjs.com/package/fast-redact). 
 It allows you to automatically redact sensitive information from your logs.
 
-It currently only performs redaction on metadata.
+It redacts all assembled log data, including metadata, context, error fields, and rootData.
 
 ## Installation
 
