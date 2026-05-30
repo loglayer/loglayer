@@ -1,7 +1,11 @@
 ---
 "loglayer": minor
 "@loglayer/shared": minor
-"@loglayer/mixin-wide-events": patch
+"@loglayer/context-manager": minor
+"@loglayer/log-level-manager": minor
+"@loglayer/plugin": minor
+"@loglayer/transport": minor
+"@loglayer/mixin-wide-events": minor
 ---
 
 **loglayer / @loglayer/shared**: Added `rootData` field to `raw()` that spreads data directly at the root level of the log entry, bypassing `metadataFieldName` / `contextFieldName` nesting. `rootData` is spread before `onBeforeDataOut` plugin hooks so plugins can redact or modify its fields.

@@ -1,6 +1,7 @@
 ---
 "@loglayer/context-manager-isolated": minor
 "@loglayer/context-manager-linked": minor
+"@internal/eslint-tests": minor
 "@loglayer/elysia": minor
 "@loglayer/express": minor
 "@loglayer/fastify": minor
