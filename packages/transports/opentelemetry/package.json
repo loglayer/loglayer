@@ -59,7 +59,7 @@
     "express": "5.2.1",
     "loglayer": "workspace:*",
     "serialize-error": "13.0.1",
-    "tsdown": "0.22.0",
+    "tsdown": "0.22.1",
     "tsx": "4.22.3",
     "typescript": "6.0.3",
     "vitest": "4.1.7"

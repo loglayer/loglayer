@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "private": true,
   "dependencies": {
-    "tsdown": "0.22.0"
+    "tsdown": "0.22.1"
   },
   "files": [
     "tsconfig.json"

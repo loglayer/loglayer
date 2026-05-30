@@ -9,14 +9,14 @@
   },
   "dependencies": {
     "loglayer": "workspace:*",
-    "tsdown": "0.22.0"
+    "tsdown": "0.22.1"
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "8.59.4",
-    "@typescript-eslint/parser": "8.59.4",
+    "@typescript-eslint/eslint-plugin": "8.60.0",
+    "@typescript-eslint/parser": "8.60.0",
     "eslint": "10.4.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.59.4"
+    "typescript-eslint": "8.60.0"
   }
 }

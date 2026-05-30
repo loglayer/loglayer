@@ -50,7 +50,7 @@
     "@types/node": "25.9.1",
     "global-jsdom": "29.0.0",
     "loglayer": "workspace:*",
-    "tsdown": "0.22.0",
+    "tsdown": "0.22.1",
     "typescript": "6.0.3",
     "vitest": "4.1.7"
   },

@@ -48,7 +48,7 @@
     "@types/bunyan": "1.8.11",
     "@types/node": "25.9.1",
     "loglayer": "workspace:*",
-    "tsdown": "0.22.0",
+    "tsdown": "0.22.1",
     "tsx": "4.22.3",
     "typescript": "6.0.3",
     "vitest": "4.1.7"

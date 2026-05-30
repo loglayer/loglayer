@@ -33,7 +33,7 @@
     "@types/node": "25.9.1",
     "lefthook": "2.1.8",
     "syncpack": "15.3.1",
-    "turbo": "2.9.14",
+    "turbo": "2.9.16",
     "typescript": "6.0.3"
   },
   "engines": {
