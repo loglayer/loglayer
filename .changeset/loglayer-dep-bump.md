@@ -1,11 +1,11 @@
 ---
 "@loglayer/context-manager-isolated": minor
 "@loglayer/context-manager-linked": minor
-"@loglayer/integration-elysia": minor
-"@loglayer/integration-express": minor
-"@loglayer/integration-fastify": minor
-"@loglayer/integration-hono": minor
-"@loglayer/integration-koa": minor
+"@loglayer/elysia": minor
+"@loglayer/express": minor
+"@loglayer/fastify": minor
+"@loglayer/hono": minor
+"@loglayer/koa": minor
 "@loglayer/log-level-manager-global": minor
 "@loglayer/log-level-manager-linked": minor
 "@loglayer/log-level-manager-one-way": minor
@@ -32,7 +32,7 @@
 "@loglayer/transport-google-cloud-logging": minor
 "@loglayer/transport-http": minor
 "@loglayer/transport-log-file-rotation": minor
-"@loglayer/transport-log4js-node": minor
+"@loglayer/transport-log4js": minor
 "@loglayer/transport-logflare": minor
 "@loglayer/transport-loglevel": minor
 "@loglayer/transport-logtape": minor
@@ -51,4 +51,4 @@
 "@loglayer/transport-winston": minor
 ---
 
-Bump versions for packages depending on loglayer due to minor version update in loglayer and @loglayer/shared.
+Bump versions for packages depending on loglayer due to minor version update in loglayer and @loglayer/shared (types changed).
