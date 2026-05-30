@@ -1,4 +1,5 @@
 ---
+"@loglayer/context-manager": minor
 "@loglayer/context-manager-isolated": minor
 "@loglayer/context-manager-linked": minor
 "@internal/eslint-tests": minor
@@ -7,17 +8,20 @@
 "@loglayer/fastify": minor
 "@loglayer/hono": minor
 "@loglayer/koa": minor
+"@loglayer/log-level-manager": minor
 "@loglayer/log-level-manager-global": minor
 "@loglayer/log-level-manager-linked": minor
 "@loglayer/log-level-manager-one-way": minor
 "@loglayer/mixin-datadog-http-metrics": minor
 "@loglayer/mixin-hot-shots": minor
+"@loglayer/plugin": minor
 "@loglayer/plugin-datadog-apm-trace-injector": minor
 "@loglayer/plugin-filter": minor
 "@loglayer/plugin-opentelemetry": minor
 "@loglayer/plugin-redaction": minor
 "@loglayer/plugin-sampling": minor
 "@loglayer/plugin-sprintf": minor
+"@loglayer/transport": minor
 "@loglayer/transport-aws-cloudwatch-logs": minor
 "@loglayer/transport-aws-lambda-powertools": minor
 "@loglayer/transport-axiom": minor

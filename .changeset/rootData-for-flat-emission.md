@@ -1,10 +1,6 @@
 ---
 "loglayer": minor
 "@loglayer/shared": minor
-"@loglayer/context-manager": minor
-"@loglayer/log-level-manager": minor
-"@loglayer/plugin": minor
-"@loglayer/transport": minor
 "@loglayer/mixin-wide-events": minor
 ---
 
