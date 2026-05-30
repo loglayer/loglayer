@@ -1310,6 +1310,8 @@ describe("LogLayer basic functionality", () => {
 
       const line = genericLogger.popLine();
       const obj = line!.data[0];
+      expect(obj.level).toBe("info");
+      expect(obj.msg).toBe("rootData test");
       expect(obj.fromMeta).toBe("yes");
       expect(obj.fromRoot).toBe("yes");
     });
@@ -1562,6 +1564,58 @@ describe("LogLayer basic functionality", () => {
       const line = genericLogger.popLine();
       const obj = line!.data[0];
       expect(obj.fn).toBe(fn);
+    });
+
+    it("should spread rootData after context and metadata in same raw() call", () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          id: "structured",
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+        metadataFieldName: "meta",
+        contextFieldName: "ctx",
+      });
+
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["combo test"],
+        metadata: { fromMeta: "yes", sharedKey: "from-metadata" },
+        context: { fromCtx: "yes" },
+        rootData: { fromRoot: "yes", sharedKey: "from-rootdata" },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.meta).toMatchObject({ fromMeta: "yes" });
+      expect(obj.ctx).toEqual({ fromCtx: "yes" });
+      expect(obj.fromRoot).toBe("yes");
+      // rootData sharedKey is at root level, metadata sharedKey stays inside meta
+      expect(obj.sharedKey).toBe("from-rootdata");
+    });
+
+    it("should pass rootData through async resolution path", async () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          id: "structured",
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+      });
+
+      await log.raw({
+        logLevel: LogLevel.info,
+        messages: ["async rootData test"],
+        metadata: { asyncMeta: Promise.resolve("resolved") },
+        rootData: { fromRoot: "yes" },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.asyncMeta).toBe("resolved");
+      expect(obj.fromRoot).toBe("yes");
     });
   });
 
