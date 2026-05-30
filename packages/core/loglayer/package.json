@@ -40,6 +40,8 @@
     "electron",
     "loglevel",
     "datadog",
+    "wide events",
+    "canonical logging",
     "log rotation",
     "rotation",
     "rotate logs",
