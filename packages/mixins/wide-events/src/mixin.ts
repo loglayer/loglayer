@@ -155,7 +155,7 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
     id: pluginId,
     onBeforeDataOut: (params) => {
       if (!includeContext) {
-        return params;
+        return params.data;
       }
 
       const store = asyncContext.getStore();
@@ -165,7 +165,7 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
         }
         Object.assign(store._llContext, params.context);
       }
-      return params;
+      return params.data;
     },
   };
 
@@ -344,8 +344,12 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
     // Wrap in field if configured, otherwise use flat
     const metadataToEmit = wideEventField ? { [wideEventField]: wideEventData } : wideEventData;
 
-    // Emit the wide event with metadata
-    self.withMetadata(metadataToEmit)[level](config.message);
+    // Emit via raw() with rootData to bypass metadataFieldName / contextFieldName nesting
+    self.raw({
+      logLevel: level,
+      messages: [config.message],
+      rootData: metadataToEmit,
+    });
   }
 
   /**

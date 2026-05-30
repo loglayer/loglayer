@@ -7,6 +7,20 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## May 29, 2026
+
+`loglayer` / `@loglayer/shared`:
+
+- **`rootData` field for `raw()`**: Added `rootData` parameter that spreads data directly at the root level of the log entry, bypassing `metadataFieldName` / `contextFieldName` nesting. Use this when you need guaranteed flat structures regardless of metadata configuration.
+
+`@loglayer/mixin-wide-events`:
+
+- **Flat emission for wide events**: `emitWideEvent()` now uses `rootData` internally, ensuring wide event fields are always emitted flat at the root level even when `metadataFieldName` is configured.
+
+`@loglayer/plugin-redaction`:
+
+- **Expanded redaction scope**: The plugin now uses `onBeforeDataOut` instead of `onMetadataCalled`, so it redacts all assembled log data (metadata, context, error fields, and `rootData`) in a single pass. Configured paths will match keys anywhere in the log object, not just in metadata.
+
 ## May 28, 2026
 
 `@loglayer/plugin-sampling`:

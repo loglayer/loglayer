@@ -299,8 +299,8 @@ logger.emitWideEvent({ message: "test" });
 
 `withMetadata()` and `withWideEvents()` serve different purposes:
 
-- **`withMetadata()`** - Adds `metadata` to an immediate log entry (not accumulated into wide events)
-- **`withWideEvents()`** - Accumulates data for the final wide event emission
+- **`withMetadata()`** - Adds `metadata` to an immediate log entry (not accumulated into wide events). Subject to `metadataFieldName` nesting if configured.
+- **`withWideEvents()`** - Accumulates data for the final wide event emission. `emitWideEvent()` always emits wide event data flat at the root level, regardless of `metadataFieldName` configuration.
 
 ```typescript
 // withMetadata() logs immediately with the data

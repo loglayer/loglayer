@@ -17,6 +17,7 @@ describe("WideEventMixin - Sampling", () => {
           level: params.logLevel,
           messages: params.messages,
           metadata: params.metadata,
+          data: params.data,
         });
         return params.messages;
       },
@@ -46,6 +47,7 @@ describe("WideEventMixin - Sampling", () => {
           level: params.logLevel,
           messages: params.messages,
           metadata: params.metadata,
+          data: params.data,
         });
         return params.messages;
       },
@@ -355,7 +357,7 @@ describe("WideEventMixin - Sampling", () => {
       });
 
       expect(emittedLogs).toHaveLength(1);
-      expect(emittedLogs[0].metadata).toEqual({ userId: "123" });
+      expect(emittedLogs[0].data).toMatchObject({ userId: "123" });
       expect(emittedLogs[0].level).toBe("info");
     });
   });

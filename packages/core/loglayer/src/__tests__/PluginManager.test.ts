@@ -297,6 +297,25 @@ describe("PluginManager", () => {
     expect(plugins[1].onBeforeDataOut).toHaveBeenCalledOnce();
   });
 
+  it("skips Object.assign when plugin returns the same data reference", () => {
+    const testData = { initial: "data" };
+    const mutatingPlugin: LogLayerPlugin = {
+      id: "mutating-plugin",
+      onBeforeDataOut: (params) => {
+        // Mutate in place and return the same reference (like fast-redact does)
+        params.data.mutated = true;
+        return params.data;
+      },
+    };
+
+    const pm = new PluginManager([mutatingPlugin]);
+    const result = pm.runOnBeforeDataOut({ logLevel: LogLevel.info, data: testData }, mockLogLayer);
+
+    // Same reference confirms skip-merge — mutations are preserved
+    expect(result).toBe(testData);
+    expect(result).toEqual({ initial: "data", mutated: true });
+  });
+
   it("runs onBeforeDataOut with metadata, error, and context parameters", () => {
     const testError = new Error("test error");
     const testMetadata = { metaKey: "metaValue" };
@@ -335,6 +354,59 @@ describe("PluginManager", () => {
       }),
       mockLogLayer,
     );
+  });
+
+  it("handles mixed return strategies across multiple plugins", () => {
+    const testData = { initial: "data" };
+
+    const pm = new PluginManager([
+      {
+        id: "new-obj-plugin",
+        onBeforeDataOut: (params) => {
+          return { ...params.data, fromNew: "yes" };
+        },
+      },
+      {
+        id: "in-place-plugin",
+        onBeforeDataOut: (params) => {
+          params.data.fromMutate = "yes";
+          return params.data;
+        },
+      },
+    ]);
+
+    const result = pm.runOnBeforeDataOut({ logLevel: LogLevel.info, data: testData }, mockLogLayer);
+
+    expect(result).toEqual({
+      initial: "data",
+      fromNew: "yes",
+      fromMutate: "yes",
+    });
+  });
+
+  it("skips Object.assign when plugin added via addPlugins returns same reference", () => {
+    const originalData = { initial: "data", key: "value" };
+    let receivedReference: any = null;
+
+    pluginManager.addPlugins([
+      {
+        id: "in-place-mutate",
+        onBeforeDataOut: (params) => {
+          receivedReference = params.data;
+          // Mutate in place and return same reference (like fast-redact does)
+          params.data.key = "mutated";
+          return params.data;
+        },
+      },
+    ]);
+
+    const result = pluginManager.runOnBeforeDataOut({ logLevel: LogLevel.info, data: originalData }, mockLogLayer);
+
+    // The plugin received the original data object
+    expect(receivedReference).toBe(originalData);
+    // Mutation is preserved
+    expect(result).toBe(originalData);
+    expect(result.key).toBe("mutated");
   });
 
   it("runs onBeforeMessageOut and properly respects plugin responses", () => {
