@@ -1,0 +1,54 @@
+---
+"@loglayer/context-manager-isolated": minor
+"@loglayer/context-manager-linked": minor
+"@loglayer/integration-elysia": minor
+"@loglayer/integration-express": minor
+"@loglayer/integration-fastify": minor
+"@loglayer/integration-hono": minor
+"@loglayer/integration-koa": minor
+"@loglayer/log-level-manager-global": minor
+"@loglayer/log-level-manager-linked": minor
+"@loglayer/log-level-manager-one-way": minor
+"@loglayer/mixin-datadog-http-metrics": minor
+"@loglayer/mixin-hot-shots": minor
+"@loglayer/plugin-datadog-apm-trace-injector": minor
+"@loglayer/plugin-filter": minor
+"@loglayer/plugin-opentelemetry": minor
+"@loglayer/plugin-redaction": minor
+"@loglayer/plugin-sampling": minor
+"@loglayer/plugin-sprintf": minor
+"@loglayer/transport-aws-cloudwatch-logs": minor
+"@loglayer/transport-aws-lambda-powertools": minor
+"@loglayer/transport-axiom": minor
+"@loglayer/transport-betterstack": minor
+"@loglayer/transport-bunyan": minor
+"@loglayer/transport-central": minor
+"@loglayer/transport-consola": minor
+"@loglayer/transport-cribl-http": minor
+"@loglayer/transport-datadog": minor
+"@loglayer/transport-datadog-browser-logs": minor
+"@loglayer/transport-dynatrace": minor
+"@loglayer/transport-electron-log": minor
+"@loglayer/transport-google-cloud-logging": minor
+"@loglayer/transport-http": minor
+"@loglayer/transport-log-file-rotation": minor
+"@loglayer/transport-log4js-node": minor
+"@loglayer/transport-logflare": minor
+"@loglayer/transport-loglevel": minor
+"@loglayer/transport-logtape": minor
+"@loglayer/transport-new-relic": minor
+"@loglayer/transport-opentelemetry": minor
+"@loglayer/transport-pino": minor
+"@loglayer/transport-pretty-terminal": minor
+"@loglayer/transport-roarr": minor
+"@loglayer/transport-sentry": minor
+"@loglayer/transport-signale": minor
+"@loglayer/transport-simple-pretty-terminal": minor
+"@loglayer/transport-sumo-logic": minor
+"@loglayer/transport-tracer": minor
+"@loglayer/transport-tslog": minor
+"@loglayer/transport-victoria-logs": minor
+"@loglayer/transport-winston": minor
+---
+
+Bump versions for packages depending on loglayer due to minor version update in loglayer and @loglayer/shared.
