@@ -1,5 +1,20 @@
 # `@loglayer/plugin-redaction` Changelog
 
+## 4.0.0
+
+### Major Changes
+
+- [#404](https://github.com/loglayer/loglayer/pull/404) [`9cf3b79`](https://github.com/loglayer/loglayer/commit/9cf3b795a73fbf932068f2722fefdf0e874a90fc) Thanks [@theogravity](https://github.com/theogravity)! - **@loglayer/plugin-redaction**: Switched from `onMetadataCalled` to `onBeforeDataOut` hook. The plugin now redacts all assembled data (metadata, context, error fields, and `rootData`) instead of only metadata from `withMetadata()` calls. This ensures sensitive fields are redacted regardless of how they enter the logging pipeline.
+
+### Minor Changes
+
+- [#405](https://github.com/loglayer/loglayer/pull/405) [`bdec560`](https://github.com/loglayer/loglayer/commit/bdec56055ffa2ae8b0ca7e06e5bb1332747f82cf) Thanks [@theogravity](https://github.com/theogravity)! - Bump versions for packages depending on loglayer due to minor version update in loglayer and @loglayer/shared (types changed).
+
+### Patch Changes
+
+- Updated dependencies [[`bdec560`](https://github.com/loglayer/loglayer/commit/bdec56055ffa2ae8b0ca7e06e5bb1332747f82cf)]:
+  - @loglayer/plugin@3.2.0
+
 ## 3.1.0
 
 ### Minor Changes
