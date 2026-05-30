@@ -167,6 +167,7 @@ export class PluginManager {
    */
   runOnBeforeDataOut(params: PluginBeforeDataOutParams, loglayer: ILogLayer): LogLayerData | undefined {
     const initialData = { ...params }; // Make a shallow copy of params to avoid direct modification
+    const originalData = initialData.data;
 
     for (const pluginId of this.onBeforeDataOut) {
       const plugin = this.idToPlugin[pluginId];
@@ -191,8 +192,14 @@ export class PluginManager {
             initialData.data = {};
           }
 
-          // Mutate initialData.data directly instead of spreading it repeatedly
-          Object.assign(initialData.data, result);
+          // If plugin returned the same data reference it received, skip merge
+          // (mutations are already applied). Otherwise merge the result.
+          // Note: plugins cannot remove keys by returning a new trimmed object —
+          // Object.assign only adds/overwrites keys. To remove keys, mutate
+          // params.data directly.
+          if (result !== originalData) {
+            Object.assign(initialData.data, result);
+          }
         }
       }
     }

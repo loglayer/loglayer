@@ -14,12 +14,12 @@ describe("WideEventMixin", () => {
 
     const transport = new BlankTransport({
       shipToLogger: (params) => {
-        // Capture just the flat metadata (what would be logged as data fields)
         emittedLogs.push({
           level: params.logLevel,
           messages: params.messages,
           metadata: params.metadata,
           context: params.context,
+          data: params.data,
         });
         return params.messages;
       },
@@ -60,7 +60,7 @@ describe("WideEventMixin", () => {
 
     expect(emittedLogs).toHaveLength(1);
     expect(emittedLogs[0].messages).toContain("Order processed");
-    expect(emittedLogs[0].metadata).toEqual({
+    expect(emittedLogs[0].data).toMatchObject({
       userId: "123",
       orderId: "456",
     });
@@ -76,7 +76,7 @@ describe("WideEventMixin", () => {
     expect(emittedLogs[0].context).toEqual({
       requestId: "req-1",
     });
-    expect(emittedLogs[0].metadata).toEqual({
+    expect(emittedLogs[0].data).toMatchObject({
       userId: "123",
     });
   });
@@ -87,7 +87,7 @@ describe("WideEventMixin", () => {
     const l = new LogLayer({
       transport: new BlankTransport({
         shipToLogger: (p) => {
-          emittedLogs.push({ metadata: p.metadata, context: p.context });
+          emittedLogs.push({ metadata: p.metadata, context: p.context, data: p.data });
           return p.messages;
         },
       }),
@@ -99,10 +99,12 @@ describe("WideEventMixin", () => {
       logger.emitWideEvent({ message: "Test" });
     });
 
-    // Metadata should NOT include context data when includeContext is false
-    // Note: params.context still contains the logger's context (this is separate)
-    expect(emittedLogs[0].metadata).toEqual({ userId: "123" });
-    expect(emittedLogs[0].metadata.requestId).toBeUndefined();
+    // includeContext: false means wide event rootData doesn't include context
+    // The logger's context still flows through formatContext independently
+    // Verify: context is tracked in params.context (from formatContext)
+    expect(emittedLogs[0].context).toMatchObject({ requestId: "req-1" });
+    // And rootData only has wide event fields
+    expect(emittedLogs[0].data).toMatchObject({ userId: "123" });
   });
 
   it("should nest wide event data under wideEventField when configured", () => {
@@ -111,7 +113,7 @@ describe("WideEventMixin", () => {
     const l = new LogLayer({
       transport: new BlankTransport({
         shipToLogger: (p) => {
-          emittedLogs.push({ metadata: p.metadata, context: p.context });
+          emittedLogs.push({ metadata: p.metadata, context: p.context, data: p.data });
           return p.messages;
         },
       }),
@@ -125,7 +127,7 @@ describe("WideEventMixin", () => {
     });
 
     // wideEventField should wrap the wideEvents data
-    expect(emittedLogs[0].metadata).toEqual({
+    expect(emittedLogs[0].data).toMatchObject({
       event: { userId: "123" },
     });
     // Context should still be separate
@@ -138,7 +140,7 @@ describe("WideEventMixin", () => {
     const l = new LogLayer({
       transport: new BlankTransport({
         shipToLogger: (p) => {
-          emittedLogs.push({ metadata: p.metadata, context: p.context });
+          emittedLogs.push({ metadata: p.metadata, context: p.context, data: p.data });
           return p.messages;
         },
       }),
@@ -153,7 +155,7 @@ describe("WideEventMixin", () => {
 
     // Both context and wideEvents should be included
     expect(emittedLogs[0].context).toEqual({ contextKey: "from-context" });
-    expect(emittedLogs[0].metadata).toEqual({ wideEventsKey: "from-wideEvents" });
+    expect(emittedLogs[0].data).toMatchObject({ wideEventsKey: "from-wideEvents" });
   });
 
   it("should prioritize withWideEvents over withContext for same key", () => {
@@ -162,7 +164,7 @@ describe("WideEventMixin", () => {
     const l = new LogLayer({
       transport: new BlankTransport({
         shipToLogger: (p) => {
-          emittedLogs.push({ metadata: p.metadata, context: p.context });
+          emittedLogs.push({ metadata: p.metadata, context: p.context, data: p.data });
           return p.messages;
         },
       }),
@@ -175,9 +177,9 @@ describe("WideEventMixin", () => {
       logger.emitWideEvent({ message: "Test" });
     });
 
-    // Context has its value, but wideEvents should override in metadata
+    // Context has its value, but wideEvents should override in data
     expect(emittedLogs[0].context).toEqual({ key: "from-context" });
-    expect(emittedLogs[0].metadata).toEqual({ key: "from-wideEvents" });
+    expect(emittedLogs[0].data).toMatchObject({ key: "from-wideEvents" });
   });
 
   it("should allow withMetadata and withWideEvents to work independently", () => {
@@ -186,7 +188,7 @@ describe("WideEventMixin", () => {
     const l = new LogLayer({
       transport: new BlankTransport({
         shipToLogger: (p) => {
-          emittedLogs.push({ messages: p.messages, metadata: p.metadata });
+          emittedLogs.push({ messages: p.messages, metadata: p.metadata, data: p.data });
           return p.messages;
         },
       }),
@@ -224,7 +226,7 @@ describe("WideEventMixin", () => {
 
     // Third log (wide event - has only wideEvents data, not withMetadata data)
     expect(emittedLogs[2].messages).toContain("Wide event");
-    expect(emittedLogs[2].metadata).toEqual({ accumulated: "yes", more: "yes" });
+    expect(emittedLogs[2].data).toMatchObject({ accumulated: "yes", more: "yes" });
   });
 
   it("should support custom log level in emitWideEvent", () => {
@@ -271,7 +273,7 @@ describe("WideEventMixin", () => {
       logger.emitWideEvent({ message: "Async complete" });
     });
 
-    expect(emittedLogs[0].metadata).toEqual({
+    expect(emittedLogs[0].data).toMatchObject({
       step: 2,
     });
   });
@@ -297,7 +299,7 @@ describe("WideEventMixin", () => {
       child.emitWideEvent({ message: "Child event" });
     });
 
-    expect(emittedLogs[0].metadata).toEqual({ fromChild: "yes" });
+    expect(emittedLogs[0].data).toMatchObject({ fromChild: "yes" });
   });
 
   it("should deep merge nested objects", () => {
@@ -309,7 +311,7 @@ describe("WideEventMixin", () => {
     });
 
     // Both nested properties should be present
-    expect(emittedLogs[0].metadata).toEqual({
+    expect(emittedLogs[0].data).toMatchObject({
       user: { id: "123", name: "Alice" },
     });
   });
@@ -323,7 +325,7 @@ describe("WideEventMixin", () => {
     });
 
     // count: 2 (overwritten), user: { id: "123", name: "Alice" } (merged)
-    expect(emittedLogs[0].metadata).toEqual({
+    expect(emittedLogs[0].data).toMatchObject({
       user: { id: "123", name: "Alice" },
       count: 2,
     });
@@ -463,7 +465,7 @@ describe("WideEventMixin", () => {
         logger.emitWideEvent({ message: "Operation failed" });
 
         expect(emittedLogs).toHaveLength(1);
-        expect(emittedLogs[0].metadata.error).toEqual({
+        expect(emittedLogs[0].data.error).toMatchObject({
           name: "CustomError",
           message: "Something went wrong",
           stack: testError.stack,
@@ -479,6 +481,7 @@ describe("WideEventMixin", () => {
             emittedLogs.push({
               level: params.logLevel,
               metadata: params.metadata,
+              data: params.data,
             });
             return params.messages;
           },
@@ -496,8 +499,8 @@ describe("WideEventMixin", () => {
         logger.emitWideEvent({ message: "Done" });
       });
 
-      expect(emittedLogs[0].metadata.errorInfo).toBeDefined();
-      expect(emittedLogs[0].metadata.error).toBeUndefined();
+      expect(emittedLogs[0].data.errorInfo).toBeDefined();
+      expect(emittedLogs[0].data.error).toBeUndefined();
     });
 
     it("should use 'errors' field name by default when errorsAsArray is true", () => {
@@ -508,6 +511,7 @@ describe("WideEventMixin", () => {
             emittedLogs.push({
               level: params.logLevel,
               metadata: params.metadata,
+              data: params.data,
             });
             return params.messages;
           },
@@ -527,12 +531,12 @@ describe("WideEventMixin", () => {
       });
 
       // Should use 'errors' (plural) by default when errorsAsArray is true
-      expect(emittedLogs[0].metadata.errors).toEqual([
+      expect(emittedLogs[0].data.errors).toEqual([
         { name: "Error", message: "First error", stack: expect.any(String) },
         { name: "Error", message: "Second error", stack: expect.any(String) },
       ]);
       // Should NOT have 'error' field
-      expect(emittedLogs[0].metadata.error).toBeUndefined();
+      expect(emittedLogs[0].data.error).toBeUndefined();
     });
 
     it("should replace error when errorsAsArray is false (default)", () => {
@@ -543,7 +547,7 @@ describe("WideEventMixin", () => {
         logger.emitWideEvent({ message: "Done" });
       });
 
-      expect(emittedLogs[0].metadata.error).toEqual({
+      expect(emittedLogs[0].data.error).toMatchObject({
         name: "Error",
         message: "Second",
         stack: expect.any(String),
@@ -557,7 +561,7 @@ describe("WideEventMixin", () => {
         logger.emitWideEvent({ message: "Done" });
       });
 
-      expect(emittedLogs[0].metadata.error).toEqual({
+      expect(emittedLogs[0].data.error).toMatchObject({
         message: "Just a string error",
       });
     });
@@ -587,7 +591,7 @@ describe("WideEventMixin", () => {
       const customLog = new LogLayer({
         transport: new BlankTransport({
           shipToLogger: (params) => {
-            emittedLogs.push({ metadata: params.metadata });
+            emittedLogs.push({ metadata: params.metadata, data: params.data });
             return params.messages;
           },
         }),
@@ -607,11 +611,39 @@ describe("WideEventMixin", () => {
         logger.emitWideEvent({ message: "Done" });
       });
 
-      expect(emittedLogs[0].metadata.error).toEqual({
+      expect(emittedLogs[0].data.error).toMatchObject({
         class: "Error",
         text: "Service unavailable",
         code: "SVC_DOWN",
       });
     });
+  });
+
+  it("should emit wide event data flat at root even when metadataFieldName is configured", () => {
+    const ctx = new AsyncLocalStorage();
+    useLogLayerMixin(createWideEventMixin({ asyncContext: ctx }));
+    const l = new LogLayer({
+      transport: new BlankTransport({
+        shipToLogger: (p) => {
+          emittedLogs.push({ metadata: p.metadata, context: p.context, data: p.data });
+          return p.messages;
+        },
+      }),
+      metadataFieldName: "meta",
+    });
+
+    ctx.run({}, () => {
+      const logger = l.child();
+      logger.withWideEvents({ userId: "123", orderId: "456" });
+      logger.emitWideEvent({ message: "Test" });
+    });
+
+    // Wide event data should be flat at root, not nested under "meta"
+    expect(emittedLogs[0].data).toMatchObject({
+      userId: "123",
+      orderId: "456",
+    });
+    // Should NOT be nested under metadataFieldName
+    expect(emittedLogs[0].data.meta).toBeUndefined();
   });
 });

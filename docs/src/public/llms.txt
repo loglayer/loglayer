@@ -158,6 +158,25 @@ await log.metadataOnly({
 // Callbacks are NOT invoked when the log level is disabled
 ```
 
+## Raw Logging
+
+Full control over all log entry parameters:
+
+```typescript
+import { LogLevel } from 'loglayer'
+
+log.raw({
+  logLevel: LogLevel.info,
+  messages: ['User action completed', { userId: 123 }],
+  metadata: { operation: 'insert', table: 'users' },
+  rootData: { userId: 123 },  // spread directly at root, bypasses metadataFieldName nesting
+  error: new Error('Connection timeout'),
+  context: { requestId: 'req-789' }  // overrides context manager for this entry
+})
+```
+
+The `rootData` parameter spreads data flat at the root level of the log entry, ignoring `metadataFieldName` / `contextFieldName` nesting.
+
 ## Configuration
 
 ```typescript
@@ -179,6 +198,25 @@ const log: ILogLayer = new LogLayer({
   plugins: [],
 })
 ```
+
+## Raw Logging
+
+Bypass the normal API and directly specify all aspects of a log entry:
+
+```typescript
+import { LogLevel } from 'loglayer'
+
+log.raw({
+  logLevel: LogLevel.info,
+  messages: ['User action completed', { userId: 123 }],
+  metadata: { operation: 'insert', table: 'users' },
+  rootData: { userId: 123 },  // spread directly at root, bypasses metadataFieldName nesting
+  error: new Error('Connection timeout'),
+  context: { requestId: 'req-789' }  // overrides context manager for this entry
+})
+```
+
+The `rootData` parameter spreads data flat at the root level of the emitted log object, regardless of `metadataFieldName` / `contextFieldName` configuration. Use it when you need guaranteed flat structures.
 
 ## Groups (route logs to specific transports)
 
@@ -298,7 +336,7 @@ Other: HTTP, Log File Rotation, OpenTelemetry
 ## Available Plugins
 
 - Filter: conditionally drop logs
-- Redaction: redact sensitive fields
+- Redaction: redact sensitive fields from all log data (metadata, context, error, rootData)
 - Sprintf: printf-style string formatting
 - OpenTelemetry: add trace/span context
 - Sampling: randomly drop log entries
@@ -328,7 +366,7 @@ Other: HTTP, Log File Rotation, OpenTelemetry
 - [Context Managers](https://loglayer.dev/context-managers/): Customize context inheritance behavior
 - [Log Level Managers](https://loglayer.dev/log-level-managers/): Customize log level behavior
 - [Mixins](https://loglayer.dev/mixins/): Extend LogLayer with custom methods
-  - [Wide Events](https://loglayer.dev/mixins/wide-events): Accumulate data across async boundaries and emit as single log entry; supports configurable sampling (default/per-level) with error/fatal defaulting to 100% (can be overridden)
+  - [Wide Events](https://loglayer.dev/mixins/wide-events): Accumulate data across async boundaries and emit as single log entry; wide event data is always flat at root level (ignores metadataFieldName); supports configurable sampling (default/per-level) with error/fatal defaulting to 100% (can be overridden)
   - [Hot-Shots](https://loglayer.dev/mixins/hot-shots): Emit StatsD/dogstatsd metrics from log entries
   - [Datadog HTTP Metrics](https://loglayer.dev/mixins/datadog-http-metrics): Send metrics to Datadog HTTP endpoint
 - [ElysiaJS Integration](https://loglayer.dev/integrations/elysia): ElysiaJS plugin with request-scoped logging, optional `group` config to tag auto-logged messages with groups for routing/filtering

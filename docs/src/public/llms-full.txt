@@ -508,9 +508,34 @@ log.raw({
   logLevel: LogLevel.info,
   messages: ['User action completed', { userId: 123 }],
   metadata: { operation: 'insert', table: 'users' },
+  rootData: { userId: 123 },  // spread directly at root, bypasses metadataFieldName nesting
   error: new Error('Connection timeout'),
   context: { requestId: 'req-789' }  // overrides context manager for this entry
 })
+```
+
+### Root Data (Flat Emission)
+
+The `rootData` parameter spreads data directly at the root level of the emitted log object, bypassing `metadataFieldName` / `contextFieldName` nesting. This ensures flat structures regardless of LogLayer configuration.
+
+```typescript
+// With metadataFieldName: 'meta', rootData stays flat:
+log.raw({
+  logLevel: LogLevel.info,
+  messages: ['Flat emission'],
+  metadata: { nested: 'under-meta' },
+  rootData: { userId: '123', action: 'login' }
+})
+// Output: { level: 'info', msg: 'Flat emission', meta: { nested: 'under-meta' }, userId: '123', action: 'login' }
+
+// rootData overrides same-named metadata fields
+log.raw({
+  logLevel: LogLevel.info,
+  messages: ['Override'],
+  metadata: { status: 'from-metadata' },
+  rootData: { status: 'from-rootdata' }
+})
+// Output: { level: 'info', msg: 'Override', status: 'from-rootdata' }
 ```
 
 ## Multiple Transports
@@ -1033,7 +1058,7 @@ Install: `npm install @loglayer/plugin-filter`
 
 ## Redaction Plugin
 
-Redact sensitive fields from metadata using fast-redact:
+Redact sensitive fields from all log data (metadata, context, error, rootData) using fast-redact:
 
 ```typescript
 import { redactionPlugin } from '@loglayer/plugin-redaction'
@@ -1357,14 +1382,14 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 
 - `@loglayer/plugin-sampling` - Sample log emissions to control volume with rate-based, per-level, or custom callback strategies
 - `@loglayer/plugin-filter` - Filter logs by patterns, regex, or JSON queries
-- `@loglayer/plugin-redaction` - Redact sensitive fields
+- `@loglayer/plugin-redaction` - Redact sensitive fields from all log data (metadata, context, error, rootData)
 - `@loglayer/plugin-sprintf` - Printf-style string formatting
 - `@loglayer/plugin-opentelemetry` - OpenTelemetry trace/span context
 - `@loglayer/plugin-datadog-apm-trace-injector` - DataDog APM trace IDs
 
 ## Available Mixins
 
-- `@loglayer/mixin-wide-events` - Accumulate telemetry across async boundaries and emit as a single log entry (canonical log line). Supports configurable sampling (`rate` or `perLevel`) with `error`/`fatal` defaulting to 100% (can be overridden).
+- `@loglayer/mixin-wide-events` - Accumulate telemetry across async boundaries and emit as a single log entry (canonical log line). Wide event data is always emitted flat at the root level, regardless of `metadataFieldName` configuration. Supports configurable sampling (`rate` or `perLevel`) with `error`/`fatal` defaulting to 100% (can be overridden).
 - `@loglayer/mixin-hot-shots` - Hot-Shots (StatsD) metrics
 
 ## Available Context Managers

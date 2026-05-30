@@ -11,7 +11,11 @@ description: Learn how to use the redaction plugin to protect sensitive data in 
 
 The redaction plugin for LogLayer provides a simple way to redact sensitive information from your logs using [fast-redact](https://www.npmjs.com/package/fast-redact).
 
-It currently only performs redaction on metadata.
+It redacts all assembled log data — including metadata, context, error fields, and `rootData` from `raw()` calls.
+
+::: info Redaction scope
+Because this plugin operates on all assembled data, configured paths will match keys anywhere in the log object — not just in metadata passed to `withMetadata()`. For example, a path of `password` will also redact `password` keys in context data and rootData.
+:::
 
 ## Installation
 

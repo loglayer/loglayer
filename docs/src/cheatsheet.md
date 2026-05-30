@@ -364,6 +364,7 @@ log.raw({
   logLevel: LogLevel.error,
   messages: ['Operation failed'],
   metadata: { table: 'users' },
+  rootData: { userId: 123 },         // always flat at root, ignores metadataFieldName
   error: new Error('timeout'),
   context: { requestId: 'req-1' }    // overrides stored context for this entry
 })
@@ -388,6 +389,8 @@ See [Basic Logging](/logging-api/basic-logging#raw-logging) for context behavior
 | Lazy value | `lazy(() => expensiveCall())` | Per evaluation |
 | Log error only | `log.errorOnly(err)` | Single entry |
 | Log `metadata` only | `log.metadataOnly({...})` | Single entry |
+| Raw log entry | `log.raw({ logLevel, messages, metadata, rootData })` | Single entry |
+| Flat emission | `rootData: { userId: 123 }` in `raw()` | Bypasses `metadataFieldName` nesting |
 | Mock for tests | `new MockLogLayer()` | - |
 | Wide events mixin | `@loglayer/mixin-wide-events` | Accumulate data across async boundaries and emit as single log entry (canonical log line). Supports sampling with `error`/`fatal` defaulting to 100% (overridable via `perLevel` or ``shouldEmit``). |
 | Create wide event mixin | `createWideEventMixin({ asyncContext, sampling: { strategy: 'default', `rate`: 0.1 } })` | - |

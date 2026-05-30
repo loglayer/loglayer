@@ -1,4 +1,4 @@
-import type { LogLayerPlugin, LogLayerPluginParams } from "@loglayer/plugin";
+import type { LogLayerPlugin, LogLayerPluginParams, PluginBeforeDataOutParams } from "@loglayer/plugin";
 import type { RedactOptions } from "fast-redact";
 import fastRedact from "fast-redact";
 
@@ -13,10 +13,11 @@ export function redactionPlugin(config: RedactionPluginParams): LogLayerPlugin {
   return {
     id: config.id,
     disabled: config.disabled,
-    onMetadataCalled(metadata: Record<string, any>) {
-      if (!metadata) return;
+    onBeforeDataOut(params: PluginBeforeDataOutParams) {
+      if (!params.data) return params.data;
 
-      return redactInstance(metadata) as Record<string, any>;
+      redactInstance(params.data);
+      return params.data;
     },
   };
 }

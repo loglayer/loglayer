@@ -156,6 +156,7 @@ log.raw({
 | `logLevel` | `LogLevelType` | Yes | The log level for this entry              |
 | `messages` | `MessageDataType[]` | No | Array of message parameters               |
 | `metadata` | `Record<string, any>` | No | Additional metadata to include            |
+| `rootData` | `Record<string, any>` | No | Data spread directly at root level, bypassing `metadataFieldName` / `contextFieldName` nesting |
 | `error` | `any` | No | Error object to include                   |
 | `context` | `Record<string, any>` | No | Context data to include (see notes below) |
 
@@ -225,4 +226,36 @@ log.raw({
   context: { requestId: 'req-789' }
 })
 // Output: { "level": "error", "msg": "Database operation failed", "ctx": { "requestId": "req-789" }, "meta": { "operation": "insert", "table": "users" }, "err": { "type": "Error", "message": "Connection timeout", "stack": "Error: Connection timeout\n    at ..." } }
+
+### Root Data (Flat Emission)
+
+The `rootData` parameter spreads data directly at the root level of the log entry, bypassing `metadataFieldName` / `contextFieldName` nesting. This is useful when you need guaranteed flat structures regardless of LogLayer configuration.
+
+```typescript
+// rootData always stays flat at root, even with metadataFieldName configured
+log.raw({
+  logLevel: LogLevel.info,
+  messages: ['Flat emission'],
+  metadata: { nested: 'under-meta' },
+  rootData: { userId: '123', action: 'login' }
+})
+// With metadataFieldName: 'meta':
+// Output: { "level": "info", "msg": "Flat emission", "meta": { "nested": "under-meta" }, "userId": "123", "action": "login" }
+
+// rootData can override same-named fields from metadata
+log.raw({
+  logLevel: LogLevel.info,
+  messages: ['Override test'],
+  metadata: { status: 'from-metadata' },
+  rootData: { status: 'from-rootdata' }
+})
+// Output: { "level": "info", "msg": "Override test", "status": "from-rootdata" }
 ```
+
+::: warning rootData can override core fields
+`rootData` is spread **before** `onBeforeDataOut` plugin hooks run, so plugins can see and redact its fields. `@loglayer/plugin-redaction` will redact `rootData` fields.
+
+However, `rootData` can override core fields like `level`, `msg`, or the error field name (`err`). Be careful not to use keys that conflict with LogLayer's own output fields.
+
+Note: Unlike `metadata`, `rootData` does not support [lazy evaluation](/logging-api/lazy-evaluation).
+:::

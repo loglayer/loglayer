@@ -33,6 +33,16 @@ export interface RawLogEntry {
   metadata?: LogLayerMetadata;
 
   /**
+   * Data to spread directly at the root level of the log entry.
+   *
+   * Unlike `metadata`, this bypasses `metadataFieldName` / `contextFieldName`
+   * nesting and is always flattened at the root of the emitted log object.
+   *
+   * Note: Unlike `metadata`, `rootData` does not support lazy evaluation.
+   */
+  rootData?: LogLayerMetadata;
+
+  /**
    * Error object to include with the log entry.
    */
   error?: any;

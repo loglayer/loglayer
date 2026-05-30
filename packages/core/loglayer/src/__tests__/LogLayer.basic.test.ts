@@ -2,7 +2,9 @@ import { LogLevel } from "@loglayer/shared";
 import { describe, expect, it, vi } from "vitest";
 import { LogLayer } from "../LogLayer.js";
 import { TestLoggingLibrary } from "../TestLoggingLibrary.js";
+import { BlankTransport } from "../transports/BlankTransport.js";
 import { ConsoleTransport } from "../transports/ConsoleTransport.js";
+import { StructuredTransport } from "../transports/StructuredTransport.js";
 import type { LogLayerConfig } from "../types/index.js";
 
 function getLogger(config?: Partial<LogLayerConfig>) {
@@ -1288,6 +1290,278 @@ describe("LogLayer basic functionality", () => {
           data: ["empty context override test"], // No context data should be present
         }),
       );
+    });
+
+    it("should spread rootData flat at root level, bypassing metadataFieldName", () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+      });
+
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["rootData test"],
+        metadata: { fromMeta: "yes" },
+        rootData: { fromRoot: "yes" },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.fromMeta).toBe("yes");
+      expect(obj.fromRoot).toBe("yes");
+    });
+
+    it("should spread rootData flat even when metadataFieldName is set", () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          id: "structured",
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+        metadataFieldName: "meta",
+      });
+
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["rootData with metadataFieldName"],
+        metadata: { fromMeta: "yes" },
+        rootData: { fromRoot: "yes" },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.meta).toEqual({ fromMeta: "yes" });
+      expect(obj.fromRoot).toBe("yes");
+      expect(obj.fromMeta).toBeUndefined();
+    });
+
+    it("should let rootData override same-named fields from metadata", () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          id: "structured",
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+      });
+
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["rootData override test"],
+        metadata: { sharedKey: "from-metadata" },
+        rootData: { sharedKey: "from-rootdata" },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.sharedKey).toBe("from-rootdata");
+    });
+
+    it("should spread rootData flat even when contextFieldName is set", () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          id: "structured",
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+        contextFieldName: "ctx",
+      });
+
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["rootData with contextFieldName"],
+        metadata: { fromMeta: "yes" },
+        rootData: { fromRoot: "yes" },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.fromRoot).toBe("yes");
+    });
+
+    it("should let plugins redact/modify rootData fields", () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          id: "structured",
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+        plugins: [
+          {
+            id: "redaction-plugin",
+            onBeforeDataOut: (params) => {
+              if (params.data) {
+                params.data.ssn = "[REDACTED]";
+                params.data.traceId = "abc-123";
+              }
+              return params.data;
+            },
+          },
+        ],
+      });
+
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["redaction test"],
+        rootData: { userId: "user-1", ssn: "123-45-6789" },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.ssn).toBe("[REDACTED]");
+      expect(obj.traceId).toBe("abc-123");
+      expect(obj.userId).toBe("user-1");
+    });
+
+    it("should preserve rootData fields when plugin doesn't touch them", () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          id: "structured",
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+        plugins: [
+          {
+            id: "trace-plugin",
+            onBeforeDataOut: (params) => {
+              if (params.data) {
+                params.data.traceId = "abc-123";
+              }
+              return params.data;
+            },
+          },
+        ],
+      });
+
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["preserve test"],
+        rootData: { userId: "user-1", orderId: "order-42" },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.userId).toBe("user-1");
+      expect(obj.orderId).toBe("order-42");
+      expect(obj.traceId).toBe("abc-123");
+    });
+
+    it("should let rootData override error field", () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          id: "structured",
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+      });
+
+      log.raw({
+        logLevel: LogLevel.error,
+        messages: ["error override test"],
+        error: new Error("original error"),
+        rootData: { err: "from-rootdata" },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.err).toBe("from-rootdata");
+    });
+
+    it("should not set hasData when rootData is empty and no other data exists", () => {
+      let capturedHasData: boolean | undefined;
+      const log = new LogLayer({
+        transport: new BlankTransport({
+          shipToLogger: (params) => {
+            capturedHasData = params.hasData;
+            return params.messages;
+          },
+        }),
+      });
+
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["empty rootData test"],
+        rootData: {},
+      });
+
+      expect(capturedHasData).toBeFalsy();
+    });
+
+    it("should spread rootData flat when metadataFieldName equals contextFieldName", () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          id: "structured",
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+        metadataFieldName: "meta",
+        contextFieldName: "meta",
+      });
+
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["same field name test"],
+        metadata: { fromMeta: "yes" },
+        rootData: { fromRoot: "yes" },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.meta).toMatchObject({ fromMeta: "yes" });
+      expect(obj.fromRoot).toBe("yes");
+    });
+
+    it("should let rootData override level and msg fields in StructuredTransport", () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          id: "structured",
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+      });
+
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["actual message"],
+        rootData: { level: "error", msg: "fake message" },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.level).toBe("error");
+      expect(obj.msg).toBe("fake message");
+    });
+
+    it("should not lazily evaluate rootData values", () => {
+      const genericLogger = new TestLoggingLibrary();
+      const log = new LogLayer({
+        transport: new StructuredTransport({
+          id: "structured",
+          // @ts-expect-error
+          logger: genericLogger,
+        }),
+      });
+
+      const fn = () => "evaluated";
+      log.raw({
+        logLevel: LogLevel.info,
+        messages: ["test"],
+        rootData: { fn },
+      });
+
+      const line = genericLogger.popLine();
+      const obj = line!.data[0];
+      expect(obj.fn).toBe(fn);
     });
   });
 

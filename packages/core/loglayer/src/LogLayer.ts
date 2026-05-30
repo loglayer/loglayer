@@ -40,6 +40,7 @@ interface FormatLogParams {
   logLevel: LogLevelType;
   params?: any[];
   metadata?: LogLayerMetadata | null;
+  rootData?: LogLayerMetadata | null;
   err?: any;
   context?: LogLayerContext | null;
   groups?: string[] | null;
@@ -802,6 +803,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
       logLevel: logEntry.logLevel,
       params: logEntry.messages,
       metadata: logEntry.metadata,
+      rootData: logEntry.rootData,
       err: logEntry.error,
       context: logEntry.context,
     };
@@ -1106,6 +1108,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
     logLevel,
     params = [],
     metadata = null,
+    rootData = null,
     err,
     context = null,
     groups = null,
@@ -1151,10 +1154,10 @@ export class LogLayer implements ILogLayer<LogLayer> {
     const metadataHasPromises = metadata ? hasPromiseValues(metadata) : false;
 
     if (metadataHasPromises) {
-      return this._resolveAsyncAndProcess(logLevel, params, finalContextData, metadata, err, context, groups);
+      return this._resolveAsyncAndProcess(logLevel, params, finalContextData, metadata, rootData, err, context, groups);
     }
 
-    this._processLog(logLevel, params, finalContextData, metadata, err, context, groups);
+    this._processLog(logLevel, params, finalContextData, metadata, rootData, err, context, groups);
   }
 
   /**
@@ -1166,6 +1169,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
     params: any[],
     contextData: LogLayerContext,
     metadata: LogLayerMetadata | null,
+    rootData: LogLayerMetadata | null,
     err: any,
     context: LogLayerContext | null,
     groups: string[] | null,
@@ -1179,7 +1183,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
       }
     }
 
-    this._processLog(logLevel, params, contextData, resolvedMetadata, err, context, groups);
+    this._processLog(logLevel, params, contextData, resolvedMetadata, rootData, err, context, groups);
   }
 
   /**
@@ -1204,6 +1208,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
           LogLevel.error,
           [`[LogLayer] Lazy evaluation failed for ${source} key "${failure.key}": ${errorMessage}`],
           {},
+          null,
           null,
           failure.error instanceof Error ? failure.error : undefined,
           {},
@@ -1239,6 +1244,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
           ],
           {},
           null,
+          null,
           undefined,
           {},
         );
@@ -1257,6 +1263,7 @@ export class LogLayer implements ILogLayer<LogLayer> {
     params: any[],
     contextData: LogLayerContext,
     metadata: LogLayerMetadata | null,
+    rootData: LogLayerMetadata | null,
     err: any,
     context: LogLayerContext | null,
     groups: string[] | null = null,
@@ -1338,6 +1345,13 @@ export class LogLayer implements ILogLayer<LogLayer> {
         };
       }
 
+      hasObjData = true;
+    }
+
+    // Spread rootData before plugins so they can redact/modify it,
+    // but still bypass metadataFieldName / contextFieldName nesting
+    if (rootData && Object.keys(rootData).length > 0) {
+      d = { ...d, ...rootData };
       hasObjData = true;
     }
 
