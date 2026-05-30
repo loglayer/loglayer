@@ -87,36 +87,28 @@ With the [Pretty Terminal Transport](https://loglayer.dev/transports/pretty-term
 
 ![Pretty Terminal Transport](https://loglayer.dev/images/pretty-terminal/pretty-terminal-short-v2.gif)
 
-The [Hot Shots Mixin](https://loglayer.dev/mixins/hot-shots) adds a metrics API to LogLayer:
+The [Wide Events Mixin](https://loglayer.dev/mixins/wide-events) enables comprehensive, self-contained log entries that capture an entire operation's context. For background on the problem this solves, see [Why Logging Sucks](https://loggingsucks.com/).
 
 ```typescript
-import { LogLayer, useLogLayerMixin, ConsoleTransport } from 'loglayer';
-import { StatsD } from 'hot-shots';
-import { hotshotsMixin } from '@loglayer/mixin-hot-shots';
+import { AsyncLocalStorage } from "node:async_hooks";
+import { LogLayer, StructuredTransport, useLogLayerMixin } from 'loglayer';
+import { createWideEventMixin } from '@loglayer/mixin-wide-events';
 
-// Create a StatsD client
-const statsd = new StatsD({
-  host: 'localhost',
-  port: 8125
-});
+const asyncLocalStorage = new AsyncLocalStorage<{ logger: LogLayer }>();
 
-// Register the mixin (must be called before creating LogLayer instances)
-useLogLayerMixin(hotshotsMixin(statsd));
+useLogLayerMixin(createWideEventMixin({ asyncContext: asyncLocalStorage }));
 
-// Create LogLayer instance
 const log = new LogLayer({
-  transport: new ConsoleTransport({
-    logger: console
-  })
+  transport: new StructuredTransport({ logger: console })
 });
 
-// Use StatsD methods through the stats property
-log.stats.increment('request.count').send();
-log.info('Request received');
-log.stats.timing('request.duration', 150).send();
-log.info('Request processed');
-log.stats.gauge('active.connections', 42).send();
-log.info('Connection established');
+asyncLocalStorage.run({ logger: log }, () => {
+  log.withWideEvents({ userId: "123" });
+  // ... do work ...
+  log.withWideEvents({ orderId: "456", duration: 150 });
+  log.emitWideEvent({ message: "Order processed" });
+  // Emits a single log with all accumulated data in one entry
+});
 ```
 
 ## Development Setup
