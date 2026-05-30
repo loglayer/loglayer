@@ -1361,6 +1361,7 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 - `@loglayer/transport-google-cloud-logging` - Google Cloud Logging
 - `@loglayer/transport-dynatrace` - Dynatrace
 - `@loglayer/transport-new-relic` - New Relic
+- `@loglayer/transport-posthog` - PostHog (browser-side structured logging via posthog-js SDK)
 - `@loglayer/transport-sentry` - Sentry
 - `@loglayer/transport-axiom` - Axiom
 - `@loglayer/transport-betterstack` - Better Stack

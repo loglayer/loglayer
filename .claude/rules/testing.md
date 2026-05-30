@@ -41,6 +41,7 @@ Live tests test the transport with the actual backing library (non-mocked). They
 
 - Use `import { testTransportOutput } from "@loglayer/transport";` to test the transport
 - Look at other `livetest.ts` files for example implementations
+- **ALWAYS** use environment variables for API keys, tokens, and credentials. Never hardcode secrets in livetest files
 
 ## Type Testing
 

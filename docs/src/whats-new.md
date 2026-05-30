@@ -7,6 +7,14 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## May 30, 2026
+
+`@loglayer/transport-posthog`:
+
+- **New PostHog transport**: Sends structured logs to PostHog via the `posthog-js` SDK's `logger` API.
+
+See the [PostHog transport documentation](/transports/posthog) for details.
+
 ## May 29, 2026
 
 `loglayer` / `@loglayer/shared`:

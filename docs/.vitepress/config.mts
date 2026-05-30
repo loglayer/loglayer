@@ -144,6 +144,7 @@ export default defineConfig({
             { text: 'Google Cloud Logging', link: '/transports/google-cloud-logging' },
             { text: 'Logflare', link: '/transports/logflare' },
             { text: 'New Relic', link: '/transports/new-relic' },
+            { text: 'PostHog', link: '/transports/posthog' },
             { text: 'Sentry', link: '/transports/sentry' },
             { text: "Sumo Logic", link: '/transports/sumo-logic'},
             { text: 'VictoriaLogs', link: '/transports/victoria-logs' },
