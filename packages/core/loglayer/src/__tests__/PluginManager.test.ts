@@ -384,7 +384,7 @@ describe("PluginManager", () => {
     });
   });
 
-  it("skips Object.assign when plugin returns the same data reference", () => {
+  it("skips Object.assign when plugin added via addPlugins returns same reference", () => {
     const originalData = { initial: "data", key: "value" };
     let receivedReference: any = null;
 
