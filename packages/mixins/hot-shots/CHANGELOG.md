@@ -1,5 +1,13 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 4.2.1
+
+### Patch Changes
+
+- [#409](https://github.com/loglayer/loglayer/pull/409) [`99dd6a1`](https://github.com/loglayer/loglayer/commit/99dd6a18142c9ebcc776965ad317b46a4a66a7e4) Thanks [@theogravity](https://github.com/theogravity)! - fix: add `loglayer` as a peer dependency to all mixin packages
+
+  All mixin packages now declare `loglayer` as a peer dependency, ensuring tsdown externalizes `loglayer` types instead of bundling them inline. This fixes type incompatibility when using mixins with consumer projects that have their own `loglayer` installation.
+
 ## 4.2.0
 
 ### Minor Changes
