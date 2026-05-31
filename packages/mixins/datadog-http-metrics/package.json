@@ -54,6 +54,9 @@
     "typescript": "6.0.3",
     "vitest": "4.1.7"
   },
+  "peerDependencies": {
+    "loglayer": ">=9.0.0"
+  },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {
     "node": ">=20"
