@@ -392,5 +392,5 @@ See [Basic Logging](/logging-api/basic-logging#raw-logging) for context behavior
 | Raw log entry | `log.raw({ logLevel, messages, metadata, rootData })` | Single entry |
 | Flat emission | `rootData: { userId: 123 }` in `raw()` | Bypasses `metadataFieldName` nesting |
 | Mock for tests | `new MockLogLayer()` | - |
-| Wide events mixin | `@loglayer/mixin-wide-events` | Accumulate data across async boundaries and emit as single log entry (canonical log line). Supports sampling with `error`/`fatal` defaulting to 100% (overridable via `perLevel` or ``shouldEmit``). |
+| Wide events mixin | `@loglayer/mixin-wide-events` | Accumulate data across async boundaries and emit as single log entry (canonical log line). Sampling: `error`/`fatal` default to 100% (overridable via `perLevel`/`shouldEmit`); `forceKeep` can rescue rate-dropped events. |
 | Create wide event mixin | `createWideEventMixin({ asyncContext, sampling: { strategy: 'default', `rate`: 0.1 } })` | - |
