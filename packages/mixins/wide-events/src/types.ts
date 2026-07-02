@@ -124,6 +124,9 @@ export interface WideEventSamplingConfig {
    * `forceKeep` can only rescue events — it never drops an event that standard
    * logic would keep (`error`/`fatal` stay exempt).
    *
+   * Treat `wideData` as read-only: it is passed by reference and mutating it
+   * changes what gets emitted.
+   *
    * If it throws, it fails **safe**: the throw is swallowed and evaluation
    * falls through to the standard rate/`shouldEmit` logic (unlike `shouldEmit`,
    * which fails open). A swallowed throw is logged via `console.error` when
