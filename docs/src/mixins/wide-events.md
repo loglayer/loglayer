@@ -386,10 +386,11 @@ setting `perLevel` rates or using the `shouldEmit` callback.
 
 ### Evaluation Order
 
-1. **`shouldEmit` callback** (if set): Inspects `wideData` + `level`. Returns `true` → kept, `false` → dropped. Throws → kept (fail-open). **Then** runs `rate` check too — **BOTH must pass.**
-2. **`error`/`fatal` default to 100%**: Kept by default unless explicitly mapped in `perLevel`.
-3. **`per_level` strategy**: Checks `perLevel` map → unmapped → `rate`.
-4. **`default` strategy**: Uses `rate` for all non-error/fatal levels.
+1. **`forceKeep` callback** (if set): Inspects `wideData` + `level`. Returns `true` → **kept immediately**, bypassing the rate check and `shouldEmit`. Returns `false` → falls through to the checks below. Throws → **fail-safe**: falls through to the checks below (logged when `consoleDebug` is enabled). `forceKeep` is **keep-only** — it can rescue but never drop.
+2. **`shouldEmit` callback** (if set): Inspects `wideData` + `level`. Returns `true` → kept, `false` → dropped. Throws → kept (fail-open). **Then** runs `rate` check too — **BOTH must pass.**
+3. **`error`/`fatal` default to 100%**: Kept by default unless explicitly mapped in `perLevel`.
+4. **`per_level` strategy**: Checks `perLevel` map → unmapped → `rate`.
+5. **`default` strategy**: Uses `rate` for all non-error/fatal levels.
 
 ### Quick Start
 
@@ -459,6 +460,7 @@ calling `createWideEventMixin()` has no effect.
 | `rate` | `boolean` \| `number` | `1` | Single `rate` for `default` strategy; with `"per_level"` acts as fallback for unmapped levels. |
 | `perLevel` | `Partial<Record<LogLevelType, boolean \| number>>` | `undefined` | Per-level rates for `per_level` strategy. |
 | `shouldEmit` | `(params: { wideData, level }) => boolean` | `undefined` | Custom callback that receives the accumulated wide event data and log level. Can override the default error/fatal exemption by returning `false`. |
+| `forceKeep` | `(params: { wideData, level }) => boolean` | `undefined` | Keep-only override evaluated **before** `rate`/`shouldEmit`. Returns `true` → kept immediately (bypasses rate + `shouldEmit`); `false` → normal logic applies. Cannot drop events. Fails **safe** on throw (falls through to `rate`). |
 | `emitLevel` | `LogLevelType` | `undefined` | Override the default emit level when no explicit `level` is passed to `emitWideEvent()`. |
 
 ### Custom Sampling Function
@@ -491,6 +493,50 @@ const mixin = createWideEventMixin({
 ```
 
 **Note:** "error" and "fatal" default to a 100% keep `rate`, but can be overridden by returning `false` from `shouldEmit` or by explicitly setting their `rate` in `perLevel`.
+
+### Force-Keep Override
+
+`forceKeep` lets you **rescue** events the rate would otherwise drop — for
+example, sampling 2xx responses at 1% but always keeping requests flagged for
+debugging or showing a downstream failure:
+
+```typescript
+const mixin = createWideEventMixin({
+  asyncContext,
+  sampling: {
+    strategy: "per_level",
+    perLevel: { info: 0.01 }, // keep ~1% of info
+    forceKeep: ({ wideData }) =>
+      wideData.debug === true ||
+      (wideData.deps?.someService?.failures ?? 0) > 0,
+  },
+});
+```
+
+`forceKeep` only sees `wideData` and `level` — it cannot read the request,
+headers, or any external state. Write the signal into the wide event first:
+
+```typescript
+// e.g. in middleware, when a debug header is present
+if (req.headers["x-debug"]) {
+  logger.withWideEvents({ debug: true });
+}
+// ...later
+logger.emitWideEvent({ message: "request completed" }); // forceKeep sees wideData.debug
+```
+
+::: tip
+`forceKeep` is **keep-only**. Returning `false` never drops an event that would
+otherwise be kept — `error`/`fatal` still emit and `info` still runs the rate.
+Use `shouldEmit` (or `perLevel`) to drop events.
+:::
+
+::: warning
+`forceKeep` fails **safe**: if it throws, the throw is swallowed and force-keep
+is skipped for that event (normal `rate`/`shouldEmit` logic applies), so a broken
+override can't blow past your sampling budget. A throwing `forceKeep` or
+`shouldEmit` is logged via `console.error` only when `consoleDebug` is enabled.
+:::
 
 ### What Gets Sampled
 

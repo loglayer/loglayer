@@ -1390,7 +1390,7 @@ useLogLayerMixin({ mixinsToAdd: [metricsMixin] })
 
 ## Available Mixins
 
-- `@loglayer/mixin-wide-events` - Accumulate telemetry across async boundaries and emit as a single log entry (canonical log line). Wide event data is always emitted flat at the root level, regardless of `metadataFieldName` configuration. Supports configurable sampling (`rate` or `perLevel`) with `error`/`fatal` defaulting to 100% (can be overridden).
+- `@loglayer/mixin-wide-events` - Accumulate telemetry across async boundaries and emit as a single log entry (canonical log line). Wide event data is always emitted flat at the root level, regardless of `metadataFieldName` configuration. Supports configurable sampling (`rate` or `perLevel`) with `error`/`fatal` defaulting to 100% (can be overridden), a `shouldEmit` restrictor callback, and a keep-only `forceKeep` override that rescues events the rate would drop (fails safe on throw).
 - `@loglayer/mixin-hot-shots` - Hot-Shots (StatsD) metrics
 
 ## Available Context Managers

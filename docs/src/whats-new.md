@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Jul 2, 2026
+
+`@loglayer/mixin-wide-events`:
+
+- **Added `forceKeep` sampling override**: a keep-only callback evaluated before the rate check that rescues events the configured rate would otherwise drop. Thrown `forceKeep`/`shouldEmit` callbacks are now logged when `consoleDebug` is enabled.
+
 `@loglayer/mixin-wide-events`, `@loglayer/mixin-hot-shots`, `@loglayer/mixin-datadog-http-metrics`:
 
 - **Fixed type resolution**: All mixin packages now declare `loglayer` as a peer dependency, ensuring tsdown externalizes `loglayer` types instead of bundling them inline. This fixes type incompatibility when using mixins with consumer projects that have their own `loglayer` installation.
