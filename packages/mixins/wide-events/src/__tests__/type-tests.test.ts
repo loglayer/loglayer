@@ -124,6 +124,14 @@ describe("Type Tests", () => {
     };
     createWideEventMixin({ asyncContext: new AsyncLocalStorage(), sampling: config4 });
 
+    // forceKeep callback
+    const config5: WideEventSamplingConfig = {
+      strategy: "per_level",
+      perLevel: { info: 0.01 },
+      forceKeep: ({ wideData, level }) => wideData.debug === true && level === "info",
+    };
+    createWideEventMixin({ asyncContext: new AsyncLocalStorage(), sampling: config5 });
+
     // Type check: strategy is literal
     expectTypeOf<WideEventSamplingStrategy>().toEqualTypeOf<"default" | "per_level">();
   });
