@@ -62,6 +62,7 @@ describe("WideEventMixin - Sampling", () => {
         perLevel: captureConfig.perLevel,
         emitLevel: captureConfig.emitLevel,
         shouldEmit: captureConfig.shouldEmit,
+        forceKeep: captureConfig.forceKeep,
       },
     });
     useLogLayerMixin(mixin);
@@ -616,6 +617,237 @@ describe("WideEventMixin - Sampling", () => {
       });
 
       expect(logs).toHaveLength(0);
+    });
+  });
+
+  describe("forceKeep", () => {
+    it("rescues an event the rate would drop", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "default",
+        rate: 0, // would drop all info
+        forceKeep: ({ wideData }) => wideData.debug === true,
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.withWideEvents({ debug: true });
+        logger.emitWideEvent({ message: "rescued", level: "info" });
+      });
+
+      expect(logs).toHaveLength(1);
+      expect(logs[0].messages[0]).toBe("rescued");
+    });
+
+    it("bypasses shouldEmit when forceKeep returns true", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        rate: 1,
+        shouldEmit: () => false, // would drop everything
+        forceKeep: ({ wideData }) => wideData.keep === true,
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.withWideEvents({ keep: true });
+        logger.emitWideEvent({ message: "kept", level: "info" });
+      });
+
+      expect(logs).toHaveLength(1);
+    });
+
+    it("falls through to rate/shouldEmit when forceKeep returns false (drops at rate 0)", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "default",
+        rate: 0,
+        forceKeep: () => false,
+      });
+
+      ctx.run({}, () => {
+        log.child().emitWideEvent({ message: "dropped", level: "info" });
+      });
+
+      expect(logs).toHaveLength(0);
+    });
+
+    it("falls through and keeps when forceKeep returns false and rate passes (fast-path disabled)", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "default",
+        rate: 1,
+        forceKeep: () => false,
+      });
+
+      ctx.run({}, () => {
+        log.child().emitWideEvent({ message: "kept-by-rate", level: "info" });
+      });
+
+      expect(logs).toHaveLength(1);
+    });
+
+    it("does not interfere with error/fatal exemption when returning false", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "default",
+        rate: 0,
+        forceKeep: () => false,
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.emitWideEvent({ message: "err", level: "error" });
+        logger.emitWideEvent({ message: "fat", level: "fatal" });
+      });
+
+      expect(logs).toHaveLength(2);
+    });
+
+    it("fails safe: throwing forceKeep at rate 0 is dropped", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "default",
+        rate: 0,
+        forceKeep: () => {
+          throw new Error("boom");
+        },
+      });
+
+      ctx.run({}, () => {
+        log.child().emitWideEvent({ message: "dropped", level: "info" });
+      });
+
+      expect(logs).toHaveLength(0);
+    });
+
+    it("fails safe: throwing forceKeep with passing rate is kept", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "default",
+        rate: 1,
+        forceKeep: () => {
+          throw new Error("boom");
+        },
+      });
+
+      ctx.run({}, () => {
+        log.child().emitWideEvent({ message: "kept", level: "info" });
+      });
+
+      expect(logs).toHaveLength(1);
+    });
+
+    it("receives wideData and the resolved level", () => {
+      const seen: Array<{ wideData: Record<string, any>; level: string }> = [];
+      const { log, ctx } = createLogWithCapture({
+        strategy: "default",
+        rate: 1,
+        emitLevel: "warn",
+        forceKeep: (params) => {
+          seen.push({ wideData: params.wideData, level: params.level });
+          return false;
+        },
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.withWideEvents({ userId: "u1" });
+        logger.emitWideEvent({ message: "no explicit level" }); // uses emitLevel "warn"
+      });
+
+      expect(seen).toHaveLength(1);
+      expect(seen[0].level).toBe("warn");
+      expect(seen[0].wideData).toMatchObject({ userId: "u1" });
+    });
+
+    it("works with per_level (issue scenario)", () => {
+      const { log, ctx, logs } = createLogWithCapture({
+        strategy: "per_level",
+        perLevel: { info: 0 }, // drop all info
+        forceKeep: ({ wideData }) => wideData.debug === true,
+      });
+
+      ctx.run({}, () => {
+        const logger = log.child();
+        logger.withWideEvents({ debug: true });
+        logger.emitWideEvent({ message: "kept-debug", level: "info" });
+
+        logger.clearWideEvents();
+        logger.withWideEvents({ debug: false });
+        logger.emitWideEvent({ message: "dropped", level: "info" });
+      });
+
+      const kept = logs.map((l) => l.messages[0]);
+      expect(kept).toContain("kept-debug");
+      expect(kept).not.toContain("dropped");
+    });
+  });
+
+  describe("thrown callback observability", () => {
+    it("logs forceKeep throw only when consoleDebug is enabled", () => {
+      const errors: any[][] = [];
+      const spy = console.error;
+      console.error = (...args: any[]) => {
+        errors.push(args);
+      };
+      try {
+        const ctx = new AsyncLocalStorage<Record<string, any>>();
+        const transport = new BlankTransport({ shipToLogger: (p) => p.messages });
+        const mixin = createWideEventMixin({
+          asyncContext: ctx,
+          sampling: {
+            rate: 1,
+            forceKeep: () => {
+              throw new Error("boom");
+            },
+          },
+        });
+        useLogLayerMixin(mixin);
+
+        // consoleDebug off (default) — no log
+        const logOff = new LogLayer({ transport });
+        ctx.run({}, () => logOff.child().emitWideEvent({ message: "x", level: "info" }));
+        expect(errors).toHaveLength(0);
+
+        // consoleDebug on — one [LogLayer] error
+        const logOn = new LogLayer({ transport, consoleDebug: true });
+        ctx.run({}, () => logOn.child().emitWideEvent({ message: "y", level: "info" }));
+        expect(errors).toHaveLength(1);
+        expect(String(errors[0][0])).toContain("[LogLayer]");
+        expect(String(errors[0][0])).toContain("forceKeep");
+      } finally {
+        console.error = spy;
+      }
+    });
+
+    it("logs shouldEmit throw only when consoleDebug is enabled and still keeps (fail-open)", () => {
+      const errors: any[][] = [];
+      const spy = console.error;
+      console.error = (...args: any[]) => {
+        errors.push(args);
+      };
+      try {
+        const ctx = new AsyncLocalStorage<Record<string, any>>();
+        const captured: any[] = [];
+        const transport = new BlankTransport({
+          shipToLogger: (p) => {
+            captured.push(p.messages);
+            return p.messages;
+          },
+        });
+        const mixin = createWideEventMixin({
+          asyncContext: ctx,
+          sampling: {
+            rate: 1,
+            shouldEmit: () => {
+              throw new Error("boom");
+            },
+          },
+        });
+        useLogLayerMixin(mixin);
+
+        const logOn = new LogLayer({ transport, consoleDebug: true });
+        ctx.run({}, () => logOn.child().emitWideEvent({ message: "z", level: "info" }));
+
+        expect(captured).toHaveLength(1); // fail-open: kept
+        expect(errors).toHaveLength(1);
+        expect(String(errors[0][0])).toContain("shouldEmit");
+      } finally {
+        console.error = spy;
+      }
     });
   });
 });

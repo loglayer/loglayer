@@ -4,6 +4,7 @@ import {
   LogLayerMixinAugmentType,
   type LogLayerMixinRegistration,
   type LogLayerPlugin,
+  type LogLevelType,
 } from "loglayer";
 import type { EmitWideEventConfig, WideEventMixinOptions, WideEventSamplingConfig } from "./types.js";
 
@@ -120,6 +121,7 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
         perLevel: snapshotPerLevel,
         emitLevel: options.sampling.emitLevel,
         shouldEmit: options.sampling.shouldEmit,
+        forceKeep: options.sampling.forceKeep,
       }
     : undefined;
 
@@ -288,6 +290,63 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
   }
 
   /**
+   * Logs a thrown sampling callback via console.error, gated on `consoleDebug`.
+   * Matches loglayer's emit-path error convention (see LogLayer.ts:1457).
+   */
+  function logCallbackError(callbackName: string, err: unknown, self: any): void {
+    if (self.getConfig?.()?.consoleDebug) {
+      console.error(`[LogLayer] wide-events ${callbackName} callback threw; falling back:`, err);
+    }
+  }
+
+  /**
+   * Single sampling decision for an emit. Only called when a `forceKeep` or
+   * `shouldEmit` callback is configured (the no-callback case is handled by the
+   * pre-build fast-path in emitWideEventImpl).
+   *
+   * - `forceKeep` runs first (OR logic): true → keep; throws → fail-safe (log +
+   *   fall through); false → fall through.
+   * - Standard logic: rate AND `shouldEmit` (shouldEmit throws → fail-open, log
+   *   + keep). Without `shouldEmit`, rate alone decides.
+   *
+   * Invokes `runRateSampling` at most once.
+   */
+  function evaluateSampling(wideData: Record<string, any>, level: LogLevelType, self: any): boolean {
+    // forceKeep: keep-only override, evaluated before rate/shouldEmit
+    if (samplingConfig?.forceKeep) {
+      try {
+        if (samplingConfig.forceKeep({ wideData, level })) {
+          return true;
+        }
+        // returned false → fall through to standard logic
+      } catch (err) {
+        // fail-safe: log and fall through to standard logic
+        logCallbackError("forceKeep", err, self);
+      }
+    }
+
+    // Standard logic: rate AND shouldEmit (unchanged semantics)
+    if (samplingConfig?.shouldEmit) {
+      try {
+        const callbackOk = samplingConfig.shouldEmit({ wideData, level });
+        const ratePassed = runRateSampling(
+          level,
+          samplingConfig.strategy,
+          samplingConfig.rate,
+          samplingConfig.perLevel,
+        );
+        return ratePassed && callbackOk;
+      } catch (err) {
+        // fail-open: log and keep
+        logCallbackError("shouldEmit", err, self);
+        return true;
+      }
+    }
+
+    return runRateSampling(level, samplingConfig?.strategy, samplingConfig?.rate, samplingConfig?.perLevel);
+  }
+
+  /**
    * Implementation for emitWideEvent
    */
   function emitWideEventImpl(config: EmitWideEventConfig, self: any): void {
@@ -295,10 +354,12 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
     const defaultLevel = samplingConfig?.emitLevel ?? "info";
     const level = config.level ?? defaultLevel;
 
-    // Check non-callback rate sampling early (skip data building when possible)
+    // Pre-build fast-path: drop before building data when no callback needs wideData.
+    // Skipped when forceKeep OR shouldEmit is set (both need wideData).
     if (
       samplingConfig &&
       !samplingConfig.shouldEmit &&
+      !samplingConfig.forceKeep &&
       !runRateSampling(level, samplingConfig.strategy, samplingConfig.rate, samplingConfig.perLevel)
     ) {
       return;
@@ -320,24 +381,11 @@ export function createWideEventMixin(options: WideEventMixinOptions): LogLayerMi
       Object.assign(wideEventData, store._llWideEvents);
     }
 
-    // Run custom callback sampling (now that data is available)
-    if (samplingConfig?.shouldEmit) {
-      // Custom callback can override error/fatal exemption — run it for all levels
-      // Fail-open: if callback throws, keep everything (override rate check too)
-      try {
-        const callbackOk = samplingConfig.shouldEmit({ wideData: wideEventData, level });
-        // Run rate sampling if callback passed
-        const ratePassed = runRateSampling(
-          level,
-          samplingConfig.strategy,
-          samplingConfig.rate,
-          samplingConfig.perLevel,
-        );
-        if (!ratePassed || !callbackOk) {
-          return;
-        }
-      } catch {
-        // Callback threw — fail-open: keep the event (fall through to emit)
+    // Callback-aware sampling decision (only when a callback is configured;
+    // the no-callback case was already handled by the fast-path above).
+    if (samplingConfig && (samplingConfig.forceKeep || samplingConfig.shouldEmit)) {
+      if (!evaluateSampling(wideEventData, level, self)) {
+        return;
       }
     }
 

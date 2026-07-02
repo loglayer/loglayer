@@ -114,6 +114,35 @@ export interface WideEventSamplingConfig {
   shouldEmit?: (params: WideEventSamplingParams) => boolean;
 
   /**
+   * A keep-only override evaluated **before** the rate/`shouldEmit` checks.
+   * When it returns `true`, the event is emitted immediately, bypassing the
+   * rate check and `shouldEmit`. When it returns `false`, standard
+   * rate/`shouldEmit` logic applies. Receives the same params as `shouldEmit`,
+   * so any external signal (e.g. an HTTP header) must first be written into the
+   * wide event via `withWideEvents()`.
+   *
+   * `forceKeep` can only rescue events — it never drops an event that standard
+   * logic would keep (`error`/`fatal` stay exempt).
+   *
+   * If it throws, it fails **safe**: the throw is swallowed and evaluation
+   * falls through to the standard rate/`shouldEmit` logic (unlike `shouldEmit`,
+   * which fails open). A swallowed throw is logged via `console.error` when
+   * `consoleDebug` is enabled.
+   *
+   * @example
+   * ```ts
+   * {
+   *   strategy: "per_level",
+   *   perLevel: { info: 0.01 },
+   *   forceKeep: ({ wideData }) =>
+   *     wideData?.debug === true ||
+   *     (wideData?.deps?.someService?.failures ?? 0) > 0,
+   * }
+   * ```
+   */
+  forceKeep?: (params: WideEventSamplingParams) => boolean;
+
+  /**
    * Override the default log level when no explicit `level` is passed to
    * `emitWideEvent()`. When set, the resolved level uses this value instead
    * of `"info"`. This **does** affect sampling decisions — with `per_level`
