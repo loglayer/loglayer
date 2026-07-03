@@ -136,6 +136,37 @@ mockLogger.stats.timing('timer', 500).send();
 
 For more information on testing with MockLogLayer, see the [Unit Testing documentation](/logging-api/unit-testing).
 
+### Testing with MemoryStatsClient
+
+`MemoryStatsClient` records structured metric records instead of sending them,
+so tests can assert on metrics without parsing StatsD wire format:
+
+```typescript
+import { hotshotsMixin, MemoryStatsClient } from '@loglayer/mixin-hot-shots';
+import { LogLayer, useLogLayerMixin } from 'loglayer';
+
+const stats = new MemoryStatsClient();
+useLogLayerMixin(hotshotsMixin(stats));
+
+const log = new LogLayer({ transport: /* ... */ });
+log.stats.increment('dependency.count').withTags(['dependency:coreApi']).send();
+
+expect(stats.records).toContainEqual({
+  type: 'increment',
+  name: 'dependency.count',
+  value: 1,
+  tags: ['dependency:coreApi'],
+  sampleRate: undefined,
+});
+
+stats.clear(); // reset between tests
+```
+
+Each `.send()` appends exactly one record `{ type, name, value, tags, sampleRate }`
+(a builder never `.send()`-ed records nothing). `increment`/`decrement` default
+`value` to `1`/`-1`. Note the hot-shots positional caveat: on `increment`/`decrement`,
+a lone `.withSampleRate(r)` (no `.withValue()`) is recorded as the `value`.
+
 ## Configuration Options
 
 The `hotshotsMixin` function requires a configured `StatsD` client instance from the `hot-shots` library.
@@ -147,6 +178,37 @@ The `hotshotsMixin` function requires a configured `StatsD` client instance from
 | `client` | `StatsD` | A configured `StatsD` client instance from the `hot-shots` library |
 
 For detailed information about configuring the `StatsD` client, see the [hot-shots documentation](https://github.com/bdeitte/hot-shots).
+
+### Optional Parameters
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `options.contextTagKeys` | `string[]` | `[]` | Allowlist of logger-context keys to automatically promote to metric tags. |
+
+#### Context-Derived Tags
+
+Pass `contextTagKeys` to promote scalar values from the logger's context into
+tags on every metric, without repeating `.withTags()`:
+
+```typescript
+useLogLayerMixin(hotshotsMixin(statsClient, {
+  contextTagKeys: ["endpoint", "method", "status_code"],
+}));
+
+// Tagged with endpoint:/v1/x automatically:
+log.withContext({ endpoint: "/v1/x" }).stats.increment("request.count").send();
+```
+
+Rules:
+
+- **Allowlist is mandatory** — only listed keys are promoted. This prevents
+  high-cardinality values (e.g. `userId`, `reqId`) from inflating metric costs.
+- **Scalars only** — only `string`/`number`/`boolean` context values are
+  promoted; missing keys, `null`/`undefined`, objects, and arrays are skipped.
+- **Explicit tags win** — a `.withTags()` tag overrides a derived tag on the same
+  key; no duplicate keys are emitted.
+- Context is read from the logger the `.stats` call is made on
+  (`log.withContext({...}).stats...`), resolved at `send()` time.
 
 ## Available Methods
 
