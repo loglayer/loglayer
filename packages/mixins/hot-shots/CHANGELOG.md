@@ -1,5 +1,14 @@
 # `@loglayer/mixin-hot-shots` Changelog
 
+## 4.3.0
+
+### Minor Changes
+
+- [#415](https://github.com/loglayer/loglayer/pull/415) [`ba79471`](https://github.com/loglayer/loglayer/commit/ba79471e235f8b3cbb8d9f793872e0c6d5275fcf) Thanks [@theogravity](https://github.com/theogravity)! - Add two opt-in features:
+
+  - **Context-derived tags**: pass `contextTagKeys` to `hotshotsMixin()` to automatically promote allowlisted scalar (`string`/`number`/`boolean`) logger-context values to metric tags. The allowlist is mandatory (cardinality guard) and explicit `.withTags()` tags override derived tags on the same key.
+  - **`MemoryStatsClient`**: a StatsD-compatible client that records structured `{ type, name, value, tags, sampleRate }` records instead of sending, enabling metric assertions in tests without parsing StatsD wire format.
+
 ## 4.2.1
 
 ### Patch Changes
