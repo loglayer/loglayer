@@ -1,7 +1,8 @@
 import type { LogLayer, LogLayerMixin } from "loglayer";
 import { LogLayerMixinAugmentType } from "loglayer";
 import "./types.js"; // Import types to ensure declarations are processed
-import { getStatsClient, isNoOpClient } from "./LogBuilder.augment.js";
+import { deriveContextTags } from "./deriveContextTags.js";
+import { getContextTagKeys, getStatsClient, isNoOpClient } from "./LogBuilder.augment.js";
 import { MockStatsAPI } from "./MockStatsAPI.js";
 import { StatsAPI } from "./StatsAPI.js";
 
@@ -16,8 +17,13 @@ export const logLayerHotShotsMixin: LogLayerMixin = {
       get(this: LogLayer) {
         // Create stats API lazily and cache it
         if (!(this as any)._statsAPI) {
-          // Use MockStatsAPI if no client is configured, otherwise use real StatsAPI
-          (this as any)._statsAPI = isNoOpClient() ? new MockStatsAPI() : new StatsAPI(getStatsClient());
+          if (isNoOpClient()) {
+            (this as any)._statsAPI = new MockStatsAPI();
+          } else {
+            const keys = getContextTagKeys();
+            const deriveTags = keys.length ? () => deriveContextTags(this.getContext(), keys) : undefined;
+            (this as any)._statsAPI = new StatsAPI(getStatsClient(), deriveTags);
+          }
         }
         return (this as any)._statsAPI;
       },
@@ -32,10 +38,18 @@ export const logLayerHotShotsMixin: LogLayerMixin = {
   augmentMock: (prototype) => {
     // Mock implementation - return a no-op stats API
     Object.defineProperty(prototype, "stats", {
-      get() {
+      get(this: any) {
         if (!(this as any)._statsAPI) {
-          // Use MockStatsAPI if no client is configured, otherwise use real StatsAPI
-          (this as any)._statsAPI = isNoOpClient() ? new MockStatsAPI() : new StatsAPI(getStatsClient());
+          if (isNoOpClient()) {
+            (this as any)._statsAPI = new MockStatsAPI();
+          } else {
+            const keys = getContextTagKeys();
+            const deriveTags =
+              keys.length && typeof this.getContext === "function"
+                ? () => deriveContextTags(this.getContext(), keys)
+                : undefined;
+            (this as any)._statsAPI = new StatsAPI(getStatsClient(), deriveTags);
+          }
         }
         return (this as any)._statsAPI;
       },

@@ -1,13 +1,17 @@
 import type { StatsD } from "hot-shots";
 import type { LogLayerMixinRegistration } from "loglayer";
-import { setStatsClient } from "./LogBuilder.augment.js";
+import { setContextTagKeys, setStatsClient } from "./LogBuilder.augment.js";
 import { logLayerHotShotsMixin } from "./LogLayer.augment.js";
+import type { MemoryStatsClient } from "./MemoryStatsClient.js";
+import type { HotShotsMixinOptions } from "./types.js";
 import "./types.js"; // Import types to ensure declarations are processed
 
 export type { StatsD } from "hot-shots";
+export { MemoryStatsClient } from "./MemoryStatsClient.js";
 export { MockStatsAPI } from "./MockStatsAPI.js";
 export { StatsAPI } from "./StatsAPI.js";
 export type {
+  HotShotsMixinOptions,
   IAsyncDistTimerBuilder,
   IAsyncTimerBuilder,
   ICheckBuilder,
@@ -18,6 +22,7 @@ export type {
   IStatsBuilder,
   ITimerBuilder,
   StatsCallback,
+  StatsRecord,
   StatsTags,
 } from "./types.js";
 
@@ -27,6 +32,7 @@ export type {
  * providing a fluent API for sending metrics to StatsD, DogStatsD, and Telegraf.
  *
  * @param client - The hot-shots StatsD client instance to use for sending metrics
+ * @param options - Optional mixin options (e.g. `contextTagKeys`)
  * @returns A LogLayer mixin registration object
  *
  * @example
@@ -39,9 +45,14 @@ export type {
  * useLogLayerMixin(hotshotsMixin(statsClient));
  * ```
  */
-export function hotshotsMixin(client: StatsD | null): LogLayerMixinRegistration {
-  // Set the client for the mixin
-  setStatsClient(client);
+export function hotshotsMixin(
+  client: StatsD | MemoryStatsClient | null,
+  options?: HotShotsMixinOptions,
+): LogLayerMixinRegistration {
+  // Set the client for the mixin (MemoryStatsClient duck-types the used StatsD surface)
+  setStatsClient(client as StatsD | null);
+  // Set the context-tag allowlist (empty when not provided)
+  setContextTagKeys(options?.contextTagKeys);
 
   return {
     mixinsToAdd: [logLayerHotShotsMixin],

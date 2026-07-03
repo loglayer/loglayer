@@ -14,6 +14,8 @@ export abstract class CommonStatsBuilder implements IStatsBuilder {
   protected callback?: StatsCallback;
   /** The hot-shots client instance */
   protected readonly client: StatsD;
+  /** Resolver for context-derived tags; injected by StatsAPI. Undefined when no allowlist is configured. */
+  public deriveContextTags?: () => string[];
 
   /**
    * Creates a new CommonStatsBuilder instance.
@@ -59,19 +61,35 @@ export abstract class CommonStatsBuilder implements IStatsBuilder {
   }
 
   /**
-   * Convert tags to the format hot-shots expects (array of strings)
+   * Normalize explicit tags (array or object) to an array of `key:value` strings.
    */
-  protected convertTags(): string[] | undefined {
+  private normalizeExplicitTags(): string[] {
     if (!this.tags) {
-      return undefined;
+      return [];
     }
-
     if (Array.isArray(this.tags)) {
       return this.tags;
     }
-
     // Convert object to array format: ["key:value", "key2:value2"]
     return Object.entries(this.tags).map(([key, value]) => `${key}:${value}`);
+  }
+
+  /**
+   * Convert tags to the format hot-shots expects (array of strings), merging
+   * context-derived tags. Explicit tags win: a derived tag is included only
+   * when its key is not already present in the explicit tags.
+   */
+  protected convertTags(): string[] | undefined {
+    const explicit = this.normalizeExplicitTags();
+    const derived = this.deriveContextTags?.() ?? [];
+
+    if (derived.length === 0) {
+      return explicit.length ? explicit : undefined;
+    }
+
+    const explicitKeys = new Set(explicit.map((tag) => tagKey(tag)));
+    const merged = [...explicit, ...derived.filter((tag) => !explicitKeys.has(tagKey(tag)))];
+    return merged.length ? merged : undefined;
   }
 
   /**
@@ -107,4 +125,13 @@ export abstract class CommonStatsBuilder implements IStatsBuilder {
    * Abstract method that each builder must implement to send the metric
    */
   abstract send(): void;
+}
+
+/**
+ * Extract the key portion of a `key:value` tag (substring before the first `:`).
+ * A tag with no `:` is its own key.
+ */
+function tagKey(tag: string): string {
+  const idx = tag.indexOf(":");
+  return idx === -1 ? tag : tag.slice(0, idx);
 }

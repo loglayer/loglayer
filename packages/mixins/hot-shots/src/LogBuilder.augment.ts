@@ -15,6 +15,28 @@ export function setStatsClient(client: StatsD | null): void {
   statsClient = client;
 }
 
+// Store the allowlist of context keys to promote to tags - set during mixin registration
+let contextTagKeys: string[] = [];
+
+/**
+ * Set the allowlist of logger-context keys to promote to metric tags.
+ * Called during mixin registration.
+ *
+ * @param keys - The context keys to promote (undefined clears the allowlist)
+ */
+export function setContextTagKeys(keys: string[] | undefined): void {
+  contextTagKeys = keys ?? [];
+}
+
+/**
+ * Get the allowlist of context keys to promote to metric tags.
+ *
+ * @returns The configured context tag keys (empty array if none)
+ */
+export function getContextTagKeys(): string[] {
+  return contextTagKeys;
+}
+
 /**
  * Check if the client is null (no-op mode)
  *

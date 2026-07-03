@@ -394,3 +394,5 @@ See [Basic Logging](/logging-api/basic-logging#raw-logging) for context behavior
 | Mock for tests | `new MockLogLayer()` | - |
 | Wide events mixin | `@loglayer/mixin-wide-events` | Accumulate data across async boundaries and emit as single log entry (canonical log line). Sampling: `error`/`fatal` default to 100% (overridable via `perLevel`/`shouldEmit`); `forceKeep` can rescue rate-dropped events. |
 | Create wide event mixin | `createWideEventMixin({ asyncContext, sampling: { strategy: 'default', `rate`: 0.1 } })` | - |
+| Hot-shots mixin | `@loglayer/mixin-hot-shots` | StatsD/DogStatsD metrics via `log.stats.*`. `contextTagKeys` auto-promotes allowlisted scalar context values to tags. |
+| Hot-shots metrics testing | `new MemoryStatsClient()` + `hotshotsMixin(client)` | Records structured `{ type, name, value, tags, sampleRate }` in `client.records`; `client.clear()` to reset. |

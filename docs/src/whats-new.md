@@ -7,6 +7,13 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Jul 3, 2026
+
+`@loglayer/mixin-hot-shots`:
+
+- **Context-derived tags**: pass `contextTagKeys` to `hotshotsMixin()` to automatically promote allowlisted scalar context values to metric tags.
+- **`MemoryStatsClient`**: a StatsD-compatible client that records structured metric records for assertions in tests, replacing StatsD wire-format string parsing.
+
 ## Jul 2, 2026
 
 `@loglayer/mixin-wide-events`:
