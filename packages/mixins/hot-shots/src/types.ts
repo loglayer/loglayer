@@ -11,6 +11,20 @@ export type StatsCallback = (error?: Error, bytes?: number) => void;
 export type StatsTags = string[] | Record<string, string>;
 
 /**
+ * Options for configuring the hot-shots mixin.
+ */
+export interface HotShotsMixinOptions {
+  /**
+   * Allowlist of logger-context keys to automatically promote to metric tags.
+   * Only scalar (string/number/boolean) context values are promoted; explicit
+   * `.withTags()` tags override derived tags on the same key. The allowlist is
+   * mandatory — context is never auto-promoted wholesale, to avoid
+   * high-cardinality tags (e.g. userId) inflating metric costs.
+   */
+  contextTagKeys?: string[];
+}
+
+/**
  * Builder interface for chaining stats method configurations
  */
 export interface IStatsBuilder {

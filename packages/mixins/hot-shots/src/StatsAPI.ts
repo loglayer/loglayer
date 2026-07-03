@@ -13,6 +13,7 @@ import { TimerBuilder } from "./builders/TimerBuilder.js";
 import { TimingBuilder } from "./builders/TimingBuilder.js";
 import { UniqueBuilder } from "./builders/UniqueBuilder.js";
 import { CheckBuilder } from "./CheckBuilder.js";
+import type { CommonStatsBuilder } from "./CommonStatsBuilder.js";
 import type {
   IAsyncDistTimerBuilder,
   IAsyncTimerBuilder,
@@ -33,8 +34,20 @@ export class StatsAPI implements IStatsAPI {
    * Creates a new StatsAPI instance.
    *
    * @param client - The hot-shots StatsD client instance to use for sending metrics
+   * @param deriveTags - Optional resolver returning context-derived tag strings
    */
-  constructor(private readonly client: StatsD) {}
+  constructor(
+    private readonly client: StatsD,
+    private readonly deriveTags?: () => string[],
+  ) {}
+
+  /**
+   * Attach the context-tag resolver to a builder before returning it.
+   */
+  private withContext<B extends CommonStatsBuilder>(builder: B): B {
+    builder.deriveContextTags = this.deriveTags;
+    return builder;
+  }
 
   /**
    * Increment a counter metric.
@@ -44,7 +57,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   increment(stat: string | string[]): IIncrementDecrementBuilder {
-    return new IncrementBuilder(this.client, stat);
+    return this.withContext(new IncrementBuilder(this.client, stat));
   }
 
   /**
@@ -55,7 +68,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   decrement(stat: string | string[]): IIncrementDecrementBuilder {
-    return new DecrementBuilder(this.client, stat);
+    return this.withContext(new DecrementBuilder(this.client, stat));
   }
 
   /**
@@ -67,7 +80,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   gauge(stat: string | string[], value: number): IStatsBuilder {
-    return new GaugeBuilder(this.client, stat, value);
+    return this.withContext(new GaugeBuilder(this.client, stat, value));
   }
 
   /**
@@ -79,7 +92,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   gaugeDelta(stat: string | string[], delta: number): IStatsBuilder {
-    return new GaugeDeltaBuilder(this.client, stat, delta);
+    return this.withContext(new GaugeDeltaBuilder(this.client, stat, delta));
   }
 
   /**
@@ -91,7 +104,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   histogram(stat: string | string[], value: number): IStatsBuilder {
-    return new HistogramBuilder(this.client, stat, value);
+    return this.withContext(new HistogramBuilder(this.client, stat, value));
   }
 
   /**
@@ -103,7 +116,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   distribution(stat: string | string[], value: number): IStatsBuilder {
-    return new DistributionBuilder(this.client, stat, value);
+    return this.withContext(new DistributionBuilder(this.client, stat, value));
   }
 
   /**
@@ -115,7 +128,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   timing(stat: string | string[], value: number | Date): IStatsBuilder {
-    return new TimingBuilder(this.client, stat, value);
+    return this.withContext(new TimingBuilder(this.client, stat, value));
   }
 
   /**
@@ -127,7 +140,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   set(stat: string | string[], value: string | number): IStatsBuilder {
-    return new SetBuilder(this.client, stat, value);
+    return this.withContext(new SetBuilder(this.client, stat, value));
   }
 
   /**
@@ -139,7 +152,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   unique(stat: string | string[], value: string | number): IStatsBuilder {
-    return new UniqueBuilder(this.client, stat, value);
+    return this.withContext(new UniqueBuilder(this.client, stat, value));
   }
 
   /**
@@ -150,7 +163,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   event(title: string): IEventBuilder {
-    return new EventBuilder(this.client, title);
+    return this.withContext(new EventBuilder(this.client, title));
   }
 
   /**
@@ -162,7 +175,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   check(name: string, status: DatadogChecksValues): ICheckBuilder {
-    return new CheckBuilder(this.client, name, status);
+    return this.withContext(new CheckBuilder(this.client, name, status));
   }
 
   /**
@@ -175,7 +188,7 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   asyncTimer<P extends unknown[], R>(func: (...args: P) => Promise<R>, stat: string | string[]): IAsyncTimerBuilder {
-    return new AsyncTimerBuilder(this.client, func as (...args: unknown[]) => Promise<unknown>, stat);
+    return this.withContext(new AsyncTimerBuilder(this.client, func as (...args: unknown[]) => Promise<unknown>, stat));
   }
 
   /**
@@ -191,7 +204,9 @@ export class StatsAPI implements IStatsAPI {
     func: (...args: P) => Promise<R>,
     stat: string | string[],
   ): IAsyncDistTimerBuilder {
-    return new AsyncDistTimerBuilder(this.client, func as (...args: unknown[]) => Promise<unknown>, stat);
+    return this.withContext(
+      new AsyncDistTimerBuilder(this.client, func as (...args: unknown[]) => Promise<unknown>, stat),
+    );
   }
 
   /**
@@ -204,6 +219,6 @@ export class StatsAPI implements IStatsAPI {
    * @returns A builder instance for chaining additional options
    */
   timer<P extends unknown[], R>(func: (...args: P) => R, stat: string | string[]): ITimerBuilder {
-    return new TimerBuilder(this.client, func as (...args: unknown[]) => unknown, stat);
+    return this.withContext(new TimerBuilder(this.client, func as (...args: unknown[]) => unknown, stat));
   }
 }
