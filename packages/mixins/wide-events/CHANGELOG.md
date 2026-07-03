@@ -1,5 +1,11 @@
 # @loglayer/mixin-wide-events
 
+## 1.3.0
+
+### Minor Changes
+
+- [#414](https://github.com/loglayer/loglayer/pull/414) [`10199fb`](https://github.com/loglayer/loglayer/commit/10199fb838031c75a5867d69a59253479d2cce53) Thanks [@theogravity](https://github.com/theogravity)! - Add `forceKeep` sampling override — a keep-only callback evaluated before the rate check that rescues wide events the configured rate would otherwise drop (e.g. always keep a request flagged for debugging or showing a downstream failure). Returns `true` to emit immediately, bypassing the rate check and `shouldEmit`; returns `false` to apply normal sampling; and fails safe on throw. Thrown `forceKeep`/`shouldEmit` callbacks are now logged via `console.error` when `consoleDebug` is enabled.
+
 ## 1.2.1
 
 ### Patch Changes
