@@ -11,6 +11,40 @@ export type StatsCallback = (error?: Error, bytes?: number) => void;
 export type StatsTags = string[] | Record<string, string>;
 
 /**
+ * A structured record of a metric captured by MemoryStatsClient (for testing).
+ */
+export interface StatsRecord {
+  /** The metric operation type */
+  type:
+    | "increment"
+    | "decrement"
+    | "gauge"
+    | "gaugeDelta"
+    | "histogram"
+    | "distribution"
+    | "timing"
+    | "set"
+    | "unique"
+    | "event"
+    | "check"
+    | "timer"
+    | "asyncTimer"
+    | "asyncDistTimer";
+  /** Stat name (or event title / check name) */
+  name: string;
+  /** Metric value; string for set/unique, number|Date for timing, undefined for event */
+  value?: number | string | Date;
+  /** Normalized tag strings, or undefined when none */
+  tags?: string[];
+  /** Sample rate, or undefined */
+  sampleRate?: number;
+  /** DataDog service-check status (check only) */
+  status?: number;
+  /** Event text (event only) */
+  text?: string;
+}
+
+/**
  * Options for configuring the hot-shots mixin.
  */
 export interface HotShotsMixinOptions {
