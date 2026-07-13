@@ -1301,15 +1301,21 @@ Add the mixin package to your tsconfig.json:
 import { LogLayer, useLogLayerMixin, LogLayerMixinAugmentType } from 'loglayer'
 import type { LogLayerMixin, LogLayerMixinRegistration, MockLogLayer } from 'loglayer'
 
-// 1. Define types
-export interface IMetricsMixin<T> {
-  recordMetric(name: string, value: number): T
+// 1. Define types. Chainable methods return `this`.
+export interface IMetricsMixin {
+  recordMetric(name: string, value: number): this
 }
 
+// Augment the concrete classes in `loglayer`...
 declare module 'loglayer' {
-  interface LogLayer extends IMetricsMixin<LogLayer> {}
-  interface MockLogLayer extends IMetricsMixin<MockLogLayer> {}
-  interface ILogLayer<This> extends IMetricsMixin<This> {}
+  interface LogLayer extends IMetricsMixin {}
+  interface MockLogLayer extends IMetricsMixin {}
+}
+
+// ...and the ILogLayer interface in `@loglayer/shared`, where it is defined.
+// Augmenting `ILogLayer` under `loglayer` misses chained return types like child().
+declare module '@loglayer/shared' {
+  interface ILogLayer<This> extends IMetricsMixin {}
 }
 
 // 2. Implement

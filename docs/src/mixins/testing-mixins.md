@@ -33,19 +33,23 @@ import { LogLayerMixinAugmentType, LogBuilder, MockLogBuilder } from 'loglayer';
 import type { PluginBeforeDataOutParams } from 'loglayer';
 
 // TypeScript declarations
-export interface IPerfTimingMixin<T> {
-  withPerfStart(id: string): T;
-  withPerfEnd(id: string): T;
+export interface IPerfTimingMixin {
+  withPerfStart(id: string): this;
+  withPerfEnd(id: string): this;
 }
 
-// Augment the loglayer module
+// Augment the concrete classes for runtime prototype augmentation
 declare module 'loglayer' {
-  interface LogLayer extends IPerfTimingMixin<LogLayer> {}
-  interface LogBuilder extends IPerfTimingMixin<LogBuilder> {}
-  interface MockLogLayer extends IPerfTimingMixin<MockLogLayer> {}
-  interface MockLogBuilder extends IPerfTimingMixin<MockLogBuilder> {}
-  interface ILogLayer<This> extends IPerfTimingMixin<This> {}
-  interface ILogBuilder<This> extends IPerfTimingMixin<This> {}
+  interface LogLayer extends IPerfTimingMixin {}
+  interface LogBuilder extends IPerfTimingMixin {}
+  interface MockLogLayer extends IPerfTimingMixin {}
+  interface MockLogBuilder extends IPerfTimingMixin {}
+}
+
+// Augment the interfaces where they live (@loglayer/shared)
+declare module '@loglayer/shared' {
+  interface ILogLayer<This> extends IPerfTimingMixin {}
+  interface ILogBuilder<This> extends IPerfTimingMixin {}
 }
 
 // Module-level storage for performance timing state

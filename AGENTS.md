@@ -272,61 +272,75 @@ Mixins extend LogLayer functionality by adding methods directly to `ILogLayer` a
 
 ### Type Declarations (Required)
 
-All mixins must augment both modules:
+All mixins must augment both modules. For chainable methods (those that return
+the logger), **use the polymorphic `this` return type** — not a generic type
+parameter that gets threaded through `ILogLayer<This>`.
 
 ```typescript
-// Define generic mixin interface
-export interface ICustomMixin<T> {
-  customMethod(param: string): T;
+// Define mixin interface. Chainable methods return `this`.
+export interface ICustomMixin {
+  customMethod(param: string): this;
 }
 
 // Required: Augment @loglayer/shared for type preservation
 declare module '@loglayer/shared' {
-  interface ILogLayer<This> extends ICustomMixin<This> {}
+  interface ILogLayer<This> extends ICustomMixin {}
 }
 
 // Required: Augment loglayer for runtime prototype augmentation
 declare module 'loglayer' {
-  interface LogLayer extends ICustomMixin<LogLayer> {}
-  interface MockLogLayer extends ICustomMixin<MockLogLayer> {}
+  interface LogLayer extends ICustomMixin {}
+  interface MockLogLayer extends ICustomMixin {}
 }
 ```
+
+> **⚠️ Do NOT return a generic `T`/`This` from chainable mixin methods.**
+> A mixin declared as `ICustomMixin<T>` whose methods `return T`, wired up as
+> `interface ILogLayer<This> extends ICustomMixin<This>`, collapses to `any` for
+> a consumer who types their logger as the bare `ILogLayer` interface: `This`
+> resolves to `ILogLayer<any>`, and the `any` argument propagates so the method
+> return type degrades to `any` (see
+> [#417](https://github.com/loglayer/loglayer/issues/417)). The polymorphic
+> `this` type has no such problem — it always resolves to the concrete receiver
+> (`LogLayer`, `MockLogLayer`, or `ILogLayer<…>`) and stays stable across
+> arbitrarily deep chains. The shipped `@loglayer/mixin-wide-events` mixin uses
+> this pattern.
 
 ### Augmenting ILogBuilder
 
 ```typescript
-export interface ICustomBuilderMixin<T> {
-  customBuilderMethod(param: string): T;
+export interface ICustomBuilderMixin {
+  customBuilderMethod(param: string): this;
 }
 
 declare module '@loglayer/shared' {
-  interface ILogBuilder<This> extends ICustomBuilderMixin<This> {}
+  interface ILogBuilder<This> extends ICustomBuilderMixin {}
 }
 
 declare module 'loglayer' {
-  interface LogBuilder extends ICustomBuilderMixin<LogBuilder> {}
-  interface MockLogBuilder extends ICustomBuilderMixin<MockLogBuilder> {}
+  interface LogBuilder extends ICustomBuilderMixin {}
+  interface MockLogBuilder extends ICustomBuilderMixin {}
 }
 ```
 
 ### Augmenting Both Interfaces
 
 ```typescript
-export interface IPerfTimingMixin<T> {
-  withPerfStart(id: string): T;
-  withPerfEnd(id: string): T;
+export interface IPerfTimingMixin {
+  withPerfStart(id: string): this;
+  withPerfEnd(id: string): this;
 }
 
 declare module '@loglayer/shared' {
-  interface ILogLayer<This> extends IPerfTimingMixin<This> {}
-  interface ILogBuilder<This> extends IPerfTimingMixin<This> {}
+  interface ILogLayer<This> extends IPerfTimingMixin {}
+  interface ILogBuilder<This> extends IPerfTimingMixin {}
 }
 
 declare module 'loglayer' {
-  interface LogLayer extends IPerfTimingMixin<LogLayer> {}
-  interface LogBuilder extends IPerfTimingMixin<LogBuilder> {}
-  interface MockLogLayer extends IPerfTimingMixin<MockLogLayer> {}
-  interface MockLogBuilder extends IPerfTimingMixin<MockLogBuilder> {}
+  interface LogLayer extends IPerfTimingMixin {}
+  interface LogBuilder extends IPerfTimingMixin {}
+  interface MockLogLayer extends IPerfTimingMixin {}
+  interface MockLogBuilder extends IPerfTimingMixin {}
 }
 ```
 
