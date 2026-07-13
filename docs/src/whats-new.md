@@ -9,13 +9,10 @@ description: Learn about the latest features and improvements in LogLayer
 
 ## Jul 13, 2026
 
-`@loglayer/shared`:
+All packages received a minor release for an `ILogLayer`/`ILogBuilder` type-system fix ([#417](https://github.com/loglayer/loglayer/issues/417)):
 
-- Fixed the `ILogLayer` type collapsing to `any` when chaining two or more logger-returning methods (e.g. `.child().child()`, `.withPrefix("a").withPrefix("b")`). The type now stays stable across arbitrarily deep chains.
-
-`@loglayer/mixin-hot-shots`, `@loglayer/mixin-datadog-http-metrics`:
-
-- Fixed mixin methods (`stats`, `ddStats`) disappearing on chained logger return types (e.g. `logger.child().stats`) when the logger is typed as `ILogLayer`. The interface augmentation now targets `@loglayer/shared` where `ILogLayer` is defined.
+- Fixed the `ILogLayer` type collapsing to `any` when chaining two or more logger-returning methods (e.g. `.child().child()`, `.withPrefix("a").withPrefix("b")`). Chainable methods now return `ILogLayer<This>`, so the type stays stable across arbitrarily deep chains.
+- `@loglayer/mixin-hot-shots` and `@loglayer/mixin-datadog-http-metrics`: fixed mixin methods (`stats`, `ddStats`) disappearing on chained logger return types (e.g. `logger.child().stats`) when the logger is typed as `ILogLayer`. The interface augmentation now targets `@loglayer/shared`, where `ILogLayer` is defined.
 
 ## Jul 3, 2026
 
