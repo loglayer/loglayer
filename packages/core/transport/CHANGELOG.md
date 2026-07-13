@@ -1,5 +1,16 @@
 # `@loglayer/transport` Changelog
 
+## 3.3.0
+
+### Minor Changes
+
+- [#418](https://github.com/loglayer/loglayer/pull/418) [`8406eec`](https://github.com/loglayer/loglayer/commit/8406eec67980a167cbbc2f0418b764d1cad6faac) Thanks [@theogravity](https://github.com/theogravity)! - Minor version bump to release the updated `ILogLayer` / `ILogBuilder` type system across the ecosystem. The core type change in `@loglayer/shared` (chainable methods now return `ILogLayer<This>` so types no longer collapse to `any` — see [#417](https://github.com/loglayer/loglayer/issues/417)) affects the types every package exposes and consumes, so all packages are re-released together at minor.
+
+### Patch Changes
+
+- Updated dependencies [[`8406eec`](https://github.com/loglayer/loglayer/commit/8406eec67980a167cbbc2f0418b764d1cad6faac)]:
+  - @loglayer/shared@4.4.0
+
 ## 3.2.0
 
 ### Minor Changes
