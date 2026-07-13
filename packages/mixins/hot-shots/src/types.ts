@@ -307,5 +307,15 @@ export interface IHotShotsMixin<_T> {
 declare module "loglayer" {
   interface LogLayer extends IHotShotsMixin<LogLayer> {}
   interface MockLogLayer extends IHotShotsMixin<MockLogLayer> {}
+}
+
+// Augment `ILogLayer` in `@loglayer/shared`, where it is defined (`loglayer`
+// only re-exports it), rather than under `declare module "loglayer"`. This keeps
+// the augmentation target consistent with the other official mixins. When one
+// mixin augments `ILogLayer` under `@loglayer/shared` and another under
+// `loglayer`, the `loglayer`-targeted methods stop resolving on chained return
+// types such as `child()`/`withPrefix()` — so all mixins must augment the same
+// module. See https://github.com/loglayer/loglayer/issues/417.
+declare module "@loglayer/shared" {
   interface ILogLayer<This> extends IHotShotsMixin<This> {}
 }

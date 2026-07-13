@@ -472,64 +472,64 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  enableLogging(): This;
+  enableLogging(): ILogLayer<This>;
   /**
    * All logging inputs are dropped and stops sending logs to the logging library.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  disableLogging(): This;
+  disableLogging(): ILogLayer<This>;
   /**
    * Calls child() and sets the prefix to be included with every log message.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#message-prefixing | Message Prefixing Docs}
    */
-  withPrefix(string: string): This;
+  withPrefix(string: string): ILogLayer<This>;
   /**
    * Creates a child logger with the specified group(s) persistently assigned.
    * All logs from the child will be tagged with these groups.
    *
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
-  withGroup(group: string | string[]): This;
+  withGroup(group: string | string[]): ILogLayer<This>;
   /**
    * Adds a new group definition at runtime.
    *
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
-  addGroup(name: string, config: LogGroupConfig): This;
+  addGroup(name: string, config: LogGroupConfig): ILogLayer<This>;
   /**
    * Removes a group definition at runtime.
    *
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
-  removeGroup(name: string): This;
+  removeGroup(name: string): ILogLayer<This>;
   /**
    * Enables a group by name (sets enabled: true).
    *
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
-  enableGroup(name: string): This;
+  enableGroup(name: string): ILogLayer<This>;
   /**
    * Disables a group by name (sets enabled: false). Logs tagged with a disabled
    * group will not be routed through that group.
    *
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
-  disableGroup(name: string): This;
+  disableGroup(name: string): ILogLayer<This>;
   /**
    * Sets the minimum log level for a group at runtime.
    *
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
-  setGroupLevel(name: string, level: LogLevelType): This;
+  setGroupLevel(name: string, level: LogLevelType): ILogLayer<This>;
   /**
    * Sets which groups are active. Only active groups will route logs.
    * Pass null to clear the filter (all groups active).
    *
    * @see {@link https://loglayer.dev/logging-api/groups.html | Groups Docs}
    */
-  setActiveGroups(groups: string[] | null): This;
+  setActiveGroups(groups: string[] | null): ILogLayer<This>;
   /**
    * Returns a snapshot of all group configurations.
    *
@@ -546,14 +546,14 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  withContext(context?: LogLayerContext): This;
+  withContext(context?: LogLayerContext): ILogLayer<This>;
   /**
    * Clears the context data. If keys are provided, only those keys will be removed.
    * If no keys are provided, all context data will be cleared.
    *
    * @see {@link https://loglayer.dev/logging-api/context.html | Context Docs}
    */
-  clearContext(keys?: string | string[]): This;
+  clearContext(keys?: string | string[]): ILogLayer<This>;
   /**
    * Logs only the error object without a log message
    *
@@ -589,44 +589,44 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/logging-api/child-loggers.html | Child Logging Docs}
    */
-  child(): This;
+  child(): ILogLayer<This>;
 
   /**
    * Disables inclusion of context data in the print
    *
    * @see {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
    */
-  muteContext(): This;
+  muteContext(): ILogLayer<This>;
   /**
    * Enables inclusion of context data in the print
    *
    * @see {@link https://loglayer.dev/logging-api/context.html#managing-context | Managing Context Docs}
    */
-  unMuteContext(): This;
+  unMuteContext(): ILogLayer<This>;
   /**
    * Disables inclusion of metadata data in the print
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
    */
-  muteMetadata(): This;
+  muteMetadata(): ILogLayer<This>;
   /**
    * Enables inclusion of metadata data in the print
    *
    * @see {@link https://loglayer.dev/logging-api/metadata.html#controlling-metadata-output | Controlling Metadata Output Docs}
    */
-  unMuteMetadata(): This;
+  unMuteMetadata(): ILogLayer<This>;
   /**
    * Enables a specific log level
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  enableIndividualLevel(logLevel: LogLevelType): This;
+  enableIndividualLevel(logLevel: LogLevelType): ILogLayer<This>;
   /**
    * Disables a specific log level
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  disableIndividualLevel(logLevel: LogLevelType): This;
+  disableIndividualLevel(logLevel: LogLevelType): ILogLayer<This>;
   /**
    * Sets the minimum log level to be used by the logger. Only messages with
    * this level or higher severity will be logged.
@@ -643,7 +643,7 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  setLevel(logLevel: LogLevelType): This;
+  setLevel(logLevel: LogLevelType): ILogLayer<This>;
   /**
    * Checks if a specific log level is enabled
    *
@@ -655,13 +655,13 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  enableLogging(): This;
+  enableLogging(): ILogLayer<This>;
   /**
    * All logging inputs are dropped and stops sending logs to the logging library.
    *
    * @see {@link https://loglayer.dev/logging-api/basic-logging.html#enabling-disabling-logging | Enabling/Disabling Logging Docs}
    */
-  disableLogging(): This;
+  disableLogging(): ILogLayer<This>;
 
   /**
    * Returns a logger instance for a specific transport
@@ -679,7 +679,7 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
    */
-  withFreshTransports(transports: LogLayerTransport | Array<LogLayerTransport>): This;
+  withFreshTransports(transports: LogLayerTransport | Array<LogLayerTransport>): ILogLayer<This>;
 
   /**
    * Adds one or more transports to the existing transports.
@@ -691,7 +691,7 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/logging-api/transport-management.html | Transport Management Docs}
    */
-  addTransport(transports: LogLayerTransport | Array<LogLayerTransport>): This;
+  addTransport(transports: LogLayerTransport | Array<LogLayerTransport>): ILogLayer<This>;
 
   /**
    * Removes a transport by its ID.
@@ -714,12 +714,12 @@ export interface ILogLayer<This = ILogLayer<any>> {
    *
    * @see {@link https://loglayer.dev/plugins/ | Plugins Docs}
    */
-  withFreshPlugins(plugins: Array<LogLayerPlugin>): This;
+  withFreshPlugins(plugins: Array<LogLayerPlugin>): ILogLayer<This>;
 
   /**
    * Sets the context manager to use for managing context data.
    */
-  withContextManager(manager: IContextManager): This;
+  withContextManager(manager: IContextManager): ILogLayer<This>;
 
   /**
    * Gets the context manager used by the logger.
@@ -729,7 +729,7 @@ export interface ILogLayer<This = ILogLayer<any>> {
   /**
    * Sets the log level manager to use for managing log levels.
    */
-  withLogLevelManager(manager: ILogLevelManager): This;
+  withLogLevelManager(manager: ILogLevelManager): ILogLayer<This>;
 
   /**
    * Gets the log level manager used by the logger.

@@ -47,7 +47,17 @@ describe("Type Tests", () => {
       .clearWideEvents()
       .withWideEvents({ newRequest: "req-789" });
 
+    // Chaining mixin + core methods on a bare ILogLayer must not collapse to
+    // `any`. See https://github.com/loglayer/loglayer/issues/417. Note that
+    // toMatchTypeOf<ILogLayer>() alone would pass for `any`, so assert
+    // explicitly that the type is not `any`.
+    expectTypeOf(result).not.toBeAny();
     expectTypeOf(result).toMatchTypeOf<ILogLayer>();
+
+    // Chaining core methods alone must also stay stable.
+    const coreOnly = logger.child().child().withPrefix("a");
+    expectTypeOf(coreOnly).not.toBeAny();
+    expectTypeOf(coreOnly).toMatchTypeOf<ILogLayer>();
 
     // emitWideEvent returns void, call separately
     logger.emitWideEvent({ message: "New request completed" });
