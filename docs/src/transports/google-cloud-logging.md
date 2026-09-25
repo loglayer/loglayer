@@ -19,7 +19,7 @@ This transport sends logs to [Google Cloud Logging](https://cloud.google.com/log
 
 | Name | Type | Description |
 |------|------|-------------|
-| `logger` | `Log` | The Google Cloud Logging instance |
+| `logger` | `Log \| LogSync` | The Google Cloud Logging instance |
 
 ### Optional Parameters
 
@@ -28,7 +28,7 @@ This transport sends logs to [Google Cloud Logging](https://cloud.google.com/log
 | `level` | `"trace" \| "debug" \| "info" \| "warn" \| "error" \| "fatal"` | `"trace"` | The minimum log level to process. Logs below this level will be filtered out |
 | `rootLevelData` | `Record<string, any>` | - | Data to be included in the metadata portion of the log entry |
 | `rootLevelMetadataFields` | `Array<string>` | `[]` | List of LogLayer metadata fields to merge into `rootLevelData` |
-| `onError` | `(error: Error) => void` | - | Error handling callback |
+| `onError` | `(error: Error) => void` | - | Receives errors that occur when creating or writing log entries (see [Error Handling](#error-handling)) |
 | `enabled` | `boolean` | `true` | If false, the transport will not send logs to the logger |
 | `consoleDebug` | `boolean` | `false` | If true, the transport will log to the console for debugging purposes |
 | `id` | `string` | - | A user-defined identifier for the transport |
@@ -168,6 +168,37 @@ const logger = new LogLayer({
   }),
 });
 ```
+
+## Error Handling
+
+The transport writes entries with a fire-and-forget call to the underlying `write()` API. All failures that
+occur inside the transport — synchronous errors while creating the log entry, and rejections from the promise
+returned by `Log.write()` (eg, project or resource detection failures) — are caught and reported to `onError`,
+so logging failures never surface as unhandled rejections or crash the application. If `onError` is not
+configured, these failures are silently ignored. `onError` is invoked in a guarded context, so a throwing
+callback cannot produce a rejection or exception either.
+
+```typescript
+const logger = new LogLayer({
+  transport: new GoogleCloudLoggingTransport({
+    logger: log,
+    onError: (error) => {
+      console.error("Failed to write log to Google Cloud", error);
+    },
+  }),
+});
+```
+
+::: tip Using `defaultWriteDeleteCallback`
+If you configured `defaultWriteDeleteCallback` on the Google Cloud Logging client, API-level write failures are
+reported there instead of rejecting the promise returned by `write()`. The two callbacks are complementary:
+
+- `defaultWriteDeleteCallback` receives API request failures from the SDK
+- `onError` receives everything the transport itself catches, including failures that occur before the SDK
+  invokes `defaultWriteDeleteCallback`
+
+With both configured, no failure is double-reported.
+:::
 
 ## Log Level Mapping
 

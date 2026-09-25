@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Sep 25, 2026
+
+`@loglayer/transport-google-cloud-logging`:
+
+- **`onError` callback**: the transport now catches all write failures — including promise rejections from the underlying `write()` API and synchronous errors while creating log entries — and reports them via `onError` instead of surfacing unhandled rejections. See [Error Handling](/transports/google-cloud-logging#error-handling).
+
 ## Jul 13, 2026
 
 All packages received a minor release for an `ILogLayer`/`ILogBuilder` type-system fix ([#417](https://github.com/loglayer/loglayer/issues/417)):

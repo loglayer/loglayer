@@ -286,6 +286,196 @@ describe("GoogleCloudLoggingTransport", () => {
     });
   });
 
+  describe("error handling", () => {
+    it("should call onError when write() rejects", async () => {
+      const onError = vi.fn();
+      const loggerWithErrorHandler = new LogLayer({
+        transport: new GoogleCloudLoggingTransport({
+          logger: mockLog,
+          onError,
+        }),
+      });
+
+      mockWrite.mockRejectedValueOnce(new Error("write failed"));
+
+      loggerWithErrorHandler.info("test message");
+
+      await vi.waitFor(() => {
+        expect(onError).toHaveBeenCalledTimes(1);
+      });
+
+      const error = onError.mock.calls[0][0];
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("write failed");
+    });
+
+    it("should call onError when write() throws synchronously", () => {
+      const onError = vi.fn();
+      const loggerWithErrorHandler = new LogLayer({
+        transport: new GoogleCloudLoggingTransport({
+          logger: mockLog,
+          onError,
+        }),
+      });
+
+      mockWrite.mockImplementationOnce(() => {
+        throw new Error("sync write failed");
+      });
+
+      expect(() => loggerWithErrorHandler.info("test message")).not.toThrow();
+
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(onError.mock.calls[0][0]).toBeInstanceOf(Error);
+      expect((onError.mock.calls[0][0] as Error).message).toBe("sync write failed");
+    });
+
+    it("should call onError when entry() throws and skip the write", () => {
+      const onError = vi.fn();
+      const brokenLog = {
+        entry: () => {
+          throw new Error("entry failed");
+        },
+        write: mockWrite,
+      } as unknown as Log;
+
+      const loggerWithBrokenEntry = new LogLayer({
+        transport: new GoogleCloudLoggingTransport({
+          logger: brokenLog,
+          onError,
+        }),
+      });
+
+      expect(() => loggerWithBrokenEntry.info("test message")).not.toThrow();
+
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(onError.mock.calls[0][0]).toBeInstanceOf(Error);
+      expect((onError.mock.calls[0][0] as Error).message).toBe("entry failed");
+      expect(mockWrite).not.toHaveBeenCalled();
+    });
+
+    it("should not produce an unhandled rejection when write() rejects without an onError configured", async () => {
+      const unhandledHandler = vi.fn();
+      process.on("unhandledRejection", unhandledHandler);
+
+      try {
+        mockWrite.mockRejectedValueOnce(new Error("write failed without a handler"));
+
+        expect(() => logger.info("test message")).not.toThrow();
+
+        // Give the rejected promise time to surface as an unhandled rejection if unhandled
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      } finally {
+        process.off("unhandledRejection", unhandledHandler);
+      }
+
+      expect(unhandledHandler).not.toHaveBeenCalled();
+    });
+
+    it("should not produce an unhandled rejection when onError itself throws (async rejection)", async () => {
+      const unhandledHandler = vi.fn();
+      process.on("unhandledRejection", unhandledHandler);
+
+      try {
+        const loggerWithThrowingHandler = new LogLayer({
+          transport: new GoogleCloudLoggingTransport({
+            logger: mockLog,
+            onError: () => {
+              throw new Error("callback exploded");
+            },
+          }),
+        });
+
+        mockWrite.mockRejectedValueOnce(new Error("write failed"));
+
+        expect(() => loggerWithThrowingHandler.info("test message")).not.toThrow();
+
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      } finally {
+        process.off("unhandledRejection", unhandledHandler);
+      }
+
+      expect(unhandledHandler).not.toHaveBeenCalled();
+    });
+
+    it("should not propagate an exception when onError itself throws (synchronous error)", () => {
+      const loggerWithThrowingHandler = new LogLayer({
+        transport: new GoogleCloudLoggingTransport({
+          logger: mockLog,
+          onError: () => {
+            throw new Error("callback exploded");
+          },
+        }),
+      });
+
+      mockWrite.mockImplementationOnce(() => {
+        throw new Error("sync write failed");
+      });
+
+      expect(() => loggerWithThrowingHandler.info("test message")).not.toThrow();
+    });
+
+    it("should normalize non-Error rejections to Error instances", async () => {
+      const onError = vi.fn();
+      const loggerWithErrorHandler = new LogLayer({
+        transport: new GoogleCloudLoggingTransport({
+          logger: mockLog,
+          onError,
+        }),
+      });
+
+      mockWrite.mockRejectedValueOnce("string failure");
+
+      loggerWithErrorHandler.info("test message");
+
+      await vi.waitFor(() => {
+        expect(onError).toHaveBeenCalledTimes(1);
+      });
+
+      const error = onError.mock.calls[0][0];
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("string failure");
+    });
+
+    it("should continue writing entries after a failed write", async () => {
+      const onError = vi.fn();
+      const loggerWithErrorHandler = new LogLayer({
+        transport: new GoogleCloudLoggingTransport({
+          logger: mockLog,
+          onError,
+        }),
+      });
+
+      mockWrite.mockRejectedValueOnce(new Error("first write failed"));
+
+      loggerWithErrorHandler.info("first message");
+
+      await vi.waitFor(() => {
+        expect(onError).toHaveBeenCalledTimes(1);
+      });
+
+      loggerWithErrorHandler.info("second message");
+
+      expect(mockWrite).toHaveBeenCalledTimes(2);
+      expect(onError).toHaveBeenCalledTimes(1);
+    });
+
+    it("should not call onError when write() returns void (LogSync behavior)", () => {
+      const onError = vi.fn();
+      const loggerWithErrorHandler = new LogLayer({
+        transport: new GoogleCloudLoggingTransport({
+          logger: mockLog,
+          onError,
+        }),
+      });
+
+      // mockWrite returns undefined by default, matching LogSync.write()'s void return
+      loggerWithErrorHandler.info("test message");
+
+      expect(mockWrite).toHaveBeenCalledTimes(1);
+      expect(onError).not.toHaveBeenCalled();
+    });
+  });
+
   describe("level filtering", () => {
     it("should only log messages at or above the specified level", () => {
       const loggerWithLevel = new LogLayer({
