@@ -37,7 +37,7 @@
     "typescript": "6.0.3"
   },
   "engines": {
-    "node": ">=20.16.0"
+    "node": ">=22"
   },
   "engineStrict": true,
   "packageManager": "pnpm@10.20.0"

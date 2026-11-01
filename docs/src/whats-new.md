@@ -7,6 +7,12 @@ description: Learn about the latest features and improvements in LogLayer
 
 - [`loglayer` Changelog](/core-changelogs/loglayer-changelog)
 
+## Nov 1, 2026
+
+All packages:
+
+- **Node.js support floor raised to `>=22`** — `engines.node` is now `>=22` for every package. Node 20 is end-of-life; Node 22 is the oldest release still under maintenance LTS. No runtime code changes; the terminal transports additionally moved to chalk 6 / cli-truncate 6 / wrap-ansi 10.
+
 ## Sep 25, 2026
 
 `@loglayer/transport-google-cloud-logging`:
