@@ -48,15 +48,15 @@
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
     "@loglayer/transport": "workspace:*",
-    "@types/node": "25.9.1",
+    "@types/node": "26.6.6",
     "dotenv": "18.0.9",
     "loglayer": "workspace:*",
     "serialize-error": "13.0.2",
-    "tsdown": "0.22.1",
+    "tsdown": "0.23.4",
     "tsx": "4.23.15",
     "typescript": "6.0.3",
     "vite": "7.3.7",
-    "vitest": "4.1.12"
+    "vitest": "5.0.5"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

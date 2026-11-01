@@ -45,17 +45,17 @@
     "@internal/tsconfig": "workspace:*",
     "@loglayer/transport-simple-pretty-terminal": "workspace:*",
     "@types/koa": "3.0.3",
-    "@types/node": "25.9.1",
+    "@types/node": "26.6.6",
     "@types/supertest": "7.2.0",
     "koa": "3.2.1",
     "loglayer": "workspace:*",
     "serialize-error": "13.0.2",
     "supertest": "7.3.1",
-    "tsdown": "0.22.1",
+    "tsdown": "0.23.4",
     "tsx": "4.23.15",
     "typescript": "6.0.3",
     "vite": "7.3.7",
-    "vitest": "4.1.12"
+    "vitest": "5.0.5"
   },
   "peerDependencies": {
     "koa": ">=2.0.0",

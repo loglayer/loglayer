@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "loglayer": "workspace:*",
-    "tsdown": "0.22.1"
+    "tsdown": "0.23.4"
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
