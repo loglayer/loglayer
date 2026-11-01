@@ -49,11 +49,12 @@
     "@types/node": "25.9.1",
     "global-jsdom": "29.0.0",
     "loglayer": "workspace:*",
-    "posthog-js": "1.376.4",
+    "posthog-js": "1.444.0",
     "serialize-error": "13.0.1",
     "tsdown": "0.22.1",
     "typescript": "6.0.3",
-    "vitest": "4.1.7"
+    "vite": "7.3.7",
+    "vitest": "4.1.12"
   },
   "peerDependencies": {
     "posthog-js": ">=1.368.0"

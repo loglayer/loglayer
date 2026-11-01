@@ -48,9 +48,10 @@
     "@types/node": "25.9.1",
     "loglayer": "workspace:*",
     "tsdown": "0.22.1",
-    "tsx": "4.22.3",
+    "tsx": "4.23.15",
     "typescript": "6.0.3",
-    "vitest": "4.1.7"
+    "vite": "7.3.7",
+    "vitest": "4.1.12"
   },
   "peerDependencies": {
     "log4js": "*"

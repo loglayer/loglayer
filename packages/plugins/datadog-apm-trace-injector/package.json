@@ -52,13 +52,14 @@
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
     "@types/node": "25.9.1",
-    "dd-trace": "5.104.0",
-    "express": "5.2.1",
+    "dd-trace": "5.134.0",
+    "express": "5.3.0",
     "loglayer": "workspace:*",
     "tsdown": "0.22.1",
-    "tsx": "4.22.3",
+    "tsx": "4.23.15",
     "typescript": "6.0.3",
-    "vitest": "4.1.7"
+    "vite": "7.3.7",
+    "vitest": "4.1.12"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {

@@ -49,7 +49,8 @@
     "serialize-error": "13.0.1",
     "tsdown": "0.22.1",
     "typescript": "6.0.3",
-    "vitest": "4.1.7"
+    "vite": "7.3.7",
+    "vitest": "4.1.12"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {
