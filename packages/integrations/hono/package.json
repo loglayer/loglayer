@@ -61,7 +61,7 @@
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "files": [
     "dist"
