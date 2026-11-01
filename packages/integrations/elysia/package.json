@@ -52,7 +52,7 @@
     "file-type": "21.3.4",
     "loglayer": "workspace:*",
     "@loglayer/transport-simple-pretty-terminal": "workspace:*",
-    "serialize-error": "13.0.1",
+    "serialize-error": "13.0.2",
     "tsdown": "0.22.1",
     "tsx": "4.23.15",
     "typescript": "6.0.3",

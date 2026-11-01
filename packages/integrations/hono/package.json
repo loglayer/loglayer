@@ -48,7 +48,7 @@
     "@types/node": "25.9.1",
     "hono": "4.13.16",
     "loglayer": "workspace:*",
-    "serialize-error": "13.0.1",
+    "serialize-error": "13.0.2",
     "tsdown": "0.22.1",
     "tsx": "4.23.15",
     "typescript": "6.0.3",

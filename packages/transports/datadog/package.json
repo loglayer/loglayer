@@ -42,7 +42,7 @@
     "verify-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@datadog/datadog-api-client": "1.58.0",
+    "@datadog/datadog-api-client": "1.64.0",
     "@loglayer/transport": "workspace:*",
     "datadog-transport-common": "3.0.2"
   },

@@ -19,7 +19,6 @@ if (!process.env.SENTRY_DSN) {
 // Initialize Sentry for live testing
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
-  enableLogs: true,
 });
 
 const log = new LogLayer({

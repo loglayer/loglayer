@@ -41,7 +41,6 @@ import * as Sentry from "@sentry/node";
 // to your app so Sentry can instrument your code, such as the index.ts file
 Sentry.init({
   dsn: "YOUR_SENTRY_DSN",
-  enableLogs: true,
 });
 
 const log = new LogLayer({
