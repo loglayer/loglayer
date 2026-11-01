@@ -1,5 +1,11 @@
 # `@loglayer/transport-pretty-terminal` Changelog
 
+## 7.0.0
+
+### Major Changes
+
+- [#431](https://github.com/loglayer/loglayer/pull/431) [`e0a1d9f`](https://github.com/loglayer/loglayer/commit/e0a1d9f700e4aa61cc0ef94e750e5c59616f38c3) Thanks [@theogravity](https://github.com/theogravity)! - Update terminal rendering dependencies: chalk 6, cli-truncate 6, wrap-ansi 10 and date-fns 4.4.0. These require Node >=22, so the Node engine floor for both terminal transports is now `>=22`.
+
 ## 6.3.0
 
 ### Minor Changes

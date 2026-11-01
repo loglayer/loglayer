@@ -1,5 +1,11 @@
 # `@loglayer/transport-datadog` Changelog
 
+## 4.3.1
+
+### Patch Changes
+
+- [#426](https://github.com/loglayer/loglayer/pull/426) [`db61ded`](https://github.com/loglayer/loglayer/commit/db61deda84ecaea9737aa258d75c7d29d0e3b3ca) Thanks [@theogravity](https://github.com/theogravity)! - Update runtime dependencies: `@opentelemetry/api-logs` to 0.223.0 and `@datadog/datadog-api-client` to 1.64.0. Remove the removed-in-v11 `enableLogs` init option from Sentry setup examples.
+
 ## 4.3.0
 
 ### Minor Changes
