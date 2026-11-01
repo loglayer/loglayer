@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@nolebase/ui-asciinema": "2.21.1",
-    "asciinema-player": "3.15.1",
-    "tsdown": "0.22.1"
+    "asciinema-player": "3.17.0",
+    "tsdown": "0.23.4"
   },
   "devDependencies": {
     "glob": "14.0.3",

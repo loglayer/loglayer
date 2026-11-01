@@ -3,19 +3,20 @@ import { LogLayer, TestLoggingLibrary, TestTransport } from "loglayer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { openTelemetryPlugin } from "../index.js";
 
+vi.mock("@opentelemetry/api", () => ({
+  isSpanContextValid: vi.fn().mockReturnValue(true),
+  trace: {
+    getSpan: vi.fn(),
+  },
+  context: {
+    active: vi.fn(),
+  },
+}));
+
 describe("OpenTelemetry plugin", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(context, "active").mockReturnValue({} as any);
-    vi.mock("@opentelemetry/api", () => ({
-      isSpanContextValid: vi.fn().mockReturnValue(true),
-      trace: {
-        getSpan: vi.fn(),
-      },
-      context: {
-        active: vi.fn(),
-      },
-    }));
   });
 
   it("should add trace context with default field names when span exists", () => {

@@ -47,13 +47,13 @@
   },
   "devDependencies": {
     "@internal/tsconfig": "workspace:*",
-    "@types/node": "25.9.1",
+    "@types/node": "26.6.6",
     "@types/sprintf-js": "1.1.4",
     "loglayer": "workspace:*",
-    "tsdown": "0.22.1",
+    "tsdown": "0.23.4",
     "typescript": "6.0.3",
     "vite": "7.3.7",
-    "vitest": "4.1.12"
+    "vitest": "5.0.5"
   },
   "bugs": "https://github.com/loglayer/loglayer/issues",
   "engines": {
