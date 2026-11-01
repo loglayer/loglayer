@@ -48,14 +48,16 @@
     "@elysiajs/node": "1.4.5",
     "@internal/tsconfig": "workspace:*",
     "@types/node": "25.9.1",
-    "elysia": "1.4.28",
+    "elysia": "1.4.30",
+    "file-type": "21.3.4",
     "loglayer": "workspace:*",
     "@loglayer/transport-simple-pretty-terminal": "workspace:*",
     "serialize-error": "13.0.1",
     "tsdown": "0.22.1",
-    "tsx": "4.22.3",
+    "tsx": "4.23.15",
     "typescript": "6.0.3",
-    "vitest": "4.1.7"
+    "vite": "7.3.7",
+    "vitest": "4.1.12"
   },
   "peerDependencies": {
     "elysia": ">=1.0.0",
